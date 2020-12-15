@@ -18,6 +18,7 @@ namespace gthread
         m_task_infos[child].m_parents.push_back(parent);
         m_task_infos[parent].m_children.push_back(child);
     }
+
     void task_group::launch_task(job_manager& job_manager, task& task_to_run, task_map_info& infos, std::mutex& task_info_lock, gthread::latch& latch)
     {
         job_manager.submit([&]
