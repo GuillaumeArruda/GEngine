@@ -14,11 +14,4 @@
       <Item Name="rad">m_value * gmath::pi / 180.f</Item>
     </Expand>
   </Type>
-    <Type Name="gscene::kd_accelerator::node">
-        <DisplayString>{{is_leaf = {((node_data*)m_storage)->m_is_leaf}}}</DisplayString>
-        <Expand>
-            <Item Condition="((node_data*)m_storage)->m_is_leaf" Name="data">*((leaf_data*)m_storage)</Item>
-            <Item Condition="!((node_data*)m_storage)->m_is_leaf" Name="data">*((intermediate_data*)m_storage)</Item>
-        </Expand>
-    </Type>
 </AutoVisualizer>

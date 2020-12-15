@@ -61,7 +61,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Natvis Include="src\GRayTracer.natvis" />
+    <Natvis Include="src\gengine.natvis" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
