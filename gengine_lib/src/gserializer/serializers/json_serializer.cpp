@@ -1,5 +1,7 @@
 #include "stdafx.h"
+
 #include "gserializer/serializers/json_serializer.h"
+#include "gtl/uuid.h"
 
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/istreamwrapper.h>
@@ -50,6 +52,12 @@ void gserializer::json_write_serializer::process(const char* name, double& value
 void gserializer::json_write_serializer::process(const char* name, bool& value)
 {
     stack_top().AddMember(rapidjson::Value(name, m_document.GetAllocator()), rapidjson::Value(value), m_document.GetAllocator());
+}
+
+void gserializer::json_write_serializer::process(const char* name, gtl::uuid& value)
+{
+    std::string s = value.to_string();
+    stack_top().AddMember(rapidjson::Value(name, m_document.GetAllocator()), rapidjson::Value(s.c_str(), static_cast<rapidjson::SizeType>(s.size()), m_document.GetAllocator()), m_document.GetAllocator());
 }
 
 void gserializer::json_write_serializer::write_to_file(const char* file)
@@ -189,6 +197,15 @@ void gserializer::json_read_serializer::process(const char* name, bool& value)
     if (it != stack_top().MemberEnd())
     {
         value = it->value.GetBool();
+    }
+}
+
+void gserializer::json_read_serializer::process(const char* name, gtl::uuid& value)
+{
+    auto it = stack_top().FindMember(name);
+    if (it != stack_top().MemberEnd())
+    {
+        value = gtl::uuid::from_string(it->value.GetString());
     }
 }
 

@@ -9,13 +9,14 @@
 
 #include "gtl/span.h"
 #include "gtl/cast.h"
+#include "gtl/uuid.h"
 
 #include "gcore/component.h"
 
 namespace gcore
 {
 
-    using entity = std::size_t;
+    using entity = gtl::uuid;
     using component_id = std::type_index;
     using view_id = std::type_index;
 
@@ -29,7 +30,7 @@ namespace gcore
         void remove_component(entity entity) { remove_component(entity, component_id(typeid(ComponentType))); }
 
         template<class ... ComponentType>
-        [[nodiscard]]auto get_components(entity entity) const
+        [[nodiscard]] auto get_components(entity entity) const
         {
             if constexpr (sizeof...(ComponentType) == 1)
             {

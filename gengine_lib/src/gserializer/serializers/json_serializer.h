@@ -20,6 +20,7 @@ namespace gserializer
         void process(const char* name, float& value) override;
         void process(const char* name, double& value) override;
         void process(const char* name, bool& value) override;
+        void process(const char* name, gtl::uuid& value) override;
 
         void write_to_file(const char* file);
     private:
@@ -54,6 +55,7 @@ namespace gserializer
         void process(const char* name, float& value) override;
         void process(const char* name, double& value) override;
         void process(const char* name, bool& value) override;
+        void process(const char* name, gtl::uuid& value) override;
 
     private:
         rapidjson::Value& stack_top();

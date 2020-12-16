@@ -1,4 +1,5 @@
 #include <vector>
+#include <cassert>
 
 #include "gcore/world.h"
 
@@ -24,13 +25,18 @@ int main()
     auto entity2 = registry.create_entity();
     registry.add_components(entity2, comp);
 
+    auto s = entity2.to_string();
+    auto entity3 = gtl::uuid::from_string(s);
+
+    assert(entity2 == entity3);
+
     auto view = registry.get_view<component2, component3>();
     for (auto& [comp2, comp3] : view)
     {
         std::cout << "ALLO\n";
     }
 
-    registry.remove_entity(entity2);
+    registry.remove_component<component2>(entity2);
 
     for (auto& [comp2, comp3] : view)
     {

@@ -24,4 +24,11 @@
             </ArrayItems>
         </Expand>
     </Type>
+    <Type Name="gtl::uuid">
+        <DisplayString>{{{m_array[0],h} {m_array[1],h}}}</DisplayString>
+        <Expand>
+            <Item Name="[high]">m_array[0],h</Item>
+            <Item Name="[low]">m_array[1],h</Item>
+        </Expand>
+    </Type>
 </AutoVisualizer>

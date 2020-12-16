@@ -6,7 +6,7 @@ namespace gcore
 {
     entity entity_registry::create_entity() 
     { 
-        return m_entity_generator++;
+        return entity::generate();
     }
 
     void entity_registry::remove_entity(entity entity)
@@ -44,6 +44,7 @@ namespace gcore
                 it->second.erase(std::find(it->second.begin(), it->second.end(), component_type));
             }
         }
+
         for (auto& group : m_group_map)
         {
             group.second->on_component_removed(*this, entity);

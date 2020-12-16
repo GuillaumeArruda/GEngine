@@ -48,6 +48,7 @@
     <ClInclude Include="src\gthread\thread_group.h" />
     <ClInclude Include="src\gtl\cast.h" />
     <ClInclude Include="src\gtl\span.h" />
+    <ClInclude Include="src\gtl\uuid.h" />
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\gcore\world.h" />
   </ItemGroup>
@@ -60,6 +61,7 @@
     <ClCompile Include="src\gthread\latch.cpp" />
     <ClCompile Include="src\gthread\task_group.cpp" />
     <ClCompile Include="src\gthread\thread_group.cpp" />
+    <ClCompile Include="src\gtl\uuid.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

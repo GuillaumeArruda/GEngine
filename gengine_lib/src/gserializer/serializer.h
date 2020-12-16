@@ -6,6 +6,11 @@
 #include <optional>
 #include <unordered_map>
 
+namespace gtl 
+{
+    struct uuid;
+}
+
 namespace gserializer
 {
     struct serializer;
@@ -36,6 +41,7 @@ namespace gserializer
         virtual void process(const char* name, float& value) = 0;
         virtual void process(const char* name, double& value) = 0;
         virtual void process(const char* name, bool& value) = 0;
+        virtual void process(const char* name, gtl::uuid& value) = 0;
 
 
         template<class TypeToSerialize, class ... ExtraType>

@@ -108,6 +108,9 @@
     <ClInclude Include="src\gcore\component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gtl\uuid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -138,6 +141,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gcore\entity_registry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gtl\uuid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
