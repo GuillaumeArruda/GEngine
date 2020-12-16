@@ -1,0 +1,51 @@
+{
+    "entity_registry": {
+        "entities": [
+            {
+                "key": "5fda29ffde927f0b9263f6640ea431d6",
+                "data": [
+                    {
+                        "is_valid": true,
+                        "type_name": "component2",
+                        "data": {}
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "component3",
+                        "data": {}
+                    }
+                ]
+            },
+            {
+                "key": "5fda2a0644bdbaf1d05e5e4860542d55",
+                "data": [
+                    {
+                        "is_valid": true,
+                        "type_name": "component2",
+                        "data": {}
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "component3",
+                        "data": {}
+                    }
+                ]
+            },
+            {
+                "key": "5fda2a0deb6a34ec3561f1e54ae5382a",
+                "data": [
+                    {
+                        "is_valid": true,
+                        "type_name": "component2",
+                        "data": {}
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "component3",
+                        "data": {}
+                    }
+                ]
+            }
+        ]
+    }
+}

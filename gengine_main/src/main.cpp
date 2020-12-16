@@ -3,9 +3,19 @@
 
 #include "gcore/world.h"
 
-struct component2 : gcore::component {};
+#include "gserializer/serializers/json_serializer.h"
 
-struct component3 : gcore::component {};
+struct component2 : gcore::component {
+    GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
+};
+
+struct component3 : gcore::component 
+{
+    GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
+};
+
+GSERIALIZER_DEFINE_SUBCLASS_FACTORY_REGISTRATION(component2);
+GSERIALIZER_DEFINE_SUBCLASS_FACTORY_REGISTRATION(component3);
 
 #include <iostream>
 
@@ -13,34 +23,28 @@ int main()
 {
     gcore::world world;
     auto& registry = world.get_entity_registry();
-    std::vector<std::unique_ptr<gcore::component>> comp;
-   
-    comp.push_back(std::make_unique<component2>());
-    comp.push_back(std::make_unique<component3>());
-    auto entity = registry.create_entity();
-    registry.add_components(entity, comp);
+    
+    {
+        gserializer::json_read_serializer seri("entities.json");
+        seri.process("entity_registry", registry);
+    }
 
-    comp.push_back(std::make_unique<component2>());
-    comp.push_back(std::make_unique<component3>());
-    auto entity2 = registry.create_entity();
-    registry.add_components(entity2, comp);
+    auto new_entity = registry.create_entity();
+    std::vector<std::unique_ptr<gcore::component>> comps;
+    comps.push_back(std::make_unique<component2>());
+    comps.push_back(std::make_unique<component3>());
+    registry.add_components(new_entity, comps);
 
-    auto s = entity2.to_string();
-    auto entity3 = gtl::uuid::from_string(s);
-
-    assert(entity2 == entity3);
+    {
+        gserializer::json_write_serializer seri;
+        seri.process("entity_registry", registry);
+        seri.write_to_file("entities.json");
+    }
 
     auto view = registry.get_view<component2, component3>();
     for (auto& [comp2, comp3] : view)
     {
-        std::cout << "ALLO\n";
-    }
-
-    registry.remove_component<component2>(entity2);
-
-    for (auto& [comp2, comp3] : view)
-    {
-        std::cout << "ALLO2\n";
+        std::cout << "Allo\n";
     }
 
     return 0;

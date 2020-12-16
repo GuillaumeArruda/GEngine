@@ -11,7 +11,7 @@ namespace gserializer
         json_write_serializer();
 
         using serializer::process;
-        bool is_writing() const { return true; }
+        bool is_reading_from_object() const { return true; }
         void process(const char* name, std::string& value) override;
         void process(const char* name, std::uint32_t& value) override;
         void process(const char* name, std::uint64_t& value) override;
@@ -46,7 +46,7 @@ namespace gserializer
         json_read_serializer(const char* file_path);
 
         using serializer::process;
-        bool is_writing() const { return false; }
+        bool is_reading_from_object() const { return false; }
         void process(const char* name, std::string& value) override;
         void process(const char* name, std::uint32_t& value) override;
         void process(const char* name, std::uint64_t& value) override;

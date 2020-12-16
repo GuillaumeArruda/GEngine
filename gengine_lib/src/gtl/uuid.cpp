@@ -10,12 +10,12 @@ namespace gtl
 {
     uuid uuid::generate()
     {
-        auto const time_since_epoch = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         static thread_local std::random_device                              rd;
         static thread_local std::mt19937                                    gen(rd());
         static thread_local std::uniform_int_distribution<std::uint64_t>    dis(0);
         static std::atomic<uint32_t> counter = static_cast<uint32_t>(dis(gen));
         
+        auto const time_since_epoch = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         std::uint64_t const high = static_cast<std::uint64_t>(time_since_epoch) << 32ull | counter++;
         std::uint64_t const low = dis(gen);
         return uuid(high, low);

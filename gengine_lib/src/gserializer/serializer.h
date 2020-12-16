@@ -30,8 +30,8 @@ namespace gserializer
             serializer& m_serializer;
         };
 
-        virtual bool is_writing() const = 0;
-        virtual bool is_reading() const { return !is_writing(); }
+        virtual bool is_reading_from_object() const = 0;
+        virtual bool is_writing_to_object() const { return !is_reading_from_object(); }
 
         virtual void process(const char* name, std::string& value) = 0;
         virtual void process(const char* name, std::uint32_t& value) = 0;
@@ -58,7 +58,7 @@ namespace gserializer
             using gserializer::process;
             std::size_t element_count = container.size();
             open_array(name, element_count);
-            if (is_writing())
+            if (is_reading_from_object())
             {
                 for (auto& value : container)
                 {
@@ -86,7 +86,7 @@ namespace gserializer
             using gserializer::process;
             std::size_t element_count = container.size();
             open_array(name, element_count);
-            if (is_writing())
+            if (is_reading_from_object())
             {
                 for (auto& value : container)
                 {
@@ -118,7 +118,7 @@ namespace gserializer
             if (enum_as_string())
             {
                 std::string temp;
-                if (is_reading())
+                if (is_writing_to_object())
                 {
                     process(name, temp);
                     from_string(temp.c_str(), value);
@@ -133,7 +133,7 @@ namespace gserializer
             {
                 std::underlying_type_t<EnumToSerialize> int_value = static_cast<std::underlying_type_t<EnumToSerialize>>(value);
                 process(name, int_value);
-                if (is_reading())
+                if (is_writing_to_object())
                     value = static_cast<EnumToSerialize>(int_value);
             }
         }
@@ -155,7 +155,7 @@ namespace gserializer
     {
         bool is_valid = static_cast<bool>(value);
         serializer.process("is_valid", is_valid);
-        if (serializer.is_writing())
+        if (serializer.is_reading_from_object())
         {
             if (is_valid)
             {
@@ -177,7 +177,7 @@ namespace gserializer
     {
         bool is_valid = static_cast<bool>(value);
         serializer.process("is_valid", is_valid);
-        if (serializer.is_writing())
+        if (serializer.is_reading_from_object())
         {
             if (value)
                 serializer.process("data", *value);
@@ -199,7 +199,7 @@ namespace gserializer
         serializer.process("is_valid", is_valid);
         if (is_valid)
         {
-            if (serializer.is_writing())
+            if (serializer.is_reading_from_object())
             {
                 std::string type_name(factory.get_type_name(*value));
                 serializer.process("type_name", type_name);
@@ -224,7 +224,7 @@ namespace gserializer
     {
         bool is_valid = static_cast<bool>(value);
         serializer.process("is_valid", is_valid);
-        if (serializer.is_writing())
+        if (serializer.is_reading_from_object())
         {
             if (value)
                 serializer.process("data", *value);
@@ -246,7 +246,7 @@ namespace gserializer
         serializer.process("is_valid", is_valid);
         if (is_valid)
         {
-            if (serializer.is_writing())
+            if (serializer.is_reading_from_object())
             {
                 std::string type_name(factory.get_type_name(*value));
                 serializer.process("type_name", type_name);

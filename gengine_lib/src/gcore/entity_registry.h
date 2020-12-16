@@ -13,6 +13,12 @@
 
 #include "gcore/component.h"
 
+namespace gserializer
+{
+    struct serializer;
+}
+
+
 namespace gcore
 {
 
@@ -55,10 +61,14 @@ namespace gcore
         template<class ... ComponentType>
         [[nodiscard]] view<ComponentType...> get_view();
 
+        void process(gserializer::serializer& serializer);
+
     private:
         void remove_component(entity entity, component_id component_type);
         bool has_components(entity entity, gtl::span<component_id const> component_types) const;
-        component* get_component(entity entity, component_id component_type) const;
+        [[nodiscard]] component* get_component(entity entity, component_id component_type) const;
+        void rebuild_component_type_map();
+
 
         struct group_base
         {
@@ -74,14 +84,13 @@ namespace gcore
         struct entity_component_list
         {
             std::vector<entity> m_entities;
-            std::vector<std::unique_ptr<component>> m_components;
+            std::vector<component*> m_components;
         };
         
-        std::unordered_map<entity, std::vector<component_id>> m_entity_to_component_id;
+        std::unordered_map<entity, std::vector<std::unique_ptr<component>>> m_entity_to_component;
         std::unordered_map<component_id, entity_component_list> m_component_type_map;
         std::unordered_map<view_id, std::unique_ptr<group_base>> m_group_map;
         std::shared_mutex m_lock;
-        entity m_entity_generator = 0;
     };
 
     template<class ... ComponentTypes>
@@ -169,7 +178,7 @@ namespace gcore
         if (it.second)
         {
             it.first->second = std::make_unique<group_type>();
-            for (auto& entity_comp : m_entity_to_component_id)
+            for (auto& entity_comp : m_entity_to_component)
             {
                 it.first->second->on_component_added(*this, entity_comp.first);
             }
