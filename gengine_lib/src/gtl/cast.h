@@ -2,7 +2,7 @@
 #include <utility>
 #include <type_traits>
 
-#define GTL_CHECK_CAST() 0
+#define GTL_CHECK_CAST() 1
 
 namespace gtl
 {

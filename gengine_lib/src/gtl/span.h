@@ -31,8 +31,8 @@ namespace gtl
         constexpr span(element_type(&arr)[N]) noexcept : m_begin(arr), m_end(arr + N) {}
         template<class U, class = std::enable_if_t<!std::is_same_v<U, T> && std::is_convertible_v<element_type(*)[], U(*)[]>, void>>
         constexpr span(span<U> s) noexcept : m_begin(s.begin()), m_end(s.end()) {}
-        template<class Vector, class = std::enable_if_t<std::is_convertible_v<typename Vector::value_type (*)[], element_type(*)[]>, decltype(std::declval<Vector>().data())>>
-        constexpr span(Vector const& vec) noexcept : m_begin(vec.data()), m_end(vec.data() + vec.size()) {}
+        template<class Vector, class = std::enable_if_t<std::is_convertible_v<typename Vector::value_type(*)[], element_type(*)[]>, decltype(std::declval<Vector>().data())>>
+        constexpr span(Vector& vec) noexcept : m_begin(vec.data()), m_end(vec.data() + vec.size()) {}
 
         constexpr span(span const&) noexcept = default;
         constexpr span(span&&) noexcept = default;

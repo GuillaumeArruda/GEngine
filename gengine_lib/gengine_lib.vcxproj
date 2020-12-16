@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\gcore\component.h" />
+    <ClInclude Include="src\gcore\entity_registry.h" />
+    <ClInclude Include="src\gcore\system.h" />
+    <ClInclude Include="src\gcore\system_registry.h" />
     <ClInclude Include="src\gmath\axis_aligned_box.h" />
     <ClInclude Include="src\gmath\direction.h" />
     <ClInclude Include="src\gmath\internal\units_helper.h" />
@@ -45,8 +49,11 @@
     <ClInclude Include="src\gtl\cast.h" />
     <ClInclude Include="src\gtl\span.h" />
     <ClInclude Include="src\stdafx.h" />
+    <ClInclude Include="src\gcore\world.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gcore\entity_registry.cpp" />
+    <ClCompile Include="src\gcore\system_registry.cpp" />
     <ClCompile Include="src\gserializer\gmath_serialization.cpp" />
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp" />
     <ClCompile Include="src\gthread\job_manager.cpp" />
@@ -59,6 +66,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\gcore\world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\gengine.natvis" />

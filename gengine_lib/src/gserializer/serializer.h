@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <optional>
+#include <unordered_map>
 
 namespace gserializer
 {
