@@ -86,7 +86,7 @@ namespace gcore
         {
             if (component)
             {
-                component_id const id = typeid((*component.get())).hash_code();
+                component_id const id = component_id(typeid((*component.get())));
                 entity_comp_id_list.push_back(id);
 
                 entity_component_list& ent_comp_list = m_component_type_map[id];

@@ -5,6 +5,7 @@
 #include <memory>
 #include <tuple>
 #include <shared_mutex>
+#include <typeindex>
 
 #include "gtl/span.h"
 #include "gtl/cast.h"
@@ -15,8 +16,8 @@ namespace gcore
 {
 
     using entity = std::size_t;
-    using component_id = std::size_t;
-    using view_id = std::size_t;
+    using component_id = std::type_index;
+    using view_id = std::type_index;
 
     struct entity_registry
     {
@@ -25,25 +26,25 @@ namespace gcore
         
         void add_components(entity entity, gtl::span<std::unique_ptr<component>> components);
         template<class ComponentType>
-        void remove_component(entity entity) { remove_component(entity, typeid(ComponentType).hash_code()); }
+        void remove_component(entity entity) { remove_component(entity, component_id(typeid(ComponentType))); }
 
         template<class ... ComponentType>
         [[nodiscard]]auto get_components(entity entity) const
         {
             if constexpr (sizeof...(ComponentType) == 1)
             {
-                return gtl::cast<ComponentType*...>(get_component(entity, typeid(ComponentType...).hash_code()));
+                return gtl::cast<ComponentType*...>(get_component(entity, component_id(typeid(ComponentType...))));
             }
             else
             {
-                return std::tuple<ComponentType*...>{ gtl::cast<ComponentType*>(get_component(entity, typeid(ComponentType).hash_code()))... };
+                return std::tuple<ComponentType*...>{ gtl::cast<ComponentType*>(get_component(entity, component_id(typeid(ComponentType))))... };
             }
         }
 
 
         template<class ... ComponentType>
         [[nodiscard]] bool has_components(entity) const { 
-            static component_id component_types[] = { typeid(ComponentType).hash_code()... };
+            static component_id component_types[] = { std::type_index(typeid(ComponentType))... };
             return has_component(entity, component_types); 
         }
 
@@ -124,7 +125,7 @@ namespace gcore
         }
         gtl::span<component_id const> get_component_types() const noexcept { return m_component_ids; }
 
-        component_id const m_component_ids[sizeof...(ComponentTypes)] = { typeid(ComponentTypes).hash_code()... };
+        component_id const m_component_ids[sizeof...(ComponentTypes)] = { component_id(typeid(ComponentTypes))... };
         std::vector<entity> m_entities;
         std::vector<std::tuple<ComponentTypes*...>> m_components;
     };
@@ -152,7 +153,7 @@ namespace gcore
     [[nodiscard]] entity_registry::view<ComponentType...> entity_registry::get_view()
     {
         using group_type = group_impl<ComponentType...>;
-        std::size_t const group_type_hash = typeid(group_type).hash_code();
+        component_id const group_type_hash = component_id(typeid(group_type));
         {
             std::shared_lock shared_lock(m_lock);
             if (auto it = m_group_map.find(group_type_hash);
