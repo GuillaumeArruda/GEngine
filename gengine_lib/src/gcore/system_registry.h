@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <unordered_map>
+#include <typeindex>
 
 #include "gtl/cast.h"
 
@@ -8,12 +9,13 @@
 
 namespace gcore
 {
+    using system_id = std::type_index;
     struct system_registry
     {
         system_registry() = default;
         ~system_registry();
 
-        system_registry(system_registry&&);
+        system_registry(system_registry&&) noexcept;
         system_registry& operator=(system_registry&&) noexcept;
 
         system_registry(system_registry const&) = delete;
@@ -24,7 +26,7 @@ namespace gcore
         template<class SystemType>
         system* get_system()
         {
-            auto it = m_system_map.find(typeid(SystemType).hash_code());
+            auto it = m_system_map.find(system_id(typeid(SystemType)));
             if (it != m_system_map.end())
                 return gtl::cast<SystemType*>(it->second.get());
             return nullptr;
@@ -33,12 +35,12 @@ namespace gcore
         template<class SystemType>
         system const* get_system() const
         {
-            auto it = m_system_map.find(typeid(SystemType).hash_code());
+            auto it = m_system_map.find(system_id(typeid(SystemType)));
             if (it != m_system_map.end())
                 return gtl::cast<SystemType const *>(it->second.get());
             return nullptr;
         }
     private:
-        std::unordered_map<std::size_t, std::unique_ptr<system>> m_system_map;
+        std::unordered_map<system_id, std::unique_ptr<system>> m_system_map;
     };
 }

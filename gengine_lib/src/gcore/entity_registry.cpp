@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <algorithm>
 
 #include "gserializer/serializer.h"
 
@@ -99,19 +100,28 @@ namespace gcore
 
         for (auto& entity : m_entity_to_component)
         {
+            entity.second.erase(
+                std::remove_if(entity.second.begin(), entity.second.end(),
+                [&](auto& comp) 
+                {
+                    if (comp)
+                    {
+                        entity_component_list& ent_comp_list = m_component_type_map[component_id(typeid((*comp.get())))];
+
+                        auto const entity_insert_position = std::lower_bound(ent_comp_list.m_entities.begin(), ent_comp_list.m_entities.end(), entity.first);
+                        auto const diff = std::distance(ent_comp_list.m_entities.begin(), entity_insert_position);
+                        auto const component_insert_position = ent_comp_list.m_components.begin() + diff;
+
+                        ent_comp_list.m_entities.insert(entity_insert_position, entity.first);
+                        ent_comp_list.m_components.insert(component_insert_position, comp.get());
+                        return false;
+                    }
+                    return true;
+                }
+            ), entity.second.end());
             for (auto& comp : entity.second)
             {
-                if (comp)
-                {
-                    entity_component_list& ent_comp_list = m_component_type_map[component_id(typeid((*comp.get())))];
-
-                    auto const entity_insert_position = std::lower_bound(ent_comp_list.m_entities.begin(), ent_comp_list.m_entities.end(), entity.first);
-                    auto const diff = std::distance(ent_comp_list.m_entities.begin(), entity_insert_position);
-                    auto const component_insert_position = ent_comp_list.m_components.begin() + diff;
-
-                    ent_comp_list.m_entities.insert(entity_insert_position, entity.first);
-                    ent_comp_list.m_components.insert(component_insert_position, comp.get());
-                }
+               
             }
         }
     }
