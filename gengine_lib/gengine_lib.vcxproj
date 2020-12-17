@@ -20,12 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gcore\component.h" />
+    <ClInclude Include="src\gcore\components\transform_component.h" />
     <ClInclude Include="src\gcore\entity_registry.h" />
     <ClInclude Include="src\gcore\resource.h" />
     <ClInclude Include="src\gcore\resource_library.h" />
     <ClInclude Include="src\gcore\spaces.h" />
     <ClInclude Include="src\gcore\system.h" />
-    <ClInclude Include="src\gcore\systems\window_system.h" />
+    <ClInclude Include="src\gtool\systems\create_entity_systems.h" />
+    <ClInclude Include="src\grender\systems\window_system.h" />
     <ClInclude Include="src\gcore\system_registry.h" />
     <ClInclude Include="src\gmath\axis_aligned_box.h" />
     <ClInclude Include="src\gmath\direction.h" />
@@ -37,9 +39,11 @@
     <ClInclude Include="src\gmath\units.h" />
     <ClInclude Include="src\gmath\utils.h" />
     <ClInclude Include="src\gmath\vector.h" />
+    <ClInclude Include="src\grender\components\graphic_component.h" />
     <ClInclude Include="src\grender\resources\mesh_resource.h" />
     <ClInclude Include="src\grender\resources\program.h" />
     <ClInclude Include="src\grender\serializers\imgui_serializer.h" />
+    <ClInclude Include="src\grender\systems\render_system.h" />
     <ClInclude Include="src\grender\utils.h" />
     <ClInclude Include="src\gserializer\enum.h" />
     <ClInclude Include="src\gserializer\gmath_serialization.h" />
@@ -64,14 +68,18 @@
     <ClInclude Include="src\gcore\world.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gcore\components\transform_component.cpp" />
     <ClCompile Include="src\gcore\entity_registry.cpp" />
     <ClCompile Include="src\gcore\resource.cpp" />
     <ClCompile Include="src\gcore\resource_library.cpp" />
-    <ClCompile Include="src\gcore\systems\window_system.cpp" />
+    <ClCompile Include="src\gtool\systems\create_entity_systems.cpp" />
+    <ClCompile Include="src\grender\systems\window_system.cpp" />
     <ClCompile Include="src\gcore\system_registry.cpp" />
+    <ClCompile Include="src\grender\components\graphic_component.cpp" />
     <ClCompile Include="src\grender\resources\mesh_resource.cpp" />
     <ClCompile Include="src\grender\resources\program.cpp" />
     <ClCompile Include="src\grender\serializers\imgui_serializer.cpp" />
+    <ClCompile Include="src\grender\systems\render_system.cpp" />
     <ClCompile Include="src\gserializer\gmath_serialization.cpp" />
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp" />
     <ClCompile Include="src\gthread\job_manager.cpp" />

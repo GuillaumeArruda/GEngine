@@ -1,16 +1,18 @@
 #include "stdafx.h"
-#include "window_system.h"
+#include "grender/systems/window_system.h"
 
+#include "grender/utils.h"
 #include <GLFW/glfw3.h>
 
 #include <imgui.h>
 #include "imgui_impl/imgui_impl_opengl3.h"
 #include "imgui_impl/imgui_impl_glfw.h"
 
-namespace gcore
+namespace grender
 {
     window_system::window_system(std::string const& window_name, int x_resolution, int y_resolution)
     {
+        glfwInit();
         GLFWmonitor* monitor = glfwGetPrimaryMonitor();
         const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
@@ -28,6 +30,7 @@ namespace gcore
     window_system::~window_system()
     {
         glfwDestroyWindow(m_window);
+        glfwTerminate();
     }
 
     window_system& window_system::operator=(window_system&& move)
@@ -48,7 +51,8 @@ namespace gcore
         ImGui::StyleColorsDark();
 
         ImGui_ImplGlfw_InitForOpenGL(m_window, true);
-        ImGui_ImplOpenGL3_Init(nullptr);
+        ImGui_ImplOpenGL3_Init(nullptr);    
+        gl_exec(glewInit);
     }
 
     bool window_system::should_close() const
@@ -61,6 +65,7 @@ namespace gcore
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        glfwPollEvents();
     }
 
     void window_system::end_frame()

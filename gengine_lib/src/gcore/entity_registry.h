@@ -62,10 +62,14 @@ namespace gcore
 
         void process(gserializer::serializer& serializer);
 
-    private:
         void remove_component(entity entity, component_id component_type);
-        bool has_components(entity entity, gtl::span<component_id const> component_types) const;
         [[nodiscard]] component* get_component(entity entity, component_id component_type) const;
+
+        gtl::span<std::unique_ptr<component>> see_components(entity entity);
+        [[nodiscard]] bool has_any_component(entity entity) const;
+
+    private:
+        bool has_components(entity entity, gtl::span<component_id const> component_types) const;
         void rebuild_component_type_map();
 
 

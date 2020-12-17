@@ -6,9 +6,9 @@
 
 struct GLFWwindow;
 
-namespace gcore
+namespace grender
 {
-    struct window_system : system
+    struct window_system : gcore::system
     {
         window_system(std::string const& window_name, int x_resolution, int y_resolution);
         ~window_system() override;
@@ -22,8 +22,6 @@ namespace gcore
         bool should_close() const;
         void begin_frame();
         void end_frame();
-
-        GLFWwindow* get_window() { return m_window; }
     private:
         GLFWwindow* m_window;
     };

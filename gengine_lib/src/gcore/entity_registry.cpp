@@ -20,7 +20,10 @@ namespace gcore
         {
             for (std::unique_ptr<component>& component : it->second)
             {
-                remove_component(entity, component_id(typeid(*component.get())));
+                if (component)
+                {
+                    remove_component(entity, component_id(typeid(*component.get())));
+                }
             }
             m_entity_to_component.erase(it);
         }
@@ -91,6 +94,26 @@ namespace gcore
             }
         }
         return nullptr;
+    }
+
+    gtl::span<std::unique_ptr<component>> entity_registry::see_components(entity entity)
+    {
+        if (auto const it = m_entity_to_component.find(entity);
+            it != m_entity_to_component.end())
+        {
+            return it->second;
+        }
+        return gtl::span<std::unique_ptr<component>>();
+    }
+
+    bool entity_registry::has_any_component(entity entity) const
+    {
+        if (auto const it = m_entity_to_component.find(entity);
+            it != m_entity_to_component.end())
+        {
+            return !it->second.empty();
+        }
+        return false;
     }
 
     void entity_registry::rebuild_component_type_map()

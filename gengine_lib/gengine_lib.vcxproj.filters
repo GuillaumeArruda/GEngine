@@ -111,9 +111,6 @@
     <ClInclude Include="src\gtl\uuid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\gcore\systems\window_system.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\gcore\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -142,6 +139,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\imgui_impl\imgui_stdlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gcore\components\transform_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\components\graphic_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\systems\render_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\systems\window_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gtool\systems\create_entity_systems.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -179,9 +191,6 @@
     <ClCompile Include="src\gtl\uuid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gcore\systems\window_system.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\gcore\resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -204,6 +213,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\imgui_impl\imgui_stdlib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gcore\components\transform_component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\components\graphic_component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\systems\render_system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\systems\window_system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gtool\systems\create_entity_systems.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

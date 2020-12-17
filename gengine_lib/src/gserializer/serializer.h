@@ -6,6 +6,8 @@
 #include <optional>
 #include <unordered_map>
 
+#include "gtl/span.h"
+
 namespace gtl 
 {
     struct uuid;
@@ -139,10 +141,9 @@ namespace gserializer
             }
         }
 
-    private:
+
         virtual void open_scope(const char* name) = 0;
         virtual void close_scope(const char* name) = 0;
-        
         virtual bool enum_as_string() const = 0;
 
         virtual void open_array(const char* name, std::size_t& element_count) = 0;
@@ -151,7 +152,13 @@ namespace gserializer
         virtual void close_array_element() = 0;
     };
 
-    template<typename TypeToSerialize>
+    template<class TypeToSerialize>
+    auto process(serializer& serializer, TypeToSerialize& value) -> std::enable_if_t<std::is_same_v<TypeToSerialize, gtl::uuid>>
+    {
+        serializer.process("value", value);
+    }
+
+    template<class TypeToSerialize>
     void process(serializer& serializer, std::optional<TypeToSerialize>& value)
     {
         bool is_valid = static_cast<bool>(value);
@@ -207,7 +214,7 @@ namespace gserializer
                 serializer.process("data", *value);
 
             }
-            if(serializer.is_writing_to_object())
+            else if(serializer.is_writing_to_object())
             {
                 std::string type_name;
                 serializer.process("type_name", type_name);
@@ -262,6 +269,45 @@ namespace gserializer
                 if (value)
                     serializer.process("data", *value);
             }
+        }
+    }
+
+    template<class TypeToSerialize>
+    void process(serializer& serializer, gtl::span<TypeToSerialize>& container)
+    {
+        using gserializer::process;
+        if (serializer.is_reading_from_object())
+        {
+            std::size_t size = container.size();
+            serializer.open_array("span", size);
+            for (auto& value : container)
+            {
+                serializer.open_array_element();
+                process(serializer, value);
+                serializer.close_array_element();
+            }
+            serializer.close_array("span");
+        }
+    }
+
+    template<class TypeToSerialize>
+    void process(serializer& serializer, gtl::span<std::unique_ptr<TypeToSerialize>>& container)
+    {
+        using gserializer::process;
+        if (serializer.is_reading_from_object())
+        {
+            std::size_t size = container.size();
+            serializer.open_array("span", size);
+            for (auto& value : container)
+            {
+                if (value)
+                {
+                    serializer.open_array_element();
+                    process(serializer, *value);
+                    serializer.close_array_element();
+                }
+            }
+            serializer.close_array("span");
         }
     }
 }

@@ -34,6 +34,8 @@ namespace gtl
         template<class Vector, class = std::enable_if_t<std::is_convertible_v<typename Vector::value_type(*)[], element_type(*)[]>, decltype(std::declval<Vector>().data())>>
         constexpr span(Vector& vec) noexcept : m_begin(vec.data()), m_end(vec.data() + vec.size()) {}
 
+        constexpr span(T& t) noexcept : m_begin(&t), m_end(&t + 1) {}
+
         constexpr span(span const&) noexcept = default;
         constexpr span(span&&) noexcept = default;
         ~span() noexcept = default;

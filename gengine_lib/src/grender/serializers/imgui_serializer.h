@@ -7,7 +7,7 @@ namespace grender
     struct imgui_serializer : gserializer::serializer
     {
         using serializer::process;
-        imgui_serializer(const char* window_name);
+        imgui_serializer(const char* node_name);
         ~imgui_serializer();
 
         virtual bool is_reading_from_object() const { return true; }
@@ -24,7 +24,7 @@ namespace grender
         void process(const char* name, gtl::uuid& value) override;
 
     private:
-        bool should_display() const { return m_should_display_stack.size() == 0 ? true : m_should_display_stack.back(); }
+        bool should_display() const { return m_should_display_stack.back(); }
         std::vector<bool> m_should_display_stack;
         std::vector<std::size_t> m_array_index_stack;
         std::vector<std::size_t> m_array_element_stack;

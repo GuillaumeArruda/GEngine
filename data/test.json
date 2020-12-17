@@ -1,0 +1,106 @@
+{
+    "entity_registry": {
+        "entities": [
+            {
+                "key": "5fdbbf5013a67f832717ef280d00ca5b",
+                "data": [
+                    {
+                        "is_valid": true,
+                        "type_name": "gcore::transform_component",
+                        "data": {
+                            "transform": {
+                                "m_transform": {
+                                    "[0]": {
+                                        "x": 1.0,
+                                        "y": 0.0,
+                                        "z": 0.0,
+                                        "w": 0.0
+                                    },
+                                    "[1]": {
+                                        "x": 0.0,
+                                        "y": 1.0,
+                                        "z": 0.0,
+                                        "w": 0.0
+                                    },
+                                    "[2]": {
+                                        "x": 0.0,
+                                        "y": 0.0,
+                                        "z": 1.0,
+                                        "w": 0.0
+                                    },
+                                    "[3]": {
+                                        "x": 0.0,
+                                        "y": 0.0,
+                                        "z": 0.0,
+                                        "w": 1.0
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "grender::graphic_component",
+                        "data": {
+                            "meshes": [
+                                {
+                                    "value": "5fdad25e7cad6150dd9c58c2db34a5ef"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "key": "5fdbbf7713a67f85255a14958007934e",
+                "data": [
+                    {
+                        "is_valid": true,
+                        "type_name": "grender::graphic_component",
+                        "data": {
+                            "meshes": [
+                                {
+                                    "value": "5fdad25e7cad6150dd9c58c2db34a5ef"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "gcore::transform_component",
+                        "data": {
+                            "transform": {
+                                "m_transform": {
+                                    "[0]": {
+                                        "x": 1.0,
+                                        "y": 0.0,
+                                        "z": 0.0,
+                                        "w": 0.0
+                                    },
+                                    "[1]": {
+                                        "x": 0.0,
+                                        "y": 1.0,
+                                        "z": 0.0,
+                                        "w": 0.0
+                                    },
+                                    "[2]": {
+                                        "x": 0.0,
+                                        "y": 0.0,
+                                        "z": 1.0,
+                                        "w": 0.0
+                                    },
+                                    "[3]": {
+                                        "x": 100.0,
+                                        "y": 0.0,
+                                        "z": 0.0,
+                                        "w": 1.0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

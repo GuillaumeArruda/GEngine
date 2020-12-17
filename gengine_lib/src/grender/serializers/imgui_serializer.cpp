@@ -8,14 +8,17 @@
 
 namespace grender
 {
-    imgui_serializer::imgui_serializer(const char* window_name)
+    imgui_serializer::imgui_serializer(const char* node_name)
     {
-        ImGui::Begin(window_name);
+        m_should_display_stack.push_back(ImGui::TreeNode(node_name));
     }
 
     imgui_serializer::~imgui_serializer()
     {
-        ImGui::End();
+        if (should_display())
+        {
+            ImGui::TreePop();
+        }
     }
 
     void imgui_serializer::process(const char* name, std::string& value)
@@ -125,7 +128,7 @@ namespace grender
     bool imgui_serializer::open_array_element()
     {
         std::size_t const value = m_array_index_stack.back()++;
-        if ((value < m_array_element_stack.back()))
+        if ((value < m_array_element_stack.back()) || (should_display() && ImGui::Button("Create Element")))
         {
             if (should_display())
             {
@@ -145,5 +148,4 @@ namespace grender
     {
         close_scope("element");
     }
-
 }
