@@ -21,10 +21,12 @@ namespace gcore
         void process(gserializer::serializer& serializer);
 
         template<class ResourceType>
-        ResourceType* get_resource(gtl::uuid const& uuid)
+        [[nodiscard]] ResourceType* get_resource(gtl::uuid const& uuid)
         {
             return dynamic_cast<ResourceType*>(get_resource(uuid));
         }
+
+        void scan_directory(const char* folder);
 
     private:
         resource* get_resource(gtl::uuid const& uuid);

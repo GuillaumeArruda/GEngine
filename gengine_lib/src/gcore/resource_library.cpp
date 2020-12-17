@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#include <filesystem>
+
 #include "gcore/resource_library.h"
 
 #include "gserializer/serializer.h"
@@ -37,6 +39,21 @@ namespace gcore
             }
         }
         return it->second.get();
+    }
 
+    void resource_library::scan_directory(const char* directory)
+    {
+        namespace fs = std::filesystem;
+        for (auto& path : fs::recursive_directory_iterator(directory))
+        {
+            if (path.is_regular_file() && path.path().extension() == fs::path(".json"))
+            {
+                gtl::uuid const uuid = gtl::uuid::from_string(path.path().stem().string());
+                if (uuid.is_valid())
+                {
+                    m_uuid_to_resource_file[uuid] = path.path().string();
+                }
+            }
+        }
     }
 }

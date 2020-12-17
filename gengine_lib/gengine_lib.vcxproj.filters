@@ -120,6 +120,24 @@
     <ClInclude Include="src\gcore\resource_library.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\grender\resources\mesh_resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gcore\spaces.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\resources\program.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\imgui_impl\imgui_impl_glfw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\imgui_impl\imgui_impl_opengl3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -162,6 +180,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gcore\resource_library.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\resources\mesh_resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\resources\program.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_impl\imgui_impl_glfw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_impl\imgui_impl_opengl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

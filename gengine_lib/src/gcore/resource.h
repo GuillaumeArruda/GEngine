@@ -12,8 +12,7 @@ namespace gcore
 {
     struct resource
     {
-        resource(gtl::uuid const& uuid) : m_uuid(uuid) {}
-        virtual ~resource() = 0;
+        virtual ~resource() {};
 
         virtual void process(gserializer::serializer& serializer);
         virtual void load() = 0;
@@ -22,6 +21,7 @@ namespace gcore
 
         GSERIALIZER_DECLARE_FACTORY_BASE(resource);
     private:
-        gtl::uuid m_uuid;
+        gtl::uuid m_uuid = gtl::uuid::generate();
+        std::string m_name;
     };
 }

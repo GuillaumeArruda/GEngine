@@ -20,7 +20,9 @@ namespace gcore
 
         void bind_context();
         bool should_close() const;
+        void swap_buffers();
 
+        GLFWwindow* get_window() { return m_window; }
     private:
         GLFWwindow* m_window;
     };

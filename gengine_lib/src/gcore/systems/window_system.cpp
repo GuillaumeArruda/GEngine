@@ -34,6 +34,7 @@ namespace gcore
         glfwDestroyWindow(m_window);
         m_window = move.m_window;
         move.m_window = nullptr;
+        return *this;
     }
 
     void window_system::bind_context()
@@ -44,6 +45,11 @@ namespace gcore
     bool window_system::should_close() const
     {
         return glfwWindowShouldClose(m_window) == 0;
+    }
+
+    void window_system::swap_buffers()
+    {
+        glfwSwapBuffers(m_window);
     }
 }
 

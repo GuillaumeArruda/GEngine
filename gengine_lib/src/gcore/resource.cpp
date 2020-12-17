@@ -9,6 +9,7 @@ namespace gcore
     void resource::process(gserializer::serializer& serializer)
     {
         serializer.process("uuid", m_uuid);
+        serializer.process("name", m_name);
     }
 }
 

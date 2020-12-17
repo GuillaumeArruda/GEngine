@@ -1,0 +1,20 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::program",
+        "data": {
+            "uuid": "5fdb7534af7c1b239419bb136a2b00e7",
+            "name": "simple_program",
+            "shaders": [
+				{
+					"key" : "shader::type::vertex",
+					"data" : "data\\programs\\vertex\\simple_vertex.glsl"
+				},
+				{
+					"key" : "shader::type::fragment",
+					"data" : "data\\programs\\fragment\\simple_fragment.glsl"
+				}
+			]
+        }
+    }
+}
