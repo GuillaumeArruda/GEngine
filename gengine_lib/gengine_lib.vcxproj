@@ -21,7 +21,10 @@
   <ItemGroup>
     <ClInclude Include="src\gcore\component.h" />
     <ClInclude Include="src\gcore\entity_registry.h" />
+    <ClInclude Include="src\gcore\resource.h" />
+    <ClInclude Include="src\gcore\resource_library.h" />
     <ClInclude Include="src\gcore\system.h" />
+    <ClInclude Include="src\gcore\systems\window_system.h" />
     <ClInclude Include="src\gcore\system_registry.h" />
     <ClInclude Include="src\gmath\axis_aligned_box.h" />
     <ClInclude Include="src\gmath\direction.h" />
@@ -54,6 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gcore\entity_registry.cpp" />
+    <ClCompile Include="src\gcore\resource.cpp" />
+    <ClCompile Include="src\gcore\resource_library.cpp" />
+    <ClCompile Include="src\gcore\systems\window_system.cpp" />
     <ClCompile Include="src\gcore\system_registry.cpp" />
     <ClCompile Include="src\gserializer\gmath_serialization.cpp" />
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp" />

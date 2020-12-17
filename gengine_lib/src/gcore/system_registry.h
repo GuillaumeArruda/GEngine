@@ -24,7 +24,7 @@ namespace gcore
         void add_system(std::unique_ptr<system> system);
 
         template<class SystemType>
-        system* get_system()
+        SystemType* get_system()
         {
             auto it = m_system_map.find(system_id(typeid(SystemType)));
             if (it != m_system_map.end())
@@ -33,7 +33,7 @@ namespace gcore
         }
 
         template<class SystemType>
-        system const* get_system() const
+        SystemType const* get_system() const
         {
             auto it = m_system_map.find(system_id(typeid(SystemType)));
             if (it != m_system_map.end())
