@@ -67,7 +67,7 @@ namespace gserializer
                     close_array_element();
                 }
             }
-            else
+            if(is_writing_to_object())
             {
                 container.reserve(element_count);
                 while (open_array_element())
@@ -97,12 +97,12 @@ namespace gserializer
                     close_array_element();
                 }
             }
-            else
+            if(is_writing_to_object())
             {
                 container.reserve(element_count);
                 while (open_array_element())
                 {
-                    Key key;
+                    Key key{};
                     this->process("key", key);
                     this->process("data", container[key], std::forward<ExtraType>(extras)...);
                     close_array_element();
@@ -118,15 +118,16 @@ namespace gserializer
             if (enum_as_string())
             {
                 std::string temp;
-                if (is_writing_to_object())
-                {
-                    process(name, temp);
-                    from_string(temp.c_str(), value);
-                }
-                else
+
+                if(is_reading_from_object())
                 {
                     temp = to_string(value);
                     process(name, temp);
+                }                
+                else if (is_writing_to_object())
+                {
+                    process(name, temp);
+                    from_string(temp.c_str(), value);
                 }
             }
             else
@@ -162,7 +163,7 @@ namespace gserializer
                 serializer.process("data", *value);
             }
         }
-        else
+        if(serializer.is_writing_to_object())
         {
             if (is_valid)
             {
@@ -182,7 +183,7 @@ namespace gserializer
             if (value)
                 serializer.process("data", *value);
         }
-        else
+        if(serializer.is_writing_to_object())
         {
             if (is_valid)
             {
@@ -206,7 +207,7 @@ namespace gserializer
                 serializer.process("data", *value);
 
             }
-            else
+            if(serializer.is_writing_to_object())
             {
                 std::string type_name;
                 serializer.process("type_name", type_name);
@@ -229,7 +230,7 @@ namespace gserializer
             if (value)
                 serializer.process("data", *value);
         }
-        else
+        if(serializer.is_writing_to_object())
         {
             if (is_valid)
             {
@@ -253,7 +254,7 @@ namespace gserializer
                 serializer.process("data", *value);
 
             }
-            else
+            if(serializer.is_writing_to_object())
             {
                 std::string type_name;
                 serializer.process("type_name", type_name);

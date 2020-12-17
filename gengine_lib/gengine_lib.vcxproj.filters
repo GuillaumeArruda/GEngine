@@ -138,6 +138,12 @@
     <ClInclude Include="src\imgui_impl\imgui_impl_opengl3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\grender\serializers\imgui_serializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\imgui_impl\imgui_stdlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -192,6 +198,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\imgui_impl\imgui_impl_opengl3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\serializers\imgui_serializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_impl\imgui_stdlib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

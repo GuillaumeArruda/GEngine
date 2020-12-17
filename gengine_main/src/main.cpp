@@ -10,16 +10,11 @@
 #include "grender/resources/mesh_resource.h"
 #include "grender/resources/program.h"
 #include "grender/utils.h"
+#include "grender/serializers/imgui_serializer.h"
 
 #include "gserializer/serializers/json_serializer.h"
 
-#include <imgui.h>
-#include "imgui_impl/imgui_impl_opengl3.h"
-#include "imgui_impl/imgui_impl_glfw.h"
-
 #include <GLFW/glfw3.h>
-
-#include <imgui.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -37,11 +32,7 @@ int main()
     window->bind_context();
     grender::gl_exec(glewInit);
     
-    ImGui::CreateContext();
-    ImGui::StyleColorsDark();
-    
-    ImGui_ImplGlfw_InitForOpenGL(window->get_window(), true);
-    ImGui_ImplOpenGL3_Init(nullptr);
+
 
     gserializer::json_write_serializer seri;
     {
@@ -63,22 +54,23 @@ int main()
             grender::gl_exec(glClearColor, 0.0f, 0.0f, 0.0f, 1.0f);
             grender::gl_exec(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             grender::gl_exec(glEnable, GL_DEPTH_TEST);
+            window->begin_frame();
             program->activate();
             grender::gl_exec(glUniformMatrix4fv, id, 1, GL_FALSE, glm::value_ptr(mvp));
             for (auto& mesh : mesh->get_meshes())
             {
                 mesh.draw();
             }
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-            ImGui::ShowDemoWindow();
-            ImGui::Render();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-            window->swap_buffers();
+
+            {
+                grender::imgui_serializer visitor("test");
+                visitor.process("mesh", *mesh);
+                visitor.process("program", *program);
+                visitor.process("resources", lib);
+            }
+
+            window->end_frame();
         }
-        seri.process("resource_library", lib);
-        seri.write_to_file("data\\resource_index.json");
     }
 
     glfwTerminate();

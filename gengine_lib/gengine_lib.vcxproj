@@ -39,6 +39,7 @@
     <ClInclude Include="src\gmath\vector.h" />
     <ClInclude Include="src\grender\resources\mesh_resource.h" />
     <ClInclude Include="src\grender\resources\program.h" />
+    <ClInclude Include="src\grender\serializers\imgui_serializer.h" />
     <ClInclude Include="src\grender\utils.h" />
     <ClInclude Include="src\gserializer\enum.h" />
     <ClInclude Include="src\gserializer\gmath_serialization.h" />
@@ -58,6 +59,7 @@
     <ClInclude Include="src\gtl\uuid.h" />
     <ClInclude Include="src\imgui_impl\imgui_impl_glfw.h" />
     <ClInclude Include="src\imgui_impl\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\imgui_impl\imgui_stdlib.h" />
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\gcore\world.h" />
   </ItemGroup>
@@ -69,6 +71,7 @@
     <ClCompile Include="src\gcore\system_registry.cpp" />
     <ClCompile Include="src\grender\resources\mesh_resource.cpp" />
     <ClCompile Include="src\grender\resources\program.cpp" />
+    <ClCompile Include="src\grender\serializers\imgui_serializer.cpp" />
     <ClCompile Include="src\gserializer\gmath_serialization.cpp" />
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp" />
     <ClCompile Include="src\gthread\job_manager.cpp" />
@@ -83,6 +86,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\imgui_impl\imgui_impl_opengl3.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\imgui_impl\imgui_stdlib.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

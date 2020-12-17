@@ -3,6 +3,10 @@
 
 #include <GLFW/glfw3.h>
 
+#include <imgui.h>
+#include "imgui_impl/imgui_impl_opengl3.h"
+#include "imgui_impl/imgui_impl_glfw.h"
+
 namespace gcore
 {
     window_system::window_system(std::string const& window_name, int x_resolution, int y_resolution)
@@ -40,6 +44,11 @@ namespace gcore
     void window_system::bind_context()
     {
         glfwMakeContextCurrent(m_window);
+        ImGui::CreateContext();
+        ImGui::StyleColorsDark();
+
+        ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+        ImGui_ImplOpenGL3_Init(nullptr);
     }
 
     bool window_system::should_close() const
@@ -47,8 +56,17 @@ namespace gcore
         return glfwWindowShouldClose(m_window) == 0;
     }
 
-    void window_system::swap_buffers()
+    void window_system::begin_frame()
     {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+    }
+
+    void window_system::end_frame()
+    {
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(m_window);
     }
 }
