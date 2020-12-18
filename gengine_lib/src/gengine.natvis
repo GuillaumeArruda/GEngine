@@ -31,4 +31,39 @@
             <Item Name="[low]">m_array[1],h</Item>
         </Expand>
     </Type>
+    <Type Name="grender::uniform_variant">
+        <DisplayString>{{ {m_type} }}</DisplayString>
+        <Expand>
+            <Item Name="[value]" Condition="m_type == type::glbool">m_bool</Item>
+            <Item Name="[value]" Condition="m_type == type::glint">m_int</Item>
+            <Item Name="[value]" Condition="m_type == type::gluint">m_uint</Item>
+            <Item Name="[value]" Condition="m_type == type::glfloat">m_float</Item>
+            <Item Name="[value]" Condition="m_type == type::gldouble">m_double</Item>
+            <Item Name="[value]" Condition="m_type == type::bvec2">m_bvec2</Item>
+            <Item Name="[value]" Condition="m_type == type::bvec3">m_bvec3</Item>
+            <Item Name="[value]" Condition="m_type == type::bvec4">m_bvec4</Item>
+            <Item Name="[value]" Condition="m_type == type::ivec2">m_ivec2</Item>
+            <Item Name="[value]" Condition="m_type == type::ivec3">m_ivec3</Item>
+            <Item Name="[value]" Condition="m_type == type::ivec4">m_ivec4</Item>
+            <Item Name="[value]" Condition="m_type == type::uvec2">m_uvec2</Item>
+            <Item Name="[value]" Condition="m_type == type::uvec3">m_uvec3</Item>
+            <Item Name="[value]" Condition="m_type == type::uvec4">m_uvec4</Item>
+            <Item Name="[value]" Condition="m_type == type::vec2">m_vec2</Item>
+            <Item Name="[value]" Condition="m_type == type::vec3">m_vec3</Item>
+            <Item Name="[value]" Condition="m_type == type::vec4">m_vec4</Item>
+            <Item Name="[value]" Condition="m_type == type::dvec2">m_dvec2</Item>
+            <Item Name="[value]" Condition="m_type == type::dvec3">m_dvec3</Item>
+            <Item Name="[value]" Condition="m_type == type::dvec4">m_dvec4</Item>
+            <Item Name="[value]" Condition="m_type == type::mat22">m_mat22</Item>
+            <Item Name="[value]" Condition="m_type == type::mat23">m_mat23</Item>
+            <Item Name="[value]" Condition="m_type == type::mat24">m_mat24</Item>
+            <Item Name="[value]" Condition="m_type == type::mat32">m_mat32</Item>
+            <Item Name="[value]" Condition="m_type == type::mat33">m_mat33</Item>
+            <Item Name="[value]" Condition="m_type == type::mat34">m_mat34</Item>
+            <Item Name="[value]" Condition="m_type == type::mat42">m_mat42</Item>
+            <Item Name="[value]" Condition="m_type == type::mat43">m_mat43</Item>
+            <Item Name="[value]" Condition="m_type == type::mat44">m_mat44</Item>
+        </Expand>
+    </Type>
+    
 </AutoVisualizer>
