@@ -11,7 +11,7 @@ namespace gcore
 {
     void resource_library::process(gserializer::serializer& serializer)
     {
-        serializer.process("uuid_to_resource_file", m_uuid_to_resource_file);
+        serializer.process("uuid_to_resource_file", m_uuid_to_resource_file, "Resource");
     }
 
     resource* resource_library::get_resource(gtl::uuid const& uuid)

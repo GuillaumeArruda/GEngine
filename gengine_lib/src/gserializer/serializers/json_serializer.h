@@ -32,8 +32,8 @@ namespace gserializer
 
         void open_array(const char* name, std::size_t& element_count) override;
         void close_array(const char* name) override;
-        bool open_array_element() override;
-        void close_array_element() override;
+        bool open_array_element(const char* name) override;
+        void close_array_element(const char* name) override;
 
         void create_and_add_stack_value(const char* name, rapidjson::Type object_type);
 
@@ -66,8 +66,8 @@ namespace gserializer
 
         void open_array(const char* name, std::size_t& element_count) override;
         void close_array(const char* name) override;
-        bool open_array_element() override;
-        void close_array_element() override;
+        bool open_array_element(const char*) override;
+        void close_array_element(const char*) override;
 
         void create_and_add_stack_value(const char* name, rapidjson::Type object_type);
 

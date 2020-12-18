@@ -125,14 +125,14 @@ namespace grender
         m_array_element_stack.pop_back();
     }
 
-    bool imgui_serializer::open_array_element()
+    bool imgui_serializer::open_array_element(const char* element_name)
     {
         std::size_t const value = m_array_index_stack.back()++;
         if ((value < m_array_element_stack.back()) || (should_display() && ImGui::Button("Create Element")))
         {
             if (should_display())
             {
-                m_should_display_stack.push_back(ImGui::TreeNode(reinterpret_cast<void const*>(value), "element"));
+                m_should_display_stack.push_back(ImGui::TreeNode(reinterpret_cast<void const*>(value), element_name));
             }
             else
             {
@@ -144,8 +144,8 @@ namespace grender
         return false;
     }
 
-    void imgui_serializer::close_array_element()
+    void imgui_serializer::close_array_element(const char* element_name)
     {
-        close_scope("element");
+        close_scope(element_name);
     }
 }

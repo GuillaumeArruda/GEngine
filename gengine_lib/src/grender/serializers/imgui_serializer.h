@@ -35,7 +35,7 @@ namespace grender
 
         void open_array(const char* name, std::size_t& element_count) override;
         void close_array(const char* name) override;
-        bool open_array_element() override;
-        void close_array_element() override;
+        bool open_array_element(const char* element_name) override;
+        void close_array_element(const char* element_name) override;
     };
 }

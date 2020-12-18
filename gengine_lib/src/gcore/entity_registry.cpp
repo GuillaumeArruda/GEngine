@@ -31,7 +31,7 @@ namespace gcore
 
     void entity_registry::process(gserializer::serializer& serializer)
     {
-        serializer.process("entities", m_entity_to_component, component::factory());
+        serializer.process("Entities", m_entity_to_component, "Entity", "Component", component::factory());
         if (serializer.is_writing_to_object())
         {
             rebuild_component_type_map();

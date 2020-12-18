@@ -6,15 +6,60 @@
             "uuid": "5fdb7534af7c1b239419bb136a2b00e7",
             "name": "simple_program",
             "shaders": [
-				{
-					"key" : "shader::type::vertex",
-					"data" : "data\\programs\\vertex\\simple_vertex.glsl"
-				},
-				{
-					"key" : "shader::type::fragment",
-					"data" : "data\\programs\\fragment\\simple_fragment.glsl"
-				}
-			]
+                {
+                    "key": "shader::type::vertex",
+                    "data": "data\\programs\\vertex\\simple_vertex.glsl"
+                },
+                {
+                    "key": "shader::type::fragment",
+                    "data": "data\\programs\\fragment\\simple_fragment.glsl"
+                }
+            ],
+            "default uniforms": {
+                "uniforms": [
+                    {
+                        "name": "MVP",
+                        "type": "uniform_variant::type::mat44",
+                        "[0]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[1]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[3]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[4]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        }
+                    },
+                    {
+                        "name": "color",
+                        "type": "uniform_variant::type::vec4",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 0.0,
+                        "w": 0.0
+                    },
+                    {
+                        "name": "intensity",
+                        "type": "uniform_variant::type::glfloat",
+                        "value": 1.0
+                    }
+                ]
+            }
         }
     }
 }

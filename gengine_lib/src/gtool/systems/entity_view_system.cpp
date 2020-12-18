@@ -41,7 +41,7 @@ namespace gtool
 
             {
                 grender::imgui_serializer serializer("Current Components");
-                serializer.process("Components", m_components, gcore::component::factory());
+                serializer.process("Components", m_components, "Component", gcore::component::factory());
             }
 
             if (ImGui::Button("Create Component"))
@@ -108,7 +108,7 @@ namespace gtool
 
                 grender::imgui_serializer serializer("Current Components");
                 gtl::span<std::unique_ptr<gcore::component>> components = registry.see_components(entity);
-                serializer.process("Components", components, gcore::component::factory());
+                serializer.process("Components", components, "Component", gcore::component::factory());
 
                 if (ImGui::Button("Remove entity"))
                 {

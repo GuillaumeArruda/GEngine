@@ -95,14 +95,14 @@ void gserializer::json_write_serializer::close_array(const char*)
     m_stack.pop_back();
 }
 
-bool gserializer::json_write_serializer::open_array_element()
+bool gserializer::json_write_serializer::open_array_element(const char*)
 {
     stack_top().PushBack(rapidjson::Value(rapidjson::kObjectType), m_document.GetAllocator());
     m_stack.push_back(*((stack_top().End() - 1)));
     return true;
 }
 
-void gserializer::json_write_serializer::close_array_element()
+void gserializer::json_write_serializer::close_array_element(const char*)
 {
     m_stack.pop_back();
 }
@@ -237,7 +237,7 @@ void gserializer::json_read_serializer::close_array(const char* name)
     m_array_itr_stack.pop_back();
 }
 
-bool gserializer::json_read_serializer::open_array_element()
+bool gserializer::json_read_serializer::open_array_element(const char*)
 {
     if (m_array_itr_stack.back() == stack_top().End())
     {
@@ -249,7 +249,7 @@ bool gserializer::json_read_serializer::open_array_element()
     return true;
 }
 
-void gserializer::json_read_serializer::close_array_element()
+void gserializer::json_read_serializer::close_array_element(const char*)
 {
     m_stack.pop_back();
 }

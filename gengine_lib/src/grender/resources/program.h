@@ -7,6 +7,8 @@
 
 #include "gserializer/enum.h"
 
+#include "grender/uniform_variant.h"
+
 namespace grender
 {
     struct shader
@@ -38,15 +40,37 @@ namespace grender
 
     GSERIALIZER_FORWARD_DECLARE_ENUM_SERIALIZATION(shader::type);
 
+    struct program_uniform_state
+    {
+        void apply() const;
+        void bind(GLint program_id);
+        void set_uniform(GLint location, uniform_variant const& variant);
+        void process(gserializer::serializer& serializer);
+        void reconcile(program_uniform_state const& state);
+        GLint get_uniform_location(std::string_view name) const;
+    private:
+        struct uniform
+        {
+            uniform_variant m_uniform;
+            std::string m_name;
+            void process(gserializer::serializer& serializer);
+        };
+        std::vector<uniform> m_uniforms;
+    };
+
     struct program : gcore::resource
     {
         void process(gserializer::serializer& serializer) override;
         void load() override;
         void unload() override;
 
-        void activate();
+        void activate() const;
         GLuint get_id() const noexcept { return m_program_id; }
+
+        
+        program_uniform_state const& get_default_state() const { return m_default_state; }
     private:
+        program_uniform_state m_default_state;
         std::unordered_map<shader::type, std::string> m_shaders_file;
         std::vector<shader> m_shaders;
         GLuint m_program_id = 0;

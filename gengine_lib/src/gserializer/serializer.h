@@ -55,7 +55,7 @@ namespace gserializer
         }
 
         template<class TypeToSerialize, class ...ExtraType >
-        void process(const char* name, std::vector<TypeToSerialize>& container, ExtraType&&... extras)
+        void process(const char* name, std::vector<TypeToSerialize>& container, const char* element_name, ExtraType&&... extras)
         {
             using gserializer::process;
             std::size_t element_count = container.size();
@@ -64,26 +64,26 @@ namespace gserializer
             {
                 for (auto& value : container)
                 {
-                    open_array_element();
+                    open_array_element(element_name);
                     process(*this, value, std::forward<ExtraType>(extras)...);
-                    close_array_element();
+                    close_array_element(element_name);
                 }
             }
             if(is_writing_to_object())
             {
                 container.reserve(element_count);
-                while (open_array_element())
+                while (open_array_element(element_name))
                 {
                     TypeToSerialize& element = container.emplace_back();
                     process(*this, element , std::forward<ExtraType>(extras)...);
-                    close_array_element();
+                    close_array_element(element_name);
                 }
             }
             close_array(name);
         }
 
         template<class Key, class TypeToSerialize, class ...ExtraType>
-        void process(const char* name, std::unordered_map<Key, TypeToSerialize>& container, ExtraType&&... extras)
+        void process(const char* name, std::unordered_map<Key, TypeToSerialize>& container, const char* element_name, ExtraType&&... extras)
         {
             using gserializer::process;
             std::size_t element_count = container.size();
@@ -92,22 +92,22 @@ namespace gserializer
             {
                 for (auto& value : container)
                 {
-                    open_array_element();
+                    open_array_element(element_name);
                     Key key = value.first;
                     this->process("key", key);
                     this->process("data", value.second, std::forward<ExtraType>(extras)...);
-                    close_array_element();
+                    close_array_element(element_name);
                 }
             }
             if(is_writing_to_object())
             {
                 container.reserve(element_count);
-                while (open_array_element())
+                while (open_array_element(element_name))
                 {
                     Key key{};
                     this->process("key", key);
                     this->process("data", container[key], std::forward<ExtraType>(extras)...);
-                    close_array_element();
+                    close_array_element(element_name);
                 }
             }
             close_array(name);
@@ -148,12 +148,27 @@ namespace gserializer
 
         virtual void open_array(const char* name, std::size_t& element_count) = 0;
         virtual void close_array(const char* name) = 0;
-        virtual bool open_array_element() = 0;
-        virtual void close_array_element() = 0;
+        virtual bool open_array_element(const char* name) = 0;
+        virtual void close_array_element(const char* name) = 0;
     };
 
+    inline void process(serializer& serializer, gtl::uuid& value)
+    {
+        serializer.process("value", value);
+    }
+
+    inline void process(serializer& serializer, bool& value)
+    {
+        serializer.process("value", value);
+    }
+
+    inline void process(serializer& serializer, std::string& value)
+    {
+        serializer.process("value", value);
+    }
+
     template<class TypeToSerialize>
-    auto process(serializer& serializer, TypeToSerialize& value) -> std::enable_if_t<std::is_same_v<TypeToSerialize, gtl::uuid>>
+    auto  process(serializer& serializer, TypeToSerialize& value) -> std::enable_if_t<std::is_integral_v<TypeToSerialize> || std::is_floating_point_v<TypeToSerialize>>
     {
         serializer.process("value", value);
     }
@@ -273,7 +288,7 @@ namespace gserializer
     }
 
     template<class TypeToSerialize, class ... ExtraTypes>
-    void process(serializer& serializer, gtl::span<TypeToSerialize>& container, ExtraTypes&&... args)
+    void process(serializer& serializer, gtl::span<TypeToSerialize>& container, const char* element_name, ExtraTypes&&... args)
     {
         using gserializer::process;
         if (serializer.is_reading_from_object())
@@ -282,9 +297,9 @@ namespace gserializer
             serializer.open_array("span", size);
             for (auto& value : container)
             {
-                serializer.open_array_element();
+                serializer.open_array_element(element_name);
                 process(serializer, value, std::forward<ExtraTypes>(args)...);
-                serializer.close_array_element();
+                serializer.close_array_element(element_name);
             }
             serializer.close_array("span");
         }
