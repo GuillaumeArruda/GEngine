@@ -5,7 +5,8 @@
 #include "gcore/world.h"
 
 #include "gcore/resource_library.h"
-#include "gtool/systems/create_entity_systems.h"
+#include "gtool/systems/entity_view_system.h"
+#include "gtool/systems/resource_view_system.h"
 
 #include "grender/systems/window_system.h"
 #include "grender/systems/render_system.h"
@@ -19,10 +20,12 @@ int main()
 
     systems.add_system(std::make_unique<grender::window_system>("test", 1920, 1080));
     systems.add_system(std::make_unique<grender::render_system>());
-    systems.add_system(std::make_unique<gtool::create_entity_system>());
+    systems.add_system(std::make_unique<gtool::entity_view_system>());
+    systems.add_system(std::make_unique<gtool::resouce_view_system>());
     grender::window_system* window = systems.get_system<grender::window_system>();
     grender::render_system* render = systems.get_system<grender::render_system>();
-    gtool::create_entity_system* create_entity = systems.get_system<gtool::create_entity_system>();
+    gtool::entity_view_system* entity_view_system = systems.get_system<gtool::entity_view_system>();
+    gtool::resouce_view_system* resource_view_system = systems.get_system<gtool::resouce_view_system>();
     
     window->bind_context();
     {
@@ -32,7 +35,8 @@ int main()
         {
             window->begin_frame();
             render->render(registry, lib);
-            create_entity->update(registry);
+            entity_view_system->update(registry);
+            resource_view_system->update(lib);
             window->end_frame();
         }
     }

@@ -130,7 +130,10 @@ namespace grender
             aiProcess_OptimizeMeshes);
 
         if (!scene)
+        {
+            std::cerr << importer.GetErrorString() << "\n";
             return;
+        }
 
         m_submeshes.reserve(scene->mNumMeshes);
         for (unsigned int i = 0; i < scene->mNumMeshes; ++i)
@@ -138,6 +141,10 @@ namespace grender
             m_submeshes.emplace_back(*scene->mMeshes[i]);
         }
 
+    }
+    void mesh_resource::unload()
+    {
+        m_submeshes.clear();
     }
     void mesh_resource::set_fbx_path(std::string path)
     {

@@ -43,6 +43,7 @@ namespace grender
     {
         void process(gserializer::serializer& serializer) override;
         void load() override;
+        void unload() override;
         void set_fbx_path(std::string path);
 
         gtl::span<mesh const> get_meshes() const { return m_submeshes; }

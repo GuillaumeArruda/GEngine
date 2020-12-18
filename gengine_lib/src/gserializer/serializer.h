@@ -272,8 +272,8 @@ namespace gserializer
         }
     }
 
-    template<class TypeToSerialize>
-    void process(serializer& serializer, gtl::span<TypeToSerialize>& container)
+    template<class TypeToSerialize, class ... ExtraTypes>
+    void process(serializer& serializer, gtl::span<TypeToSerialize>& container, ExtraTypes&&... args)
     {
         using gserializer::process;
         if (serializer.is_reading_from_object())
@@ -283,29 +283,8 @@ namespace gserializer
             for (auto& value : container)
             {
                 serializer.open_array_element();
-                process(serializer, value);
+                process(serializer, value, std::forward<ExtraTypes>(args)...);
                 serializer.close_array_element();
-            }
-            serializer.close_array("span");
-        }
-    }
-
-    template<class TypeToSerialize>
-    void process(serializer& serializer, gtl::span<std::unique_ptr<TypeToSerialize>>& container)
-    {
-        using gserializer::process;
-        if (serializer.is_reading_from_object())
-        {
-            std::size_t size = container.size();
-            serializer.open_array("span", size);
-            for (auto& value : container)
-            {
-                if (value)
-                {
-                    serializer.open_array_element();
-                    process(serializer, *value);
-                    serializer.close_array_element();
-                }
             }
             serializer.close_array("span");
         }

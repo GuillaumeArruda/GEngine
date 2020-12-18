@@ -26,6 +26,8 @@ namespace gcore
             return dynamic_cast<ResourceType*>(get_resource(uuid));
         }
 
+        std::string get_filepath(gtl::uuid const& uuid) const;
+
         void scan_directory(const char* folder);
 
     private:

@@ -153,7 +153,13 @@
     <ClInclude Include="src\grender\systems\window_system.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\gtool\systems\create_entity_systems.h">
+    <ClInclude Include="src\gtool\systems\entity_view_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gtool\systems\resource_view_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gtool\common_widgets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -227,7 +233,13 @@
     <ClCompile Include="src\grender\systems\window_system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gtool\systems\create_entity_systems.cpp">
+    <ClCompile Include="src\gtool\systems\entity_view_system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gtool\common_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gtool\systems\resource_view_system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

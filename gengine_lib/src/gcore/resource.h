@@ -16,6 +16,7 @@ namespace gcore
 
         virtual void process(gserializer::serializer& serializer);
         virtual void load() = 0;
+        virtual void unload() = 0;
         
         gtl::uuid const& get_uuid() const noexcept{ return m_uuid; }
 

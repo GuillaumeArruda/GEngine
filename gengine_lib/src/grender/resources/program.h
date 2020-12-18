@@ -42,7 +42,8 @@ namespace grender
     {
         void process(gserializer::serializer& serializer) override;
         void load() override;
-        
+        void unload() override;
+
         void activate();
         GLuint get_id() const noexcept { return m_program_id; }
     private:

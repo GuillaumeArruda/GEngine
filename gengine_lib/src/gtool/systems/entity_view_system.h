@@ -1,0 +1,47 @@
+#pragma once
+
+#include "gcore/system.h"
+#include "gcore/component.h"
+
+#include "gtool/common_widgets.h"
+
+namespace gcore
+{
+    struct entity_registry;
+}
+
+namespace gtool
+{
+    struct create_entity_widget
+    {
+        void update(gcore::entity_registry& registry);
+    private:
+        factory_combo_box<gcore::component> m_create_component_combo;
+        std::vector<std::unique_ptr<gcore::component>> m_components;
+    };
+
+    struct save_load_registry_widget
+    {
+        void update(gcore::entity_registry& registry);
+    private:
+        std::string m_filepath;
+    };
+
+    struct selected_entity_widget
+    {
+        void update(gcore::entity_registry& registry);
+    private:
+        factory_combo_box<gcore::component> m_component_combo_box;
+        std::string m_uuid;
+    };
+
+    struct entity_view_system : gcore::system
+    {
+        void update(gcore::entity_registry& registry);
+    private:
+        bool m_display = true;
+        create_entity_widget create_entity_widget;
+        save_load_registry_widget save_load_registry_widget;
+        selected_entity_widget selected_entity_widget;
+    };
+}

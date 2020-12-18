@@ -41,6 +41,16 @@ namespace gcore
         return it->second.get();
     }
 
+    std::string resource_library::get_filepath(gtl::uuid const& uuid) const
+    {
+        if (auto const it = m_uuid_to_resource_file.find(uuid);
+            it != m_uuid_to_resource_file.end())
+        {
+            return it->second;
+        }
+        return std::string();
+    }
+
     void resource_library::scan_directory(const char* directory)
     {
         namespace fs = std::filesystem;

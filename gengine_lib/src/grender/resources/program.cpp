@@ -128,6 +128,13 @@ namespace grender
         }
     }
 
+    void program::unload()
+    {
+        glDeleteProgram(m_program_id);
+        m_shaders.clear();
+        m_program_id = 0;
+    }
+
     void program::activate()
     {
         gl_exec(glUseProgram, m_program_id);
