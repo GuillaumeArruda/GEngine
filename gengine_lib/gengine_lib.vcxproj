@@ -26,6 +26,7 @@
     <ClInclude Include="src\gcore\resource_library.h" />
     <ClInclude Include="src\gcore\spaces.h" />
     <ClInclude Include="src\gcore\system.h" />
+    <ClInclude Include="src\grender\components\camera_component.h" />
     <ClInclude Include="src\grender\uniform_variant.h" />
     <ClInclude Include="src\gtool\common_widgets.h" />
     <ClInclude Include="src\gtool\systems\entity_view_system.h" />
@@ -75,6 +76,7 @@
     <ClCompile Include="src\gcore\entity_registry.cpp" />
     <ClCompile Include="src\gcore\resource.cpp" />
     <ClCompile Include="src\gcore\resource_library.cpp" />
+    <ClCompile Include="src\grender\components\camera_component.cpp" />
     <ClCompile Include="src\grender\uniform_variant.cpp" />
     <ClCompile Include="src\gtool\common_widgets.cpp" />
     <ClCompile Include="src\gtool\systems\entity_view_system.cpp" />

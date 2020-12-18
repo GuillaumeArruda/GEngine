@@ -13,7 +13,6 @@
 
 int main()
 {
-
     gcore::world world;
     auto& systems = world.get_system_registry();
     auto& registry = world.get_entity_registry();
