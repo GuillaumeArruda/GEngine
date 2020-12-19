@@ -63,6 +63,10 @@
             <Item Name="[value]" Condition="m_type == type::mat42">m_mat42</Item>
             <Item Name="[value]" Condition="m_type == type::mat43">m_mat43</Item>
             <Item Name="[value]" Condition="m_type == type::mat44">m_mat44</Item>
+            <Item Name="[value]" Condition="m_type ==type::sampler_1d">m_texture_id</Item>
+            <Item Name="[value]" Condition="m_type ==type::sampler_2d">m_texture_id</Item>
+            <Item Name="[value]" Condition="m_type ==type::sampler_3d">m_texture_id</Item>
+            <Item Name="[value]" Condition="m_type ==type::sampler_cube">m_texture_id</Item>
         </Expand>
     </Type>
 

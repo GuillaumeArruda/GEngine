@@ -49,9 +49,6 @@ namespace grender
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_2d)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_3d)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_cube)
-        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::texture_rectangle)
-        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::texture_buffer)
-        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::texture_2d_multisample)
     GSERIALIZER_END_ENUM_HANDLER(uniform_variant::type)
 
     uniform_variant::uniform_variant(type type)
@@ -91,10 +88,7 @@ namespace grender
         case type::sampler_1d:
         case type::sampler_2d:
         case type::sampler_3d:
-        case type::sampler_cube:
-        case type::texture_rectangle:
-        case type::texture_buffer:
-        case type::texture_2d_multisample: new((void*)&m_texture_id) gtl::uuid(); break;
+        case type::sampler_cube: new((void*)&m_texture_id) gtl::uuid(); break;
         case type::invalid:     break;
         }
     }

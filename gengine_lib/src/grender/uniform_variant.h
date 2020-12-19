@@ -54,9 +54,6 @@ namespace grender
             sampler_2d,
             sampler_3d,
             sampler_cube,
-            texture_rectangle,
-            texture_buffer,
-            texture_2d_multisample,
             invalid,
         };
 
