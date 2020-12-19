@@ -5,6 +5,7 @@
 #include <vector>
 #include <optional>
 #include <unordered_map>
+#include <filesystem>
 
 #include "gtl/span.h"
 
@@ -44,6 +45,7 @@ namespace gserializer
         virtual void process(const char* name, double& value) = 0;
         virtual void process(const char* name, bool& value) = 0;
         virtual void process(const char* name, gtl::uuid& value) = 0;
+        virtual void process(const char* name, std::filesystem::path& value) = 0;
 
 
         template<class TypeToSerialize, class ... ExtraType>
@@ -163,6 +165,11 @@ namespace gserializer
     }
 
     inline void process(serializer& serializer, std::string& value)
+    {
+        serializer.process("value", value);
+    }
+
+    inline void process(serializer& serializer, std::filesystem::path& value)
     {
         serializer.process("value", value);
     }

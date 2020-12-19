@@ -28,6 +28,7 @@
     <ClInclude Include="src\gcore\input_key.h" />
     <ClInclude Include="src\gcore\resource.h" />
     <ClInclude Include="src\gcore\resource_library.h" />
+    <ClInclude Include="src\gcore\serializers\dependency_gatherer_serializer.h" />
     <ClInclude Include="src\gcore\spaces.h" />
     <ClInclude Include="src\gcore\system.h" />
     <ClInclude Include="src\gcore\systems\flying_controller_system.h" />
@@ -88,6 +89,7 @@
     <ClCompile Include="src\gcore\input_key.cpp" />
     <ClCompile Include="src\gcore\resource.cpp" />
     <ClCompile Include="src\gcore\resource_library.cpp" />
+    <ClCompile Include="src\gcore\serializers\dependency_gatherer_serializer.cpp" />
     <ClCompile Include="src\gcore\systems\flying_controller_system.cpp" />
     <ClCompile Include="src\gcore\systems\input_system.cpp" />
     <ClCompile Include="src\grender\components\camera_component.cpp" />

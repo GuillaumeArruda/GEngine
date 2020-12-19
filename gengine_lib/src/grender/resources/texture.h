@@ -1,5 +1,7 @@
 #pragma once
 
+#include <filesystem>
+
 #include "gcore/resource.h"
 
 #include "GL/glew.h"
@@ -25,7 +27,7 @@ namespace grender
         GLuint get_id() const { return m_texture_id; }
 
     private:
-        std::string m_file_path;
+        std::filesystem::path m_file_path;
         GLuint m_texture_id = 0;
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
     };

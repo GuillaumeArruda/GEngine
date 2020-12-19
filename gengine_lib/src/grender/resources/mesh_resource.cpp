@@ -146,7 +146,7 @@ namespace grender
     void mesh_resource::load()
     {
         Assimp::Importer importer;
-        aiScene const* scene = importer.ReadFile(m_fbx_path.c_str(),
+        aiScene const* scene = importer.ReadFile(m_fbx_path.string().c_str(),
             aiProcess_Triangulate |
             aiProcess_ImproveCacheLocality |
             aiProcess_FixInfacingNormals |

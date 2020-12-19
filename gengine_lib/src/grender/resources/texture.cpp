@@ -52,7 +52,7 @@ namespace grender
         ILuint const imageId = ilGenImage();
 
         ilBindImage(imageId);
-        ILboolean const success = ilLoadImage(m_file_path.data());
+        ILboolean const success = ilLoadImage(m_file_path.string().data());
         if (!success)
         {
             std::cerr << "Error while loading the texture file: " << m_file_path << std::endl;

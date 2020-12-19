@@ -1,6 +1,7 @@
-#include <vector>
-#include <cassert>
-#include <iostream>
+#include <IL/il.h>
+
+#include <FileWatch/FileWatch.h>
+
 
 #include "gcore/world.h"
 
@@ -15,7 +16,6 @@
 #include "grender/systems/window_system.h"
 #include "grender/systems/render_system.h"
 
-#include <IL/il.h>
 
 int main()
 {
@@ -42,6 +42,12 @@ int main()
     {
         gcore::resource_library lib;
         lib.scan_directory("data\\");
+        filewatch::FileWatch<std::wstring> watcher(L"./",
+            [&](std::wstring const& path, filewatch::Event const& event)
+            {
+                lib.on_file_change(path);
+            }
+        );
         while (window->should_close())
         {
             window->begin_frame();
@@ -50,6 +56,7 @@ int main()
             render->render(registry, lib);
             entity_view_system->update(registry);
             resource_view_system->update(lib);
+            lib.update();
             window->end_frame();
         }
     }

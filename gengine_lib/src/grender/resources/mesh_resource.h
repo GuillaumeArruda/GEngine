@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <filesystem>
 
 #include <GL/glew.h>
 
@@ -56,7 +57,7 @@ namespace grender
     private:
         gmath::axis_aligned_box<gcore::model_space> m_extent;
         std::vector<mesh> m_submeshes;
-        std::string m_fbx_path;
+        std::filesystem::path m_fbx_path;
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
     };
 }

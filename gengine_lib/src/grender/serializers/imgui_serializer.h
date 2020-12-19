@@ -22,6 +22,7 @@ namespace grender
         void process(const char* name, double& value) override;
         void process(const char* name, bool& value) override;
         void process(const char* name, gtl::uuid& value) override;
+        void process(const char* name, std::filesystem::path& value) override;
 
     private:
         bool should_display() const { return m_should_display_stack.back(); }

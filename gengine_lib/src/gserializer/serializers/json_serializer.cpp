@@ -60,6 +60,11 @@ void gserializer::json_write_serializer::process(const char* name, gtl::uuid& va
     stack_top().AddMember(rapidjson::Value(name, m_document.GetAllocator()), rapidjson::Value(s.c_str(), static_cast<rapidjson::SizeType>(s.size()), m_document.GetAllocator()), m_document.GetAllocator());
 }
 
+void gserializer::json_write_serializer::process(const char* name, std::filesystem::path& value)
+{
+    stack_top().AddMember(rapidjson::Value(name, m_document.GetAllocator()), rapidjson::Value(value.string().c_str(), static_cast<rapidjson::SizeType>(value.string().size()), m_document.GetAllocator()), m_document.GetAllocator());
+}
+
 void gserializer::json_write_serializer::write_to_file(const char* file)
 {
     std::ofstream ofs(file);
@@ -206,6 +211,15 @@ void gserializer::json_read_serializer::process(const char* name, gtl::uuid& val
     if (it != stack_top().MemberEnd())
     {
         value = gtl::uuid::from_string(it->value.GetString());
+    }
+}
+
+void gserializer::json_read_serializer::process(const char* name, std::filesystem::path& value)
+{
+    auto it = stack_top().FindMember(name);
+    if (it != stack_top().MemberEnd())
+    {
+        value = std::filesystem::path(it->value.GetString());
     }
 }
 

@@ -79,6 +79,16 @@ namespace grender
         }
     }
 
+    void imgui_serializer::process(const char* name, std::filesystem::path& value)
+    {
+        if (should_display())
+        {
+            std::string string = value.string();
+            ImGui::InputText(name, &string);
+            value = std::filesystem::path(value);
+        }
+    }
+
     void imgui_serializer::open_scope(const char* name)
     {
         if (should_display())

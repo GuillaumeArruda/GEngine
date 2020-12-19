@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string_view>
+#include <filesystem>
 #include <GL/glew.h>
 
 #include "gcore/resource.h"
@@ -76,7 +77,7 @@ namespace grender
         program_uniform_state const& get_default_state() const { return m_default_state; }
     private:
         program_uniform_state m_default_state;
-        std::unordered_map<shader::type, std::string> m_shaders_file;
+        std::unordered_map<shader::type, std::filesystem::path> m_shaders_file;
         std::vector<shader> m_shaders;
         GLuint m_program_id = 0;
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();

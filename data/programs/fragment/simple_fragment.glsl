@@ -9,5 +9,5 @@ out vec4 frag_color;
 
 void main()
 {
-    frag_color = texture(albedo_map, uv) + texture(normal_map, uv) * 2.0 - 1.f;
+    frag_color = texture(albedo_map, uv) + (texture(normal_map, uv) * 2.0 - 1.0);
 }
