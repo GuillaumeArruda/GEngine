@@ -1,11 +1,13 @@
 #version 440
-in smooth vec3 Normal;
-out vec4 FragColor;
+in smooth vec3 normal;
+in smooth vec2 uv;
 
-uniform vec4 color;
-uniform float intensity;
+uniform sampler2D albedo_map;
+uniform sampler2D normal_map;
+
+out vec4 frag_color;
 
 void main()
 {
-    FragColor = intensity * color * abs(vec4(Normal, 1.0));
+    frag_color = texture(albedo_map, uv) + texture(normal_map, uv) * 2.0 - 1.f;
 }

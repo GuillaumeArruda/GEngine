@@ -9,6 +9,10 @@
 #include "gserializer/serializer.h"
 #include "gserializer/gmath_serialization.h"
 
+#include "gcore/resource_library.h"
+
+#include "grender/resources/texture.h"
+
 namespace grender
 {
     GSERIALIZER_BEGIN_ENUM_HANDLER(uniform_variant::type)
@@ -41,6 +45,13 @@ namespace grender
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::mat42)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::mat43)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::mat44)
+        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_1d)
+        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_2d)
+        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_3d)
+        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_cube)
+        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::texture_rectangle)
+        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::texture_buffer)
+        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::texture_2d_multisample)
     GSERIALIZER_END_ENUM_HANDLER(uniform_variant::type)
 
     uniform_variant::uniform_variant(type type)
@@ -77,6 +88,13 @@ namespace grender
         case type::mat42:       new((void*)&m_mat42)   glm::mat4x2(); break;
         case type::mat43:       new((void*)&m_mat43)   glm::mat4x3(); break;
         case type::mat44:       new((void*)&m_mat44)   glm::mat4x4(); break;
+        case type::sampler_1d:
+        case type::sampler_2d:
+        case type::sampler_3d:
+        case type::sampler_cube:
+        case type::texture_rectangle:
+        case type::texture_buffer:
+        case type::texture_2d_multisample: new((void*)&m_texture_id) gtl::uuid(); break;
         case type::invalid:     break;
         }
     }
@@ -96,7 +114,7 @@ namespace grender
         return *this;
     }
 
-    void uniform_variant::apply(GLint location) const
+    void uniform_variant::apply(GLint location, gcore::resource_library& lib) const
     {
         switch (m_type)
         {
@@ -129,6 +147,18 @@ namespace grender
         case type::mat42:       gl_exec(glUniformMatrix4x2fv,   location, 1, GL_FALSE, glm::value_ptr(m_mat42)); break;
         case type::mat43:       gl_exec(glUniformMatrix4x3fv,   location, 1, GL_FALSE, glm::value_ptr(m_mat43)); break;
         case type::mat44:       gl_exec(glUniformMatrix4fv,     location, 1, GL_FALSE, glm::value_ptr(m_mat44)); break;
+        case type::sampler_1d:
+        case type::sampler_2d:
+        case type::sampler_3d:
+        case type::sampler_cube:
+        {
+            if (grender::texture* tex = lib.get_resource<grender::texture>(m_texture_id))
+            {
+                gl_exec(glActiveTexture, GL_TEXTURE0 + location);
+                gl_exec(glBindTexture, GL_TEXTURE_2D, tex->get_id());
+                gl_exec(glUniform1i, location, location);
+            }
+        }
         case type::invalid:     break;
         }
     }
@@ -168,6 +198,11 @@ namespace grender
         case type::mat42:       process(serializer, m_mat42);   break;
         case type::mat43:       process(serializer, m_mat43);   break;
         case type::mat44:       process(serializer, m_mat44);   break;
+        case type::sampler_1d:
+        case type::sampler_2d:
+        case type::sampler_3d:
+        case type::sampler_cube:
+            process(serializer, m_texture_id); break;
         }
     }
 
@@ -204,6 +239,11 @@ namespace grender
         case type::mat42:       new((void*)&m_mat42)   glm::mat4x2(copy.m_mat42); break;
         case type::mat43:       new((void*)&m_mat43)   glm::mat4x3(copy.m_mat43); break;
         case type::mat44:       new((void*)&m_mat44)   glm::mat4x4(copy.m_mat44); break;
+        case type::sampler_1d:
+        case type::sampler_2d:
+        case type::sampler_3d:
+        case type::sampler_cube:
+            new((void*)&m_texture_id) gtl::uuid(copy.m_texture_id); break;
         case type::invalid:     break;
         }
     }
@@ -240,6 +280,10 @@ namespace grender
         case GL_FLOAT_MAT4x2:               return uniform_variant::type::mat42;
         case GL_FLOAT_MAT4x3:               return uniform_variant::type::mat43;
         case GL_FLOAT_MAT4:                 return uniform_variant::type::mat44;
+        case GL_SAMPLER_1D:                 return uniform_variant::type::sampler_1d;
+        case GL_SAMPLER_2D:                 return uniform_variant::type::sampler_2d;
+        case GL_SAMPLER_3D:                 return uniform_variant::type::sampler_3d;
+        case GL_SAMPLER_CUBE:               return uniform_variant::type::sampler_cube;
         default:                            return uniform_variant::type::invalid;
         }
         

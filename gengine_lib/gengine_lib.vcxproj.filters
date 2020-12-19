@@ -189,6 +189,9 @@
     <ClInclude Include="src\gcore\components\extent_component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\grender\resources\texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -291,6 +294,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gcore\components\extent_component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\resources\texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

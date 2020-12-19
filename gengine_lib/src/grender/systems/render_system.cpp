@@ -58,10 +58,10 @@ namespace grender
 
                         if (mesh_info.m_mesh && mesh_info.m_program)
                         {
-                            auto const mvp_id = mesh_info.m_uniform_state.get_uniform_location("MVP");
+                            auto const mvp_id = mesh_info.m_uniform_state.get_uniform_location("mvp");
                             mesh_info.m_program->activate();
                             mesh_info.m_uniform_state.set_uniform(mvp_id, mvp);
-                            mesh_info.m_uniform_state.apply();
+                            mesh_info.m_uniform_state.apply(library);
                             for (auto& submesh : mesh_info.m_mesh->get_meshes())
                             {
                                 submesh.draw();

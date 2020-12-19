@@ -33,6 +33,7 @@
     <ClInclude Include="src\gcore\systems\flying_controller_system.h" />
     <ClInclude Include="src\gcore\systems\input_system.h" />
     <ClInclude Include="src\grender\components\camera_component.h" />
+    <ClInclude Include="src\grender\resources\texture.h" />
     <ClInclude Include="src\grender\uniform_variant.h" />
     <ClInclude Include="src\gtl\utility.h" />
     <ClInclude Include="src\gtool\common_widgets.h" />
@@ -90,6 +91,7 @@
     <ClCompile Include="src\gcore\systems\flying_controller_system.cpp" />
     <ClCompile Include="src\gcore\systems\input_system.cpp" />
     <ClCompile Include="src\grender\components\camera_component.cpp" />
+    <ClCompile Include="src\grender\resources\texture.cpp" />
     <ClCompile Include="src\grender\uniform_variant.cpp" />
     <ClCompile Include="src\gtool\common_widgets.cpp" />
     <ClCompile Include="src\gtool\systems\entity_view_system.cpp" />

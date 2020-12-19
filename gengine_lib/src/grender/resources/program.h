@@ -9,6 +9,11 @@
 
 #include "grender/uniform_variant.h"
 
+namespace gcore
+{
+    struct resource_library;
+}
+
 namespace grender
 {
     struct shader
@@ -42,7 +47,7 @@ namespace grender
 
     struct program_uniform_state
     {
-        void apply() const;
+        void apply(gcore::resource_library& lib) const;
         void bind(GLint program_id);
         void set_uniform(GLint location, uniform_variant const& variant);
         void process(gserializer::serializer& serializer);

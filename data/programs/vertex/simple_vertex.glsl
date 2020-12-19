@@ -1,10 +1,16 @@
 #version 440
-layout(location = 0) in vec3 inVertexPos;
-layout(location = 1) in vec3 inNormal;
-uniform mat4 MVP;
-out vec3 Normal;
+layout(location = 0) in vec3 in_vertex_pos;
+layout(location = 1) in vec3 in_normal;
+layout(location = 2) in vec2 in_uv;
+
+uniform mat4 mvp;
+
+out vec3 normal;
+out vec2 uv;
+
 void main()
 {
-    gl_Position = MVP * vec4(inVertexPos, 1.0);
-    Normal = inNormal;
+    gl_Position = mvp * vec4(in_vertex_pos, 1.0);
+    normal = in_normal;
+	uv = in_uv;
 }

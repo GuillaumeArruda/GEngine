@@ -50,9 +50,6 @@ namespace gmath
             return intersect_result{t0, t1};
         }
 
-
-
-
         float surface_area() const noexcept
         {
             gmath::vector<Space> const diff = m_max - m_min;

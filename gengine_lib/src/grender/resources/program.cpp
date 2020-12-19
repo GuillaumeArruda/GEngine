@@ -85,11 +85,11 @@ namespace grender
         return *this;
     }
 
-    void program_uniform_state::apply() const 
+    void program_uniform_state::apply(gcore::resource_library& lib) const 
     {
         for (GLint i = 0; i < static_cast<GLint>(m_uniforms.size()); ++i)
         {
-            m_uniforms[i].m_uniform.apply(i);
+            m_uniforms[i].m_uniform.apply(i, lib);
         }
     }
 

@@ -3,6 +3,13 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
+#include "gtl/uuid.h" 
+
+namespace gcore
+{
+    struct resource_library;
+}
+
 namespace gserializer
 {
     struct serializer;
@@ -43,6 +50,13 @@ namespace grender
             mat42,
             mat43,
             mat44,
+            sampler_1d,
+            sampler_2d,
+            sampler_3d,
+            sampler_cube,
+            texture_rectangle,
+            texture_buffer,
+            texture_2d_multisample,
             invalid,
         };
 
@@ -77,16 +91,18 @@ namespace grender
         uniform_variant(glm::mat4x2 const& value) : m_mat42(value), m_type(type::mat42) {}
         uniform_variant(glm::mat4x3 const& value) : m_mat43(value), m_type(type::mat43) {}
         uniform_variant(glm::mat4x4 const& value) : m_mat44(value), m_type(type::mat44) {}
+        uniform_variant(gtl::uuid texture_id, type type) : m_texture_id(texture_id), m_type(type) {}
 
         uniform_variant(uniform_variant const& copy) noexcept;
         uniform_variant& operator=(uniform_variant const& copy) noexcept;
 
-        void apply(GLint location) const;
+        void apply(GLint location, gcore::resource_library& lib) const;
         void process(gserializer::serializer& serializer);
         type get_type() const { return m_type; }
 
     private:
         void copy(uniform_variant const& copy);
+
         union
         {
             bool m_bool;
@@ -118,6 +134,7 @@ namespace grender
             glm::mat4x2 m_mat42;
             glm::mat4x3 m_mat43;
             glm::mat4x4 m_mat44;
+            gtl::uuid m_texture_id;
         };
         type m_type;
     };

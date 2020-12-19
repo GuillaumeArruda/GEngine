@@ -58,9 +58,17 @@ namespace grender
 
         if (mesh.HasTextureCoords(0))
         {
+            std::vector<float> uv_cord;
+            uv_cord.resize(mesh.mNumVertices * 2ull);
+            for (std::size_t i = 0; i < mesh.mNumVertices; ++i)
+            {
+                uv_cord[i * 2 + 0] = mesh.mTextureCoords[0][i].x;
+                uv_cord[i * 2 + 1] = mesh.mTextureCoords[0][i].y;
+            }
+
             gl_exec(glGenBuffers, 1, &m_vbo[vbo_type::uv]);
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::uv]);
-            gl_exec(glBufferData, GL_ARRAY_BUFFER, mesh.mNumVertices * 2ull * sizeof(float), mesh.mTextureCoords[0], GL_STATIC_DRAW);
+            gl_exec(glBufferData, GL_ARRAY_BUFFER, uv_cord.size() * sizeof(float), uv_cord.data(), GL_STATIC_DRAW);
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[2]);
             gl_exec(glVertexAttribPointer, vbo_type::uv, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
             gl_exec(glEnableVertexAttribArray, vbo_type::uv);
@@ -156,7 +164,6 @@ namespace grender
         {
             m_submeshes.emplace_back(*scene->mMeshes[i], m_extent);
         }
-
     }
     void mesh_resource::unload()
     {

@@ -15,8 +15,11 @@
 #include "grender/systems/window_system.h"
 #include "grender/systems/render_system.h"
 
+#include <IL/il.h>
+
 int main()
 {
+    ilInit();
     gcore::world world;
     auto& systems = world.get_system_registry();
     auto& registry = world.get_entity_registry();
@@ -34,7 +37,7 @@ int main()
     gtool::resouce_view_system* resource_view_system = systems.get_system<gtool::resouce_view_system>();
     gcore::input_system* input_system = systems.get_system<gcore::input_system>();
     gcore::flying_controller_system* controller_system = systems.get_system<gcore::flying_controller_system>();
-    
+
     window->bind_context();
     {
         gcore::resource_library lib;

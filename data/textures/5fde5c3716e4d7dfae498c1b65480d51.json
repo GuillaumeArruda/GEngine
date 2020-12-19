@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fde5c3716e4d7dfae498c1b65480d51",
+            "name": "clothing_rough",
+            "file": "data/textures/clothing_rough.tga"
+        }
+    }
+}

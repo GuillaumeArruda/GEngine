@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fde5c3516e4d7ded5f556f4aad40b84",
+            "name": "clothing_normal",
+            "file": "data/textures/clothing_norm.tga"
+        }
+    }
+}
