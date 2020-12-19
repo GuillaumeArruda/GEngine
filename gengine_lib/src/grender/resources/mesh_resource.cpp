@@ -16,7 +16,7 @@ GSERIALIZER_DEFINE_SUBCLASS_FACTORY_REGISTRATION(grender::mesh_resource);
 
 namespace grender
 {
-    mesh::mesh(aiMesh const& mesh)
+    mesh::mesh(aiMesh const& mesh, gmath::axis_aligned_box<gcore::model_space>& out_extent)
         : m_number_of_element(mesh.mNumVertices)
     {
         gl_exec(glGenVertexArrays, 1, &m_vao);
@@ -29,6 +29,22 @@ namespace grender
             gl_exec(glBufferData, GL_ARRAY_BUFFER, mesh.mNumVertices * sizeof(float) * 3ull, mesh.mVertices, GL_STATIC_DRAW);
             gl_exec(glVertexAttribPointer, vbo_type::position, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
             gl_exec(glEnableVertexAttribArray, vbo_type::position);
+
+            glm::vec4 min(std::numeric_limits<float>::max());
+            glm::vec4 max(std::numeric_limits<float>::lowest());
+            for (std::uint32_t i = 0; i < mesh.mNumVertices; ++i)
+            {
+                min[0] = std::min(min[0], mesh.mVertices[i][0]);
+                min[1] = std::min(min[1], mesh.mVertices[i][1]);
+                min[2] = std::min(min[2], mesh.mVertices[i][2]);
+                max[0] = std::max(max[0], mesh.mVertices[i][0]);
+                max[1] = std::max(max[1], mesh.mVertices[i][1]);
+                max[2] = std::max(max[2], mesh.mVertices[i][2]);
+            }
+            min[3] = 1.f;
+            max[3] = 1.f;
+            gmath::axis_aligned_box<gcore::model_space> const mesh_box{ gmath::position<gcore::model_space>(min), gmath::position<gcore::model_space>(max) };
+            out_extent = out_extent.merge(mesh_box);
         }
 
         if (mesh.HasNormals())
@@ -138,7 +154,7 @@ namespace grender
         m_submeshes.reserve(scene->mNumMeshes);
         for (unsigned int i = 0; i < scene->mNumMeshes; ++i)
         {
-            m_submeshes.emplace_back(*scene->mMeshes[i]);
+            m_submeshes.emplace_back(*scene->mMeshes[i], m_extent);
         }
 
     }

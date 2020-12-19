@@ -23,7 +23,7 @@ namespace gcore
         using gmath::direction;
         constexpr float dt = 0.01f;
         auto view = world.get_entity_registry().get_view<transform_component, input_component, flying_controller_component>();
-        for (auto& [transform, input, controller] : view)
+        for (auto& [entity, transform, input, controller] : view)
         {
             glm::vec2 const delta_mouse = (glm::vec2(input->m_mouse_positions[0] - input->m_mouse_positions[1]))
                 * dt * static_cast<float>(gmath::radian(controller->m_rotation_speed)) 

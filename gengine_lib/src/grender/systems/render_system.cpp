@@ -5,8 +5,10 @@
 #include "grender/systems/render_system.h"
 
 #include "gcore/components/transform_component.h"
+#include "gcore/components/extent_component.h"
 #include "gcore/entity_registry.h"
 #include "gcore/resource_library.h"
+
 
 #include "grender/components/camera_component.h"
 #include "grender/components/graphic_component.h"
@@ -24,13 +26,13 @@ namespace grender
        
         auto camera_view = registry.get_view<gcore::transform_component, camera_component>();
         auto graphic_comp_view = registry.get_view<gcore::transform_component, graphic_component>();
-        for (auto& [camera_transform, camera] : camera_view)
+        for (auto& [entity, camera_transform, camera] : camera_view)
         {
             if (camera->m_active)
             {
                 glm::mat4 const projection = glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), 16.f / 9.f, camera->m_near_z, camera->m_far_z);
                 glm::mat4 const view_matrix = static_cast<glm::mat4>(camera_transform->m_transform);
-                for (auto& [transform, graphic_comp] : graphic_comp_view)
+                for (auto& [entity, transform, graphic_comp] : graphic_comp_view)
                 {
                     glm::mat4 const mvp = projection * view_matrix * static_cast<glm::mat4>(transform->m_transform);
                     for (auto& mesh_info : graphic_comp->m_meshes)
@@ -46,6 +48,10 @@ namespace grender
                                     mesh_info.m_mesh = mesh;
                                     mesh_info.m_program = program_res;
                                     mesh_info.m_uniform_state.reconcile(program_res->get_default_state());
+                                    if (auto extent_comp = registry.get_components<gcore::extent_component>(entity))
+                                    {
+                                        extent_comp->m_extent = extent_comp->m_extent.merge(mesh->get_extent());
+                                    }
                                 }
                             }
                         }

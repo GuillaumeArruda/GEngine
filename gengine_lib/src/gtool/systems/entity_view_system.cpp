@@ -4,11 +4,18 @@
 #include <imgui.h>
 #include "imgui_impl/imgui_stdlib.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "gserializer/serializers/json_serializer.h"
 
+#include "gcore/components/extent_component.h"
+#include "gcore/components/input_component.h"
+#include "gcore/components/transform_component.h"
 #include "gcore/entity_registry.h"
 
 #include "grender/serializers/imgui_serializer.h"
+#include "grender/components/camera_component.h"
 
 namespace gtool
 {
@@ -97,6 +104,48 @@ namespace gtool
 
     void selected_entity_widget::update(gcore::entity_registry& registry)
     {
+        auto camera_view = registry.get_view<grender::camera_component, gcore::input_component, gcore::transform_component>();
+        for (auto& [entity, camera, input, camera_transform] : camera_view)
+        {
+            if (input->m_keybord_state[gtl::to_underlying(gcore::keyboard_key::left_control)] == gcore::key_state::pressed
+                && input->m_mouse_key_state[gtl::to_underlying(gcore::mouse_key::button_1)] == gcore::key_state::pressed)
+            {
+                using gmath::position; using gmath::direction; using gmath::ray;
+                using gcore::model_space; using gcore::world_space; using gcore::camera_space; using gcore::projection_space;
+
+
+                auto const to_camera_space = gmath::transform<camera_space, world_space>(camera_transform->m_transform);
+                auto const to_projection_space = gmath::transform<projection_space, camera_space>(glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), 16.f / 9.f, camera->m_near_z, camera->m_far_z));
+
+                glm::vec2 const mouse_dir =  (input->m_mouse_positions[0] * 2.f) - glm::vec2(1.f);
+                ray<projection_space> const proj_ray = 
+                    to_projection_space * ray<camera_space>(
+                        position<camera_space>(),
+                        direction<camera_space>(glm::vec3(mouse_dir, -1.f)));
+
+                float best_t = std::numeric_limits<float>::max();
+                gcore::entity best_entity;
+                auto extent_view = registry.get_view<gcore::transform_component, gcore::extent_component>();
+                for (auto& [entity, transform, extent] : extent_view)
+                {
+                    gmath::axis_aligned_box<projection_space> const projection_extent = 
+                        to_projection_space * 
+                        to_camera_space *
+                        gmath::transform<world_space, model_space>(transform->m_transform) * extent->m_extent;
+                    auto result = projection_extent.intersect(proj_ray);
+                    if (result && result->t0 < best_t)
+                    {
+                        best_t = result->t0;
+                        best_entity = entity;
+                    }
+                }
+
+                m_uuid = best_entity.to_string();
+            }
+           
+        }
+
+
         if (ImGui::TreeNode("Selected entity"))
         {
             ImGui::InputText("uuid", &m_uuid);

@@ -35,12 +35,15 @@ namespace gcore
             mouse_key_state[i] = key_state == GLFW_PRESS ? key_state::pressed : key_state::released;
         }
 
+        glm::ivec2 window_size;
         glm::dvec2 mouse_pos;
         glfwGetCursorPos(window->get_window(), &mouse_pos[0], &mouse_pos[1]);
+        glfwGetWindowSize(window->get_window(), &window_size[0], &window_size[1]);
         
-        
+        mouse_pos /= window_size;
+
         auto view = world.get_entity_registry().get_view<input_component>();
-        for (auto& [input_component] : view)
+        for (auto& [entity, input_component] : view)
         {
             input_component->m_keybord_state = keybord_state;
             input_component->m_mouse_key_state = mouse_key_state;

@@ -65,5 +65,16 @@
             <Item Name="[value]" Condition="m_type == type::mat44">m_mat44</Item>
         </Expand>
     </Type>
-    
+
+    <Type Name="glm::vec&lt;*&gt;">
+        <DisplayString Condition="$T1 == 2" Optional="true">{{x={x}, y={y}}}</DisplayString>
+        <DisplayString Condition="$T1 == 3"   Optional="true">{{x={x}, y={y}, z={z}}}</DisplayString>
+        <DisplayString Condition="$T1 == 4" Optional="true">{{x={x}, y={y}, z={z}, w={w}}}</DisplayString>
+        <Expand>
+            <Item Name="[x]">x</Item>
+            <Item Name="[y]">y</Item>
+            <Item Name="[z]" Condition="$T1 > 2" Optional="true">z</Item>
+            <Item Name="[w]" Condition="$T1 > 3" Optional="true">w</Item>
+        </Expand>
+    </Type>    
 </AutoVisualizer>

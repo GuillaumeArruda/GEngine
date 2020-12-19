@@ -47,6 +47,19 @@ namespace gcore
             }
         }
 
+        template<class ... ComponentType>
+        [[nodiscard]] auto get_components(entity entity)
+        {
+            if constexpr (sizeof...(ComponentType) == 1)
+            {
+                return gtl::cast<ComponentType*...>(get_component(entity, component_id(typeid(ComponentType)...)));
+            }
+            else
+            {
+                return std::tuple<ComponentType*...>{ gtl::cast<ComponentType*>(get_component(entity, component_id(typeid(ComponentType))))... };
+            }
+        }
+
 
         template<class ... ComponentType>
         [[nodiscard]] bool has_components(entity) const { 
@@ -104,43 +117,48 @@ namespace gcore
         friend view;
         friend entity_registry;
         
-        void on_component_added(entity_registry const& registry, entity entity) override
+        void on_component_added(entity_registry const& registry, entity new_entity) override
         {
-            if (auto const iterator_in_entity_vector = std::lower_bound(m_entities.begin(), m_entities.end(), entity);
-                iterator_in_entity_vector == m_entities.end() || *iterator_in_entity_vector != entity)
+            auto const it = std::lower_bound(m_entities_components.begin(), m_entities_components.end(), new_entity,
+                [](std::tuple<entity, ComponentTypes*...> const& tuple, entity const& to_find) {
+                return to_find < std::get<entity>(tuple);
+            });
+
+            if (it == m_entities_components.end() || std::get<entity>(*it) != new_entity)
             {
-                if (registry.has_components(entity, m_component_ids))
+                if (registry.has_components(new_entity, m_component_ids))
                 {
-                    auto const diff = std::distance(m_entities.begin(), iterator_in_entity_vector);
-                    auto const iterator_in_comp_vector = m_components.begin() + diff;
-                    m_components.insert(iterator_in_comp_vector, registry.get_components<ComponentTypes...>(entity));
-                    m_entities.insert(iterator_in_entity_vector, entity);
+                    if constexpr (sizeof...(ComponentTypes) == 1)
+                    {
+                        m_entities_components.insert(it, std::tuple(new_entity, registry.get_components<ComponentTypes...>(new_entity)));
+                    }
+                    else
+                    {
+                        m_entities_components.insert(it, std::tuple_cat(std::tuple<entity>(new_entity), registry.get_components<ComponentTypes...>(new_entity)));
+                    }
                 }
             }
         }
 
-        void on_component_removed(entity_registry const& registry, entity entity) override
+        void on_component_removed(entity_registry const& registry, entity entity_removed) override
         {
-            if (auto const iterator_in_entity_vector = std::lower_bound(m_entities.begin(), m_entities.end(), entity);
-                iterator_in_entity_vector != m_entities.end() && *iterator_in_entity_vector == entity)
+            auto const it = std::lower_bound(m_entities_components.begin(), m_entities_components.end(), entity_removed,
+                [](std::tuple<entity, ComponentTypes*...> const& tuple, entity const& to_find) {
+                return to_find < std::get<entity>(tuple);
+            });
+
+            if (it != m_entities_components.end() && std::get<entity>(*it) == entity_removed)
             {
-                if (!registry.has_components(entity, m_component_ids))
+                if (!registry.has_components(entity_removed, m_component_ids))
                 {
-                    auto const diff = std::distance(m_entities.begin(), iterator_in_entity_vector);
-                    auto const iterator_in_comp_vector = m_components.begin() + diff;
-                    if (iterator_in_comp_vector != m_components.end())
-                    {
-                        m_components.erase(iterator_in_comp_vector);
-                        m_entities.erase(iterator_in_entity_vector);
-                    }
+                    m_entities_components.erase(it);
                 }
             }
         }
         gtl::span<component_id const> get_component_types() const noexcept { return m_component_ids; }
 
-        component_id const m_component_ids[sizeof...(ComponentTypes)] = { component_id(typeid(ComponentTypes))... };
-        std::vector<entity> m_entities;
-        std::vector<std::tuple<ComponentTypes*...>> m_components;
+        component_id const m_component_ids[sizeof...(ComponentTypes)] = { component_id(typeid(ComponentTypes))... };;
+        std::vector<std::tuple<entity, ComponentTypes*...>> m_entities_components;
     };
 
     template<class ... ComponentTypes>
@@ -152,11 +170,11 @@ namespace gcore
 
         view(group_type& group) : m_group(group) {}
 
-        auto begin() const noexcept { return m_group.m_components.begin(); }
-        auto cbegin() const noexcept { return m_group.m_components.cbegin(); }
+        auto begin() const noexcept { return m_group.m_entities_components.begin(); }
+        auto cbegin() const noexcept { return m_group.m_entities_components.cbegin(); }
 
-        auto end() const noexcept { return m_group.m_components.end(); }
-        auto cend() const noexcept { return m_group.m_components.cend(); }
+        auto end() const noexcept { return m_group.m_entities_components.end(); }
+        auto cend() const noexcept { return m_group.m_entities_components.cend(); }
 
     private:
         group_type& m_group;

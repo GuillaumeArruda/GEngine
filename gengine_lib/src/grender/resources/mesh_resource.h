@@ -5,7 +5,12 @@
 #include <GL/glew.h>
 
 #include "gtl/span.h"
+
+#include "gmath/axis_aligned_box.h"
+
 #include "gcore/resource.h"
+#include "gcore/spaces.h"
+
 
 
 struct aiMesh;
@@ -14,7 +19,7 @@ namespace grender
 {
     struct mesh
     {
-        mesh(aiMesh const& mesh);
+        mesh(aiMesh const& mesh, gmath::axis_aligned_box<gcore::model_space>& out_extent);
         ~mesh();
 
         mesh(mesh&&) noexcept;
@@ -24,7 +29,6 @@ namespace grender
         mesh& operator=(mesh const&) = delete;
 
         void draw() const;
-
     private:
         enum vbo_type
         {
@@ -47,8 +51,10 @@ namespace grender
         void set_fbx_path(std::string path);
 
         gtl::span<mesh const> get_meshes() const { return m_submeshes; }
+        gmath::axis_aligned_box<gcore::model_space> const& get_extent() const { return m_extent; }
 
     private:
+        gmath::axis_aligned_box<gcore::model_space> m_extent;
         std::vector<mesh> m_submeshes;
         std::string m_fbx_path;
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();

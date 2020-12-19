@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gcore\component.h" />
+    <ClInclude Include="src\gcore\components\extent_component.h" />
     <ClInclude Include="src\gcore\components\flying_controller_component.h" />
     <ClInclude Include="src\gcore\components\input_component.h" />
     <ClInclude Include="src\gcore\components\transform_component.h" />
@@ -78,6 +79,7 @@
     <ClInclude Include="src\gcore\world.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gcore\components\extent_component.cpp" />
     <ClCompile Include="src\gcore\components\flying_controller_component.cpp" />
     <ClCompile Include="src\gcore\components\input_component.cpp" />
     <ClCompile Include="src\gcore\components\transform_component.cpp" />

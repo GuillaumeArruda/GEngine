@@ -5,4 +5,5 @@ namespace gcore
     struct world_space {};
     struct model_space {};
     struct camera_space {};
+    struct projection_space {};
 }

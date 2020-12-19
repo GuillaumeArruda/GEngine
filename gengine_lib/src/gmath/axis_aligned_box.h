@@ -9,7 +9,7 @@ namespace gmath
     template<class Space>
     struct axis_aligned_box
     {
-        axis_aligned_box(gmath::position<Space> const& min, gmath::position<Space> const& max) 
+        axis_aligned_box(position<Space> const& min = position<Space>(), position<Space> const& max = position<Space>{})
             : m_min(glm::min(static_cast<glm::vec4>(min), static_cast<glm::vec4>(max)))
             , m_max(glm::max(static_cast<glm::vec4>(min), static_cast<glm::vec4>(max))) {}
         axis_aligned_box(axis_aligned_box const&) noexcept = default;
@@ -50,6 +50,9 @@ namespace gmath
             return intersect_result{t0, t1};
         }
 
+
+
+
         float surface_area() const noexcept
         {
             gmath::vector<Space> const diff = m_max - m_min;
@@ -73,4 +76,31 @@ namespace gmath
         gmath::position<Space> m_min;
         gmath::position<Space> m_max;
     };
+
+    template<class ToSpace, class FromSpace>
+    axis_aligned_box<ToSpace> operator*(transform<ToSpace, FromSpace> const& transform, axis_aligned_box<FromSpace> const& box)
+    {
+        auto const mat = static_cast<glm::mat4>(transform);
+        glm::vec4 const corners[] = {
+            glm::vec4(box.min()[0], box.min()[1], box.min()[2], 1.f),
+            glm::vec4(box.min()[0], box.min()[1], box.max()[2], 1.f),
+            glm::vec4(box.min()[0], box.max()[1], box.min()[2], 1.f),
+            glm::vec4(box.min()[0], box.max()[1], box.max()[2], 1.f),
+            glm::vec4(box.max()[0], box.min()[1], box.min()[2], 1.f),
+            glm::vec4(box.max()[0], box.min()[1], box.max()[2], 1.f),
+            glm::vec4(box.max()[0], box.max()[1], box.min()[2], 1.f),
+            glm::vec4(box.max()[0], box.max()[1], box.max()[2], 1.f),
+        };
+        glm::vec4 new_min(std::numeric_limits<float>::max());
+        glm::vec4 new_max(std::numeric_limits<float>::lowest());
+        for (glm::vec4 const corner : corners)
+        {
+            glm::vec4 const transformed_corner = mat * corner;
+            new_min = glm::min(transformed_corner, new_min);
+            new_max = glm::max(transformed_corner, new_max);
+        }
+
+        return axis_aligned_box<ToSpace>(position<ToSpace>(new_min), position<ToSpace>(new_max));
+    }
+
 }
