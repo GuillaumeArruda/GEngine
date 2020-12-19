@@ -29,10 +29,10 @@ namespace grender
             if (camera->m_active)
             {
                 glm::mat4 const projection = glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), 16.f / 9.f, camera->m_near_z, camera->m_far_z);
-                glm::mat4 const vp = projection * static_cast<glm::mat4>(camera_transform->m_transform);
+                glm::mat4 const view_matrix = static_cast<glm::mat4>(camera_transform->m_transform);
                 for (auto& [transform, graphic_comp] : graphic_comp_view)
                 {
-                    glm::mat4 const mvp = vp * static_cast<glm::mat4>(transform->m_transform);
+                    glm::mat4 const mvp = projection * view_matrix * static_cast<glm::mat4>(transform->m_transform);
                     for (auto& mesh_info : graphic_comp->m_meshes)
                     {
                         if (!mesh_info.m_mesh || !mesh_info.m_program

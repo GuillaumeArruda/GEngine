@@ -17,9 +17,9 @@ namespace gmath
             garantee_normal
         };
 
-        static constexpr direction forward() noexcept { return direction(garantee_normal_t::garantee_normal, 0.f, 0.f, 1.f); }
-        static constexpr direction up() noexcept { return direction(garantee_normal_t::garantee_normal, 0.f, 1.f, 0.f); }
-        static constexpr direction right() noexcept { return direction(garantee_normal_t::garantee_normal, 1.f, 0.f, 0.f); }
+        static constexpr glm::vec3 forward() noexcept { return glm::vec3(0.f, 0.f, 1.f); }
+        static constexpr glm::vec3 up() noexcept { return glm::vec3(0.f, 1.f, 0.f); }
+        static constexpr glm::vec3 right() noexcept { return glm::vec3(-1.f, 0.f, 0.f); }
 
         constexpr explicit direction(glm_vector_type const& vector) : m_direction(vector) { normalize(); }
         constexpr direction(float x = 1.f, float y = 0.f, float z = 0.f) noexcept : m_direction(x, y, z) { normalize(); }

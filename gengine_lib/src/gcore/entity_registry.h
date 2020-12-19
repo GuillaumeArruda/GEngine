@@ -39,7 +39,7 @@ namespace gcore
         {
             if constexpr (sizeof...(ComponentType) == 1)
             {
-                return gtl::cast<ComponentType*...>(get_component(entity, component_id(typeid(ComponentType...))));
+                return gtl::cast<ComponentType*...>(get_component(entity, component_id(typeid(ComponentType)...)));
             }
             else
             {

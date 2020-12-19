@@ -48,6 +48,19 @@ namespace gmath
 
         position<to_space> get_translation() const noexcept { return position<to_space>(m_transform[3]); }
 
+        template<template<typename> class Vector, class glm_vector_type = Vector<to_space>::glm_vector_type>
+        void translate(Vector<to_space> const& translation) 
+        {
+            if constexpr (std::is_same_v<glm_vector_type, glm::vec3>)
+            {
+                m_transform[3] += glm::vec4(static_cast<glm_vector_type>(translation), 0.f);
+            }
+            else
+            {
+                m_transform[3] += static_cast<glm_vector_type>(translation);
+            }
+        }
+
         constexpr transform<from_space, to_space> inverse() const noexcept { return transform<from_space, to_space>(glm::inverse(m_transform)); }
 
         friend constexpr bool operator==(transform const& lhs, transform const& rhs) noexcept { return lhs.m_transform == rhs.m_transform; }

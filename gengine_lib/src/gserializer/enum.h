@@ -22,7 +22,7 @@ namespace string_pair##Enum                                                     
 #define GSERIALIZER_END_ENUM_HANDLER(Enum)                                                                  \
     };                                                                                                      \
 }                                                                                                           \
-constexpr const char* to_string(Enum value)                                                                 \
+const char* to_string(Enum value)                                                                           \
 {                                                                                                           \
     auto it = std::find_if(std::begin(string_pair##Enum::to_string_array),                                  \
                            std::end(string_pair##Enum::to_string_array),                                    \
@@ -32,7 +32,7 @@ constexpr const char* to_string(Enum value)                                     
     return #Enum "::<Unkwnon>";                                                                             \
 }                                                                                                           \
                                                                                                             \
-constexpr bool from_string(const char* string, Enum& value)                                                 \
+bool from_string(const char* string, Enum& value)                                                           \
 {                                                                                                           \
     auto it = std::find_if(std::begin(string_pair##Enum::to_string_array),                                  \
                            std::end(string_pair##Enum::to_string_array),                                    \
@@ -46,5 +46,5 @@ constexpr bool from_string(const char* string, Enum& value)                     
 }
 
 #define GSERIALIZER_FORWARD_DECLARE_ENUM_SERIALIZATION(Enum)                                                \
-    constexpr const char* to_string(Enum);                                                                  \
-    constexpr bool from_string(const char* string, Enum& value);
+    const char* to_string(Enum);                                                                            \
+    bool from_string(const char* string, Enum& value);

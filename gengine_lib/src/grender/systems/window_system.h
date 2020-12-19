@@ -22,6 +22,8 @@ namespace grender
         bool should_close() const;
         void begin_frame();
         void end_frame();
+
+        GLFWwindow* get_window() { return m_window; }
     private:
         GLFWwindow* m_window;
     };
