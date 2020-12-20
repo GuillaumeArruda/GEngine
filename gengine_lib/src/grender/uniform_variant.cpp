@@ -88,7 +88,7 @@ namespace grender
         case type::sampler_1d:
         case type::sampler_2d:
         case type::sampler_3d:
-        case type::sampler_cube: new((void*)&m_texture_id) gtl::uuid(); break;
+        case type::sampler_cube: new((void*)&m_texture_info) texture_info(); break;
         case type::invalid:     break;
         }
     }
@@ -146,12 +146,22 @@ namespace grender
         case type::sampler_3d:
         case type::sampler_cube:
         {
-            if (grender::texture* tex = lib.get_resource<grender::texture>(m_texture_id))
+            if (m_texture_info.m_texture_id == 0)
+            {
+                if (grender::texture* tex = lib.get_resource<grender::texture>(m_texture_info.m_texture_uuid))
+                {
+                    gl_exec(glActiveTexture, GL_TEXTURE0 + location);
+                    gl_exec(glBindTexture, GL_TEXTURE_2D, tex->get_id());
+                    gl_exec(glUniform1i, location, location);
+                }
+            }
+            else
             {
                 gl_exec(glActiveTexture, GL_TEXTURE0 + location);
-                gl_exec(glBindTexture, GL_TEXTURE_2D, tex->get_id());
+                gl_exec(glBindTexture, GL_TEXTURE_2D, m_texture_info.m_texture_id);
                 gl_exec(glUniform1i, location, location);
             }
+            break;
         }
         case type::invalid:     break;
         }
@@ -196,7 +206,7 @@ namespace grender
         case type::sampler_2d:
         case type::sampler_3d:
         case type::sampler_cube:
-            process(serializer, m_texture_id); break;
+            process(serializer, m_texture_info.m_texture_uuid); break;
         }
     }
 
@@ -237,7 +247,7 @@ namespace grender
         case type::sampler_2d:
         case type::sampler_3d:
         case type::sampler_cube:
-            new((void*)&m_texture_id) gtl::uuid(copy.m_texture_id); break;
+            new((void*)&m_texture_info) texture_info(copy.m_texture_info); break;
         case type::invalid:     break;
         }
     }

@@ -127,6 +127,11 @@ namespace grender
         }
     }
 
+    void program_uniform_state::set_uniform(std::string_view name, uniform_variant const& variant)
+    {
+        set_uniform(get_uniform_location(name), variant);
+    }
+
     void program_uniform_state::process(gserializer::serializer& serializer)
     {
         serializer.process("uniforms", m_uniforms, "Uniform");

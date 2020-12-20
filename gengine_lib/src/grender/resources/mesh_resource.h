@@ -36,6 +36,8 @@ namespace grender
             position,
             normal,
             uv,
+            tangent,
+            bitangent,
             faces,
             count
         };

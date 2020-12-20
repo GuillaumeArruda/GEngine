@@ -51,6 +51,7 @@ namespace grender
         void apply(gcore::resource_library& lib) const;
         void bind(GLint program_id);
         void set_uniform(GLint location, uniform_variant const& variant);
+        void set_uniform(std::string_view name, uniform_variant const& variant);
         void process(gserializer::serializer& serializer);
         void reconcile(program_uniform_state const& state);
         GLint get_uniform_location(std::string_view name) const;

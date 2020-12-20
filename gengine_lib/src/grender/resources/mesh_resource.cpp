@@ -74,6 +74,38 @@ namespace grender
             gl_exec(glEnableVertexAttribArray, vbo_type::uv);
         }
 
+        if (mesh.HasTangentsAndBitangents())
+        {
+            std::vector<float> tangent;
+            tangent.resize(mesh.mNumVertices * 3ull);
+            for (std::size_t i = 0; i < mesh.mNumVertices; ++i)
+            {
+                tangent[i * 3 + 0] = mesh.mTangents[i].x;
+                tangent[i * 3 + 1] = mesh.mTangents[i].y;
+                tangent[i * 3 + 2] = mesh.mTangents[i].z;
+            }
+
+            gl_exec(glGenBuffers, 1, &m_vbo[vbo_type::tangent]);
+            gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::tangent]);
+            gl_exec(glBufferData, GL_ARRAY_BUFFER, tangent.size() * sizeof(float), tangent.data(), GL_STATIC_DRAW);
+            gl_exec(glVertexAttribPointer, vbo_type::tangent, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+            gl_exec(glEnableVertexAttribArray, vbo_type::tangent);
+
+            for (std::size_t i = 0; i < mesh.mNumVertices; ++i)
+            {
+                tangent[i * 3 + 0] = mesh.mBitangents[i].x;
+                tangent[i * 3 + 1] = mesh.mBitangents[i].y;
+                tangent[i * 3 + 2] = mesh.mBitangents[i].z;
+            }
+
+            gl_exec(glGenBuffers, 1, &m_vbo[vbo_type::bitangent]);
+            gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::bitangent]);
+            gl_exec(glBufferData, GL_ARRAY_BUFFER, tangent.size() * sizeof(float), tangent.data(), GL_STATIC_DRAW);
+            gl_exec(glVertexAttribPointer, vbo_type::bitangent, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+            gl_exec(glEnableVertexAttribArray, vbo_type::bitangent);
+
+        }
+
         if (mesh.HasFaces())
         {
             std::vector<std::uint32_t> faces_idx;
@@ -151,7 +183,8 @@ namespace grender
             aiProcess_ImproveCacheLocality |
             aiProcess_FixInfacingNormals |
             aiProcess_OptimizeGraph |
-            aiProcess_OptimizeMeshes);
+            aiProcess_OptimizeMeshes | 
+            aiProcess_CalcTangentSpace);
 
         if (!scene)
         {

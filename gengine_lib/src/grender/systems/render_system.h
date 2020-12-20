@@ -1,6 +1,10 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include "gcore/system.h"
+
+#include "grender/frame_buffer.h"
 
 namespace gcore
 {
@@ -13,5 +17,14 @@ namespace grender
     struct render_system : gcore::system
     {
         void render(gcore::entity_registry& registry, gcore::resource_library& library);
+
+    private:
+        void render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gcore::resource_library& library);
+        void render_lights(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gcore::resource_library& library);
+        void setup_geometry_pass();
+        void setup_stencil_pass();
+        void setup_lightning_pass();
+
+        frame_buffer m_frame_buffer = frame_buffer(1920ull, 1080ull);
     };
 }

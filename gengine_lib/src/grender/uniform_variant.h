@@ -88,7 +88,8 @@ namespace grender
         uniform_variant(glm::mat4x2 const& value) : m_mat42(value), m_type(type::mat42) {}
         uniform_variant(glm::mat4x3 const& value) : m_mat43(value), m_type(type::mat43) {}
         uniform_variant(glm::mat4x4 const& value) : m_mat44(value), m_type(type::mat44) {}
-        uniform_variant(gtl::uuid texture_id, type type) : m_texture_id(texture_id), m_type(type) {}
+        uniform_variant(gtl::uuid texture_id, type texture_type) : m_texture_info{ texture_id, 0u }, m_type(texture_type) {}
+        uniform_variant(GLuint texture_id, type texture_type) : m_texture_info{gtl::uuid(), texture_id}, m_type(texture_type) {}
 
         uniform_variant(uniform_variant const& copy) noexcept;
         uniform_variant& operator=(uniform_variant const& copy) noexcept;
@@ -99,6 +100,11 @@ namespace grender
 
     private:
         void copy(uniform_variant const& copy);
+        struct texture_info
+        {
+            gtl::uuid m_texture_uuid;
+            GLuint m_texture_id = 0;
+        };
 
         union
         {
@@ -131,7 +137,7 @@ namespace grender
             glm::mat4x2 m_mat42;
             glm::mat4x3 m_mat43;
             glm::mat4x4 m_mat44;
-            gtl::uuid m_texture_id;
+            texture_info m_texture_info;
         };
         type m_type;
     };

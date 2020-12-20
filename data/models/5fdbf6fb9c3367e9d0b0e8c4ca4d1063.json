@@ -4,8 +4,8 @@
         "type_name": "grender::mesh_resource",
         "data": {
             "uuid": "5fdbf6fb9c3367e9d0b0e8c4ca4d1063",
-            "name": "mesh_legion_skin",
-            "fbx_path": "data\\models\\legion_skin.obj"
+            "name": "square_mesh",
+            "fbx_path": "data\\models\\square.obj"
         }
     }
 }

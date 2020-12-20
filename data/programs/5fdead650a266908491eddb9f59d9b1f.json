@@ -1,0 +1,20 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::program",
+        "data": {
+            "uuid": "5fdead650a266908491eddb9f59d9b1f",
+            "name": "point_light_program",
+            "shaders": [
+                {
+                    "key": "shader::type::vertex",
+                    "data": "data\\programs\\vertex\\fullscreen_quad.glsl"
+                },
+				{
+					"key" : "shader::type::fragment",
+					"data": "data\\programs\\fragment\\point_light_fragment.glsl"
+				}
+            ]
+        }
+    }
+}

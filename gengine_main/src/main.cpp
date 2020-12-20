@@ -25,20 +25,20 @@ int main()
     auto& registry = world.get_entity_registry();
 
     systems.add_system(std::make_unique<grender::window_system>("test", 1920, 1080));
+    grender::window_system* window = systems.get_system<grender::window_system>();
+    window->bind_context();
     systems.add_system(std::make_unique<grender::render_system>());
     systems.add_system(std::make_unique<gtool::entity_view_system>());
     systems.add_system(std::make_unique<gtool::resouce_view_system>());
     systems.add_system(std::make_unique<gcore::input_system>());
     systems.add_system(std::make_unique<gcore::flying_controller_system>());
 
-    grender::window_system* window = systems.get_system<grender::window_system>();
     grender::render_system* render = systems.get_system<grender::render_system>();
     gtool::entity_view_system* entity_view_system = systems.get_system<gtool::entity_view_system>();
     gtool::resouce_view_system* resource_view_system = systems.get_system<gtool::resouce_view_system>();
     gcore::input_system* input_system = systems.get_system<gcore::input_system>();
     gcore::flying_controller_system* controller_system = systems.get_system<gcore::flying_controller_system>();
 
-    window->bind_context();
     {
         gcore::resource_library lib;
         lib.scan_directory("data\\");
