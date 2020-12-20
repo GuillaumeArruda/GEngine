@@ -1,8 +1,8 @@
 #pragma once
 
-#include "gcore/system.h"
 #include "gcore/component.h"
 
+#include "gtool/window.h"
 #include "gtool/common_widgets.h"
 
 namespace gcore
@@ -35,9 +35,11 @@ namespace gtool
         std::string m_uuid;
     };
 
-    struct entity_view_system : gcore::system
+    struct entity_view_window : window
     {
-        void update(gcore::entity_registry& registry);
+        void update(gcore::world& world, window_manager& manager);
+        bool& get_should_display() override { return m_display; };
+        const char* get_name() const override{ return "Entity Viewer"; }
     private:
         bool m_display = true;
         create_entity_widget create_entity_widget;

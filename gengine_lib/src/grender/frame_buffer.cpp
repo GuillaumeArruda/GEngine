@@ -36,13 +36,19 @@ namespace grender
     
     frame_buffer::~frame_buffer()
     {
-        gl_exec(glDeleteBuffers, 1, &m_fbo);
+        unbind();
+        gl_exec(glDeleteFramebuffers, 1, &m_fbo);
     }
 
     frame_buffer::frame_buffer(frame_buffer&& move) noexcept
         : m_fbo(move.m_fbo)
+        , m_width(move.m_width)
+        , m_height(move.m_height)
         , m_render_targets(std::move(move.m_render_targets))
     {
+        move.m_fbo = 0;
+        move.m_width = 0;
+        move.m_height = 0;
     }
 
     frame_buffer& frame_buffer::operator=(frame_buffer&& move) noexcept
@@ -50,10 +56,15 @@ namespace grender
         if (this == &move)
             return *this;
 
-        gl_exec(glDeleteBuffers, 1, &m_fbo);
         m_render_targets = std::move(move.m_render_targets);
+        gl_exec(glDeleteFramebuffers, 1, &m_fbo);
+
         m_fbo = move.m_fbo;
+        m_width = move.m_width;
+        m_height = move.m_height;
         move.m_fbo = 0;
+        move.m_width = 0;
+        move.m_height = 0;
 
         return *this;
     }
@@ -78,15 +89,6 @@ namespace grender
     void frame_buffer::bind_for_light() const
     {
         gl_exec(glDrawBuffer, GL_COLOR_ATTACHMENT4);
-    }
-
-    void frame_buffer::transfer_to_default() const
-    {
-        gl_exec(glBindFramebuffer, GL_DRAW_FRAMEBUFFER, 0);
-        gl_exec(glBindFramebuffer, GL_READ_FRAMEBUFFER, m_fbo);
-        gl_exec(glReadBuffer, GL_COLOR_ATTACHMENT4);
-        gl_exec(glBlitFramebuffer, 0, 0, m_width, m_height,
-            0, 0, m_width, m_height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
     }
 }
 

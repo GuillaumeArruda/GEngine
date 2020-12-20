@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "gtool/systems/entity_view_system.h"
+#include "gtool/windows/entity_view_window.h"
 
-#include <imgui.h>
-#include "imgui_impl/imgui_stdlib.h"
+#include <imgui/imgui.h>
+#include <imgui/imgui_stdlib.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -12,32 +12,36 @@
 #include "gcore/components/extent_component.h"
 #include "gcore/components/input_component.h"
 #include "gcore/components/transform_component.h"
-#include "gcore/entity_registry.h"
+#include "gcore/world.h"
 
 #include "grender/serializers/imgui_serializer.h"
 #include "grender/components/camera_component.h"
 
 namespace gtool
 {
-    void entity_view_system::update(gcore::entity_registry& registry)
+    void entity_view_window::update(gcore::world& world, window_manager&)
     {
-        if (!ImGui::Begin("Entity viewer", &m_display))
+        if (m_display)
         {
+            if (!ImGui::Begin(get_name(), &m_display))
+            {
+                ImGui::End();
+                return;
+            }
+
+            gcore::entity_registry& registry = world.get_entity_registry();
+
+            {
+                grender::imgui_serializer serializer("Current Entities");
+                serializer.process("Entities", registry);
+            }
+
+            selected_entity_widget.update(registry);
+            create_entity_widget.update(registry);
+            save_load_registry_widget.update(registry);
+
             ImGui::End();
-            return;
         }
-
-        {
-            grender::imgui_serializer serializer("Current Entities");
-            serializer.process("Entities", registry);
-        }
-
-        selected_entity_widget.update(registry);
-        create_entity_widget.update(registry);
-        save_load_registry_widget.update(registry);
-        
-
-        ImGui::End();
     }
 
     void create_entity_widget::update(gcore::entity_registry& registry)

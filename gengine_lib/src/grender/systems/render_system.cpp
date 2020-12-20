@@ -27,16 +27,35 @@ namespace grender
         {
             if (camera->m_active)
             {
-                glm::mat4 const projection = glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), 16.f / 9.f, camera->m_near_z, camera->m_far_z);
+                glm::ivec2 const size = get_target_size();
+                glm::mat4 const projection = glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), size[0] / static_cast<float>(size[1]), camera->m_near_z, camera->m_far_z);
                 glm::mat4 const view_matrix = camera_transform->m_transform;
 
                 render_meshes(projection, view_matrix, registry, library);
                 render_lights(projection, view_matrix, registry, library);
             }
-            m_frame_buffer.transfer_to_default();
-            m_frame_buffer.unbind();
         }
-       
+        m_frame_buffer.unbind();
+    }
+
+    bool render_system::set_target_size(std::size_t width, std::size_t height)
+    {
+        if (m_frame_buffer.get_size() != glm::ivec2(width, height))
+        {
+            m_frame_buffer = frame_buffer(static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+            return true;
+        }
+        return false;
+    }
+
+    glm::ivec2 render_system::get_target_size() const
+    {
+        return m_frame_buffer.get_size();
+    }
+
+    GLuint render_system::get_target_id() const
+    {
+        return m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::final_color);
     }
 
     void render_system::render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gcore::resource_library& library)
@@ -103,7 +122,7 @@ namespace grender
                     auto const world_matrix_loc = light->m_main_state.get_uniform_location("world_matrix");
                     auto const screen_size = light->m_main_state.get_uniform_location("screen_size");
                     light->m_main_state.set_uniform("world_matrix", transform->m_transform);
-                    light->m_main_state.set_uniform("screen_size", glm::vec2(1920.f, 1080.f));
+                    light->m_main_state.set_uniform("screen_size", glm::vec2(get_target_size()));
                     light->m_stencil_state.apply(library);
                     for (auto& submesh : mesh->get_meshes())
                     {
@@ -117,7 +136,7 @@ namespace grender
                     setup_lightning_pass();
                     light_program->activate();
                     light->m_main_state.set_uniform("world_matrix", transform->m_transform);
-                    light->m_main_state.set_uniform("scren_size", glm::vec2(1920.f, 1080.f));
+                    light->m_main_state.set_uniform("screen_size", glm::vec2(get_target_size()));
                     light->m_main_state.set_uniform("camera_world_matrix", glm::inverse(view_matrix));
                     light->m_main_state.set_uniform("diffuse_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::diffuse), uniform_variant::type::sampler_2d });
                     light->m_main_state.set_uniform("position_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::position), uniform_variant::type::sampler_2d });

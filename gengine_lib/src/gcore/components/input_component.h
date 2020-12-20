@@ -19,7 +19,7 @@ namespace gcore
 
         keybord_state m_keybord_state;
         mouse_key_state m_mouse_key_state;
-        std::array<glm::vec2, 2> m_mouse_positions;
+        std::array<glm::vec2, 2> m_mouse_positions{};
         void process(gserializer::serializer& serializer);
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
     };

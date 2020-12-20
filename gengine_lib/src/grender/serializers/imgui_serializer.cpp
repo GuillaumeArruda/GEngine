@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "grender/serializers/imgui_serializer.h"
 
-#include <imgui.h>
-#include "imgui_impl/imgui_stdlib.h"
+#include <imgui/imgui.h>
+#include "imgui/imgui_stdlib.h"
 
 #include "gtl/uuid.h"
 
@@ -11,25 +11,30 @@ namespace grender
     imgui_serializer::imgui_serializer(const char* node_name)
     {
         m_should_display_stack.push_back(ImGui::TreeNode(node_name));
+        if (should_display())
+        {
+            ImGui::PushItemWidth(280);
+        }
     }
 
     imgui_serializer::~imgui_serializer()
     {
         if (should_display())
         {
+            ImGui::PopItemWidth();
             ImGui::TreePop();
         }
     }
 
     void imgui_serializer::process(const char* name, std::string& value)
     {
-        if(should_display())
+        if (should_display())
             ImGui::InputText(name, &value);
     }
 
     void imgui_serializer::process(const char* name, std::uint32_t& value)
     {
-        if(should_display())
+        if (should_display())
             ImGui::InputScalar(name, ImGuiDataType_U32, &value);
     }
 

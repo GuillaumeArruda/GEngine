@@ -1,7 +1,6 @@
 #pragma once
 
-#include "gcore/system.h"
-
+#include "gtool/window.h"
 #include "gtool/common_widgets.h"
 
 #include "gcore/resource.h"
@@ -29,10 +28,13 @@ namespace gtool
         std::string m_uuid;
     };
 
-    struct resouce_view_system : gcore::system
+    struct resource_view_window : window
     {
-        void update(gcore::resource_library& library);
+        void update(gcore::world& world, window_manager& manager) override;
+        bool& get_should_display() override { return m_display; }
+        const char* get_name() const override { return "Resource Viewer"; }
     private:
+        bool m_display = true;
         resource_viewer_widget m_resource_viewer_widget;
         create_resource_widget m_create_resource_widget;
     };

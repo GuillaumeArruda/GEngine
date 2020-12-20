@@ -36,8 +36,9 @@ namespace grender
         void bind_for_geometry() const;
         void bind_for_stencil() const;
         void bind_for_light() const;
-        void transfer_to_default() const;
         void unbind() const;
+
+        glm::ivec2 get_size() const { return { m_width, m_height }; }
     private:
         std::array<render_target, gtl::to_underlying(render_target_type::count)> m_render_targets;
         GLsizei m_width = 0;

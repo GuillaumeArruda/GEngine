@@ -18,6 +18,10 @@ namespace grender
     {
         void render(gcore::entity_registry& registry, gcore::resource_library& library);
 
+        bool set_target_size(std::size_t width, std::size_t height);
+        glm::ivec2 get_target_size() const;
+        GLuint get_target_id() const;
+
     private:
         void render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gcore::resource_library& library);
         void render_lights(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gcore::resource_library& library);
@@ -25,6 +29,6 @@ namespace grender
         void setup_stencil_pass();
         void setup_lightning_pass();
 
-        frame_buffer m_frame_buffer = frame_buffer(1920ull, 1080ull);
+        frame_buffer m_frame_buffer = frame_buffer(3440ull, 1440ull);
     };
 }

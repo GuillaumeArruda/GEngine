@@ -5,8 +5,6 @@
 #include "gcore/components/input_component.h"
 #include "gcore/world.h"
 
-#include "grender/systems/window_system.h"
-
 #include<GLFW/glfw3.h>
 
 namespace gcore
@@ -16,29 +14,28 @@ namespace gcore
 
     void input_system::update(world& world)
     {
-        grender::window_system* window = world.get_system_registry().get_system<grender::window_system>();
-        if (!window)
+        if (!m_window)
             return;
         
         input_component::keybord_state keybord_state{};
 
         for (int i = gtl::to_underlying(keyboard_key::first); i < gtl::to_underlying(keyboard_key::count); ++i)
         {
-            auto key_state = glfwGetKey(window->get_window(), keyboard_key_to_glfw_int(static_cast<keyboard_key>(i)));
+            auto key_state = glfwGetKey(m_window, keyboard_key_to_glfw_int(static_cast<keyboard_key>(i)));
             keybord_state[i] = key_state == GLFW_PRESS ? key_state::pressed : key_state::released;
         }
 
         input_component::mouse_key_state mouse_key_state{};
         for (int i = gtl::to_underlying(mouse_key::first); i < gtl::to_underlying(mouse_key::count); ++i)
         {
-            auto key_state = glfwGetMouseButton (window->get_window(), mouse_key_to_glfw_int(static_cast<mouse_key>(i)));
+            auto key_state = glfwGetMouseButton (m_window, mouse_key_to_glfw_int(static_cast<mouse_key>(i)));
             mouse_key_state[i] = key_state == GLFW_PRESS ? key_state::pressed : key_state::released;
         }
 
         glm::ivec2 window_size;
         glm::dvec2 mouse_pos;
-        glfwGetCursorPos(window->get_window(), &mouse_pos[0], &mouse_pos[1]);
-        glfwGetWindowSize(window->get_window(), &window_size[0], &window_size[1]);
+        glfwGetCursorPos(m_window, &mouse_pos[0], &mouse_pos[1]);
+        glfwGetWindowSize(m_window, &window_size[0], &window_size[1]);
         
         mouse_pos /= window_size;
 

@@ -1,16 +1,17 @@
 #include "stdafx.h"
-#include "gtool/systems/resource_view_system.h"
+#include "gtool/windows/resource_view_window.h"
 
-#include <imgui.h>
-#include "imgui_impl/imgui_stdlib.h"
+#include <imgui/imgui.h>
+#include "imgui/imgui_stdlib.h"
 
 #include "gtl/uuid.h"
 
 #include "gserializer/serializers/json_serializer.h"
 
-#include "gcore/resource_library.h"
+#include "gcore/world.h"
 
 #include "grender/serializers/imgui_serializer.h"
+#include "resource_view_window.h"
 
 namespace gtool
 {
@@ -62,22 +63,25 @@ namespace gtool
         }
     }
 
-    void resouce_view_system::update(gcore::resource_library& library)
+    void resource_view_window::update(gcore::world& world, window_manager&)
     {
-        if (!ImGui::Begin("Resource viewer"))
+        if (m_display)
         {
+            if (!ImGui::Begin(get_name(), &m_display))
+            {
+                ImGui::End();
+                return;
+            }
+            gcore::resource_library& library = *world.get_resource_library();
+
+            {
+                grender::imgui_serializer serializer("Current Resources");
+                serializer.process("Resources", library);
+            }
+            m_resource_viewer_widget.update(library);
+            m_create_resource_widget.update(library);
+
             ImGui::End();
-            return;
         }
-
-        {
-            grender::imgui_serializer serializer("Current Resources");
-            serializer.process("Resources", library);
-        }
-        m_resource_viewer_widget.update(library);
-        m_create_resource_widget.update(library);
-
-        ImGui::End();
     }
-
 }

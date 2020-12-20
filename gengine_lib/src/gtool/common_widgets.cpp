@@ -2,8 +2,8 @@
 
 #include "gtool/common_widgets.h"
 
-#include <imgui.h>
-#include "imgui_impl/imgui_stdlib.h"
+#include <imgui/imgui.h>
+#include "imgui/imgui_stdlib.h"
 
 namespace gtool
 {

@@ -28,6 +28,7 @@ namespace grender
     {
         move.m_id = 0;
     }
+
     render_target& render_target::operator=(render_target&& move) noexcept
     {
         if (this == &move)

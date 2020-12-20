@@ -10,7 +10,7 @@ namespace grender
     void gl_exec(Function function, Args&& ... args)
     {
         function(std::forward<Args>(args)...);
-        GLenum const error = glGetError();
+        GLenum const error = 0;//glGetError();
         if (error != GL_NO_ERROR)
         {
             switch (error)
