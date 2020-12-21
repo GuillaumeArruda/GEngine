@@ -23,13 +23,15 @@ namespace grender
     {
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
         auto camera_view = registry.get_view<gcore::transform_component, camera_component>();       
+        glm::ivec2 const size = get_target_size();
+        float const aspect_ratio = size[0] / static_cast<float>(size[1]);
+        gl_exec(glViewport, 0, 0, size[0], size[1]);
         for (auto& [entity, camera_transform, camera] : camera_view)
         {
             if (camera->m_active)
             {
-                glm::ivec2 const size = get_target_size();
-                glm::mat4 const projection = glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), size[0] / static_cast<float>(size[1]), camera->m_near_z, camera->m_far_z);
-                glm::mat4 const view_matrix = camera_transform->m_transform;
+                glm::mat4 const projection = glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), aspect_ratio, camera->m_near_z, camera->m_far_z);
+                glm::mat4 const view_matrix = glm::inverse(camera_transform->m_transform);
 
                 render_meshes(projection, view_matrix, registry, library);
                 render_lights(projection, view_matrix, registry, library);
@@ -38,14 +40,12 @@ namespace grender
         m_frame_buffer.unbind();
     }
 
-    bool render_system::set_target_size(std::size_t width, std::size_t height)
+    void render_system::set_target_size(std::size_t width, std::size_t height)
     {
         if (m_frame_buffer.get_size() != glm::ivec2(width, height))
         {
             m_frame_buffer = frame_buffer(static_cast<GLsizei>(width), static_cast<GLsizei>(height));
-            return true;
         }
-        return false;
     }
 
     glm::ivec2 render_system::get_target_size() const

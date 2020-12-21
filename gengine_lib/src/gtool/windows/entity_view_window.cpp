@@ -16,6 +16,7 @@
 
 #include "grender/serializers/imgui_serializer.h"
 #include "grender/components/camera_component.h"
+#include "grender/systems/render_system.h"
 
 namespace gtool
 {
@@ -36,7 +37,7 @@ namespace gtool
                 serializer.process("Entities", registry);
             }
 
-            selected_entity_widget.update(registry);
+            selected_entity_widget.update(world);
             create_entity_widget.update(registry);
             save_load_registry_widget.update(registry);
 
@@ -106,79 +107,75 @@ namespace gtool
         }
     }
 
-    void selected_entity_widget::update(gcore::entity_registry& registry)
+    void selected_entity_widget::update(gcore::world& world)
     {
-        auto camera_view = registry.get_view<grender::camera_component, gcore::input_component, gcore::transform_component>();
-        for (auto& [entity, camera, input, camera_transform] : camera_view)
+        if (grender::render_system* render = world.get_system_registry().get_system<grender::render_system>())
         {
-            if (input->m_keybord_state[gtl::to_underlying(gcore::keyboard_key::left_control)] == gcore::key_state::pressed
-                && input->m_mouse_key_state[gtl::to_underlying(gcore::mouse_key::button_1)] == gcore::key_state::pressed)
+            glm::ivec2 const size = render->get_target_size();
+            float const aspect_ratio = size[0] / static_cast<float>(size[1]);
+            auto camera_view = world.get_entity_registry().get_view<grender::camera_component, gcore::input_component, gcore::transform_component>();
+            for (auto& [entity, camera, input, camera_transform] : camera_view)
             {
-                using gmath::position; using gmath::direction; using gmath::ray;
-                using gcore::model_space; using gcore::world_space; using gcore::camera_space; using gcore::projection_space;
-
-
-                auto const to_camera_space = gmath::transform<camera_space, world_space>(camera_transform->m_transform);
-                auto const to_projection_space = gmath::transform<projection_space, camera_space>(glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), 16.f / 9.f, camera->m_near_z, camera->m_far_z));
-
-                glm::vec2 const mouse_dir =  (input->m_mouse_positions[0] * 2.f) - glm::vec2(1.f);
-                ray<projection_space> const proj_ray = 
-                    to_projection_space * ray<camera_space>(
-                        position<camera_space>(),
-                        direction<camera_space>(glm::vec3(mouse_dir, -1.f)));
-
-                float best_t = std::numeric_limits<float>::max();
-                gcore::entity best_entity;
-                auto extent_view = registry.get_view<gcore::transform_component, gcore::extent_component>();
-                for (auto& [entity, transform, extent] : extent_view)
+                if (input->m_keybord_state[gtl::to_underlying(gcore::keyboard_key::left_control)] == gcore::key_state::pressed
+                    && input->m_mouse_key_state[gtl::to_underlying(gcore::mouse_key::button_1)] == gcore::key_state::pressed)
                 {
-                    gmath::axis_aligned_box<projection_space> const projection_extent = 
-                        to_projection_space * 
-                        to_camera_space *
-                        gmath::transform<world_space, model_space>(transform->m_transform) * extent->m_extent;
-                    auto result = projection_extent.intersect(proj_ray);
-                    if (result && result->t0 < best_t)
+                    using gmath::position; using gmath::direction; using gmath::ray;
+                    using gcore::model_space; using gcore::world_space; using gcore::camera_space; using gcore::projection_space;
+
+                    glm::mat4 const from_projection_space = glm::inverse(glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), aspect_ratio, camera->m_near_z, camera->m_far_z));
+                    glm::vec2 const device_coordinates = (input->m_mouse_positions[0] * 2.f) - glm::vec2(1.f);
+                    glm::vec4 const camera_direction = from_projection_space * glm::vec4(device_coordinates[0], -device_coordinates[1], -1.f, 1.f);
+                    glm::vec4 const world_direction = camera_transform->m_transform * glm::vec4(camera_direction[0], camera_direction[1], -1.f, 0.f);
+                    ray<world_space> const world_space_ray = ray<world_space>(gmath::position<world_space>(camera_transform->m_transform[3]), gmath::direction<world_space>(glm::vec3(world_direction)));
+
+                    float best_t = std::numeric_limits<float>::max();
+                    gcore::entity best_entity;
+                    auto extent_view = world.get_entity_registry().get_view<gcore::transform_component, gcore::extent_component>();
+                    for (auto& [entity, transform, extent] : extent_view)
                     {
-                        best_t = result->t0;
-                        best_entity = entity;
+                        gmath::axis_aligned_box<world_space> const projection_extent = gmath::transform<world_space, model_space>(transform->m_transform) * extent->m_extent;
+                        auto result = projection_extent.intersect(world_space_ray);
+                        if (result && result->t0 < best_t)
+                        {
+                            best_t = result->t0;
+                            best_entity = entity;
+                        }
                     }
+
+                    m_uuid = best_entity.to_string();
                 }
-
-                m_uuid = best_entity.to_string();
             }
-           
         }
-
 
         if (ImGui::TreeNode("Selected entity"))
         {
             ImGui::InputText("uuid", &m_uuid);
             
             gcore::entity const entity = gtl::uuid::from_string(m_uuid);
-            if (registry.has_any_component(entity))
+            if (world.get_entity_registry().has_any_component(entity))
             {
                 m_component_combo_box.draw("Component Type");
 
                 grender::imgui_serializer serializer("Current Components");
-                gtl::span<std::unique_ptr<gcore::component>> components = registry.see_components(entity);
+                gtl::span<std::unique_ptr<gcore::component>> components = world.get_entity_registry().see_components(entity);
                 serializer.process("Components", components, "Component", gcore::component::factory());
 
                 if (ImGui::Button("Remove entity"))
                 {
-                    registry.remove_entity(entity);
+                    world.get_entity_registry().remove_entity(entity);
                 }
                 ImGui::SameLine();
                 if (ImGui::Button("Add Component"))
                 {
                     if (auto comp = gcore::component::factory().create(m_component_combo_box.get_current_type()))
                     {
-                        registry.add_components(entity, { comp });
+                        world.get_entity_registry().add_components(entity, { comp });
                     }
                 }
                 ImGui::SameLine();
                 if (ImGui::Button("Remove Component"))
                 {
-                    registry.remove_component(entity, gcore::component::factory().get_type_index_from_name(m_component_combo_box.get_current_type()));
+                    world.get_entity_registry().remove_component(entity, gcore::component::factory().get_type_index_from_name(m_component_combo_box.get_current_type()));
                 }
             }
 

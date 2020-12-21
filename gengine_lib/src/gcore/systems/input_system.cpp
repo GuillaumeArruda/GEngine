@@ -31,13 +31,15 @@ namespace gcore
             auto key_state = glfwGetMouseButton (m_window, mouse_key_to_glfw_int(static_cast<mouse_key>(i)));
             mouse_key_state[i] = key_state == GLFW_PRESS ? key_state::pressed : key_state::released;
         }
-
-        glm::ivec2 window_size;
         glm::dvec2 mouse_pos;
         glfwGetCursorPos(m_window, &mouse_pos[0], &mouse_pos[1]);
-        glfwGetWindowSize(m_window, &window_size[0], &window_size[1]);
-        
-        mouse_pos /= window_size;
+        if (m_viewport_size[0] == 0.f || m_viewport_size[1] == 0.f)
+        {
+            glfwGetWindowSize(m_window, &m_viewport_size[0], &m_viewport_size[1]);
+        }
+
+        mouse_pos -= m_start_point;
+        mouse_pos /= m_viewport_size;
 
         auto view = world.get_entity_registry().get_view<input_component>();
         for (auto& [entity, input_component] : view)

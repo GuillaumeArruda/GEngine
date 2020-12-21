@@ -37,7 +37,7 @@ namespace gtool
 		glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
 		glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
-		m_window = glfwCreateWindow(mode->width, mode->height, "gengine", nullptr, nullptr);
+		m_window = glfwCreateWindow(1920, 1080, "gengine", nullptr, nullptr);
 
 		glfwMakeContextCurrent(m_window);
 		IMGUI_CHECKVERSION();
@@ -95,29 +95,31 @@ namespace gtool
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-		ImGui::Begin("Master DockSpace", NULL, window_flags);
-		ImGuiID dockMain = ImGui::GetID("MyDockspace");
-
-		ImGui::DockSpace(dockMain);
-		if (ImGui::BeginMenuBar())
+		if (ImGui::Begin("Master DockSpace", NULL, window_flags))
 		{
-			if (ImGui::BeginMenu("Windows"))
+			ImGuiID dockMain = ImGui::GetID("MyDockspace");
+
+			ImGui::DockSpace(dockMain);
+			if (ImGui::BeginMenuBar())
 			{
-				for (std::unique_ptr<window>& window : m_windows)
+				if (ImGui::BeginMenu("Windows"))
 				{
-					if (ImGui::MenuItem(window->get_name()))
+					for (std::unique_ptr<window>& window : m_windows)
 					{
-						window->get_should_display() = true;
+						if (ImGui::MenuItem(window->get_name()))
+						{
+							window->get_should_display() = true;
+						}
 					}
+					ImGui::EndMenu();
 				}
-				ImGui::EndMenu();
+				ImGui::EndMenuBar();
 			}
-			ImGui::EndMenuBar();
-		}
 
-		for (std::unique_ptr<window>& window : m_windows)
-		{
-			window->update(world, *this);
+			for (std::unique_ptr<window>& window : m_windows)
+			{
+				window->update(world, *this);
+			}
 		}
 
 		ImGui::End();

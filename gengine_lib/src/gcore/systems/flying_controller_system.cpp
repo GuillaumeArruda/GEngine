@@ -29,15 +29,14 @@ namespace gcore
                 * dt * static_cast<float>(gmath::radian(controller->m_rotation_speed)) 
                 * static_cast<float>(input->m_mouse_key_state[gtl::to_underlying(mouse_key::button_1)] == key_state::pressed);
 
-            controller->m_pitch -= delta_mouse[1];
-            controller->m_yaw -= delta_mouse[0];
-            glm::quat const rotation = glm::quat(transform->m_transform);
-            glm::quat const inverse_rotation = glm::inverse(rotation);
+            controller->m_pitch += delta_mouse[1];
+            controller->m_yaw += delta_mouse[0];
             glm::quat const pitch(glm::vec3(controller->m_pitch, 0.f, 0.f));
             glm::quat const yaw(glm::vec3(0.f, controller->m_yaw, 0.f));
-            glm::quat const new_rot = pitch * yaw;
-            glm::vec3 const position = inverse_rotation * transform->m_transform[3];
-            transform->m_transform = glm::mat4(new_rot) * glm::translate(glm::mat4(1.f), position);
+            glm::quat const new_rot = yaw * pitch;
+            glm::vec3 const position = transform->m_transform[3];
+            transform->m_transform = glm::mat4(new_rot);
+            transform->m_transform[3] = glm::vec4(position,1.f);
 
             glm::vec3 direction_vector =
                   (direction<model_space>::up() * float(input->m_keybord_state[gtl::to_underlying(controller->m_up)] == key_state::pressed))
@@ -54,7 +53,7 @@ namespace gcore
             
             direction_vector = glm::normalize(direction_vector);
             float const speed = controller->m_speed * dt * (1 + controller->m_boost_factor * (input->m_keybord_state[gtl::to_underlying(controller->m_boost_key)] == key_state::pressed));
-            transform->m_transform[3] += glm::vec4(direction_vector * speed, 0.f);
+            transform->m_transform[3] -= transform->m_transform * glm::vec4(direction_vector * speed, 0.f);
         }
     }
 }

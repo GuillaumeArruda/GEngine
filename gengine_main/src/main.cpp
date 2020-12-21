@@ -19,36 +19,38 @@
 
 int main()
 {
-
-    ilInit();
-    gtool::window_manager tool_window_manager;
-    std::shared_ptr<gcore::resource_library> lib = std::make_shared<gcore::resource_library>();
-    lib->scan_directory("data\\");
-    gcore::world world(lib);
-    auto& systems = world.get_system_registry();
-    auto& registry = world.get_entity_registry();
-
-    systems.add_system(std::make_unique<grender::render_system>());
-    systems.add_system(std::make_unique<gcore::input_system>());
-    systems.add_system(std::make_unique<gcore::flying_controller_system>());
-
-    grender::render_system* render = systems.get_system<grender::render_system>();
-    gcore::input_system* input_system = systems.get_system<gcore::input_system>();
-    gcore::flying_controller_system* controller_system = systems.get_system<gcore::flying_controller_system>();
-
     {
-        
-        filewatch::FileWatch<std::wstring> watcher(L"./",
-            [&](std::wstring const& path, filewatch::Event const& event)
+        ilInit();
+        gtool::window_manager tool_window_manager;
+        std::shared_ptr<gcore::resource_library> lib = std::make_shared<gcore::resource_library>();
+        lib->scan_directory("data\\");
+        gcore::world world(lib);
+        auto& systems = world.get_system_registry();
+        auto& registry = world.get_entity_registry();
+
+        systems.add_system(std::make_unique<grender::render_system>());
+        systems.add_system(std::make_unique<gcore::input_system>());
+        systems.add_system(std::make_unique<gcore::flying_controller_system>());
+
+        grender::render_system* render = systems.get_system<grender::render_system>();
+        gcore::input_system* input_system = systems.get_system<gcore::input_system>();
+        gcore::flying_controller_system* controller_system = systems.get_system<gcore::flying_controller_system>();
+
+        {
+
+            filewatch::FileWatch<std::wstring> watcher(L"./",
+                [&](std::wstring const& path, filewatch::Event const& event)
             {
                 lib->on_file_change(path);
             }
-        );
-        while (!tool_window_manager.wants_to_close())
-        {
-            tool_window_manager.update(world);
+            );
+            while (!tool_window_manager.wants_to_close())
+            {
+                tool_window_manager.update(world);
+            }
         }
     }
+
 
     return 0;
 }

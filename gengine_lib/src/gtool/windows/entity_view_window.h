@@ -29,7 +29,7 @@ namespace gtool
 
     struct selected_entity_widget
     {
-        void update(gcore::entity_registry& registry);
+        void update(gcore::world& world);
     private:
         factory_combo_box<gcore::component> m_component_combo_box;
         std::string m_uuid;

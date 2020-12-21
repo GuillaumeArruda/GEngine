@@ -20,7 +20,7 @@ namespace grender
 
     render_target::~render_target()
     {
-        gl_exec(glDeleteTextures, 1, &m_id);
+        //gl_exec(glDeleteTextures, 1, &m_id);
     }
 
     render_target::render_target(render_target&& move) noexcept

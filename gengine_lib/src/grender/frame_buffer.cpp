@@ -10,28 +10,30 @@ namespace grender
         : m_width(width)
         , m_height(height)
     {
-        gl_exec(glGenFramebuffers, 1, &m_fbo);
-        gl_exec(glBindFramebuffer, GL_DRAW_FRAMEBUFFER, m_fbo);
-
-        m_render_targets[gtl::to_underlying(render_target_type::diffuse)] = render_target(GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT0, GL_LINEAR, width, height);                     // DiffuseColor
-        m_render_targets[gtl::to_underlying(render_target_type::position)] = render_target(GL_RGB32F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT1, GL_LINEAR, width, height);                             // Position
-        m_render_targets[gtl::to_underlying(render_target_type::normal)] = render_target(GL_RGB32F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT2, GL_LINEAR, width, height);                             // Normal
-        m_render_targets[gtl::to_underlying(render_target_type::specular)] = render_target(GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT3, GL_LINEAR, width, height);                     // SpecularColor
-        m_render_targets[gtl::to_underlying(render_target_type::final_color)] = render_target(GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT4, GL_LINEAR, width, height);                     // FinalColor
-        m_render_targets[gtl::to_underlying(render_target_type::depth)] = render_target(GL_DEPTH32F_STENCIL8, GL_DEPTH_STENCIL, GL_FLOAT_32_UNSIGNED_INT_24_8_REV, GL_DEPTH_STENCIL_ATTACHMENT, GL_NEAREST, width, height); //Depth
-
-        gl_exec(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_render_targets[gtl::to_underlying(render_target_type::depth)].get_id(), 0);
-
-        const GLenum DrawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
-        glDrawBuffers(4, DrawBuffers);
-        GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-
-        if (status != GL_FRAMEBUFFER_COMPLETE)
+        if (m_width != 0 && m_height != 0)
         {
-            std::cerr << "FrameBuffer is incomplete\n";
-        }
+            gl_exec(glGenFramebuffers, 1, &m_fbo);
+            gl_exec(glBindFramebuffer, GL_DRAW_FRAMEBUFFER, m_fbo);
 
-        unbind();
+            m_render_targets[gtl::to_underlying(render_target_type::diffuse)] = render_target(GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT0, GL_LINEAR, width, height);                     // DiffuseColor
+            m_render_targets[gtl::to_underlying(render_target_type::position)] = render_target(GL_RGB32F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT1, GL_LINEAR, width, height);                             // Position
+            m_render_targets[gtl::to_underlying(render_target_type::normal)] = render_target(GL_RGB32F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT2, GL_LINEAR, width, height);                             // Normal
+            m_render_targets[gtl::to_underlying(render_target_type::specular)] = render_target(GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT3, GL_LINEAR, width, height);                     // SpecularColor
+            m_render_targets[gtl::to_underlying(render_target_type::final_color)] = render_target(GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT4, GL_LINEAR, width, height);                     // FinalColor
+            m_render_targets[gtl::to_underlying(render_target_type::depth)] = render_target(GL_DEPTH32F_STENCIL8, GL_DEPTH_STENCIL, GL_FLOAT_32_UNSIGNED_INT_24_8_REV, GL_DEPTH_STENCIL_ATTACHMENT, GL_NEAREST, width, height); //Depth
+
+            gl_exec(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_render_targets[gtl::to_underlying(render_target_type::depth)].get_id(), 0);
+
+            const GLenum DrawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+            glDrawBuffers(4, DrawBuffers);
+            GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+            if (status != GL_FRAMEBUFFER_COMPLETE)
+            {
+                std::cerr << "FrameBuffer is incomplete\n";
+            }
+            unbind();
+        }
     }
     
     frame_buffer::~frame_buffer()
@@ -57,7 +59,7 @@ namespace grender
             return *this;
 
         m_render_targets = std::move(move.m_render_targets);
-        gl_exec(glDeleteFramebuffers, 1, &m_fbo);
+        //gl_exec(glDeleteFramebuffers, 1, &m_fbo);
 
         m_fbo = move.m_fbo;
         m_width = move.m_width;
