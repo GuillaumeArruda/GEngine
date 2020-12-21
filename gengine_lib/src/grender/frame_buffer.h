@@ -36,6 +36,7 @@ namespace grender
         void bind_for_geometry() const;
         void bind_for_stencil() const;
         void bind_for_light() const;
+        void bind_for_skybox() const;
         void unbind() const;
 
         glm::ivec2 get_size() const { return { m_width, m_height }; }

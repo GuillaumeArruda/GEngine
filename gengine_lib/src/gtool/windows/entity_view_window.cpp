@@ -102,6 +102,7 @@ namespace gtool
             {
                 gserializer::json_read_serializer json_read(m_filepath.c_str());
                 json_read.process("entity_registry", registry);
+                registry.rebuild_component_type_map();
             }
             ImGui::TreePop();
         }

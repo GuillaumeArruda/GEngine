@@ -1,0 +1,16 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::cube_map_texture",
+        "data": {
+            "uuid": "5fe005a72a64142ae2d0f70244e634ce",
+            "name": "skybox",
+            "positive_x_file_path": "data/textures/skybox/x_pos.dds",
+            "positive_y_file_path": "data/textures/skybox/y_pos.dds",
+            "positive_z_file_path": "data/textures/skybox/z_pos.dds",
+            "negative_x_file_path": "data/textures/skybox/x_neg.dds",
+            "negative_y_file_path": "data/textures/skybox/y_neg.dds",
+            "negative_z_file_path": "data/textures/skybox/z_neg.dds"
+        }
+    }
+}

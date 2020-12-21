@@ -1,0 +1,57 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::program",
+        "data": {
+            "uuid": "5fe00b31591f9dda4afdd5bcb7f9783d",
+            "name": "skybox_program",
+            "shaders": [
+                {
+                    "key": "shader::type::vertex",
+                    "data": "data\\programs\\vertex\\skybox_vertex.glsl"
+                },
+                {
+                    "key": "shader::type::fragment",
+                    "data": "data\\programs\\fragment\\skybox_fragment.glsl"
+                }
+            ],
+            "default uniforms": {
+                "uniforms": [
+                    {
+                        "name": "cube_map",
+                        "type": "uniform_variant::type::sampler_cube",
+                        "value": "5fe005a72a64142ae2d0f70244e634ce"
+                    },
+                    {
+                        "name": "mvp",
+                        "type": "uniform_variant::type::mat44",
+                        "[0]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[1]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[3]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[4]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

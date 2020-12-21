@@ -32,10 +32,6 @@ namespace gcore
     void entity_registry::process(gserializer::serializer& serializer)
     {
         serializer.process("Entities", m_entity_to_component, "Entity", "Component", component::factory());
-        if (serializer.is_writing_to_object())
-        {
-            rebuild_component_type_map();
-        }
     }
 
     void entity_registry::remove_component(entity entity, component_id component_type)

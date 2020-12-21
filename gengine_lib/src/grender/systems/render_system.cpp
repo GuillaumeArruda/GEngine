@@ -13,6 +13,7 @@
 #include "grender/components/camera_component.h"
 #include "grender/components/graphic_component.h"
 #include "grender/components/light_component.h"
+#include "grender/components/skybox_component.h"
 #include "grender/resources/mesh_resource.h"
 #include "grender/resources/program.h"
 #include "grender/utils.h"
@@ -35,6 +36,7 @@ namespace grender
 
                 render_meshes(projection, view_matrix, registry, library);
                 render_lights(projection, view_matrix, registry, library);
+                render_skybox(projection, view_matrix, registry, library);
             }
         }
         m_frame_buffer.unbind();
@@ -154,11 +156,36 @@ namespace grender
         gl_exec(glDisable, GL_BLEND);
     }
 
+    void render_system::render_skybox(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gcore::resource_library& library)
+    {
+        setup_skybox_pass();
+        auto view = registry.get_view<grender::skybox_component>();
+        for (auto& [entity, skybox] : view)
+        {
+            program const* prog = library.get_resource<program>(skybox->m_program_id);
+            mesh_resource const* mesh = library.get_resource<mesh_resource>(skybox->m_mesh_id);
+            if (!prog || !mesh)
+                continue;
+
+            skybox->m_program_state.reconcile(prog->get_default_state());
+
+            prog->activate();
+            skybox->m_program_state.set_uniform("mvp", projection * glm::mat4(glm::mat3(view_matrix)));
+            skybox->m_program_state.apply(library);
+            for (auto& submesh : mesh->get_meshes())
+            {
+                submesh.draw();
+            }
+        }
+
+    }
+
     void render_system::setup_geometry_pass()
     {
         m_frame_buffer.bind_for_geometry();
         gl_exec(glEnable, GL_DEPTH_TEST);
         gl_exec(glDepthMask, GL_TRUE);
+        gl_exec(glDepthFunc, GL_LESS);
         gl_exec(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
@@ -184,6 +211,13 @@ namespace grender
         gl_exec(glBlendFunc, GL_ONE, GL_ONE);
         gl_exec(glEnable, GL_CULL_FACE);
         gl_exec(glCullFace, GL_BACK);
+    }
+    void render_system::setup_skybox_pass()
+    {
+        gl_exec(glEnable, GL_DEPTH_TEST);
+        gl_exec(glDepthFunc, GL_LEQUAL);
+        gl_exec(glDisable, GL_CULL_FACE);
+        m_frame_buffer.bind_for_skybox();
     }
 }
 

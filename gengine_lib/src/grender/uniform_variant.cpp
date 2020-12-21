@@ -12,6 +12,7 @@
 #include "gcore/resource_library.h"
 
 #include "grender/resources/texture.h"
+#include "grender/resources/cube_map_texture.h"
 
 namespace grender
 {
@@ -144,11 +145,10 @@ namespace grender
         case type::sampler_1d:
         case type::sampler_2d:
         case type::sampler_3d:
-        case type::sampler_cube:
         {
             if (m_texture_info.m_texture_id == 0)
             {
-                if (grender::texture* tex = lib.get_resource<grender::texture>(m_texture_info.m_texture_uuid))
+                if (grender::texture const* tex = lib.get_resource<grender::texture>(m_texture_info.m_texture_uuid))
                 {
                     gl_exec(glActiveTexture, GL_TEXTURE0 + location);
                     gl_exec(glBindTexture, GL_TEXTURE_2D, tex->get_id());
@@ -163,6 +163,26 @@ namespace grender
             }
             break;
         }
+        case type::sampler_cube:
+        {
+            if (m_texture_info.m_texture_id == 0)
+            {
+                if (grender::cube_map_texture const* tex = lib.get_resource<grender::cube_map_texture>(m_texture_info.m_texture_uuid))
+                {
+                    gl_exec(glActiveTexture, GL_TEXTURE0 + location);
+                    gl_exec(glBindTexture, GL_TEXTURE_CUBE_MAP, tex->get_id());
+                    gl_exec(glUniform1i, location, location);
+                }
+            }
+            else
+            {
+                gl_exec(glActiveTexture, GL_TEXTURE0 + location);
+                gl_exec(glBindTexture, GL_TEXTURE_CUBE_MAP, m_texture_info.m_texture_id);
+                gl_exec(glUniform1i, location, location);
+            }
+            break;
+        }
+        
         case type::invalid:     break;
         }
     }

@@ -22,11 +22,9 @@ namespace grender
             m_render_targets[gtl::to_underlying(render_target_type::final_color)] = render_target(GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT4, GL_LINEAR, width, height);                     // FinalColor
             m_render_targets[gtl::to_underlying(render_target_type::depth)] = render_target(GL_DEPTH32F_STENCIL8, GL_DEPTH_STENCIL, GL_FLOAT_32_UNSIGNED_INT_24_8_REV, GL_DEPTH_STENCIL_ATTACHMENT, GL_NEAREST, width, height); //Depth
 
-            gl_exec(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_render_targets[gtl::to_underlying(render_target_type::depth)].get_id(), 0);
-
             const GLenum DrawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
             glDrawBuffers(4, DrawBuffers);
-            GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+            GLenum status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
 
             if (status != GL_FRAMEBUFFER_COMPLETE)
             {
@@ -59,7 +57,7 @@ namespace grender
             return *this;
 
         m_render_targets = std::move(move.m_render_targets);
-        //gl_exec(glDeleteFramebuffers, 1, &m_fbo);
+        gl_exec(glDeleteFramebuffers, 1, &m_fbo);
 
         m_fbo = move.m_fbo;
         m_width = move.m_width;
@@ -91,6 +89,11 @@ namespace grender
     void frame_buffer::bind_for_light() const
     {
         gl_exec(glDrawBuffer, GL_COLOR_ATTACHMENT4);
+    }
+
+    void frame_buffer::bind_for_skybox() const
+    {
+        glDrawBuffer(GL_COLOR_ATTACHMENT4);
     }
 }
 

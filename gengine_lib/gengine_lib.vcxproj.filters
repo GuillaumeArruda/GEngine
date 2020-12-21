@@ -201,6 +201,12 @@
     <ClInclude Include="src\gtool\windows\viewport_window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\grender\resources\cube_map_texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\components\skybox_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -312,6 +318,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gtool\windows\viewport_window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\resources\cube_map_texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\components\skybox_component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
