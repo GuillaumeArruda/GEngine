@@ -68,15 +68,17 @@ namespace grender
     struct program : gcore::resource
     {
         void process(gserializer::serializer& serializer) override;
-        void load() override;
-        void unload() override;
+        bool need_async_load() const override { return true; }
 
         void activate() const;
-        GLuint get_id() const noexcept { return m_program_id; }
-
-        
+        GLuint get_id() const noexcept { return m_program_id; }       
         program_uniform_state const& get_default_state() const { return m_default_state; }
+
     private:
+        void do_unload() override;
+        bool do_load_async() override;
+        bool do_load_sync() override { return true; }
+
         program_uniform_state m_default_state;
         std::unordered_map<shader::type, std::filesystem::path> m_shaders_file;
         std::vector<shader> m_shaders;

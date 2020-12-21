@@ -46,7 +46,7 @@ namespace grender
         serializer.process("file", m_file_path);
     }
 
-    void texture::load()
+    bool texture::do_load_async()
     {
         gl_exec(glGenTextures, 1, &m_texture_id);
         ILuint const imageId = ilGenImage();
@@ -55,8 +55,10 @@ namespace grender
         ILboolean const success = ilLoadImage(m_file_path.string().data());
         if (!success)
         {
+            gl_exec(glDeleteTextures, 1, &m_texture_id);
+            m_texture_id = 0;
             std::cerr << "Error while loading the texture file: " << m_file_path << std::endl;
-            return;
+            return false;
         }
 
         auto const width = ilGetInteger(IL_IMAGE_WIDTH);
@@ -92,9 +94,10 @@ namespace grender
         gl_exec(glTexImage2D, GL_TEXTURE_2D, 0, format, width, height, 0, ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_TYPE), ilGetData());
         ilDeleteImage(imageId);
         gl_exec(glFinish);
+        return true;
     }
 
-    void texture::unload()
+    void texture::do_unload()
     {
         gl_exec(glDeleteTextures, 1, &m_texture_id);
     }

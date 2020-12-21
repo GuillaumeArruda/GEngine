@@ -69,7 +69,7 @@ namespace grender
             glm::mat3 const normal_matrix = glm::transpose(glm::inverse(glm::mat3(transform->m_transform)));
             for (auto& mesh_info : graphic_comp->m_meshes)
             {
-                if (mesh_info.m_mesh && mesh_info.m_program)
+                if (mesh_info.m_mesh.is_loaded() && mesh_info.m_program.is_loaded())
                 {
                     mesh_info.m_program->activate();
                     mesh_info.m_uniform_state.reconcile(mesh_info.m_program->get_default_state());
@@ -98,9 +98,9 @@ namespace grender
         auto light_view = registry.get_view<gcore::transform_component, light_component>();
         for (auto& [entity, transform, light] : light_view)
         {
-            if (light->m_mesh)
+            if (light->m_mesh.is_loaded())
             {
-                if (light->m_stencil_program)
+                if (light->m_stencil_program.is_loaded())
                 {
                     light->m_stencil_state.reconcile(light->m_stencil_program->get_default_state());
                     setup_stencil_pass();
@@ -116,7 +116,7 @@ namespace grender
                     }
                 }
 
-                if (light->m_main_program)
+                if (light->m_main_program.is_loaded())
                 {
                     light->m_main_state.reconcile(light->m_main_program->get_default_state());
                     setup_lightning_pass();
@@ -146,7 +146,7 @@ namespace grender
         auto view = registry.get_view<grender::skybox_component>();
         for (auto& [entity, skybox] : view)
         {
-            if (skybox->m_program && skybox->m_mesh)
+            if (skybox->m_program.is_loaded() && skybox->m_mesh.is_loaded())
             {
                 skybox->m_program_state.reconcile(skybox->m_program->get_default_state());
 

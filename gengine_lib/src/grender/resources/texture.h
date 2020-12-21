@@ -21,12 +21,17 @@ namespace grender
 
 
         void process(gserializer::serializer& serializer) override;
-        void load() override;
-        void unload() override;
+
+        bool need_async_load() const override { return true; }
+
 
         GLuint get_id() const { return m_texture_id; }
 
     private:
+        bool do_load_async() override;
+        bool do_load_sync() override { return true; };
+        void do_unload() override;
+
         std::filesystem::path m_file_path;
         GLuint m_texture_id = 0;
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();

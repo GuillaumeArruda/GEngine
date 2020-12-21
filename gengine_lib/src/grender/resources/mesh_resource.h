@@ -30,6 +30,7 @@ namespace grender
         mesh& operator=(mesh const&) = delete;
 
         void draw() const;
+        void bind();
     private:
         enum vbo_type
         {
@@ -49,14 +50,16 @@ namespace grender
     struct mesh_resource : gcore::resource
     {
         void process(gserializer::serializer& serializer) override;
-        void load() override;
-        void unload() override;
-        void set_fbx_path(std::string path);
+        bool need_async_load() const override { return true; };
 
         gtl::span<mesh const> get_meshes() const { return m_submeshes; }
         gmath::axis_aligned_box<gcore::model_space> const& get_extent() const { return m_extent; }
 
     private:
+        bool do_load_async() override;
+        bool do_load_sync() override;
+        void do_unload() override;
+
         gmath::axis_aligned_box<gcore::model_space> m_extent;
         std::vector<mesh> m_submeshes;
         std::filesystem::path m_fbx_path;

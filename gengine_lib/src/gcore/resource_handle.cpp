@@ -32,6 +32,8 @@ namespace gcore
         return (*this);
     }
 
+    bool resource_proxy::is_loaded() const { return m_target && m_target->is_loaded(); }
+
     void resource_proxy::set_target(resource* target)
     {
         unload_resource();

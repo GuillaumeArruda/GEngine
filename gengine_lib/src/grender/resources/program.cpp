@@ -169,7 +169,7 @@ namespace grender
         serializer.process("default uniforms", m_default_state);
     }
 
-    void program::load()
+    bool program::do_load_async()
     {
         m_program_id = glCreateProgram();
 
@@ -203,13 +203,18 @@ namespace grender
             auto log = std::make_unique<GLchar[]>(logSize);
             glGetProgramInfoLog(m_program_id, logSize, &logSize, log.get());
             std::cerr << log << "\n";
+            glDeleteProgram(m_program_id);
+            m_shaders.clear();
+            m_program_id = 0;
+            return false;
         }
         program_uniform_state new_state;
         new_state.bind(m_program_id);
         m_default_state.reconcile(new_state);
+        return true;
     }
 
-    void program::unload()
+    void program::do_unload()
     {
         glDeleteProgram(m_program_id);
         m_shaders.clear();

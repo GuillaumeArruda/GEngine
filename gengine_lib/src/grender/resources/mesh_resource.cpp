@@ -19,16 +19,11 @@ namespace grender
     mesh::mesh(aiMesh const& mesh, gmath::axis_aligned_box<gcore::model_space>& out_extent)
         : m_number_of_element(mesh.mNumVertices)
     {
-        gl_exec(glGenVertexArrays, 1, &m_vao);
-        gl_exec(glBindVertexArray, m_vao);
-
         if (mesh.HasPositions())
         {
             gl_exec(glGenBuffers, 1, &m_vbo[vbo_type::position]);
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::position]);
             gl_exec(glBufferData, GL_ARRAY_BUFFER, mesh.mNumVertices * sizeof(float) * 3ull, mesh.mVertices, GL_STATIC_DRAW);
-            gl_exec(glVertexAttribPointer, vbo_type::position, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-            gl_exec(glEnableVertexAttribArray, vbo_type::position);
 
             glm::vec4 min(std::numeric_limits<float>::max());
             glm::vec4 max(std::numeric_limits<float>::lowest());
@@ -52,8 +47,6 @@ namespace grender
             gl_exec(glGenBuffers, 1, &m_vbo[vbo_type::normal]);
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::normal]);
             gl_exec(glBufferData, GL_ARRAY_BUFFER, mesh.mNumVertices * sizeof(float) * 3ull, mesh.mNormals, GL_STATIC_DRAW);
-            gl_exec(glVertexAttribPointer, vbo_type::normal, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-            gl_exec(glEnableVertexAttribArray, vbo_type::normal);
         }
 
         if (mesh.HasTextureCoords(0))
@@ -69,9 +62,6 @@ namespace grender
             gl_exec(glGenBuffers, 1, &m_vbo[vbo_type::uv]);
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::uv]);
             gl_exec(glBufferData, GL_ARRAY_BUFFER, uv_cord.size() * sizeof(float), uv_cord.data(), GL_STATIC_DRAW);
-            gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[2]);
-            gl_exec(glVertexAttribPointer, vbo_type::uv, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-            gl_exec(glEnableVertexAttribArray, vbo_type::uv);
         }
 
         if (mesh.HasTangentsAndBitangents())
@@ -88,8 +78,6 @@ namespace grender
             gl_exec(glGenBuffers, 1, &m_vbo[vbo_type::tangent]);
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::tangent]);
             gl_exec(glBufferData, GL_ARRAY_BUFFER, tangent.size() * sizeof(float), tangent.data(), GL_STATIC_DRAW);
-            gl_exec(glVertexAttribPointer, vbo_type::tangent, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-            gl_exec(glEnableVertexAttribArray, vbo_type::tangent);
 
             for (std::size_t i = 0; i < mesh.mNumVertices; ++i)
             {
@@ -101,8 +89,6 @@ namespace grender
             gl_exec(glGenBuffers, 1, &m_vbo[vbo_type::bitangent]);
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::bitangent]);
             gl_exec(glBufferData, GL_ARRAY_BUFFER, tangent.size() * sizeof(float), tangent.data(), GL_STATIC_DRAW);
-            gl_exec(glVertexAttribPointer, vbo_type::bitangent, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-            gl_exec(glEnableVertexAttribArray, vbo_type::bitangent);
 
         }
 
@@ -121,11 +107,7 @@ namespace grender
             gl_exec(glGenBuffers, 1, &m_vbo[vbo_type::faces]);
             gl_exec(glBindBuffer, GL_ELEMENT_ARRAY_BUFFER, m_vbo[vbo_type::faces]);
             gl_exec(glBufferData, GL_ELEMENT_ARRAY_BUFFER, faces_idx.size() * sizeof(std::uint32_t), faces_idx.data(), GL_STATIC_DRAW);
-            gl_exec(glBindBuffer, GL_ELEMENT_ARRAY_BUFFER, m_vbo[vbo_type::faces]);
         }
-
-        gl_exec(glBindBuffer, GL_ARRAY_BUFFER, 0);
-        gl_exec(glBindVertexArray, 0);
     }
 
     mesh::~mesh()
@@ -169,13 +151,62 @@ namespace grender
         gl_exec(glBindVertexArray, 0);
     }
 
+    void mesh::bind()
+    {
+        gl_exec(glGenVertexArrays, 1, &m_vao);
+        gl_exec(glBindVertexArray, m_vao);
+
+        if (m_vbo[vbo_type::position] != 0)
+        {
+            gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::position]);
+            gl_exec(glVertexAttribPointer, vbo_type::position, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+            gl_exec(glEnableVertexAttribArray, vbo_type::position);
+        }
+
+        if (m_vbo[vbo_type::normal] != 0)
+        {
+            gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::normal]);
+            gl_exec(glVertexAttribPointer, vbo_type::normal, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+            gl_exec(glEnableVertexAttribArray, vbo_type::normal);
+        }
+
+        if (m_vbo[vbo_type::uv] != 0)
+        {
+            gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::uv]);
+            gl_exec(glVertexAttribPointer, vbo_type::uv, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+            gl_exec(glEnableVertexAttribArray, vbo_type::uv);
+        }
+
+        if (m_vbo[vbo_type::tangent] != 0)
+        {
+            gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::tangent]);
+            gl_exec(glVertexAttribPointer, vbo_type::tangent, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+            gl_exec(glEnableVertexAttribArray, vbo_type::tangent);
+        }
+
+        if (m_vbo[vbo_type::bitangent] != 0)
+        {
+            gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::bitangent]);
+            gl_exec(glVertexAttribPointer, vbo_type::bitangent, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+            gl_exec(glEnableVertexAttribArray, vbo_type::bitangent);
+        }
+
+        if (m_vbo[vbo_type::faces] - 1 != 0)
+        {
+            gl_exec(glBindBuffer, GL_ELEMENT_ARRAY_BUFFER, m_vbo[vbo_type::faces]);
+        }
+
+        gl_exec(glBindBuffer, GL_ARRAY_BUFFER, 0);
+        gl_exec(glBindVertexArray, 0);
+    }
+
     void mesh_resource::process(gserializer::serializer& serializer)
     {
         resource::process(serializer);
         serializer.process("fbx_path", m_fbx_path);
     }
 
-    void mesh_resource::load()
+    bool mesh_resource::do_load_async()
     {
         Assimp::Importer importer;
         aiScene const* scene = importer.ReadFile(m_fbx_path.string().c_str(),
@@ -183,13 +214,13 @@ namespace grender
             aiProcess_ImproveCacheLocality |
             aiProcess_FixInfacingNormals |
             aiProcess_OptimizeGraph |
-            aiProcess_OptimizeMeshes | 
+            aiProcess_OptimizeMeshes |
             aiProcess_CalcTangentSpace);
 
         if (!scene)
         {
             std::cerr << importer.GetErrorString() << "\n";
-            return;
+            return false;
         }
 
         m_submeshes.reserve(scene->mNumMeshes);
@@ -197,17 +228,21 @@ namespace grender
         {
             m_submeshes.emplace_back(*scene->mMeshes[i], m_extent);
         }
+        return true;
     }
-    void mesh_resource::unload()
+    
+    bool mesh_resource::do_load_sync()
     {
-        m_submeshes.clear();
-    }
-    void mesh_resource::set_fbx_path(std::string path)
-    {
-        m_submeshes.clear();
-        m_fbx_path = std::move(path);
-        load();
+        for (auto& mesh : m_submeshes)
+        {
+            mesh.bind();
+        }
+        return true;
     }
 
+    void mesh_resource::do_unload()
+    {
+        m_submeshes.clear();
+    }
 }
 

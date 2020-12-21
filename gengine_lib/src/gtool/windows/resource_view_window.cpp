@@ -53,8 +53,6 @@ namespace gtool
                         gserializer::json_write_serializer write_json;
                         write_json.process("resource", s, gcore::resource::factory());
                         write_json.write_to_file(library.get_filepath(uid).c_str());
-                        s->unload();
-                        s->load();
                     }
                     s.release();
                 }

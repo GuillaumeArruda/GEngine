@@ -33,6 +33,8 @@ namespace gcore
             return m_target;
         }
 
+        bool is_loaded() const;
+
         void set_target(resource* target);
         resource* get_target() { return m_target; }
         resource const* get_target() const { return m_target; }
@@ -101,6 +103,8 @@ namespace gcore
         {
             return dynamic_cast<ResType const*>(get());
         }
+
+        bool is_loaded() const { return m_proxy && m_proxy->is_loaded(); }
 
         void reset() { m_proxy.reset(); }
 

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include <filesystem>
+#include <algorithm>
 
 #include "gcore/resource_library.h"
 
@@ -9,8 +10,24 @@
 
 #include "gcore/serializers/dependency_gatherer_serializer.h"
 
+#include <GLFW/glfw3.h>
+
 namespace gcore
 {
+    resource_library::resource_library(GLFWwindow* rendering_context)
+    {
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        m_loading_context = glfwCreateWindow(1, 1, "", nullptr, rendering_context);
+        m_jobs.submit([=] {
+            glfwMakeContextCurrent(m_loading_context);
+        });
+    }
+
+    resource_library::~resource_library()
+    {
+        glfwDestroyWindow(m_loading_context);
+    }
+
     void resource_library::process(gserializer::serializer& serializer)
     {
         serializer.process("uuid_to_resource_file", m_uuid_to_resource_file, "Resource");
@@ -42,7 +59,24 @@ namespace gcore
                 serializer.process("resource", it->second, resource::factory());
                 if (it->second)
                 {
-                    it->second->load();
+                    if (it->second->need_async_load())
+                    {
+                        m_jobs.submit([resource = it->second.get(), this]
+                            {
+                                resource->load_async();
+                                if (resource->get_state() == resource::loading_state::pending_sync)
+                                {
+                                    std::unique_lock lock(m_lock);
+                                    m_res_to_load_sync.push_back(resource);
+                                }
+                            }
+                        );
+                    }
+                    else
+                    {
+                        it->second->load_sync();
+                    }
+
                     gcore::dependency_gatherer_serializer dependency;
                     dependency.process("resource", *(it->second));
                     for (auto const& uuid : dependency.m_uuids)
@@ -119,7 +153,8 @@ namespace gcore
                             gserializer::json_read_serializer serializer(path.string().c_str());
                             serializer.process("resource", it->second, resource::factory());
                             it->second->unload();
-                            it->second->load();
+                            it->second->load_async();
+                            it->second->load_sync();
                         }
 
                         auto uuid_it = m_uuid_dependant_map.find(uuid);
@@ -131,7 +166,8 @@ namespace gcore
                                 if (it != m_resource_map.end())
                                 {
                                     it->second->unload();
-                                    it->second->load();
+                                    it->second->load_async();
+                                    it->second->load_sync();
                                 }
                             }
                         }
@@ -147,7 +183,8 @@ namespace gcore
                         if (it != m_resource_map.end())
                         {
                             it->second->unload();
-                            it->second->load();
+                            it->second->load_async();
+                            it->second->load_sync();
                         }
                     }
                 }
@@ -157,11 +194,25 @@ namespace gcore
 
         {
             std::unique_lock lock(m_lock);
-            for (auto& res_to_unload : m_res_to_unload)
+            for (auto& res_to_load : m_res_to_load_sync)
             {
-                res_to_unload->unload();
+                res_to_load->load_sync();
             }
-            m_res_to_unload.clear();
+            m_res_to_load_sync.clear();
+            
+            m_res_to_unload.erase(
+                std::remove_if(
+                    m_res_to_unload.begin(), m_res_to_unload.end(), 
+                    [](std::unique_ptr<resource> const& res)
+                        {
+                            if (res->get_state() == resource::loading_state::loaded)
+                            {
+                                res->unload();
+                                return true;
+                            }
+                            return res->get_state() == resource::loading_state::failed;
+                        })
+                , m_res_to_unload.end());
         }
     }
 

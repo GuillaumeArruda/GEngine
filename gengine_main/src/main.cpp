@@ -22,7 +22,7 @@ int main()
     {
         ilInit();
         gtool::window_manager tool_window_manager;
-        std::shared_ptr<gcore::resource_library> lib = std::make_shared<gcore::resource_library>();
+        std::shared_ptr<gcore::resource_library> lib = std::make_shared<gcore::resource_library>(tool_window_manager.get_window());
         lib->scan_directory("data\\");
         gcore::world world(lib);
         auto& systems = world.get_system_registry();

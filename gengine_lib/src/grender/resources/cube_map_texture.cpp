@@ -27,7 +27,7 @@ namespace grender
         serializer.process("negative_z_file_path", m_texture_files[5]);
     }
 
-    void cube_map_texture::load()
+    bool cube_map_texture::do_load_async()
     {
         gl_exec(glGenTextures, 1, &m_texture_id);
         gl_exec(glBindTexture, GL_TEXTURE_CUBE_MAP, m_texture_id);
@@ -47,8 +47,10 @@ namespace grender
             ILboolean success = ilLoadImage(m_texture_files[i].string().data());
             if (!success)
             {
+                gl_exec(glDeleteTextures, 1, &m_texture_id);
+                m_texture_id = 0;
                 std::cerr << "Error while loading the texture file: " << m_texture_files[i] << std::endl;
-                return;
+                return false;
             }
 
             int const width = ilGetInteger(IL_IMAGE_WIDTH);
@@ -82,10 +84,10 @@ namespace grender
         gl_exec(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         gl_exec(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         gl_exec(glFinish);
-        return;
+        return true;
     }
 
-    void cube_map_texture::unload()
+    void cube_map_texture::do_unload()
     {
         gl_exec(glDeleteTextures, 1, &m_texture_id);
         m_texture_id = 0;

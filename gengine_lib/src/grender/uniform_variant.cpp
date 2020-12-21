@@ -136,11 +136,14 @@ namespace grender
         {
             if (m_texture_info.m_texture_id == 0)
             {
-                if (texture const* tex = m_texture_info.m_texture.as<texture>())
+                if (m_texture_info.m_texture.is_loaded())
                 {
-                    gl_exec(glActiveTexture, GL_TEXTURE0 + location);
-                    gl_exec(glBindTexture, GL_TEXTURE_2D, tex->get_id());
-                    gl_exec(glUniform1i, location, location);
+                    if (texture const* tex = m_texture_info.m_texture.as<texture>())
+                    {
+                        gl_exec(glActiveTexture, GL_TEXTURE0 + location);
+                        gl_exec(glBindTexture, GL_TEXTURE_2D, tex->get_id());
+                        gl_exec(glUniform1i, location, location);
+                    }
                 }
             }
             else
@@ -155,11 +158,14 @@ namespace grender
         {
             if (m_texture_info.m_texture_id == 0)
             {
-                if (cube_map_texture const* tex = m_texture_info.m_texture.as<cube_map_texture>())
+                if (m_texture_info.m_texture.is_loaded())
                 {
-                    gl_exec(glActiveTexture, GL_TEXTURE0 + location);
-                    gl_exec(glBindTexture, GL_TEXTURE_CUBE_MAP, tex->get_id());
-                    gl_exec(glUniform1i, location, location);
+                    if (cube_map_texture const* tex = m_texture_info.m_texture.as<cube_map_texture>())
+                    {
+                        gl_exec(glActiveTexture, GL_TEXTURE0 + location);
+                        gl_exec(glBindTexture, GL_TEXTURE_CUBE_MAP, tex->get_id());
+                        gl_exec(glUniform1i, location, location);
+                    }
                 }
             }
             else
