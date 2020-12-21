@@ -55,6 +55,7 @@ namespace grender
         ILboolean const success = ilLoadImage(m_file_path.string().data());
         if (!success)
         {
+            ilDeleteImage(imageId);
             gl_exec(glDeleteTextures, 1, &m_texture_id);
             m_texture_id = 0;
             std::cerr << "Error while loading the texture file: " << m_file_path << std::endl;

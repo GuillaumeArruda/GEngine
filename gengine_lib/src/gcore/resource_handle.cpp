@@ -36,7 +36,6 @@ namespace gcore
 
     void resource_proxy::set_target(resource* target)
     {
-        unload_resource();
         m_target = target;
     }
 

@@ -50,6 +50,8 @@ namespace gcore
     private:
         friend struct resource_proxy;
         void request_unload(resource* res_to_unload);
+        void load_resource(std::unique_ptr<resource> res_to_load);
+        void reload_resource(gtl::uuid const& uuid);
 
         resource_handle<resource> get_resource(gtl::uuid const& uuid);
         
@@ -61,7 +63,7 @@ namespace gcore
         std::unordered_map<std::size_t, std::vector<gtl::uuid>> m_file_dependant_map;
         
         std::vector<std::unique_ptr<resource>> m_res_to_unload;
-        std::vector<resource*> m_res_to_load_sync;
+        std::vector<std::unique_ptr<resource>> m_res_to_load_sync;
 
         std::mutex m_file_change_lock;
         std::vector<std::filesystem::path> m_file_changes;

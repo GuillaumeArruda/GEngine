@@ -11,7 +11,6 @@
 
 #include "grender/utils.h"
 
-
 GSERIALIZER_DEFINE_SUBCLASS_FACTORY_REGISTRATION(grender::cube_map_texture);
 
 namespace grender
@@ -47,6 +46,7 @@ namespace grender
             ILboolean success = ilLoadImage(m_texture_files[i].string().data());
             if (!success)
             {
+                ilDeleteImage(imageId);
                 gl_exec(glDeleteTextures, 1, &m_texture_id);
                 m_texture_id = 0;
                 std::cerr << "Error while loading the texture file: " << m_texture_files[i] << std::endl;
