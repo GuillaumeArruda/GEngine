@@ -9,9 +9,9 @@ namespace grender
 {
     void light_component::process(gserializer::serializer& serializer)
     {
-        serializer.process("main_program", m_main_program);
-        serializer.process("stencil_program", m_stencil_program);
-        serializer.process("mesh", m_mesh);
+        serializer.process("main_program", m_main_program_uuid, m_main_program);
+        serializer.process("stencil_program", m_stencil_program_uuid, m_stencil_program);
+        serializer.process("mesh", m_mesh_uuid, m_mesh);
         serializer.process("main_state", m_main_state);
         serializer.process("stencil_state", m_stencil_state);
     }

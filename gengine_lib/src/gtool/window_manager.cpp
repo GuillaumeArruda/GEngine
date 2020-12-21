@@ -79,7 +79,7 @@ namespace gtool
 
 		input_system->update(world);
 		controller_system->update(world);
-		render->render(registry, *lib);
+		render->render(registry);
 		lib->update();
 
 		ImGuiViewport* viewport = ImGui::GetMainViewport();

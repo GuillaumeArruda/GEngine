@@ -6,6 +6,8 @@
 #include <optional>
 #include <unordered_map>
 #include <filesystem>
+#include <any>
+#include <typeindex>
 
 #include "gtl/span.h"
 
@@ -143,6 +145,24 @@ namespace gserializer
             }
         }
 
+        template<class ContextElement>
+        void set_in_context(ContextElement&& element)
+        {
+            m_context[std::type_index(typeid(ContextElement))] = std::forward<ContextElement>(element);
+        }
+
+        template<class ContextElement>
+        ContextElement* get_in_context()
+        {
+            auto it = m_context.find(std::type_index(typeid(ContextElement)));
+            if (it != m_context.end())
+            {
+                if (it->second.type() == typeid(ContextElement))
+                    return &std::any_cast<ContextElement&>(it->second);
+            }
+            return nullptr;
+        }
+
 
         virtual void open_scope(const char* name) = 0;
         virtual void close_scope(const char* name) = 0;
@@ -152,6 +172,9 @@ namespace gserializer
         virtual void close_array(const char* name) = 0;
         virtual bool open_array_element(const char* name) = 0;
         virtual void close_array_element(const char* name) = 0;
+
+        private:
+            std::unordered_map<std::type_index, std::any> m_context;
     };
 
     inline void process(serializer& serializer, gtl::uuid& value)

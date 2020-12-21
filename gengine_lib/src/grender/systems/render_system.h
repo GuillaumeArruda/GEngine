@@ -9,23 +9,22 @@
 namespace gcore
 {
     struct entity_registry;
-    struct resource_library;
 }
 
 namespace grender
 {
     struct render_system : gcore::system
     {
-        void render(gcore::entity_registry& registry, gcore::resource_library& library);
+        void render(gcore::entity_registry& registry);
 
         void set_target_size(std::size_t width, std::size_t height);
         glm::ivec2 get_target_size() const;
         GLuint get_target_id() const;
 
     private:
-        void render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gcore::resource_library& library);
-        void render_lights(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gcore::resource_library& library);
-        void render_skybox(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gcore::resource_library& library);
+        void render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry);
+        void render_lights(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry);
+        void render_skybox(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry);
         
         void setup_geometry_pass();
         void setup_stencil_pass();

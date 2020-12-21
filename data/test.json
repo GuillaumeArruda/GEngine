@@ -42,14 +42,18 @@
                         "data": {
                             "meshes": [
                                 {
-                                    "mesh": "5fdad25e7cad6150dd9c58c2db34a5ef",
-                                    "program": "5fdb7534af7c1b239419bb136a2b00e7",
+                                    "mesh": {
+									 "value" : "5fdad25e7cad6150dd9c58c2db34a5ef"
+									},
+                                    "program": {
+										"value" : "5fdb7534af7c1b239419bb136a2b00e7"
+									}, 
                                     "uniform state": {
                                         "uniforms": [
                                             {
                                                 "name": "albedo_map",
                                                 "type": "uniform_variant::type::sampler_2d",
-                                                "value": "5fde4b97df1bcd615cd815134d2ba9bd"
+												"value" : "5fde4b97df1bcd615cd815134d2ba9bd"
                                             },
                                             {
                                                 "name": "mvp",
@@ -82,7 +86,7 @@
                                             {
                                                 "name": "normal_map",
                                                 "type": "uniform_variant::type::sampler_2d",
-                                                "value": "5fde5c3516e4d7ded5f556f4aad40b84"
+												"value" : "5fde5c3516e4d7ded5f556f4aad40b84"
                                             },
                                             {
                                                 "name": "normal_matrix",
@@ -106,7 +110,7 @@
                                             {
                                                 "name": "specular_map",
                                                 "type": "uniform_variant::type::sampler_2d",
-                                                "value": "5fde5c3716e4d7dfae498c1b65480d51"
+												"value" : "5fde5c3716e4d7dfae498c1b65480d51"
                                             },
                                             {
                                                 "name": "world_matrix",
@@ -230,14 +234,18 @@
                         "data": {
                             "meshes": [
                                 {
-                                    "mesh": "5fdad25e7cad6150dd9c58c2db34a5ef",
-                                    "program": "5fdb7534af7c1b239419bb136a2b00e7",
+                                    "mesh": {
+									 "value" : "5fdad25e7cad6150dd9c58c2db34a5ef"
+									},
+                                    "program": {
+										"value" : "5fdb7534af7c1b239419bb136a2b00e7"
+									}, 
                                     "uniform state": {
                                         "uniforms": [
                                             {
                                                 "name": "albedo_map",
                                                 "type": "uniform_variant::type::sampler_2d",
-                                                "value": "5fde4b97df1bcd615cd815134d2ba9bd"
+												"value" : "5fde4b97df1bcd615cd815134d2ba9bd"
                                             },
                                             {
                                                 "name": "mvp",
@@ -270,7 +278,7 @@
                                             {
                                                 "name": "normal_map",
                                                 "type": "uniform_variant::type::sampler_2d",
-                                                "value": "5fde5c3516e4d7ded5f556f4aad40b84"
+												"value" : "5fde5c3516e4d7ded5f556f4aad40b84"											
                                             },
                                             {
                                                 "name": "normal_matrix",
@@ -293,8 +301,8 @@
                                             },
                                             {
                                                 "name": "specular_map",
-                                                "type": "uniform_variant::type::sampler_2d",
-                                                "value": "5fde5c3716e4d7dfae498c1b65480d51"
+												"type": "uniform_variant::type::sampler_2d",
+												"value" : "5fde5c3716e4d7dfae498c1b65480d51"
                                             },
                                             {
                                                 "name": "world_matrix",
@@ -415,9 +423,15 @@
                         "is_valid": true,
                         "type_name": "grender::light_component",
                         "data": {
-                            "main_program": "5fdead650a266908491eddb9f59d9b1f",
-                            "stencil_program": "00",
-                            "mesh": "5fdbf6fb9c3367e9d0b0e8c4ca4d1063",
+                            "main_program": {
+								"value" :  "5fdead650a266908491eddb9f59d9b1f"
+							},
+                            "stencil_program": {
+								"value": "00"
+							},
+                            "mesh": {
+								"value": "5fdbf6fb9c3367e9d0b0e8c4ca4d1063"
+							},
                             "main_state": {
                                 "uniforms": [
                                     {
@@ -451,7 +465,7 @@
                                     {
                                         "name": "diffuse_tex",
                                         "type": "uniform_variant::type::sampler_2d",
-                                        "value": "00"
+										"value" : "00"
                                     },
                                     {
                                         "name": "inner_radius",
@@ -468,7 +482,7 @@
                                     {
                                         "name": "normal_tex",
                                         "type": "uniform_variant::type::sampler_2d",
-                                        "value": "00"
+										"value" : "00"
                                     },
                                     {
                                         "name": "outer_radius",
@@ -489,7 +503,7 @@
                                     {
                                         "name": "specular_tex",
                                         "type": "uniform_variant::type::sampler_2d",
-                                        "value": "00"
+										"value" : "00"
                                     },
                                     {
                                         "name": "world_matrix",
@@ -535,14 +549,18 @@
                         "is_valid": true,
                         "type_name": "grender::skybox_component",
                         "data": {
-                            "program_id": "5fe00b31591f9dda4afdd5bcb7f9783d",
-                            "mesh_id": "5fe00de27553d9652a9ec87921dea749",
+                            "program_id": { 
+								"value":"5fe00b31591f9dda4afdd5bcb7f9783d"
+							},
+                            "mesh_id": {
+								"value" : "5fe00de27553d9652a9ec87921dea749"
+							},
                             "program_state": {
                                 "uniforms": [
                                     {
                                         "name": "cube_map",
                                         "type": "uniform_variant::type::sampler_cube",
-                                        "value": "5fe005a72a64142ae2d0f70244e634ce"
+										"value": "5fe005a72a64142ae2d0f70244e634ce"
                                     },
                                     {
                                         "name": "mvp",

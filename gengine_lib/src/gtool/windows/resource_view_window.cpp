@@ -45,7 +45,7 @@ namespace gtool
             {
                 if (auto resource = library.get_resource<gcore::resource>(uid))
                 {
-                    std::unique_ptr<gcore::resource> s(resource);
+                    std::unique_ptr<gcore::resource> s(resource.get());
                     grender::imgui_serializer serializer("Resource");
                     serializer.process("Resource", s, gcore::resource::factory());
                     if (ImGui::Button("Save"))

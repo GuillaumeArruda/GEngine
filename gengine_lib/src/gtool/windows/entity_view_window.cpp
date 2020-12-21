@@ -34,18 +34,19 @@ namespace gtool
 
             {
                 grender::imgui_serializer serializer("Current Entities");
+                serializer.set_in_context(std::ref(*world.get_resource_library()));
                 serializer.process("Entities", registry);
             }
 
             selected_entity_widget.update(world);
-            create_entity_widget.update(registry);
-            save_load_registry_widget.update(registry);
+            create_entity_widget.update(world);
+            save_load_registry_widget.update(world);
 
             ImGui::End();
         }
     }
 
-    void create_entity_widget::update(gcore::entity_registry& registry)
+    void create_entity_widget::update(gcore::world& world)
     {
         if (ImGui::TreeNode("New Entity"))
         {
@@ -53,6 +54,7 @@ namespace gtool
 
             {
                 grender::imgui_serializer serializer("Current Components");
+                serializer.set_in_context(std::ref(*world.get_resource_library()));
                 serializer.process("Components", m_components, "Component", gcore::component::factory());
             }
 
@@ -78,15 +80,15 @@ namespace gtool
 
             if (ImGui::Button("Create entity with components"))
             {
-                auto entity = registry.create_entity();
-                registry.add_components(entity, m_components);
+                auto entity = world.get_entity_registry().create_entity();
+                world.get_entity_registry().add_components(entity, m_components);
                 m_components.clear();
             }
             ImGui::TreePop();
         }
     }
 
-    void save_load_registry_widget::update(gcore::entity_registry& registry)
+    void save_load_registry_widget::update(gcore::world& world)
     {
         if (ImGui::TreeNode("Save/Load entities"))
         {
@@ -94,15 +96,16 @@ namespace gtool
             if (ImGui::Button("Save"))
             {
                 gserializer::json_write_serializer json_write;
-                json_write.process("entity_registry", registry);
+                json_write.process("entity_registry", world.get_entity_registry());
                 json_write.write_to_file(m_filepath.c_str());
             }
             ImGui::SameLine();
             if (ImGui::Button("Load"))
             {
                 gserializer::json_read_serializer json_read(m_filepath.c_str());
-                json_read.process("entity_registry", registry);
-                registry.rebuild_component_type_map();
+                json_read.set_in_context(std::ref(*world.get_resource_library()));
+                json_read.process("entity_registry", world.get_entity_registry());
+                world.get_entity_registry().rebuild_component_type_map();
             }
             ImGui::TreePop();
         }
@@ -158,6 +161,7 @@ namespace gtool
                 m_component_combo_box.draw("Component Type");
 
                 grender::imgui_serializer serializer("Current Components");
+                serializer.set_in_context(std::ref(*world.get_resource_library()));
                 gtl::span<std::unique_ptr<gcore::component>> components = world.get_entity_registry().see_components(entity);
                 serializer.process("Components", components, "Component", gcore::component::factory());
 

@@ -135,91 +135,123 @@ gserializer::json_read_serializer::json_read_serializer(const char* file_path)
 
 void gserializer::json_read_serializer::process(const char* name, std::string& value)
 {
-    auto it = stack_top().FindMember(name);
-    if (it != stack_top().MemberEnd())
+    if (stack_top().IsObject())
     {
-        value = it->value.GetString();
+        auto it = stack_top().FindMember(name);
+        if (it != stack_top().MemberEnd())
+        {
+            value = it->value.GetString();
+        }
     }
 }
 
 void gserializer::json_read_serializer::process(const char* name, std::uint32_t& value)
 {
-    auto it = stack_top().FindMember(name);
-    if (it != stack_top().MemberEnd())
+    if (stack_top().IsObject())
     {
-        value = it->value.GetUint();
+        auto it = stack_top().FindMember(name);
+        if (it != stack_top().MemberEnd())
+        {
+            value = it->value.GetUint();
+        }
     }
 }
 
 void gserializer::json_read_serializer::process(const char* name, std::uint64_t& value)
 {
-    auto it = stack_top().FindMember(name);
-    if (it != stack_top().MemberEnd())
+    if (stack_top().IsObject())
     {
-        value = it->value.GetUint64();
+        auto it = stack_top().FindMember(name);
+        if (it != stack_top().MemberEnd())
+        {
+            value = it->value.GetUint64();
+        }
     }
 }
 
 void gserializer::json_read_serializer::process(const char* name, std::int32_t& value)
 {
-    auto it = stack_top().FindMember(name);
-    if (it != stack_top().MemberEnd())
+    if (stack_top().IsObject())
     {
-        value = it->value.GetInt();
+        auto it = stack_top().FindMember(name);
+        if (it != stack_top().MemberEnd())
+        {
+            value = it->value.GetInt();
+        }
     }
 }
 
 void gserializer::json_read_serializer::process(const char* name, std::int64_t& value)
 {
-    auto it = stack_top().FindMember(name);
-    if (it != stack_top().MemberEnd())
+    if (stack_top().IsObject())
     {
-        value = it->value.GetInt64();
+        auto it = stack_top().FindMember(name);
+        if (it != stack_top().MemberEnd())
+        {
+            value = it->value.GetInt64();
+        }
     }
 }
 
 void gserializer::json_read_serializer::process(const char* name, float& value)
 {
-    auto it = stack_top().FindMember(name);
-    if (it != stack_top().MemberEnd())
-    {
-        value = it->value.GetFloat();
+    if (stack_top().IsObject())
+    {    
+        auto it = stack_top().FindMember(name);
+        if (it != stack_top().MemberEnd())
+        {
+            value = it->value.GetFloat();
+        }
     }
+
 }
 
 void gserializer::json_read_serializer::process(const char* name, double& value)
 {
-    auto it = stack_top().FindMember(name);
-    if (it != stack_top().MemberEnd())
+    if (stack_top().IsObject())
     {
-        value = it->value.GetDouble();
+        auto it = stack_top().FindMember(name);
+        if (it != stack_top().MemberEnd())
+        {
+            value = it->value.GetDouble();
+        }
     }
 }
 
 void gserializer::json_read_serializer::process(const char* name, bool& value)
 {
-    auto it = stack_top().FindMember(name);
-    if (it != stack_top().MemberEnd())
+    if (stack_top().IsObject())
     {
-        value = it->value.GetBool();
+        auto it = stack_top().FindMember(name);
+        if (it != stack_top().MemberEnd())
+        {
+            value = it->value.GetBool();
+        }
     }
 }
 
 void gserializer::json_read_serializer::process(const char* name, gtl::uuid& value)
 {
-    auto it = stack_top().FindMember(name);
-    if (it != stack_top().MemberEnd())
+    if (stack_top().IsObject())
     {
-        value = gtl::uuid::from_string(it->value.GetString());
+        auto it = stack_top().FindMember(name);
+        if (it != stack_top().MemberEnd())
+        {
+            value = gtl::uuid::from_string(it->value.GetString());
+        }
     }
+
 }
 
 void gserializer::json_read_serializer::process(const char* name, std::filesystem::path& value)
 {
-    auto it = stack_top().FindMember(name);
-    if (it != stack_top().MemberEnd())
+    if (stack_top().IsObject())
     {
-        value = std::filesystem::path(it->value.GetString());
+        auto it = stack_top().FindMember(name);
+        if (it != stack_top().MemberEnd())
+        {
+            value = std::filesystem::path(it->value.GetString());
+        }
     }
 }
 

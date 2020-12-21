@@ -48,7 +48,7 @@ namespace grender
 
     struct program_uniform_state
     {
-        void apply(gcore::resource_library& lib) const;
+        void apply() const;
         void bind(GLint program_id);
         void set_uniform(GLint location, uniform_variant const& variant);
         void set_uniform(std::string_view name, uniform_variant const& variant);

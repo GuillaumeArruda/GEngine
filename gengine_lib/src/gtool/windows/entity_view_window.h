@@ -14,7 +14,7 @@ namespace gtool
 {
     struct create_entity_widget
     {
-        void update(gcore::entity_registry& registry);
+        void update(gcore::world& registry);
     private:
         factory_combo_box<gcore::component> m_create_component_combo;
         std::vector<std::unique_ptr<gcore::component>> m_components;
@@ -22,7 +22,7 @@ namespace gtool
 
     struct save_load_registry_widget
     {
-        void update(gcore::entity_registry& registry);
+        void update(gcore::world& world);
     private:
         std::string m_filepath;
     };

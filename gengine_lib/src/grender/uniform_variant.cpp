@@ -55,43 +55,7 @@ namespace grender
     uniform_variant::uniform_variant(type type)
         : m_type(type)
     {
-        switch (m_type)
-        {
-        case type::glbool:      new((void*)&m_bool)    bool{}; break;
-        case type::glint:       new((void*)&m_int)     GLint{}; break;
-        case type::gluint:      new((void*)&m_uint)    GLuint{}; break;
-        case type::glfloat:     new((void*)&m_float)   float{}; break;
-        case type::gldouble:    new((void*)&m_double)  double{}; break;
-        case type::bvec2:       new((void*)&m_bvec2)   glm::bvec2(); break;
-        case type::bvec3:       new((void*)&m_bvec3)   glm::bvec3(); break;
-        case type::bvec4:       new((void*)&m_bvec4)   glm::bvec4(); break;
-        case type::ivec2:       new((void*)&m_ivec2)   glm::ivec2(); break;
-        case type::ivec3:       new((void*)&m_ivec3)   glm::ivec3(); break;
-        case type::ivec4:       new((void*)&m_ivec4)   glm::ivec4(); break;
-        case type::uvec2:       new((void*)&m_uvec2)   glm::uvec2(); break;
-        case type::uvec3:       new((void*)&m_uvec3)   glm::uvec3(); break;
-        case type::uvec4:       new((void*)&m_uvec4)   glm::uvec4(); break;
-        case type::vec2:        new((void*)&m_vec2)    glm::vec2(); break;
-        case type::vec3:        new((void*)&m_vec3)    glm::vec3(); break;
-        case type::vec4:        new((void*)&m_vec4)    glm::vec4(); break;
-        case type::dvec2:       new((void*)&m_dvec2)   glm::dvec2(); break;
-        case type::dvec3:       new((void*)&m_dvec3)   glm::dvec3(); break;
-        case type::dvec4:       new((void*)&m_dvec4)   glm::dvec4(); break;
-        case type::mat22:       new((void*)&m_mat22)   glm::mat2x2(); break;
-        case type::mat23:       new((void*)&m_mat23)   glm::mat2x3(); break;
-        case type::mat24:       new((void*)&m_mat24)   glm::mat2x4(); break;
-        case type::mat32:       new((void*)&m_mat32)   glm::mat3x2(); break;
-        case type::mat33:       new((void*)&m_mat33)   glm::mat3x3(); break;
-        case type::mat34:       new((void*)&m_mat34)   glm::mat3x4(); break;
-        case type::mat42:       new((void*)&m_mat42)   glm::mat4x2(); break;
-        case type::mat43:       new((void*)&m_mat43)   glm::mat4x3(); break;
-        case type::mat44:       new((void*)&m_mat44)   glm::mat4x4(); break;
-        case type::sampler_1d:
-        case type::sampler_2d:
-        case type::sampler_3d:
-        case type::sampler_cube: new((void*)&m_texture_info) texture_info(); break;
-        case type::invalid:     break;
-        }
+        default_construct();
     }
     uniform_variant::uniform_variant(uniform_variant const& copy_value) noexcept
         : m_type(copy_value.m_type)
@@ -109,7 +73,31 @@ namespace grender
         return *this;
     }
 
-    void uniform_variant::apply(GLint location, gcore::resource_library& lib) const
+    uniform_variant::uniform_variant(uniform_variant&& move_value) noexcept
+        : m_type(move_value.m_type)
+    {
+        move(std::move(move_value));
+        move_value.m_type = type::invalid;
+    }
+
+    uniform_variant& uniform_variant::operator=(uniform_variant&& move_value) noexcept
+    {
+        if (this == &move_value)
+            return *this;
+
+        destroy();
+        m_type = move_value.m_type;
+        move(std::move(move_value));
+        move_value.m_type = type::invalid;
+        return *this;
+    }
+
+    uniform_variant::~uniform_variant()
+    {
+        destroy();
+    }
+
+    void uniform_variant::apply(GLint location) const
     {
         switch (m_type)
         {
@@ -148,7 +136,7 @@ namespace grender
         {
             if (m_texture_info.m_texture_id == 0)
             {
-                if (grender::texture const* tex = lib.get_resource<grender::texture>(m_texture_info.m_texture_uuid))
+                if (texture const* tex = m_texture_info.m_texture.as<texture>())
                 {
                     gl_exec(glActiveTexture, GL_TEXTURE0 + location);
                     gl_exec(glBindTexture, GL_TEXTURE_2D, tex->get_id());
@@ -167,7 +155,7 @@ namespace grender
         {
             if (m_texture_info.m_texture_id == 0)
             {
-                if (grender::cube_map_texture const* tex = lib.get_resource<grender::cube_map_texture>(m_texture_info.m_texture_uuid))
+                if (cube_map_texture const* tex = m_texture_info.m_texture.as<cube_map_texture>())
                 {
                     gl_exec(glActiveTexture, GL_TEXTURE0 + location);
                     gl_exec(glBindTexture, GL_TEXTURE_CUBE_MAP, tex->get_id());
@@ -190,7 +178,13 @@ namespace grender
     void uniform_variant::process(gserializer::serializer& serializer)
     {
         using gserializer::process;
+        type const old_type = m_type;
         serializer.process("type", m_type);
+        if (old_type != m_type)
+        {
+            destroy();
+            default_construct();
+        }
         switch (m_type)
         {
         case type::glbool:      process(serializer, m_bool);    break;
@@ -226,7 +220,103 @@ namespace grender
         case type::sampler_2d:
         case type::sampler_3d:
         case type::sampler_cube:
-            process(serializer, m_texture_info.m_texture_uuid); break;
+            process(serializer, m_texture_info.m_texture_uuid, m_texture_info.m_texture); break;
+        }
+    }
+
+    void uniform_variant::default_construct()
+    {
+        switch (m_type)
+        {
+        case type::glbool:      new((void*)&m_bool)    bool{}; break;
+        case type::glint:       new((void*)&m_int)     GLint{}; break;
+        case type::gluint:      new((void*)&m_uint)    GLuint{}; break;
+        case type::glfloat:     new((void*)&m_float)   float{}; break;
+        case type::gldouble:    new((void*)&m_double)  double{}; break;
+        case type::bvec2:       new((void*)&m_bvec2)   glm::bvec2(); break;
+        case type::bvec3:       new((void*)&m_bvec3)   glm::bvec3(); break;
+        case type::bvec4:       new((void*)&m_bvec4)   glm::bvec4(); break;
+        case type::ivec2:       new((void*)&m_ivec2)   glm::ivec2(); break;
+        case type::ivec3:       new((void*)&m_ivec3)   glm::ivec3(); break;
+        case type::ivec4:       new((void*)&m_ivec4)   glm::ivec4(); break;
+        case type::uvec2:       new((void*)&m_uvec2)   glm::uvec2(); break;
+        case type::uvec3:       new((void*)&m_uvec3)   glm::uvec3(); break;
+        case type::uvec4:       new((void*)&m_uvec4)   glm::uvec4(); break;
+        case type::vec2:        new((void*)&m_vec2)    glm::vec2(); break;
+        case type::vec3:        new((void*)&m_vec3)    glm::vec3(); break;
+        case type::vec4:        new((void*)&m_vec4)    glm::vec4(); break;
+        case type::dvec2:       new((void*)&m_dvec2)   glm::dvec2(); break;
+        case type::dvec3:       new((void*)&m_dvec3)   glm::dvec3(); break;
+        case type::dvec4:       new((void*)&m_dvec4)   glm::dvec4(); break;
+        case type::mat22:       new((void*)&m_mat22)   glm::mat2x2(); break;
+        case type::mat23:       new((void*)&m_mat23)   glm::mat2x3(); break;
+        case type::mat24:       new((void*)&m_mat24)   glm::mat2x4(); break;
+        case type::mat32:       new((void*)&m_mat32)   glm::mat3x2(); break;
+        case type::mat33:       new((void*)&m_mat33)   glm::mat3x3(); break;
+        case type::mat34:       new((void*)&m_mat34)   glm::mat3x4(); break;
+        case type::mat42:       new((void*)&m_mat42)   glm::mat4x2(); break;
+        case type::mat43:       new((void*)&m_mat43)   glm::mat4x3(); break;
+        case type::mat44:       new((void*)&m_mat44)   glm::mat4x4(); break;
+        case type::sampler_1d:
+        case type::sampler_2d:
+        case type::sampler_3d:
+        case type::sampler_cube: new((void*)&m_texture_info) texture_info(); break;
+        case type::invalid:     break;
+        }
+    }
+
+    void uniform_variant::destroy()
+    {
+        switch (m_type)
+        {
+        case type::sampler_1d:
+        case type::sampler_2d:
+        case type::sampler_3d:
+        case type::sampler_cube: 
+            m_texture_info.~texture_info();
+            break;
+        }
+    }
+
+    void uniform_variant::move(uniform_variant&& move)
+    {
+        switch (m_type)
+        {
+        case type::glbool:      new((void*)&m_bool)    bool(std::move(move.m_bool)); break;
+        case type::glint:       new((void*)&m_int)     GLint(std::move(move.m_int)); break;
+        case type::gluint:      new((void*)&m_uint)    GLuint(std::move(move.m_uint)); break;
+        case type::glfloat:     new((void*)&m_float)   float(std::move(move.m_float)); break;
+        case type::gldouble:    new((void*)&m_double)  double(std::move(move.m_double)); break;
+        case type::bvec2:       new((void*)&m_bvec2)   glm::bvec2(std::move(move.m_bvec2)); break;
+        case type::bvec3:       new((void*)&m_bvec3)   glm::bvec3(std::move(move.m_bvec3)); break;
+        case type::bvec4:       new((void*)&m_bvec4)   glm::bvec4(std::move(move.m_bvec4)); break;
+        case type::ivec2:       new((void*)&m_ivec2)   glm::ivec2(std::move(move.m_ivec2)); break;
+        case type::ivec3:       new((void*)&m_ivec3)   glm::ivec3(std::move(move.m_ivec3)); break;
+        case type::ivec4:       new((void*)&m_ivec4)   glm::ivec4(std::move(move.m_ivec4)); break;
+        case type::uvec2:       new((void*)&m_uvec2)   glm::uvec2(std::move(move.m_uvec2)); break;
+        case type::uvec3:       new((void*)&m_uvec3)   glm::uvec3(std::move(move.m_uvec3)); break;
+        case type::uvec4:       new((void*)&m_uvec4)   glm::uvec4(std::move(move.m_uvec4)); break;
+        case type::vec2:        new((void*)&m_vec2)    glm::vec2(std::move(move.m_vec2)); break;
+        case type::vec3:        new((void*)&m_vec3)    glm::vec3(std::move(move.m_vec3)); break;
+        case type::vec4:        new((void*)&m_vec4)    glm::vec4(std::move(move.m_vec4)); break;
+        case type::dvec2:       new((void*)&m_dvec2)   glm::dvec2(std::move(move.m_dvec2)); break;
+        case type::dvec3:       new((void*)&m_dvec3)   glm::dvec3(std::move(move.m_dvec3)); break;
+        case type::dvec4:       new((void*)&m_dvec4)   glm::dvec4(std::move(move.m_dvec4)); break;
+        case type::mat23:       new((void*)&m_mat23)   glm::mat2x3(std::move(move.m_mat23)); break;
+        case type::mat22:       new((void*)&m_mat22)   glm::mat2x2(std::move(move.m_mat22)); break;
+        case type::mat24:       new((void*)&m_mat24)   glm::mat2x4(std::move(move.m_mat24)); break;
+        case type::mat32:       new((void*)&m_mat32)   glm::mat3x2(std::move(move.m_mat32)); break;
+        case type::mat33:       new((void*)&m_mat33)   glm::mat3x3(std::move(move.m_mat33)); break;
+        case type::mat34:       new((void*)&m_mat34)   glm::mat3x4(std::move(move.m_mat34)); break;
+        case type::mat42:       new((void*)&m_mat42)   glm::mat4x2(std::move(move.m_mat42)); break;
+        case type::mat43:       new((void*)&m_mat43)   glm::mat4x3(std::move(move.m_mat43)); break;
+        case type::mat44:       new((void*)&m_mat44)   glm::mat4x4(std::move(move.m_mat44)); break;
+        case type::sampler_1d:
+        case type::sampler_2d:
+        case type::sampler_3d:
+        case type::sampler_cube:
+            new((void*)&m_texture_info) texture_info(std::move(move.m_texture_info)); break;
+        case type::invalid:     break;
         }
     }
 

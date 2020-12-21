@@ -7,7 +7,6 @@
 #include "gcore/components/transform_component.h"
 #include "gcore/components/extent_component.h"
 #include "gcore/entity_registry.h"
-#include "gcore/resource_library.h"
 
 
 #include "grender/components/camera_component.h"
@@ -20,7 +19,7 @@
 
 namespace grender
 {
-    void render_system::render(gcore::entity_registry& registry, gcore::resource_library& library)
+    void render_system::render(gcore::entity_registry& registry)
     {
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
         auto camera_view = registry.get_view<gcore::transform_component, camera_component>();       
@@ -34,9 +33,9 @@ namespace grender
                 glm::mat4 const projection = glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), aspect_ratio, camera->m_near_z, camera->m_far_z);
                 glm::mat4 const view_matrix = glm::inverse(camera_transform->m_transform);
 
-                render_meshes(projection, view_matrix, registry, library);
-                render_lights(projection, view_matrix, registry, library);
-                render_skybox(projection, view_matrix, registry, library);
+                render_meshes(projection, view_matrix, registry);
+                render_lights(projection, view_matrix, registry);
+                render_skybox(projection, view_matrix, registry);
             }
         }
         m_frame_buffer.unbind();
@@ -60,7 +59,7 @@ namespace grender
         return m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::final_color);
     }
 
-    void render_system::render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gcore::resource_library& library)
+    void render_system::render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry)
     {
         setup_geometry_pass();
         auto graphic_comp_view = registry.get_view<gcore::transform_component, graphic_component>();
@@ -70,43 +69,28 @@ namespace grender
             glm::mat3 const normal_matrix = glm::transpose(glm::inverse(glm::mat3(transform->m_transform)));
             for (auto& mesh_info : graphic_comp->m_meshes)
             {
-                if (!mesh_info.m_mesh || !mesh_info.m_program
-                    || mesh_info.m_mesh->get_uuid() != mesh_info.m_mesh_id
-                    || mesh_info.m_program->get_uuid() != mesh_info.m_program_id)
-                {
-                    if (mesh_resource const* mesh = library.get_resource<mesh_resource>(mesh_info.m_mesh_id))
-                    {
-                        if (program const* program_res = library.get_resource<program>(mesh_info.m_program_id))
-                        {
-                            mesh_info.m_mesh = mesh;
-                            mesh_info.m_program = program_res;
-                            mesh_info.m_uniform_state.reconcile(program_res->get_default_state());
-                            if (auto extent_comp = registry.get_components<gcore::extent_component>(entity))
-                            {
-                                extent_comp->m_extent = extent_comp->m_extent.merge(mesh->get_extent());
-                            }
-                        }
-                    }
-                }
-
                 if (mesh_info.m_mesh && mesh_info.m_program)
                 {
-                    auto const world_matrix_id = mesh_info.m_uniform_state.get_uniform_location("world_matrix");
                     mesh_info.m_program->activate();
+                    mesh_info.m_uniform_state.reconcile(mesh_info.m_program->get_default_state());
                     mesh_info.m_uniform_state.set_uniform("mvp", mvp);
                     mesh_info.m_uniform_state.set_uniform("normal_matrix", normal_matrix);
                     mesh_info.m_uniform_state.set_uniform("world_matrix", transform->m_transform);
-                    mesh_info.m_uniform_state.apply(library);
+                    mesh_info.m_uniform_state.apply();
                     for (auto& submesh : mesh_info.m_mesh->get_meshes())
                     {
                         submesh.draw();
+                    }
+                    if (auto extent_comp = registry.get_components<gcore::extent_component>(entity))
+                    {
+                        extent_comp->m_extent = extent_comp->m_extent.merge(mesh_info.m_mesh->get_extent());
                     }
                 }
             }
         }
     }
 
-    void render_system::render_lights(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gcore::resource_library& library)
+    void render_system::render_lights(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry)
     {
         m_frame_buffer.bind_for_light();
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
@@ -114,29 +98,29 @@ namespace grender
         auto light_view = registry.get_view<gcore::transform_component, light_component>();
         for (auto& [entity, transform, light] : light_view)
         {
-            if (mesh_resource const* mesh = library.get_resource<mesh_resource>(light->m_mesh))
+            if (light->m_mesh)
             {
-                if (program const* stencil_program = library.get_resource<program>(light->m_stencil_program))
+                if (light->m_stencil_program)
                 {
-                    light->m_stencil_state.reconcile(stencil_program->get_default_state());
+                    light->m_stencil_state.reconcile(light->m_stencil_program->get_default_state());
                     setup_stencil_pass();
-                    stencil_program->activate();
+                    light->m_stencil_program->activate();
                     auto const world_matrix_loc = light->m_main_state.get_uniform_location("world_matrix");
                     auto const screen_size = light->m_main_state.get_uniform_location("screen_size");
                     light->m_main_state.set_uniform("world_matrix", transform->m_transform);
                     light->m_main_state.set_uniform("screen_size", glm::vec2(get_target_size()));
-                    light->m_stencil_state.apply(library);
-                    for (auto& submesh : mesh->get_meshes())
+                    light->m_stencil_state.apply();
+                    for (auto& submesh : light->m_mesh->get_meshes())
                     {
                         submesh.draw();
                     }
                 }
 
-                if (program const* light_program = library.get_resource<program>(light->m_main_program))
+                if (light->m_main_program)
                 {
-                    light->m_main_state.reconcile(light_program->get_default_state());
+                    light->m_main_state.reconcile(light->m_main_program->get_default_state());
                     setup_lightning_pass();
-                    light_program->activate();
+                    light->m_main_program->activate();
                     light->m_main_state.set_uniform("world_matrix", transform->m_transform);
                     light->m_main_state.set_uniform("screen_size", glm::vec2(get_target_size()));
                     light->m_main_state.set_uniform("camera_world_matrix", glm::inverse(view_matrix));
@@ -144,8 +128,8 @@ namespace grender
                     light->m_main_state.set_uniform("position_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::position), uniform_variant::type::sampler_2d });
                     light->m_main_state.set_uniform("normal_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::normal), uniform_variant::type::sampler_2d });
                     light->m_main_state.set_uniform("specular_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::specular), uniform_variant::type::sampler_2d });
-                    light->m_main_state.apply(library);
-                    for (auto& submesh : mesh->get_meshes())
+                    light->m_main_state.apply();
+                    for (auto& submesh : light->m_mesh->get_meshes())
                     {
                         submesh.draw();
                     }
@@ -156,28 +140,25 @@ namespace grender
         gl_exec(glDisable, GL_BLEND);
     }
 
-    void render_system::render_skybox(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gcore::resource_library& library)
+    void render_system::render_skybox(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry)
     {
         setup_skybox_pass();
         auto view = registry.get_view<grender::skybox_component>();
         for (auto& [entity, skybox] : view)
         {
-            program const* prog = library.get_resource<program>(skybox->m_program_id);
-            mesh_resource const* mesh = library.get_resource<mesh_resource>(skybox->m_mesh_id);
-            if (!prog || !mesh)
-                continue;
-
-            skybox->m_program_state.reconcile(prog->get_default_state());
-
-            prog->activate();
-            skybox->m_program_state.set_uniform("mvp", projection * glm::mat4(glm::mat3(view_matrix)));
-            skybox->m_program_state.apply(library);
-            for (auto& submesh : mesh->get_meshes())
+            if (skybox->m_program && skybox->m_mesh)
             {
-                submesh.draw();
+                skybox->m_program_state.reconcile(skybox->m_program->get_default_state());
+
+                skybox->m_program->activate();
+                skybox->m_program_state.set_uniform("mvp", projection * glm::mat4(glm::mat3(view_matrix)));
+                skybox->m_program_state.apply();
+                for (auto& submesh : skybox->m_mesh->get_meshes())
+                {
+                    submesh.draw();
+                }
             }
         }
-
     }
 
     void render_system::setup_geometry_pass()

@@ -16,19 +16,23 @@ namespace gcore
         serializer.process("uuid_to_resource_file", m_uuid_to_resource_file, "Resource");
     }
 
-    resource* resource_library::get_resource(gtl::uuid const& uuid)
+    resource_handle<resource> resource_library::get_resource(gtl::uuid const& uuid)
     {
         {
             std::shared_lock lock(m_lock);
-            if (auto const it = m_resource_map.find(uuid);
-                it != m_resource_map.end())
+            if (auto const it = m_proxy_map.find(uuid);
+                it != m_proxy_map.end())
             {
-                return it->second.get();
+                if (auto shared_proxy = it->second.lock())
+                {
+                    return resource_handle<resource>(std::move(shared_proxy));
+                }
             }
         }
 
         std::unique_lock lock(m_lock);
         auto const& [it, inserted] = m_resource_map.insert(std::pair(uuid, std::unique_ptr<resource>()));
+        std::shared_ptr<resource_proxy> proxy;
         if (inserted)
         {
             if (auto const file_it = m_uuid_to_resource_file.find(uuid);
@@ -50,13 +54,19 @@ namespace gcore
                     }
                     for (auto const& file : dependency.m_files)
                     {
-                        m_paths.push_back(std::filesystem::absolute(file).make_preferred());
-                        m_file_dependant_map[std::filesystem::hash_value(m_paths.back())].push_back(it->second->get_uuid());
+                        m_file_dependant_map[std::filesystem::hash_value(std::filesystem::absolute(file).make_preferred())].push_back(it->second->get_uuid());
                     }
+
+                    proxy = std::make_shared<resource_proxy>(it->second.get(), this);
+                    m_proxy_map[uuid] = proxy;
                 }
             }
         }
-        return it->second.get();
+        else
+        {
+            proxy = m_proxy_map[uuid].lock();
+        }
+        return resource_handle<resource>(std::move(proxy));
     }
 
     std::string resource_library::get_filepath(gtl::uuid const& uuid) const
@@ -93,54 +103,77 @@ namespace gcore
 
     void resource_library::update()
     {
-        std::unique_lock lock(m_file_change_lock);
-        for (auto const& path : m_file_changes)
         {
-            if (path.extension() == std::filesystem::path(".json"))
+            std::unique_lock lock(m_file_change_lock);
+            for (auto const& path : m_file_changes)
             {
-                gtl::uuid const uuid = gtl::uuid::from_string(path.stem().string());
-                if (uuid.is_valid())
+                if (path.extension() == std::filesystem::path(".json"))
                 {
-                    std::unique_lock lock(m_lock);
-                    auto it = m_resource_map.find(uuid);
-                    if (it != m_resource_map.end())
+                    gtl::uuid const uuid = gtl::uuid::from_string(path.stem().string());
+                    if (uuid.is_valid())
                     {
-                        gserializer::json_read_serializer serializer(path.string().c_str());
-                        serializer.process("resource", it->second, resource::factory());
-                        it->second->unload();
-                        it->second->load();
-                    }
-
-                    auto uuid_it = m_uuid_dependant_map.find(uuid);
-                    if (uuid_it != m_uuid_dependant_map.end())
-                    {
-                        for (auto const& uuid : uuid_it->second)
+                        std::unique_lock lock(m_lock);
+                        auto it = m_resource_map.find(uuid);
+                        if (it != m_resource_map.end())
                         {
-                            auto it = m_resource_map.find(uuid);
-                            if (it != m_resource_map.end())
+                            gserializer::json_read_serializer serializer(path.string().c_str());
+                            serializer.process("resource", it->second, resource::factory());
+                            it->second->unload();
+                            it->second->load();
+                        }
+
+                        auto uuid_it = m_uuid_dependant_map.find(uuid);
+                        if (uuid_it != m_uuid_dependant_map.end())
+                        {
+                            for (auto const& uuid : uuid_it->second)
                             {
-                                it->second->unload();
-                                it->second->load();
+                                auto it = m_resource_map.find(uuid);
+                                if (it != m_resource_map.end())
+                                {
+                                    it->second->unload();
+                                    it->second->load();
+                                }
                             }
                         }
                     }
                 }
-            }
-            auto it = m_file_dependant_map.find(std::filesystem::hash_value(path));
-            if (it != m_file_dependant_map.end())
-            {
-                for (auto const& uuid : it->second)
+                auto it = m_file_dependant_map.find(std::filesystem::hash_value(path));
+                if (it != m_file_dependant_map.end())
                 {
-                    std::unique_lock lock(m_lock);
-                    auto it = m_resource_map.find(uuid);
-                    if (it != m_resource_map.end())
+                    for (auto const& uuid : it->second)
                     {
-                        it->second->unload();
-                        it->second->load();
+                        std::unique_lock lock(m_lock);
+                        auto it = m_resource_map.find(uuid);
+                        if (it != m_resource_map.end())
+                        {
+                            it->second->unload();
+                            it->second->load();
+                        }
                     }
                 }
             }
+            m_file_changes.clear();
         }
-        m_file_changes.clear();
+
+        {
+            std::unique_lock lock(m_lock);
+            for (auto& res_to_unload : m_res_to_unload)
+            {
+                res_to_unload->unload();
+            }
+            m_res_to_unload.clear();
+        }
+    }
+
+    void resource_library::request_unload(resource* res_to_unload)
+    {
+        std::unique_lock lock(m_lock);
+        m_proxy_map.erase(res_to_unload->get_uuid());
+        auto it = m_resource_map.find(res_to_unload->get_uuid());
+        if (it != m_resource_map.end())
+        {
+            m_res_to_unload.push_back(std::move(it->second));
+            m_resource_map.erase(it);
+        }
     }
 }

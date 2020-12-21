@@ -9,6 +9,7 @@
 #include "gtl/uuid.h"
 
 #include "gcore/resource.h"
+#include "gcore/resource_handle.h"
 
 namespace gserializer
 {
@@ -27,9 +28,9 @@ namespace gcore
         void process(gserializer::serializer& serializer);
 
         template<class ResourceType>
-        [[nodiscard]] ResourceType* get_resource(gtl::uuid const& uuid)
+        [[nodiscard]] resource_handle<ResourceType>  get_resource(gtl::uuid const& uuid)
         {
-            return dynamic_cast<ResourceType*>(get_resource(uuid));
+            return resource_handle<ResourceType>(get_resource(uuid));
         }
 
         std::string get_filepath(gtl::uuid const& uuid) const;
@@ -40,13 +41,17 @@ namespace gcore
         void update();
 
     private:
-        resource* get_resource(gtl::uuid const& uuid);
+        friend struct resource_proxy;
+        void request_unload(resource* res_to_unload);
+
+        resource_handle<resource> get_resource(gtl::uuid const& uuid);
         
         std::unordered_map<gtl::uuid, std::string> m_uuid_to_resource_file;
         std::unordered_map<gtl::uuid, std::unique_ptr<resource>> m_resource_map;
+        std::unordered_map<gtl::uuid, std::weak_ptr<resource_proxy>> m_proxy_map;
         std::unordered_map<gtl::uuid, std::vector<gtl::uuid>> m_uuid_dependant_map;
         std::unordered_map<std::size_t, std::vector<gtl::uuid>> m_file_dependant_map;
-        std::vector<std::filesystem::path> m_paths;
+        std::vector<std::unique_ptr<resource>> m_res_to_unload;
         std::shared_mutex m_lock;
         std::mutex m_file_change_lock;
         std::vector<std::filesystem::path> m_file_changes;

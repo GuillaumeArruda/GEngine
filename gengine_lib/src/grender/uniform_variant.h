@@ -5,6 +5,8 @@
 
 #include "gtl/uuid.h" 
 
+#include "gcore/resource_handle.h"
+
 namespace gcore
 {
     struct resource_library;
@@ -88,21 +90,32 @@ namespace grender
         uniform_variant(glm::mat4x2 const& value) : m_mat42(value), m_type(type::mat42) {}
         uniform_variant(glm::mat4x3 const& value) : m_mat43(value), m_type(type::mat43) {}
         uniform_variant(glm::mat4x4 const& value) : m_mat44(value), m_type(type::mat44) {}
-        uniform_variant(gtl::uuid texture_id, type texture_type) : m_texture_info{ texture_id, 0u }, m_type(texture_type) {}
-        uniform_variant(GLuint texture_id, type texture_type) : m_texture_info{gtl::uuid(), texture_id}, m_type(texture_type) {}
+        uniform_variant(gtl::uuid texture_id, type texture_type) : m_texture_info{ texture_id, std::shared_ptr<gcore::resource_proxy>(), 0u }, m_type(texture_type) {}
+        uniform_variant(GLuint texture_id, type texture_type) : m_texture_info{gtl::uuid(),std::shared_ptr<gcore::resource_proxy>(), texture_id}, m_type(texture_type) {}
 
         uniform_variant(uniform_variant const& copy) noexcept;
         uniform_variant& operator=(uniform_variant const& copy) noexcept;
 
-        void apply(GLint location, gcore::resource_library& lib) const;
+        uniform_variant(uniform_variant&& move) noexcept;
+        uniform_variant& operator=(uniform_variant&&) noexcept;
+
+        ~uniform_variant();
+
+
+        void apply(GLint location) const;
         void process(gserializer::serializer& serializer);
         type get_type() const { return m_type; }
 
     private:
+        void default_construct();
+        void destroy();
+        void move(uniform_variant&& move);
         void copy(uniform_variant const& copy);
+
         struct texture_info
         {
             gtl::uuid m_texture_uuid;
+            gcore::resource_handle<gcore::resource> m_texture;
             GLuint m_texture_id = 0;
         };
 

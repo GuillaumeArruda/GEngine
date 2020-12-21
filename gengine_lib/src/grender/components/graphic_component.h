@@ -3,20 +3,21 @@
 #include "gtl/uuid.h"
 
 #include "gcore/component.h"
+#include "gcore/resource_handle.h"
 
 #include "grender/resources/program.h"
+#include "grender/resources/mesh_resource.h"
 
 namespace grender
 {
-    struct mesh_resource;
     struct graphic_component : gcore::component
     {
         struct mesh_info
         {
             gtl::uuid m_mesh_id;
             gtl::uuid m_program_id;
-            mesh_resource const* m_mesh;
-            program const* m_program;
+            gcore::resource_handle<mesh_resource> m_mesh;
+            gcore::resource_handle<program> m_program;
             program_uniform_state m_uniform_state;
             void process(gserializer::serializer& serializer);
         };
