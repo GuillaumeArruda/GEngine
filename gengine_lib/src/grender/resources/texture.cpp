@@ -18,7 +18,6 @@ namespace grender
 {
     texture::~texture()
     {
-        unload();
     }
 
     texture::texture(texture&& move) noexcept

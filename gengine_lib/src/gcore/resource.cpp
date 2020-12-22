@@ -6,6 +6,11 @@
 
 namespace gcore
 {
+    resource::~resource() 
+    { 
+        assert(m_loading_state == loading_state::failed || m_loading_state == loading_state::unloaded); 
+    }
+    
     void resource::process(gserializer::serializer& serializer)
     {
         serializer.process("uuid", m_uuid);
@@ -14,6 +19,7 @@ namespace gcore
 
     void resource::load_async()
     {
+        assert(m_loading_state == loading_state::pending_async);
         if (do_load_async())
         {
             m_loading_state = loading_state::pending_sync;
@@ -26,6 +32,7 @@ namespace gcore
 
     void resource::load_sync()
     {
+        assert(m_loading_state == loading_state::pending_sync || m_loading_state == loading_state::failed);
         if (m_loading_state == loading_state::pending_sync)
         {
             if (do_load_sync())
@@ -41,11 +48,9 @@ namespace gcore
 
     void resource::unload()
     {
-        if (m_loading_state == loading_state::loaded)
-        {
-            do_unload();
-            m_loading_state = loading_state::unloaded;
-        }
+        assert(m_loading_state == loading_state::loaded);
+        do_unload();
+        m_loading_state = loading_state::unloaded;
     }
 }
 

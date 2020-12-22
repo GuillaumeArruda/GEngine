@@ -3,6 +3,7 @@
 #include "gtl/uuid.h"
 #include "gserializer/type_factory.h"
 
+
 namespace gserializer
 {
     struct serializer;
@@ -20,7 +21,7 @@ namespace gcore
             failed,
             unloaded
         };
-        virtual ~resource() {};
+        virtual ~resource();
 
         virtual void process(gserializer::serializer& serializer);
 
