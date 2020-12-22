@@ -25,6 +25,19 @@ namespace gcore
 
     resource_library::~resource_library()
     {
+        for (auto& proxy : m_proxy_map)
+        {
+            if (auto shared_proxy = proxy.second.lock())
+            {
+                shared_proxy->set_target(nullptr);
+            }
+        }
+
+        for (auto& res : m_resource_map)
+        {
+            if (res.second->get_state() == resource::loading_state::loaded)
+                res.second->unload();
+        }
         glfwDestroyWindow(m_loading_context);
     }
 
