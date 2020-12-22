@@ -68,7 +68,6 @@ namespace grender
     struct program : gcore::resource
     {
         void process(gserializer::serializer& serializer) override;
-        bool need_async_load() const override { return true; }
 
         void activate() const;
         GLuint get_id() const noexcept { return m_program_id; }       

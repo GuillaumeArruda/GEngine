@@ -225,26 +225,16 @@ namespace gcore
             }
         }
 
-        if (res_to_load->need_async_load())
-        {
-            //small workaround to go around copy requirement of std::function and the inability to go from shared_ptr to unique_ptr
-            m_jobs.submit([res = std::shared_ptr<resource>(res_to_load.release(), [](resource* res) {}), this]() mutable
-                {
-                    assert(res.use_count() == 1);
-                    std::unique_ptr<resource> real_owner = std::unique_ptr<resource>(res.get());
-                    real_owner->load_async();
-                    if (real_owner->get_state() == resource::loading_state::pending_sync)
-                    {
-                        std::unique_lock lock(m_lock);
-                        m_res_to_load_sync.push_back(std::move(real_owner));
-                    }
-                }
-            );
-        }
-        else
-        {
-            res_to_load->load_sync();
-        }
+        //small workaround to go around copy requirement of std::function and the inability to go from shared_ptr to unique_ptr
+        m_jobs.submit([res = std::shared_ptr<resource>(res_to_load.release(), [](resource* res) {}), this]() mutable
+            {
+                assert(res.use_count() == 1);
+                std::unique_ptr<resource> real_owner = std::unique_ptr<resource>(res.get());
+                real_owner->load_async();
+                std::unique_lock lock(m_lock);
+                m_res_to_load_sync.push_back(std::move(real_owner));
+            }
+        );
     }
 
     void resource_library::reload_resource(gtl::uuid const& uuid)

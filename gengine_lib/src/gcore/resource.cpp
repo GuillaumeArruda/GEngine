@@ -26,7 +26,7 @@ namespace gcore
 
     void resource::load_sync()
     {
-        if (m_loading_state == loading_state::pending_sync || !need_async_load())
+        if (m_loading_state == loading_state::pending_sync)
         {
             if (do_load_sync())
             {

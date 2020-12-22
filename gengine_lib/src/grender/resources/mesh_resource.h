@@ -50,7 +50,6 @@ namespace grender
     struct mesh_resource : gcore::resource
     {
         void process(gserializer::serializer& serializer) override;
-        bool need_async_load() const override { return true; };
 
         gtl::span<mesh const> get_meshes() const { return m_submeshes; }
         gmath::axis_aligned_box<gcore::model_space> const& get_extent() const { return m_extent; }

@@ -22,8 +22,6 @@ namespace grender
 
         void process(gserializer::serializer& serializer) override;
 
-        bool need_async_load() const override { return true; }
-
 
         GLuint get_id() const { return m_texture_id; }
 

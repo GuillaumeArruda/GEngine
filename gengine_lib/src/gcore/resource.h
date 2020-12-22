@@ -27,8 +27,6 @@ namespace gcore
         void load_async();
         void load_sync();
         void unload();
-        
-        virtual bool need_async_load() const =0;
 
         gtl::uuid const& get_uuid() const noexcept{ return m_uuid; }
         bool is_loaded() const { return m_loading_state == loading_state::loaded; }
