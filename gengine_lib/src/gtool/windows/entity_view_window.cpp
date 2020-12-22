@@ -19,6 +19,8 @@
 #include "grender/components/camera_component.h"
 #include "grender/systems/render_system.h"
 
+#include "gserializer/serializers/binary_file_serializer.h"
+
 namespace gtool
 {
     void entity_view_window::update(gcore::world& world, window_manager&)

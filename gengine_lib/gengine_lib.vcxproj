@@ -43,6 +43,8 @@
     <ClInclude Include="src\grender\resources\cube_map_texture.h" />
     <ClInclude Include="src\grender\resources\texture.h" />
     <ClInclude Include="src\grender\uniform_variant.h" />
+    <ClInclude Include="src\gserializer\serializers\binary_file_serializer.h" />
+    <ClInclude Include="src\gtl\scope_timer.h" />
     <ClInclude Include="src\gtl\utility.h" />
     <ClInclude Include="src\gtool\common_widgets.h" />
     <ClInclude Include="src\gtool\windows\entity_view_window.h" />
@@ -108,6 +110,8 @@
     <ClCompile Include="src\grender\resources\cube_map_texture.cpp" />
     <ClCompile Include="src\grender\resources\texture.cpp" />
     <ClCompile Include="src\grender\uniform_variant.cpp" />
+    <ClCompile Include="src\gserializer\serializers\binary_file_serializer.cpp" />
+    <ClCompile Include="src\gtl\scope_timer.cpp" />
     <ClCompile Include="src\gtool\common_widgets.cpp" />
     <ClCompile Include="src\gtool\windows\entity_view_window.cpp" />
     <ClCompile Include="src\gcore\system_registry.cpp" />
