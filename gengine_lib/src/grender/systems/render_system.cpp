@@ -77,10 +77,7 @@ namespace grender
                     mesh_info.m_uniform_state.set_uniform("normal_matrix", normal_matrix);
                     mesh_info.m_uniform_state.set_uniform("world_matrix", transform->m_transform);
                     mesh_info.m_uniform_state.apply();
-                    for (auto& submesh : mesh_info.m_mesh->get_meshes())
-                    {
-                        submesh.draw();
-                    }
+                    mesh_info.m_mesh->draw();
                     if (extent)
                     {
                         extent->m_extent = extent->m_extent.merge(mesh_info.m_mesh->get_extent());
@@ -112,10 +109,7 @@ namespace grender
                     light->m_main_state.set_uniform("normal_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::normal), uniform_variant::type::sampler_2d });
                     light->m_main_state.set_uniform("specular_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::specular), uniform_variant::type::sampler_2d });
                     light->m_main_state.apply();
-                    for (auto& submesh : light->m_mesh->get_meshes())
-                    {
-                        submesh.draw();
-                    }
+                    light->m_mesh->draw();
                 }
             }
         }
@@ -135,10 +129,7 @@ namespace grender
                 skybox->m_program->activate();
                 skybox->m_program_state.set_uniform("mvp", projection * glm::mat4(glm::mat3(view_matrix)));
                 skybox->m_program_state.apply();
-                for (auto& submesh : skybox->m_mesh->get_meshes())
-                {
-                    submesh.draw();
-                }
+                skybox->m_mesh->draw();
             }
         }
     }

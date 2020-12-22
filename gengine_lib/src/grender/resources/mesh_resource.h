@@ -18,19 +18,27 @@ struct aiMesh;
 
 namespace grender
 {
-    struct mesh
+    struct mesh_serialization_info
     {
-        mesh(aiMesh const& mesh, gmath::axis_aligned_box<gcore::model_space>& out_extent);
-        ~mesh();
+        void process(gserializer::serializer& serializer);
+        std::size_t m_version = 1;
+        std::vector<glm::vec3> m_positions;
+        std::vector<glm::vec3> m_normals;
+        std::vector<glm::vec3> m_tangents;
+        std::vector<glm::vec3> m_bitangents;
+        std::vector<glm::vec2> m_uv_coords;
+        std::vector<glm::ivec3> m_faces;
+        glm::vec3 m_min_extent;
+        glm::vec3 m_max_extent;
+    };
 
-        mesh(mesh&&) noexcept;
-        mesh& operator=(mesh&&) noexcept;
+    struct mesh_resource : gcore::resource
+    {
+        void process(gserializer::serializer& serializer) override;
+        void draw();
 
-        mesh(mesh const&) = delete;
-        mesh& operator=(mesh const&) = delete;
+        gmath::axis_aligned_box<gcore::model_space> const& get_extent() const { return m_extent; }
 
-        void draw() const;
-        void bind();
     private:
         enum vbo_type
         {
@@ -42,26 +50,16 @@ namespace grender
             faces,
             count
         };
-        GLuint m_vao = 0;
-        std::array<GLuint, vbo_type::count> m_vbo = {0};
-        GLuint m_number_of_element = 0;
-    };
 
-    struct mesh_resource : gcore::resource
-    {
-        void process(gserializer::serializer& serializer) override;
-
-        gtl::span<mesh const> get_meshes() const { return m_submeshes; }
-        gmath::axis_aligned_box<gcore::model_space> const& get_extent() const { return m_extent; }
-
-    private:
         bool do_load_async() override;
         bool do_load_sync() override;
         void do_unload() override;
 
+        GLuint m_vao = 0;
+        std::array<GLuint, vbo_type::count> m_vbo = { 0 };
+        GLuint m_number_of_element = 0;
         gmath::axis_aligned_box<gcore::model_space> m_extent;
-        std::vector<mesh> m_submeshes;
-        std::filesystem::path m_fbx_path;
+        std::filesystem::path m_bin_filepath;
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
     };
 }
