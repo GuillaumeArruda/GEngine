@@ -5,6 +5,8 @@
 #include "gtool/window.h"
 #include "gtool/common_widgets.h"
 
+#include <imgui/imgui.h>
+
 namespace gcore
 {
     struct entity_registry;
@@ -30,9 +32,21 @@ namespace gtool
     struct selected_entity_widget
     {
         void update(gcore::world& world);
+        std::string m_uuid;
     private:
         factory_combo_box<gcore::component> m_component_combo_box;
-        std::string m_uuid;
+    };
+
+    struct entity_browser_widget
+    {
+        enum column_id
+        {
+            name,
+            uuid
+        };
+        void update(gcore::world& world, selected_entity_widget& selected_widget);
+        ImGuiTextFilter m_filter;
+        column_id m_filter_by;
     };
 
     struct entity_view_window : window
@@ -42,8 +56,9 @@ namespace gtool
         const char* get_name() const override{ return "Entity Viewer"; }
     private:
         bool m_display = true;
-        create_entity_widget create_entity_widget;
-        save_load_registry_widget save_load_registry_widget;
-        selected_entity_widget selected_entity_widget;
+        create_entity_widget m_create_entity_widget;
+        save_load_registry_widget m_save_load_registry_widget;
+        selected_entity_widget m_selected_entity_widget;
+        entity_browser_widget m_entity_browser_widget;
     };
 }

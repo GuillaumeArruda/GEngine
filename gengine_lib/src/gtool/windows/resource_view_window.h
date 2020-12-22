@@ -5,6 +5,8 @@
 
 #include "gcore/resource.h"
 
+#include <imgui/imgui.h>
+
 namespace gcore
 {
     struct resource;
@@ -45,6 +47,7 @@ namespace gtool
         };
         std::vector<resource_info> m_resources_info;
         column_id m_filter_by = column_id::name;
+        ImGuiTextFilter m_filter;
     };
 
     struct resource_view_window : window

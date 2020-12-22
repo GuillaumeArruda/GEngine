@@ -12,6 +12,7 @@
 #include "gcore/components/extent_component.h"
 #include "gcore/components/input_component.h"
 #include "gcore/components/transform_component.h"
+#include "gcore/components/name_component.h"
 #include "gcore/world.h"
 
 #include "grender/serializers/imgui_serializer.h"
@@ -32,21 +33,10 @@ namespace gtool
 
             gcore::entity_registry& registry = world.get_entity_registry();
 
-            {
-                if (ImGui::CollapsingHeader("Current Entities"))
-                {
-                    ImGui::PushID("Current Entities");
-                    grender::imgui_serializer serializer("Entities");
-                    serializer.set_in_context(std::ref(*world.get_resource_library()));
-                    serializer.process("Entities", registry);
-                    ImGui::PopID();
-                }
-
-            }
-
-            selected_entity_widget.update(world);
-            create_entity_widget.update(world);
-            save_load_registry_widget.update(world);
+            m_selected_entity_widget.update(world);
+            m_entity_browser_widget.update(world, m_selected_entity_widget);
+            m_create_entity_widget.update(world);
+            m_save_load_registry_widget.update(world);
 
             ImGui::End();
         }
@@ -194,6 +184,97 @@ namespace gtool
                 }
             }
 
+            ImGui::PopID();
+        }
+    }
+
+    void entity_browser_widget::update(gcore::world& world, selected_entity_widget& selected_widget)
+    {
+        if (ImGui::CollapsingHeader("Entity Browser"))
+        {
+            ImGui::PushID("Entity Browser");
+            m_filter.Draw(); ImGui::SameLine();
+            const char* display_name = [&] {
+                switch (m_filter_by) {
+                case column_id::name: return "Name";
+                case column_id::uuid: return "UUID";
+                default: return "";
+                }
+            }();
+            if (ImGui::BeginCombo("Filter by", display_name))
+            {
+                bool is_selected = m_filter_by == column_id::name;
+                if (ImGui::Selectable("Name", is_selected)) m_filter_by = column_id::name;
+                if (is_selected) ImGui::SetItemDefaultFocus();
+
+                is_selected = m_filter_by == column_id::uuid;
+                if (ImGui::Selectable("UUID", is_selected)) m_filter_by = column_id::uuid;
+                if (is_selected) ImGui::SetItemDefaultFocus();
+
+                ImGui::EndCombo();
+            }
+
+            ImGuiTableFlags const table_flags = ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Borders | ImGuiTableFlags_Sortable;
+            if (ImGui::BeginTable("Entity", 2, table_flags))
+            {
+                ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_DefaultSort, -1.f, column_id::name);
+                ImGui::TableSetupColumn("UUID", 2, -1.f, column_id::uuid);
+                ImGui::TableHeadersRow();
+
+                struct entity_info
+                {
+                    gtl::uuid m_uuid;
+                    std::string* m_name;
+                };
+
+                std::vector<entity_info> infos;
+                auto view = world.get_entity_registry().get_view<gcore::optional_comp<gcore::name_component>>();
+                std::string empty_string;
+                for (auto& [entity, name_comp] : view)
+                {
+                    infos.push_back(entity_info{ entity, name_comp ? &name_comp->m_name : &empty_string });
+                }
+
+                if (ImGuiTableSortSpecs* sort_spec = ImGui::TableGetSortSpecs())
+                {
+                        std::sort(infos.begin(), infos.end(),
+                            [&](entity_info const& lhs, entity_info const& rhs) {
+                            switch (sort_spec->Specs->ColumnIndex)
+                            {
+                            case column_id::uuid:
+                                return sort_spec->Specs->SortDirection == ImGuiSortDirection_Ascending ?
+                                    lhs.m_uuid < rhs.m_uuid :
+                                    lhs.m_uuid >= rhs.m_uuid;
+                            default:
+                            case column_id::name:
+                                return sort_spec->Specs->SortDirection == ImGuiSortDirection_Ascending ?
+                                    *lhs.m_name < *rhs.m_name :
+                                    *lhs.m_name >= *rhs.m_name;
+                            }
+                        });
+                }
+
+                ImGuiListClipper clipper;
+                clipper.Begin(static_cast<int>(infos.size()));
+
+                while (clipper.Step())
+                {
+                    for (int row_n = clipper.DisplayStart; row_n < clipper.DisplayEnd; row_n++)
+                    {
+                        if ((m_filter_by == column_id::name && m_filter.PassFilter(infos[row_n].m_name->c_str()))
+                            || (m_filter_by == column_id::uuid && m_filter.PassFilter(infos[row_n].m_uuid.to_string().c_str())))
+                        {
+                            ImGui::TableNextColumn();
+                            if (ImGui::Selectable(infos[row_n].m_name->c_str(), false, ImGuiSelectableFlags_SpanAllColumns))
+                                selected_widget.m_uuid = infos[row_n].m_uuid.to_string();
+
+                            ImGui::TableNextColumn(); ImGui::Text(infos[row_n].m_uuid.to_string().c_str());
+                        }
+                    }
+                }
+
+                ImGui::EndTable();
+            }
             ImGui::PopID();
         }
     }

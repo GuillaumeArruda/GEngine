@@ -105,8 +105,7 @@ namespace gtool
                 }
             }
 
-            static ImGuiTextFilter filter;
-            filter.Draw(); ImGui::SameLine();
+            m_filter.Draw(); ImGui::SameLine();
             const char* display_name = [&] {
                 switch (m_filter_by) {
                 case column_id::name: return "Name";
@@ -174,9 +173,9 @@ namespace gtool
                 {
                     for (int row_n = clipper.DisplayStart; row_n < clipper.DisplayEnd; row_n++)
                     {
-                        if ((m_filter_by == column_id::name && filter.PassFilter(m_resources_info[row_n].m_name.c_str()))
-                        ||  (m_filter_by == column_id::type && filter.PassFilter(m_resources_info[row_n].m_resource_type.c_str()))
-                        ||  (m_filter_by == column_id::uuid && filter.PassFilter(m_resources_info[row_n].m_uuid.to_string().c_str())))
+                        if ((m_filter_by == column_id::name && m_filter.PassFilter(m_resources_info[row_n].m_name.c_str()))
+                        ||  (m_filter_by == column_id::type && m_filter.PassFilter(m_resources_info[row_n].m_resource_type.c_str()))
+                        ||  (m_filter_by == column_id::uuid && m_filter.PassFilter(m_resources_info[row_n].m_uuid.to_string().c_str())))
                         {
                             ImGui::TableNextColumn(); 
                             if (ImGui::Selectable(m_resources_info[row_n].m_name.c_str(), false, ImGuiSelectableFlags_SpanAllColumns))
