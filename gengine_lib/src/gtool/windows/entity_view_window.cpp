@@ -33,9 +33,15 @@ namespace gtool
             gcore::entity_registry& registry = world.get_entity_registry();
 
             {
-                grender::imgui_serializer serializer("Current Entities");
-                serializer.set_in_context(std::ref(*world.get_resource_library()));
-                serializer.process("Entities", registry);
+                if (ImGui::CollapsingHeader("Current Entities"))
+                {
+                    ImGui::PushID("Current Entities");
+                    grender::imgui_serializer serializer("Entities");
+                    serializer.set_in_context(std::ref(*world.get_resource_library()));
+                    serializer.process("Entities", registry);
+                    ImGui::PopID();
+                }
+
             }
 
             selected_entity_widget.update(world);
@@ -48,8 +54,9 @@ namespace gtool
 
     void create_entity_widget::update(gcore::world& world)
     {
-        if (ImGui::TreeNode("New Entity"))
+        if (ImGui::CollapsingHeader("New Entity"))
         {
+            ImGui::PushID("New Entity");
             m_create_component_combo.draw("Create Component Type");
 
             {
@@ -84,14 +91,15 @@ namespace gtool
                 world.get_entity_registry().add_components(entity, m_components);
                 m_components.clear();
             }
-            ImGui::TreePop();
+            ImGui::PopID();
         }
     }
 
     void save_load_registry_widget::update(gcore::world& world)
     {
-        if (ImGui::TreeNode("Save/Load entities"))
+        if (ImGui::CollapsingHeader("Save/Load Entities"))
         {
+            ImGui::PushID("Save/Load entities");
             ImGui::InputText("Filepath", &m_filepath);
             if (ImGui::Button("Save"))
             {
@@ -107,7 +115,7 @@ namespace gtool
                 json_read.process("entity_registry", world.get_entity_registry());
                 world.get_entity_registry().rebuild_component_type_map();
             }
-            ImGui::TreePop();
+            ImGui::PopID();
         }
     }
 
@@ -151,9 +159,10 @@ namespace gtool
             }
         }
 
-        if (ImGui::TreeNode("Selected entity"))
+        if (ImGui::CollapsingHeader("Selected Entity"))
         {
-            ImGui::InputText("uuid", &m_uuid);
+            ImGui::PushID("Selected Entity");
+            ImGui::InputText("UUID", &m_uuid);
             
             gcore::entity const entity = gtl::uuid::from_string(m_uuid);
             if (world.get_entity_registry().has_any_component(entity))
@@ -184,7 +193,7 @@ namespace gtool
                 }
             }
 
-            ImGui::TreePop();
+            ImGui::PopID();
         }
     }
 }

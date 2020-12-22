@@ -17,8 +17,9 @@ namespace gtool
 {
     void create_resource_widget::update(gcore::resource_library& library)
     {
-        if (ImGui::CollapsingHeader("Create resource"))
+        if (ImGui::CollapsingHeader("Create Resource"))
         {
+            ImGui::PushID("Create Resource");
             m_resource_type.draw("Resource Type");
             ImGui::InputText("folder", &m_folder_path);
             if (ImGui::Button("Create resource"))
@@ -31,6 +32,7 @@ namespace gtool
                     library.scan_directory(m_folder_path.c_str());
                 }
             }
+            ImGui::PopID();
         }
     }
 
@@ -38,6 +40,7 @@ namespace gtool
     {
         if (ImGui::CollapsingHeader("View Resource"))
         {
+            ImGui::PushID("View Resource");
             ImGui::InputText("uuid", &m_uuid);
             gtl::uuid const uid = gtl::uuid::from_string(m_uuid);
             if (uid.is_valid())
@@ -56,6 +59,7 @@ namespace gtool
                     s.release();
                 }
             }
+            ImGui::PopID();
         }
     }
 
@@ -80,8 +84,9 @@ namespace gtool
 
     void resource_browser_widget::update(gcore::resource_library& library, resource_viewer_widget& viewer_widget)
     {
-        if (ImGui::CollapsingHeader("Resource browser"))
+        if (ImGui::CollapsingHeader("Resource Browser"))
         {
+            ImGui::PushID("Resource Browser");
             if (m_resources_info.size() == 0)
             {
                 auto& uuid_to_files = library.get_uuid_to_resource_files();
@@ -200,6 +205,7 @@ namespace gtool
                 }
                 ImGui::EndTable();
             }
+            ImGui::PopID();
         }
     }
 }
