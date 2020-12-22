@@ -24,8 +24,27 @@ namespace gtool
     struct resource_viewer_widget
     {
         void update(gcore::resource_library& library);
-    private:
         std::string m_uuid;
+    };
+
+    struct resource_browser_widget
+    {
+        void update(gcore::resource_library& library, resource_viewer_widget& viewer_widget);
+    private:
+        enum column_id
+        {
+            name,
+            type,
+            uuid
+        };
+        struct resource_info
+        {
+            gtl::uuid m_uuid;
+            std::string m_name;
+            std::string m_resource_type;
+        };
+        std::vector<resource_info> m_resources_info;
+        column_id m_filter_by = column_id::name;
     };
 
     struct resource_view_window : window
@@ -37,5 +56,6 @@ namespace gtool
         bool m_display = true;
         resource_viewer_widget m_resource_viewer_widget;
         create_resource_widget m_create_resource_widget;
+        resource_browser_widget m_resource_browser;
     };
 }

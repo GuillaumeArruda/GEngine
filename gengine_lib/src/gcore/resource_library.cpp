@@ -56,7 +56,7 @@ namespace gcore
                 file_it != m_uuid_to_resource_file.end())
             {
                 std::unique_ptr<resource> resource_to_load;
-                gserializer::json_read_serializer serializer(file_it->second.c_str());
+                gserializer::json_read_serializer serializer(file_it->second.string().c_str());
                 serializer.process("resource", resource_to_load, resource::factory());
                 if (resource_to_load)
                 {
@@ -69,7 +69,7 @@ namespace gcore
         return resource_handle<resource>(it->second.lock());
     }
 
-    std::string resource_library::get_filepath(gtl::uuid const& uuid) const
+    std::filesystem::path resource_library::get_filepath(gtl::uuid const& uuid) const
     {
         if (auto const it = m_uuid_to_resource_file.find(uuid);
             it != m_uuid_to_resource_file.end())
@@ -89,7 +89,7 @@ namespace gcore
                 gtl::uuid const uuid = gtl::uuid::from_string(path.path().stem().string());
                 if (uuid.is_valid())
                 {
-                    m_uuid_to_resource_file[uuid] = path.path().string();
+                    m_uuid_to_resource_file[uuid] = path.path();
                 }
             }
         }
@@ -253,7 +253,7 @@ namespace gcore
             file_path != m_uuid_to_resource_file.end())
         {
             std::unique_ptr<resource> new_resource;
-            gserializer::json_read_serializer serializer(file_path->second.c_str());
+            gserializer::json_read_serializer serializer(file_path->second.string().c_str());
             serializer.process("resource", new_resource, resource::factory());
             if (new_resource)
             {

@@ -24,8 +24,6 @@ namespace gserializer
         void process(const char* name, std::filesystem::path& value) override;
 
         void write_to_file(const char* file);
-    private:
-        rapidjson::Value& stack_top();
 
         void open_scope(const char* name) override;
         void close_scope(const char* name) override;
@@ -35,7 +33,8 @@ namespace gserializer
         void close_array(const char* name) override;
         bool open_array_element(const char* name) override;
         void close_array_element(const char* name) override;
-
+    private:
+        rapidjson::Value& stack_top();
         void create_and_add_stack_value(const char* name, rapidjson::Type object_type);
 
         rapidjson::Document m_document;
@@ -59,8 +58,6 @@ namespace gserializer
         void process(const char* name, gtl::uuid& value) override;
         void process(const char* name, std::filesystem::path& value) override;
 
-    private:
-        rapidjson::Value& stack_top();
 
         void open_scope(const char* name) override;
         void close_scope(const char* name) override;
@@ -71,6 +68,8 @@ namespace gserializer
         bool open_array_element(const char*) override;
         void close_array_element(const char*) override;
 
+    private:
+        rapidjson::Value& stack_top();
         void create_and_add_stack_value(const char* name, rapidjson::Type object_type);
 
         rapidjson::Document m_document;

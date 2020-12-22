@@ -40,12 +40,14 @@ namespace gcore
             return resource_handle<ResourceType>(get_resource(uuid));
         }
 
-        std::string get_filepath(gtl::uuid const& uuid) const;
+        std::filesystem::path get_filepath(gtl::uuid const& uuid) const;
 
         void scan_directory(const char* folder);
         void on_file_change(std::wstring const& path);
 
         void update();
+
+        std::unordered_map<gtl::uuid, std::filesystem::path> const& get_uuid_to_resource_files() const { return m_uuid_to_resource_file; }
 
     private:
         friend struct resource_proxy;
@@ -56,7 +58,7 @@ namespace gcore
         resource_handle<resource> get_resource(gtl::uuid const& uuid);
         
         std::shared_mutex m_lock;
-        std::unordered_map<gtl::uuid, std::string> m_uuid_to_resource_file;
+        std::unordered_map<gtl::uuid, std::filesystem::path> m_uuid_to_resource_file;
         std::unordered_map<gtl::uuid, std::unique_ptr<resource>> m_resource_map;
         std::unordered_map<gtl::uuid, std::weak_ptr<resource_proxy>> m_proxy_map;
         std::unordered_map<gtl::uuid, std::vector<gtl::uuid>> m_uuid_dependant_map;
