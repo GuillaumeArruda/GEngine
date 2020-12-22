@@ -145,6 +145,14 @@ namespace gcore
         }
     }
 
+    void entity_registry::clear()
+    {
+        std::unique_lock lock(m_lock);
+        m_component_type_map.clear();
+        m_group_map.clear();
+        m_entity_to_component.clear();
+    }
+
     void entity_registry::add_components(entity entity, gtl::span<std::unique_ptr<component>> components)
     {
         auto& entity_comp_id_list = m_entity_to_component[entity];

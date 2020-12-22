@@ -111,6 +111,7 @@ namespace gtool
             if (ImGui::Button("Load"))
             {
                 gserializer::json_read_serializer json_read(m_filepath.c_str());
+                world.get_entity_registry().clear();
                 json_read.set_in_context(std::ref(*world.get_resource_library()));
                 json_read.process("entity_registry", world.get_entity_registry());
                 world.get_entity_registry().rebuild_component_type_map();

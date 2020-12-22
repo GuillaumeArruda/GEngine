@@ -82,6 +82,7 @@ namespace gcore
         [[nodiscard]] bool has_any_component(entity entity) const;
 
         void rebuild_component_type_map();
+        void clear();
     private:
         bool has_components(entity entity, gtl::span<component_id const> component_types) const;
 
