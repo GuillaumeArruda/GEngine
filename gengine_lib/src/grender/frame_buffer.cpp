@@ -81,11 +81,6 @@ namespace grender
         gl_exec(glDrawBuffers, 4, draw_buffers);
     }
 
-    void frame_buffer::bind_for_stencil() const
-    {
-        glDrawBuffer(GL_NONE);
-    }
-
     void frame_buffer::bind_for_light() const
     {
         gl_exec(glDrawBuffer, GL_COLOR_ATTACHMENT4);

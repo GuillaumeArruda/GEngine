@@ -92,30 +92,13 @@ namespace grender
 
     void render_system::render_lights(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry)
     {
-        m_frame_buffer.bind_for_light();
+        setup_lightning_pass();
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
-        gl_exec(glEnable, GL_STENCIL_TEST);
         auto light_view = registry.get_view<gcore::transform_component, light_component>();
         for (auto& [entity, transform, light] : light_view)
         {
             if (light->m_mesh.is_loaded())
             {
-                if (light->m_stencil_program.is_loaded())
-                {
-                    light->m_stencil_state.reconcile(light->m_stencil_program->get_default_state());
-                    setup_stencil_pass();
-                    light->m_stencil_program->activate();
-                    auto const world_matrix_loc = light->m_main_state.get_uniform_location("world_matrix");
-                    auto const screen_size = light->m_main_state.get_uniform_location("screen_size");
-                    light->m_main_state.set_uniform("world_matrix", transform->m_transform);
-                    light->m_main_state.set_uniform("screen_size", glm::vec2(get_target_size()));
-                    light->m_stencil_state.apply();
-                    for (auto& submesh : light->m_mesh->get_meshes())
-                    {
-                        submesh.draw();
-                    }
-                }
-
                 if (light->m_main_program.is_loaded())
                 {
                     light->m_main_state.reconcile(light->m_main_program->get_default_state());
@@ -136,7 +119,6 @@ namespace grender
                 }
             }
         }
-        gl_exec(glDisable, GL_STENCIL_TEST);
         gl_exec(glDisable, GL_BLEND);
     }
 
@@ -168,18 +150,6 @@ namespace grender
         gl_exec(glDepthMask, GL_TRUE);
         gl_exec(glDepthFunc, GL_LESS);
         gl_exec(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }
-
-    void render_system::setup_stencil_pass()
-    {
-        m_frame_buffer.bind_for_stencil();
-        gl_exec(glEnable, GL_DEPTH_TEST);
-        gl_exec(glDepthMask, GL_FALSE);
-        gl_exec(glDisable, GL_CULL_FACE);
-        gl_exec(glClear, GL_STENCIL_BUFFER_BIT);
-        gl_exec(glStencilFunc, GL_ALWAYS, 0, 0);
-        gl_exec(glStencilOpSeparate, GL_BACK, GL_KEEP, GL_DECR_WRAP, GL_KEEP);
-        gl_exec(glStencilOpSeparate, GL_FRONT, GL_KEEP, GL_INCR_WRAP, GL_KEEP);
     }
 
     void render_system::setup_lightning_pass()

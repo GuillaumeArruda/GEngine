@@ -34,7 +34,6 @@ namespace grender
         GLuint get_render_target_id(render_target_type type) const { return m_render_targets[gtl::to_underlying(type)].get_id(); }
 
         void bind_for_geometry() const;
-        void bind_for_stencil() const;
         void bind_for_light() const;
         void bind_for_skybox() const;
         void unbind() const;
