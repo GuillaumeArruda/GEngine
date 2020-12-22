@@ -23,6 +23,7 @@
     <ClInclude Include="src\gcore\components\extent_component.h" />
     <ClInclude Include="src\gcore\components\flying_controller_component.h" />
     <ClInclude Include="src\gcore\components\input_component.h" />
+    <ClInclude Include="src\gcore\components\name_component.h" />
     <ClInclude Include="src\gcore\components\transform_component.h" />
     <ClInclude Include="src\gcore\entity_registry.h" />
     <ClInclude Include="src\gcore\input_key.h" />
@@ -89,6 +90,7 @@
     <ClCompile Include="src\gcore\components\extent_component.cpp" />
     <ClCompile Include="src\gcore\components\flying_controller_component.cpp" />
     <ClCompile Include="src\gcore\components\input_component.cpp" />
+    <ClCompile Include="src\gcore\components\name_component.cpp" />
     <ClCompile Include="src\gcore\components\transform_component.cpp" />
     <ClCompile Include="src\gcore\entity_registry.cpp" />
     <ClCompile Include="src\gcore\input_key.cpp" />
