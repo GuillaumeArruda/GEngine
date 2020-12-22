@@ -6,9 +6,15 @@ namespace gthread
 {
     thread_group::~thread_group()
     {
+        join();
+    }
+
+    void thread_group::join()
+    {
         for (std::thread& thread : m_threads)
         {
-            thread.join();
+            if(thread.joinable())
+                thread.join();
         }
     }
 }

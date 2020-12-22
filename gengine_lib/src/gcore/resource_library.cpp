@@ -38,6 +38,26 @@ namespace gcore
             if (res.second->get_state() == resource::loading_state::loaded)
                 res.second->unload();
         }
+
+        for (auto& res : m_res_to_unload)
+        {
+            if (res->get_state() == resource::loading_state::loaded)
+                res->unload();
+        }
+
+        m_jobs.stop_and_join();
+
+        {
+            std::unique_lock lock(m_lock);
+            for (auto& res : m_res_to_load_sync)
+            {
+                res->load_sync();
+                if (res->get_state() == resource::loading_state::loaded)
+                    res->unload();
+            }
+        }
+
+
         glfwDestroyWindow(m_loading_context);
     }
 

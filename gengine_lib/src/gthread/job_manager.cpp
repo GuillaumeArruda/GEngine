@@ -28,6 +28,13 @@ namespace gthread
         }
     }
 
+    void job_manager::stop_and_join()
+    {
+        for (auto& queue : m_job_queues)
+            queue.done();
+        m_threads.join();
+    }
+
     void job_manager::process_job(unsigned index)
     {
         while (true)
