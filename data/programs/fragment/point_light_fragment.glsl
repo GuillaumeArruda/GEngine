@@ -42,8 +42,7 @@ void main()
 	const float spec_angle = max(dot(half_dir, normal), 0.0);
 	const float specular_intensity = lambertian > 0 ? pow(spec_angle, 10) : 0.0;
 
-	
-	const vec3 diffuse_color = lambertian * diffuse * light_color;
-	const vec3 specular_color =  specular * light_color * specular_intensity;
-	color = vec4((diffuse + specular_color) * light_intensity, 1.0);
+	const vec3 diffuse_color = lambertian * diffuse;
+	const vec3 specular_color =  specular * specular_intensity;
+	color = vec4((diffuse + specular_color) * light_color * light_intensity, 1.0);
 }
