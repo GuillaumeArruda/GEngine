@@ -62,8 +62,8 @@ namespace grender
     void render_system::render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry)
     {
         setup_geometry_pass();
-        auto graphic_comp_view = registry.get_view<gcore::transform_component, graphic_component>();
-        for (auto& [entity, transform, graphic_comp] : graphic_comp_view)
+        auto graphic_comp_view = registry.get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
+        for (auto& [entity, transform, graphic_comp, extent] : graphic_comp_view)
         {
             glm::mat4 const mvp = projection * view_matrix * static_cast<glm::mat4>(transform->m_transform);
             glm::mat3 const normal_matrix = glm::transpose(glm::inverse(glm::mat3(transform->m_transform)));
@@ -81,9 +81,9 @@ namespace grender
                     {
                         submesh.draw();
                     }
-                    if (auto extent_comp = registry.get_components<gcore::extent_component>(entity))
+                    if (extent)
                     {
-                        extent_comp->m_extent = extent_comp->m_extent.merge(mesh_info.m_mesh->get_extent());
+                        extent->m_extent = extent->m_extent.merge(mesh_info.m_mesh->get_extent());
                     }
                 }
             }
