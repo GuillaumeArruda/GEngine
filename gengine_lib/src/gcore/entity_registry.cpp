@@ -79,7 +79,7 @@ namespace gcore
             component_entity_it != m_component_type_map.end())
         {
             if (auto const iterator_in_entity_vector = std::lower_bound(component_entity_it->second.m_entities.begin(), component_entity_it->second.m_entities.end(), entity);
-                *iterator_in_entity_vector == entity)
+                iterator_in_entity_vector != component_entity_it->second.m_entities.end() && *iterator_in_entity_vector == entity)
             {
                 auto const diff = std::distance(component_entity_it->second.m_entities.begin(), iterator_in_entity_vector);
                 auto const iterator_in_comp_vector = component_entity_it->second.m_components.begin() + diff;
