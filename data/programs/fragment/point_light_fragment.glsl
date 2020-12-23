@@ -7,6 +7,7 @@ uniform vec2 screen_size;
 uniform float inner_radius;
 uniform float outer_radius;
 uniform float light_intensity;
+uniform vec3 ambient_light;
 
 uniform sampler2D diffuse_tex;
 uniform sampler2D position_tex;
@@ -44,5 +45,6 @@ void main()
 
 	const vec3 diffuse_color = lambertian * diffuse;
 	const vec3 specular_color =  specular * specular_intensity;
-	color = vec4((diffuse_color + specular_color) * light_color * light_intensity, 1.0);
+	const vec3 ambient = diffuse * ambient_light;
+	color = vec4((diffuse_color + specular_color) * light_color * light_intensity + ambient, 1.0);
 }
