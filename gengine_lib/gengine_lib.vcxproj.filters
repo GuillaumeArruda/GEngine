@@ -219,6 +219,9 @@
     <ClInclude Include="src\gserializer\serializers\binary_file_serializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gtool\importer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -348,6 +351,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gserializer\serializers\binary_file_serializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gtool\importer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
