@@ -69,7 +69,7 @@ namespace grender
             glm::mat3 const normal_matrix = glm::transpose(glm::inverse(glm::mat3(transform->m_transform)));
             for (auto& mesh_info : graphic_comp->m_meshes)
             {
-                if (mesh_info.m_mesh.is_loaded() && mesh_info.m_program.is_loaded())
+                if (mesh_info.m_mesh.is_loaded() && mesh_info.m_program.is_loaded() && mesh_info.m_active)
                 {
                     mesh_info.m_program->activate();
                     mesh_info.m_uniform_state.reconcile(mesh_info.m_program->get_default_state());

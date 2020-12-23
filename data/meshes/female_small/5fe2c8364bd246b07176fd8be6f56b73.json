@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "5fe2c8364bd246b07176fd8be6f56b73",
+            "name": "female_small_R_cornea_mid.L_cornea_mid",
+            "bin_file_path": "data\\meshes\\female_small\\female_small_R_cornea_mid.L_cornea_mid.meshbin"
+        }
+    }
+}

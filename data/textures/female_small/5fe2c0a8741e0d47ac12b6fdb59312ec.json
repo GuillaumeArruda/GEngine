@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2c0a8741e0d47ac12b6fdb59312ec",
+            "name": "female_small_head_norm",
+            "file": "data\\textures\\female_small\\head_norm.dds"
+        }
+    }
+}

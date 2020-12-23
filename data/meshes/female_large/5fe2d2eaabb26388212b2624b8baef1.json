@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "5fe2d2eaabb26388212b2624b8baef1",
+            "name": "female_large_c_haircap_a_mid.r_eyelashes_mid.l_eyelashes_mid.c_haircap_b_mid",
+            "bin_file_path": "data\\meshes\\female_large\\female_large_c_haircap_a_mid.r_eyelashes_mid.l_eyelashes_mid.c_haircap_b_mid.meshbin"
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "5fe2c8364bd246b1cc0685d57b87edd",
+            "name": "female_small_R_iris_mid.L_iris_mid",
+            "bin_file_path": "data\\meshes\\female_small\\female_small_R_iris_mid.L_iris_mid.meshbin"
+        }
+    }
+}

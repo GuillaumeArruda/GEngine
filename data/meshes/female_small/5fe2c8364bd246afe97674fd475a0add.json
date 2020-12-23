@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "5fe2c8364bd246afe97674fd475a0add",
+            "name": "female_small_c_body_mid",
+            "bin_file_path": "data\\meshes\\female_small\\female_small_c_body_mid.meshbin"
+        }
+    }
+}

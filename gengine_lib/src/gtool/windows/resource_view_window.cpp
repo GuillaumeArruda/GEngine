@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "gtool/windows/resource_view_window.h"
 
+#include <iostream>
+
 #include <imgui/imgui.h>
 #include "imgui/imgui_stdlib.h"
 
@@ -12,6 +14,8 @@
 
 #include "grender/serializers/imgui_serializer.h"
 #include "resource_view_window.h"
+
+#include "gtool/importer.h"
 
 namespace gtool
 {
@@ -28,10 +32,31 @@ namespace gtool
                 {
                     gserializer::json_write_serializer write_json;
                     write_json.process("resource", resource, gcore::resource::factory());
+                    std::filesystem::create_directory(m_folder_path);
                     write_json.write_to_file((m_folder_path + resource->get_uuid().to_string() + ".json").c_str());
-                    library.scan_directory(m_folder_path.c_str());
                 }
             }
+
+            if (ImGui::TreeNode("Import file"))
+            {
+                ImGui::InputText("File to import", &m_import_file);
+                ImGui::InputText("Import name", &m_import_name);
+                if (ImGui::Button("Import"))
+                {
+                    try
+                    {
+                        import_model_file(m_import_name, m_import_file, m_folder_path);
+                        import_texture_file(m_import_name, m_import_file, m_folder_path);
+                    }
+                    catch (std::filesystem::filesystem_error const& error)
+                    {
+                        std::cerr << error.what();
+                    }
+
+                }
+                ImGui::TreePop();
+            }
+
             ImGui::PopID();
         }
     }
@@ -87,6 +112,7 @@ namespace gtool
         if (ImGui::CollapsingHeader("Resource Browser"))
         {
             ImGui::PushID("Resource Browser");
+            m_resources_info.clear();
             if (m_resources_info.size() == 0)
             {
                 auto& uuid_to_files = library.get_uuid_to_resource_files();
@@ -134,7 +160,6 @@ namespace gtool
             ImGuiTableFlags const table_flags = ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Borders | ImGuiTableFlags_Sortable;
             if (ImGui::BeginTable("Resources", 3, table_flags))
             {
-
                 ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_DefaultSort, -1.f, column_id::name);
                 ImGui::TableSetupColumn("Type", 1, -1.f, column_id::type);
                 ImGui::TableSetupColumn("UUID", 2, -1.f, column_id::uuid);
@@ -142,29 +167,26 @@ namespace gtool
 
                 if (ImGuiTableSortSpecs* sort_spec = ImGui::TableGetSortSpecs())
                 {
-                    if (sort_spec->SpecsDirty)
-                    {
-                        std::sort(m_resources_info.begin(), m_resources_info.end(),
-                            [&](resource_info const& lhs, resource_info const& rhs) {
-                            switch (sort_spec->Specs->ColumnIndex)
-                            {
-                            case column_id::type: 
-                                return sort_spec->Specs->SortDirection == ImGuiSortDirection_Ascending ?
-                                    lhs.m_resource_type < rhs.m_resource_type :
-                                    lhs.m_resource_type >= rhs.m_resource_type;
-                            case column_id::uuid: 
-                                return sort_spec->Specs->SortDirection == ImGuiSortDirection_Ascending ?
-                                    lhs.m_uuid < rhs.m_uuid :
-                                    lhs.m_uuid >= rhs.m_uuid;
-                            default:
-                            case column_id::name:
-                                return sort_spec->Specs->SortDirection == ImGuiSortDirection_Ascending ?
-                                    lhs.m_name < rhs.m_name :
-                                    lhs.m_name >= rhs.m_name;
-                            }
-                        });
-                        sort_spec->SpecsDirty = false;
-                    }
+                    std::sort(m_resources_info.begin(), m_resources_info.end(),
+                        [&](resource_info const& lhs, resource_info const& rhs) {
+                        switch (sort_spec->Specs->ColumnIndex)
+                        {
+                        case column_id::type: 
+                            return sort_spec->Specs->SortDirection == ImGuiSortDirection_Ascending ?
+                                lhs.m_resource_type < rhs.m_resource_type :
+                                lhs.m_resource_type >= rhs.m_resource_type;
+                        case column_id::uuid: 
+                            return sort_spec->Specs->SortDirection == ImGuiSortDirection_Ascending ?
+                                lhs.m_uuid < rhs.m_uuid :
+                                lhs.m_uuid >= rhs.m_uuid;
+                        default:
+                        case column_id::name:
+                            return sort_spec->Specs->SortDirection == ImGuiSortDirection_Ascending ?
+                                lhs.m_name < rhs.m_name :
+                                lhs.m_name >= rhs.m_name;
+                        }
+                    });
+                    sort_spec->SpecsDirty = false;
                 }
                 ImGuiListClipper clipper;
                 clipper.Begin(static_cast<int>(m_resources_info.size()));

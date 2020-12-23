@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2c105741e0d507f9ab2902442802b",
+            "name": "female_small_iris_rough",
+            "file": "data\\textures\\female_small\\iris_rough.dds"
+        }
+    }
+}

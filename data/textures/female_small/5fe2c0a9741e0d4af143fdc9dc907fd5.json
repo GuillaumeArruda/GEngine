@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2c0a9741e0d4af143fdc9dc907fd5",
+            "name": "female_small_clothing_albedo",
+            "file": "data\\textures\\female_small\\clothing_albedo.dds"
+        }
+    }
+}

@@ -40,7 +40,8 @@ namespace gtool
             aiProcess_CalcTangentSpace |
             aiProcess_JoinIdenticalVertices |
             aiProcess_FindDegenerates |
-            aiProcess_GenBoundingBoxes);
+            aiProcess_GenBoundingBoxes |
+            aiProcess_FlipUVs);
 
         if (!scene)
         {
@@ -65,11 +66,11 @@ namespace gtool
             std::cerr << "Failed to import texture file: " << texture_path << " error: " << error<< "\n";
             return;
         }
-
-        std::filesystem::path const export_path = export_to_path.string() + "textures/" + base_name + "/" + texture_path.stem().string() + ".dds";
+        std::filesystem::path const folder_path = export_to_path.string() + "textures\\" + base_name + "\\";
+        std::filesystem::path const export_path = folder_path.string() + texture_path.stem().string() + ".dds";
 
         bool const already_exist = std::filesystem::exists(export_path);
-        std::filesystem::create_directory(export_path.parent_path());
+        std::filesystem::create_directories(folder_path);
         ILboolean const save_success = ilSaveImage(export_path.string().c_str());
         if (!save_success)
         {
@@ -88,7 +89,7 @@ namespace gtool
             std::unique_ptr<gcore::resource> res = std::move(texture_res);
             gserializer::json_write_serializer writer;
             writer.process("resource", res, gcore::resource::factory());
-            writer.write_to_file((export_to_path.string() + "textures/" + base_name + "/" + res->get_uuid().to_string() + ".json").c_str());
+            writer.write_to_file((folder_path.string() + res->get_uuid().to_string() + ".json").c_str());
         }
     }
     
@@ -160,10 +161,11 @@ namespace gtool
             }
 
             std::string const mesh_name = base_name + "_" + mesh.mName.C_Str();
-            std::filesystem::path const mesh_file_path = export_to_path.string() + "meshes/" + mesh_name + ".meshbin";
+            std::filesystem::path const folder_path = export_to_path.string() + "meshes\\" + base_name + "\\";
+            std::filesystem::path const mesh_file_path = folder_path.string() + mesh_name + ".meshbin";
             bool const already_exists = std::filesystem::exists(mesh_file_path);
 
-            std::filesystem::create_directory(mesh_file_path.parent_path());
+            std::filesystem::create_directories(folder_path);
             gserializer::binary_file_writer writer(mesh_file_path.string().c_str());
             writer.process("mesh_info", info);
 
@@ -176,7 +178,7 @@ namespace gtool
                 std::unique_ptr<gcore::resource> res = std::move(mesh_res);
                 gserializer::json_write_serializer writer;
                 writer.process("resource", res, gcore::resource::factory());
-                writer.write_to_file((export_to_path.string() + "meshes/" + res->get_uuid().to_string() + ".json").c_str());
+                writer.write_to_file((folder_path.string() + res->get_uuid().to_string() + ".json").c_str());
             }
         }
     }

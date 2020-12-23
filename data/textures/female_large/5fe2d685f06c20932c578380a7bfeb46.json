@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2d685f06c20932c578380a7bfeb46",
+            "name": "female_large_body_rough",
+            "file": "data\\textures\\female_large\\body_rough.dds"
+        }
+    }
+}

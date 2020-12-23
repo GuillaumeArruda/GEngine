@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2d2efabb263919fcb8628fbb4785d",
+            "name": "female_large_body_norm",
+            "file": "data\\textures\\female_large\\body_norm.dds"
+        }
+    }
+}

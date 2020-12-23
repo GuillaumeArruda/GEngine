@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "5fe2c8364bd246aef5e7aafe19c49cb",
+            "name": "female_small_c_shawl_mid.l_shoe_mid.r_pouchc_mid.r_poucha_mid.r_pouchb_mid.l_pouche_mid.r_pouchd_mid.c_buckle_mid.c_belt_mid.c_beltloop_mid.l_legstrap_mid.r_shoe_mid.l_armtie_mid.c_body_mid",
+            "bin_file_path": "data\\meshes\\female_small\\female_small_c_shawl_mid.l_shoe_mid.r_pouchc_mid.r_poucha_mid.r_pouchb_mid.l_pouche_mid.r_pouchd_mid.c_buckle_mid.c_belt_mid.c_beltloop_mid.l_legstrap_mid.r_shoe_mid.l_armtie_mid.c_body_mid.meshbin"
+        }
+    }
+}

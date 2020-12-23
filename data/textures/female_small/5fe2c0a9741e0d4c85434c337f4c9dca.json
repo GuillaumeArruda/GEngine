@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2c0a9741e0d4c85434c337f4c9dca",
+            "name": "female_small_iris_albedo",
+            "file": "data\\textures\\female_small\\iris_albedo.dds"
+        }
+    }
+}

@@ -128,9 +128,16 @@ namespace gcore
     {
         gcore::resource_handle<gcore::resource> temp(target_handle);
         process(serializer, uuid, temp);
-        if (static_cast<bool>(temp) == uuid.is_valid())
+        if (static_cast<bool>(temp) == uuid.is_valid() && temp.as<ResourceType>())
         {
-            target_handle = std::move(temp);
+            if (temp && !temp.as<ResourceType>())
+            {
+                uuid = gtl::uuid();
+            }
+            else
+            {
+                target_handle = std::move(temp);
+            }
         }
     }
 }

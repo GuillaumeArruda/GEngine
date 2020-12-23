@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2c0a8741e0d4871fecb86c4749f0c",
+            "name": "female_small_teeth_albedo",
+            "file": "data\\textures\\female_small\\teeth_albedo.dds"
+        }
+    }
+}

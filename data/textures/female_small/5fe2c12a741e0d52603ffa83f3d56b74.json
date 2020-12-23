@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2c12a741e0d52603ffa83f3d56b74",
+            "name": "female_small_cornea_rough",
+            "file": "data\\textures\\female_small\\cornea_rough.dds"
+        }
+    }
+}

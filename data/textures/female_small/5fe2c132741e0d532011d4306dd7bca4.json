@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2c132741e0d532011d4306dd7bca4",
+            "name": "female_small_clothing_rough",
+            "file": "data\\textures\\female_small\\clothing_rough.dds"
+        }
+    }
+}

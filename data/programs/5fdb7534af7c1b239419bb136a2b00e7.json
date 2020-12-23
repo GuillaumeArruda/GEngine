@@ -4,7 +4,7 @@
         "type_name": "grender::program",
         "data": {
             "uuid": "5fdb7534af7c1b239419bb136a2b00e7",
-            "name": "simple_program",
+            "name": "default_program",
             "shaders": [
                 {
                     "key": "shader::type::vertex",

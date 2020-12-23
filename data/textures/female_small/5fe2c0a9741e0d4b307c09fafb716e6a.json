@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2c0a9741e0d4b307c09fafb716e6a",
+            "name": "female_small_clothing_norm",
+            "file": "data\\textures\\female_small\\clothing_norm.dds"
+        }
+    }
+}

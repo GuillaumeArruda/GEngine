@@ -20,7 +20,9 @@ namespace gtool
         void update(gcore::resource_library& library);
     private:
         factory_combo_box<gcore::resource> m_resource_type;
-        std::string m_folder_path;
+        std::string m_folder_path = "data\\";
+        std::string m_import_file;
+        std::string m_import_name;
     };
 
     struct resource_viewer_widget

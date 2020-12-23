@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "5fe2d2eaabb263878658dde0ef0e35fb",
+            "name": "female_large_c_teethupper_mid.c_teethLower_mid",
+            "bin_file_path": "data\\meshes\\female_large\\female_large_c_teethupper_mid.c_teethLower_mid.meshbin"
+        }
+    }
+}

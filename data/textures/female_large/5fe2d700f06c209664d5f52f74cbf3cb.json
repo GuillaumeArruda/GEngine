@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2d700f06c209664d5f52f74cbf3cb",
+            "name": "female_large_hair_rough",
+            "file": "data\\textures\\female_large\\hair_rough.dds"
+        }
+    }
+}

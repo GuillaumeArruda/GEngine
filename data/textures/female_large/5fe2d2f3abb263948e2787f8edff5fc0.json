@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2d2f3abb263948e2787f8edff5fc0",
+            "name": "female_large_cornea_norm",
+            "file": "data\\textures\\female_large\\cornea_norm.dds"
+        }
+    }
+}

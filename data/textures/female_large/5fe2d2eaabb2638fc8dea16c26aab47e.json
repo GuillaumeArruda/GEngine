@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2d2eaabb2638fc8dea16c26aab47e",
+            "name": "female_large_teeth_norm",
+            "file": "data\\textures\\female_large\\teeth_norm.dds"
+        }
+    }
+}

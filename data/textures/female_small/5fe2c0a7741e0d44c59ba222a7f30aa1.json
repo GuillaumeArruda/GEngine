@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5fe2c0a7741e0d44c59ba222a7f30aa1",
+            "name": "female_small_hair_albedo",
+            "file": "data\\textures\\female_small\\hair_albedo.dds"
+        }
+    }
+}

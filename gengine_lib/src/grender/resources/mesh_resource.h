@@ -39,7 +39,7 @@ namespace grender
 
         gmath::axis_aligned_box<gcore::model_space> const& get_extent() const { return m_extent; }
 
-        void set_filepath(std::filesystem::path path) { m_bin_filepath = std::move(m_bin_filepath); };
+        void set_filepath(std::filesystem::path path) { m_bin_filepath = std::move(path); };
         
     private:
         enum vbo_type
