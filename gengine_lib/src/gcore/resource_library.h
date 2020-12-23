@@ -40,6 +40,12 @@ namespace gcore
             return resource_handle<ResourceType>(get_resource(uuid));
         }
 
+        template<class ResourceType>
+        [[nodiscard]] resource_handle<ResourceType>  try_get_resource(gtl::uuid const& uuid)
+        {
+            return resource_handle<ResourceType>(try_get_resource(uuid));
+        }
+
         std::filesystem::path get_filepath(gtl::uuid const& uuid) const;
 
         void scan_directory(const char* folder);
@@ -56,6 +62,7 @@ namespace gcore
         void reload_resource(gtl::uuid const& uuid);
 
         resource_handle<resource> get_resource(gtl::uuid const& uuid);
+        resource_handle<resource> try_get_resource(gtl::uuid const& uuid);
         
         std::shared_mutex m_lock;
         std::unordered_map<gtl::uuid, std::filesystem::path> m_uuid_to_resource_file;

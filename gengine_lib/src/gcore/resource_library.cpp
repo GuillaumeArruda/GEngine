@@ -66,7 +66,7 @@ namespace gcore
         serializer.process("uuid_to_resource_file", m_uuid_to_resource_file, "Resource");
     }
 
-    resource_handle<resource> resource_library::get_resource(gtl::uuid const& uuid)
+    resource_handle<resource> resource_library::try_get_resource(gtl::uuid const& uuid)
     {
         {
             std::shared_lock lock(m_lock);
@@ -79,6 +79,13 @@ namespace gcore
                 }
             }
         }
+        return resource_handle<resource>();
+    }
+
+    resource_handle<resource> resource_library::get_resource(gtl::uuid const& uuid)
+    {
+        if (auto handle = try_get_resource(uuid))
+            return handle;
 
         std::unique_lock lock(m_lock);
         auto const& [it, inserted] = m_proxy_map.insert(std::pair(uuid, std::weak_ptr<resource_proxy>()));

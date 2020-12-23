@@ -6,6 +6,8 @@
 
 #include "gtl/uuid.h"
 
+#include "gcore/resource_library.h"
+
 namespace grender
 {
     imgui_serializer::imgui_serializer(const char* node_name)
@@ -81,6 +83,17 @@ namespace grender
             std::string string = value.to_string();
             ImGui::InputText(name, &string);
             value = gtl::uuid::from_string(string);
+            if (value.is_valid())
+            {
+                if (auto* resource_lib = get_in_context<std::reference_wrapper<gcore::resource_library>>())
+                {
+                    if (auto handle = resource_lib->get().try_get_resource<gcore::resource>(value))
+                    {
+                        ImGui::SameLine();
+                        ImGui::BulletText(handle->get_name().c_str());
+                    }
+                }
+            }
         }
     }
 

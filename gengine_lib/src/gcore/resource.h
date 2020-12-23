@@ -30,6 +30,7 @@ namespace gcore
         void unload();
 
         gtl::uuid const& get_uuid() const noexcept{ return m_uuid; }
+        std::string const& get_name() const noexcept { return m_name; }
         bool is_loaded() const { return m_loading_state == loading_state::loaded; }
 
         loading_state get_state() const { return m_loading_state; }
