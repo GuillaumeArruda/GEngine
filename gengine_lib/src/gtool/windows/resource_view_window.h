@@ -23,6 +23,7 @@ namespace gtool
         std::string m_folder_path = "data\\";
         std::string m_import_file;
         std::string m_import_name;
+        float m_import_scale = 1.f;
     };
 
     struct resource_viewer_widget

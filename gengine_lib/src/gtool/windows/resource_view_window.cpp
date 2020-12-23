@@ -41,11 +41,12 @@ namespace gtool
             {
                 ImGui::InputText("File to import", &m_import_file);
                 ImGui::InputText("Import name", &m_import_name);
+                ImGui::InputFloat("Import Scale", &m_import_scale);
                 if (ImGui::Button("Import"))
                 {
                     try
                     {
-                        import_model_file(m_import_name, m_import_file, m_folder_path);
+                        import_model_file(m_import_name, m_import_file, m_folder_path, m_import_scale);
                         import_texture_file(m_import_name, m_import_file, m_folder_path);
                     }
                     catch (std::filesystem::filesystem_error const& error)

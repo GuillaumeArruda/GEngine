@@ -28,7 +28,7 @@
 
 namespace gtool
 {
-    void import_model_file(std::string const& base_name, std::filesystem::path const& model_file_path, std::filesystem::path const& export_to_path)
+    void import_model_file(std::string const& base_name, std::filesystem::path const& model_file_path, std::filesystem::path const& export_to_path, float scale_modifier)
     {
         Assimp::Importer importer;
         aiScene const* scene = importer.ReadFile(model_file_path.string().c_str(),
@@ -50,7 +50,7 @@ namespace gtool
         }
 
         std::string const new_base_name = base_name.size() == 0 ? model_file_path.stem().string() : base_name;
-        details::import_meshes(new_base_name, export_to_path, *scene);
+        details::import_meshes(new_base_name, export_to_path, *scene, scale_modifier);
         details::import_textures(new_base_name, model_file_path, export_to_path, *scene);
     }
 
@@ -93,7 +93,7 @@ namespace gtool
         }
     }
     
-    void details::import_meshes(std::string const& base_name, std::filesystem::path const& export_to_path, aiScene const& scene)
+    void details::import_meshes(std::string const& base_name, std::filesystem::path const& export_to_path, aiScene const& scene, float scale_modifier)
     {
         for (unsigned int mesh_idx = 0; mesh_idx < scene.mNumMeshes; ++mesh_idx)
         {
@@ -113,7 +113,7 @@ namespace gtool
                 info.m_positions.reserve(mesh.mNumVertices);
                 for (unsigned int i = 0; i < mesh.mNumVertices; ++i)
                 {
-                    info.m_positions.push_back(glm::vec3(mesh.mVertices[i].x, mesh.mVertices[i].y, mesh.mVertices[i].z));
+                    info.m_positions.push_back(glm::vec3(mesh.mVertices[i].x, mesh.mVertices[i].y, mesh.mVertices[i].z) * scale_modifier);
                 }
             }
             else
