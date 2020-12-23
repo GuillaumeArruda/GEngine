@@ -101,12 +101,12 @@ namespace gtool
             gtl::scope_timer s(mesh.mName.C_Str());
             grender::mesh_serialization_info info;
 
-            info.m_min_extent.x = mesh.mAABB.mMin.x;
-            info.m_min_extent.y = mesh.mAABB.mMin.y;
-            info.m_min_extent.z = mesh.mAABB.mMin.z;
-            info.m_max_extent.x = mesh.mAABB.mMax.x;
-            info.m_max_extent.y = mesh.mAABB.mMax.y;
-            info.m_max_extent.z = mesh.mAABB.mMax.z;
+            info.m_min_extent.x = scale_modifier * mesh.mAABB.mMin.x;
+            info.m_min_extent.y = scale_modifier * mesh.mAABB.mMin.y;
+            info.m_min_extent.z = scale_modifier * mesh.mAABB.mMin.z;
+            info.m_max_extent.x = scale_modifier * mesh.mAABB.mMax.x;
+            info.m_max_extent.y = scale_modifier * mesh.mAABB.mMax.y;
+            info.m_max_extent.z = scale_modifier * mesh.mAABB.mMax.z;
             
             if (mesh.HasPositions())
             {
