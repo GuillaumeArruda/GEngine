@@ -158,6 +158,13 @@ namespace gcore
                         }
                     }
 
+                    if (auto const it = m_uuid_to_resource_file.find(uuid);
+                        it == m_uuid_to_resource_file.end())
+                    {
+                        m_uuid_to_resource_file[uuid] = path;
+                    }
+                    
+
                 }
 
                 if (auto const it = m_file_dependant_map.find(std::filesystem::hash_value(path));
@@ -173,9 +180,8 @@ namespace gcore
                         }
                     }
                 }
-                
-                m_file_changes.clear();
             }
+            m_file_changes.clear();
 
             {
                 std::unique_lock lock(m_lock);
