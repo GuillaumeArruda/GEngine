@@ -116,6 +116,8 @@ namespace gcore
         void clear();
     private:
         bool has_components(entity entity, gtl::span<component_id const> component_types) const;
+        void remove_component_from_map(entity entity_to_remove, component_id id);
+        void warn_group_of_component_removal(entity changed_entity);
 
         struct group_base
         {
@@ -178,7 +180,7 @@ namespace gcore
 
             if (it != m_entities_components.end() && std::get<entity>(*it) == entity_removed)
             {
-                if (!registry.has_components(entity_removed, m_component_ids))
+                if (!registry.has_components(entity_removed, m_component_ids) || !registry.has_any_component(entity_removed))
                 {
                     m_entities_components.erase(it);
                 }

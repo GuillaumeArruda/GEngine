@@ -22,10 +22,11 @@ namespace gcore
             {
                 if (component)
                 {
-                    remove_component(entity, component_id(typeid(*component.get())));
+                    remove_component_from_map(entity, component_id(typeid(*component.get())));
                 }
             }
             m_entity_to_component.erase(it);
+            warn_group_of_component_removal(entity);
         }
     }
 
@@ -36,31 +37,14 @@ namespace gcore
 
     void entity_registry::remove_component(entity entity, component_id component_type)
     {
-        if (auto const component_entity_it = m_component_type_map.find(component_type);
-            component_entity_it != m_component_type_map.end())
+        remove_component_from_map(entity, component_type);
+        if (auto it = m_entity_to_component.find(entity);
+            it != m_entity_to_component.end())
         {
-            if (auto const iterator_in_entity_vector = std::lower_bound(component_entity_it->second.m_entities.begin(), component_entity_it->second.m_entities.end(), entity); 
-                iterator_in_entity_vector != component_entity_it->second.m_entities.end() && *iterator_in_entity_vector == entity)
-            {
-                auto const diff = std::distance(component_entity_it->second.m_entities.begin(), iterator_in_entity_vector);
-                auto const iterator_in_comp_vector = component_entity_it->second.m_components.begin() + diff;
-                if (iterator_in_comp_vector != component_entity_it->second.m_components.end())
-                {
-                    component_entity_it->second.m_components.erase(iterator_in_comp_vector);
-                    component_entity_it->second.m_entities.erase(iterator_in_entity_vector);
-                }
-            }
-            if (auto it = m_entity_to_component.find(entity);
-                it != m_entity_to_component.end())
-            {
-                it->second.erase(std::find_if(it->second.begin(), it->second.end(), [&](std::unique_ptr<component> const& comp) { return component_id(typeid(*comp.get())) == component_type; }));
-            }
+            it->second.erase(std::find_if(it->second.begin(), it->second.end(), [&](std::unique_ptr<component> const& comp) { return component_id(typeid(*comp.get())) == component_type; }));
         }
+        warn_group_of_component_removal(entity);
 
-        for (auto& group : m_group_map)
-        {
-            group.second->on_component_removed(*this, entity);
-        }
     }
 
     bool entity_registry::has_components(entity entity, gtl::span<component_id const> component_types) const
@@ -73,6 +57,33 @@ namespace gcore
             { return comp_type == component_id(typeid(*comp.get())); }) != it->second.end(); });
         }
         return false;
+    }
+
+    void entity_registry::remove_component_from_map(entity entity_to_remove, component_id id)
+    {
+        if (auto const component_entity_it = m_component_type_map.find(id);
+            component_entity_it != m_component_type_map.end())
+        {
+            if (auto const iterator_in_entity_vector = std::lower_bound(component_entity_it->second.m_entities.begin(), component_entity_it->second.m_entities.end(), entity_to_remove);
+                iterator_in_entity_vector != component_entity_it->second.m_entities.end() && *iterator_in_entity_vector == entity_to_remove)
+            {
+                auto const diff = std::distance(component_entity_it->second.m_entities.begin(), iterator_in_entity_vector);
+                auto const iterator_in_comp_vector = component_entity_it->second.m_components.begin() + diff;
+                if (iterator_in_comp_vector != component_entity_it->second.m_components.end())
+                {
+                    component_entity_it->second.m_components.erase(iterator_in_comp_vector);
+                    component_entity_it->second.m_entities.erase(iterator_in_entity_vector);
+                }
+            }
+        }
+    }
+
+    void entity_registry::warn_group_of_component_removal(entity changed_entity)
+    {
+        for (auto& group : m_group_map)
+        {
+            group.second->on_component_removed(*this, changed_entity);
+        }
     }
 
     component* entity_registry::get_component(entity entity, component_id component_type) const
