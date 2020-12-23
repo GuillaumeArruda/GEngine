@@ -10,7 +10,6 @@ namespace gcore
 {
     resource::~resource() 
     { 
-        assert(m_loading_state == loading_state::failed || m_loading_state == loading_state::unloaded); 
     }
     
     void resource::process(gserializer::serializer& serializer)

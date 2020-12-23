@@ -32,8 +32,8 @@ namespace grender
         mesh_serialization_info info;
         reader.process("mesh_info", info);
 
-        m_number_of_element = static_cast<GLuint>(info.m_positions.size());
-        if (m_number_of_element == 0)
+        std::size_t const number_of_vertices = static_cast<GLuint>(info.m_positions.size());
+        if (number_of_vertices == 0)
             return false;
 
         m_extent = gmath::axis_aligned_box<gcore::model_space>{ gmath::position<gcore::model_space>(glm::vec4(info.m_min_extent, 1.f)), gmath::position<gcore::model_space>(glm::vec4(info.m_max_extent, 1.f)) };
@@ -43,21 +43,21 @@ namespace grender
         gl_exec(glBufferData, GL_ARRAY_BUFFER, info.m_positions.size() * sizeof(glm::vec3), info.m_positions.data(), GL_STATIC_DRAW);
 
 
-        if (info.m_normals.size() == m_number_of_element)
+        if (info.m_normals.size() == number_of_vertices)
         {
             gl_exec(glGenBuffers, 1, &m_vbo[vbo_type::normal]);
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::normal]);
             gl_exec(glBufferData, GL_ARRAY_BUFFER, info.m_normals.size() * sizeof(glm::vec3), info.m_normals.data(), GL_STATIC_DRAW);
         }
 
-        if (info.m_uv_coords.size() == m_number_of_element)
+        if (info.m_uv_coords.size() == number_of_vertices)
         {
             gl_exec(glGenBuffers, 1, &m_vbo[vbo_type::uv]);
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::uv]);
             gl_exec(glBufferData, GL_ARRAY_BUFFER, info.m_uv_coords.size() * sizeof(glm::vec2), info.m_uv_coords.data(), GL_STATIC_DRAW);
         }
 
-        if (info.m_tangents.size() == m_number_of_element && info.m_bitangents.size() == m_number_of_element)
+        if (info.m_tangents.size() == number_of_vertices && info.m_bitangents.size() == number_of_vertices)
         {
             gl_exec(glGenBuffers, 2, &m_vbo[vbo_type::tangent]);
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::tangent]);
@@ -68,9 +68,14 @@ namespace grender
 
         if (info.m_faces.size() != 0)
         {
+            m_number_of_element = static_cast<GLuint>(info.m_faces.size()) * 3;
             gl_exec(glGenBuffers, 1, &m_vbo[vbo_type::faces]);
             gl_exec(glBindBuffer, GL_ELEMENT_ARRAY_BUFFER, m_vbo[vbo_type::faces]);
             gl_exec(glBufferData, GL_ELEMENT_ARRAY_BUFFER, info.m_faces.size() * sizeof(glm::ivec3), info.m_faces.data(), GL_STATIC_DRAW);
+        }
+        else
+        {
+            m_number_of_element = static_cast<GLuint>(number_of_vertices);
         }
 
         return true;

@@ -39,6 +39,8 @@ namespace grender
 
         gmath::axis_aligned_box<gcore::model_space> const& get_extent() const { return m_extent; }
 
+        void set_filepath(std::filesystem::path path) { m_bin_filepath = std::move(m_bin_filepath); };
+        
     private:
         enum vbo_type
         {
@@ -60,6 +62,7 @@ namespace grender
         GLuint m_number_of_element = 0;
         gmath::axis_aligned_box<gcore::model_space> m_extent;
         std::filesystem::path m_bin_filepath;
+
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
     };
 }

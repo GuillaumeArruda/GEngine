@@ -36,13 +36,14 @@ namespace gcore
 
         GSERIALIZER_DECLARE_FACTORY_BASE(resource);
 
+        void set_name(std::string name) { m_name = std::move(name); }
     private:
         virtual bool do_load_async() { return true; };
         virtual bool do_load_sync() = 0;
         virtual void do_unload() = 0;
 
-        loading_state m_loading_state = loading_state::pending_async;
         gtl::uuid m_uuid = gtl::uuid::generate();
         std::string m_name;
+        loading_state m_loading_state = loading_state::pending_async;
     };
 }
