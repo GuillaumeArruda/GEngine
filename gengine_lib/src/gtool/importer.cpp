@@ -32,16 +32,17 @@ namespace gtool
     {
         Assimp::Importer importer;
         aiScene const* scene = importer.ReadFile(model_file_path.string().c_str(),
-            aiProcess_Triangulate |
-            aiProcess_ImproveCacheLocality |
-            aiProcess_FixInfacingNormals |
-            aiProcess_OptimizeGraph |
-            aiProcess_OptimizeMeshes |
-            aiProcess_CalcTangentSpace |
-            aiProcess_JoinIdenticalVertices |
-            aiProcess_FindDegenerates |
-            aiProcess_GenBoundingBoxes |
-            aiProcess_FlipUVs);
+            static_cast<unsigned int>(
+                aiProcess_Triangulate |
+                aiProcess_ImproveCacheLocality |
+                aiProcess_FixInfacingNormals |
+                aiProcess_OptimizeGraph |
+                aiProcess_OptimizeMeshes |
+                aiProcess_CalcTangentSpace |
+                aiProcess_JoinIdenticalVertices |
+                aiProcess_FindDegenerates |
+                aiProcess_GenBoundingBoxes |
+                aiProcess_FlipUVs));
 
         if (!scene)
         {
@@ -166,8 +167,8 @@ namespace gtool
             bool const already_exists = std::filesystem::exists(mesh_file_path);
 
             std::filesystem::create_directories(folder_path);
-            gserializer::binary_file_writer writer(mesh_file_path.string().c_str());
-            writer.process("mesh_info", info);
+            gserializer::binary_file_writer bin_writer(mesh_file_path.string().c_str());
+            bin_writer.process("mesh_info", info);
 
             if (!already_exists)
             {
@@ -176,9 +177,9 @@ namespace gtool
                 mesh_res->set_filepath(mesh_file_path);
 
                 std::unique_ptr<gcore::resource> res = std::move(mesh_res);
-                gserializer::json_write_serializer writer;
-                writer.process("resource", res, gcore::resource::factory());
-                writer.write_to_file((folder_path.string() + res->get_uuid().to_string() + ".json").c_str());
+                gserializer::json_write_serializer json_writer;
+                json_writer.process("resource", res, gcore::resource::factory());
+                json_writer.write_to_file((folder_path.string() + res->get_uuid().to_string() + ".json").c_str());
             }
         }
     }

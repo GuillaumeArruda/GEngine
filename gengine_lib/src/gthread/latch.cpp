@@ -4,7 +4,7 @@
 
 namespace gthread
 {
-    void latch::count_down(int update)
+    void latch::count_down()
     {
         std::unique_lock lock(m_lock);
         if(--m_count == 0)

@@ -5,7 +5,6 @@
 
 #include "gcore/entity_registry.h"
 
-
 namespace gcore
 {
     entity entity_registry::create_entity() 

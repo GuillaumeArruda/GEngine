@@ -277,7 +277,7 @@ void gserializer::json_read_serializer::open_array(const char* name, std::size_t
     element_count = stack_top().Size();
 }
 
-void gserializer::json_read_serializer::close_array(const char* name)
+void gserializer::json_read_serializer::close_array(const char*)
 {
     m_stack.pop_back();
     m_array_itr_stack.pop_back();

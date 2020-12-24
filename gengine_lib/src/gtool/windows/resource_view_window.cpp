@@ -19,7 +19,7 @@
 
 namespace gtool
 {
-    void create_resource_widget::update(gcore::resource_library& library)
+    void create_resource_widget::update()
     {
         if (ImGui::CollapsingHeader("Create Resource"))
         {
@@ -101,7 +101,7 @@ namespace gtool
             gcore::resource_library& library = *world.get_resource_library();
 
             m_resource_viewer_widget.update(library);
-            m_create_resource_widget.update(library);
+            m_create_resource_widget.update();
             m_resource_browser.update(library, m_resource_viewer_widget);
 
             ImGui::End();

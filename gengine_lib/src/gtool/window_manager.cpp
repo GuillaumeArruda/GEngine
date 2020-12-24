@@ -72,7 +72,6 @@ namespace gtool
 		ImGui::NewFrame();
 
 		auto& systems = world.get_system_registry();
-		auto& registry = world.get_entity_registry();
 		auto lib = world.get_resource_library();
 
 		grender::render_system* render = systems.get_system<grender::render_system>();

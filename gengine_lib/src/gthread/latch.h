@@ -16,7 +16,7 @@ namespace gthread
         latch& operator=(latch const&) = delete;
         latch& operator=(latch&&) = delete;
 
-        void count_down(int update = 1);
+        void count_down();
         void count_down_and_wait();
         void wait();
 

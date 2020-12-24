@@ -121,15 +121,15 @@ namespace grender
         case type::dvec2:       gl_exec(glUniform2dv, location, 1, glm::value_ptr(m_dvec2)); break;
         case type::dvec3:       gl_exec(glUniform3dv, location, 1, glm::value_ptr(m_dvec3)); break;
         case type::dvec4:       gl_exec(glUniform4dv, location, 1, glm::value_ptr(m_dvec4)); break;
-        case type::mat22:       gl_exec(glUniformMatrix2fv,     location, 1, GL_FALSE, glm::value_ptr(m_mat22)); break;
-        case type::mat23:       gl_exec(glUniformMatrix2x3fv,   location, 1, GL_FALSE, glm::value_ptr(m_mat23)); break;
-        case type::mat24:       gl_exec(glUniformMatrix2x4fv,   location, 1, GL_FALSE, glm::value_ptr(m_mat24)); break;
-        case type::mat32:       gl_exec(glUniformMatrix3x2fv,   location, 1, GL_FALSE, glm::value_ptr(m_mat32)); break;
-        case type::mat33:       gl_exec(glUniformMatrix3fv,     location, 1, GL_FALSE, glm::value_ptr(m_mat33)); break;
-        case type::mat34:       gl_exec(glUniformMatrix3x4fv,   location, 1, GL_FALSE, glm::value_ptr(m_mat34)); break;
-        case type::mat42:       gl_exec(glUniformMatrix4x2fv,   location, 1, GL_FALSE, glm::value_ptr(m_mat42)); break;
-        case type::mat43:       gl_exec(glUniformMatrix4x3fv,   location, 1, GL_FALSE, glm::value_ptr(m_mat43)); break;
-        case type::mat44:       gl_exec(glUniformMatrix4fv,     location, 1, GL_FALSE, glm::value_ptr(m_mat44)); break;
+        case type::mat22:       gl_exec(glUniformMatrix2fv,     location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat22)); break;
+        case type::mat23:       gl_exec(glUniformMatrix2x3fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat23)); break;
+        case type::mat24:       gl_exec(glUniformMatrix2x4fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat24)); break;
+        case type::mat32:       gl_exec(glUniformMatrix3x2fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat32)); break;
+        case type::mat33:       gl_exec(glUniformMatrix3fv,     location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat33)); break;
+        case type::mat34:       gl_exec(glUniformMatrix3x4fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat34)); break;
+        case type::mat42:       gl_exec(glUniformMatrix4x2fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat42)); break;
+        case type::mat43:       gl_exec(glUniformMatrix4x3fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat43)); break;
+        case type::mat44:       gl_exec(glUniformMatrix4fv,     location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat44)); break;
         case type::sampler_1d:
         case type::sampler_2d:
         case type::sampler_3d:

@@ -1,15 +1,9 @@
-
-
-
 #include <IL/il.h>
 
 #include <FileWatch/FileWatch.h>
 
-
 #include "gcore/world.h"
-
 #include "gcore/resource_library.h"
-
 #include "gcore/systems/input_system.h"
 #include "gcore/systems/flying_controller_system.h"
 
@@ -29,7 +23,6 @@ int main()
         lib->scan_directory("data\\");
         gcore::world world(lib);
         auto& systems = world.get_system_registry();
-        auto& registry = world.get_entity_registry();
 
         systems.add_system(std::make_unique<grender::render_system>());
         systems.add_system(std::make_unique<gcore::input_system>());
@@ -42,7 +35,7 @@ int main()
         {
 
             filewatch::FileWatch<std::wstring> watcher(L"./",
-                [&](std::wstring const& path, filewatch::Event const& event)
+                [&](std::wstring const& path, filewatch::Event const&)
             {
                 lib->on_file_change(path);
             }

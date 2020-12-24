@@ -34,8 +34,6 @@ namespace gtool
                 return;
             }
 
-            gcore::entity_registry& registry = world.get_entity_registry();
-
             m_selected_entity_widget.update(world);
             m_entity_browser_widget.update(world, m_selected_entity_widget);
             m_create_entity_widget.update(world);
@@ -131,7 +129,7 @@ namespace gtool
             glm::ivec2 const size = render->get_target_size();
             float const aspect_ratio = size[0] / static_cast<float>(size[1]);
             auto camera_view = world.get_entity_registry().get_view<grender::camera_component, gcore::input_component, gcore::transform_component>();
-            for (auto& [entity, camera, input, camera_transform] : camera_view)
+            for (auto& [camera_entity, camera, input, camera_transform] : camera_view)
             {
                 if (input->m_keybord_state[gtl::to_underlying(gcore::keyboard_key::left_control)] == gcore::key_state::pressed
                     && input->m_mouse_key_state[gtl::to_underlying(gcore::mouse_key::button_1)] == gcore::key_state::pressed)

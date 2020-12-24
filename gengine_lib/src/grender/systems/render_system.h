@@ -24,7 +24,7 @@ namespace grender
 
     private:
         void render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry);
-        void render_lights(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry);
+        void render_lights(glm::mat4 const& camera_world_matrix, gcore::entity_registry& registry);
         void render_skybox(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry);
         
         void setup_geometry_pass();

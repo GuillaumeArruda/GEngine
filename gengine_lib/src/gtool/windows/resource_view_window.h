@@ -17,7 +17,7 @@ namespace gtool
 {
     struct create_resource_widget
     {
-        void update(gcore::resource_library& library);
+        void update();
     private:
         factory_combo_box<gcore::resource> m_resource_type;
         std::string m_folder_path = "data\\";

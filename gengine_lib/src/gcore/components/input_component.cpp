@@ -5,7 +5,7 @@ GSERIALIZER_DEFINE_SUBCLASS_FACTORY_REGISTRATION(gcore::input_component)
 
 namespace gcore
 {
-    void input_component::process(gserializer::serializer& serializer)
+    void input_component::process(gserializer::serializer&)
     {
     }
 }

@@ -37,7 +37,7 @@ namespace grender
                 glm::mat4 const view_matrix = glm::inverse(camera_transform->m_transform);
 
                 render_meshes(projection, view_matrix, registry);
-                render_lights(projection, view_matrix, registry);
+                render_lights(camera_transform->m_transform, registry);
                 render_skybox(projection, view_matrix, registry);
 
                 if (debug_render_system* debug = world.get_system_registry().get_system<debug_render_system>())
@@ -98,7 +98,7 @@ namespace grender
         }
     }
 
-    void render_system::render_lights(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry)
+    void render_system::render_lights(glm::mat4 const& camera_world_matrix, gcore::entity_registry& registry)
     {
         setup_lightning_pass();
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
@@ -114,7 +114,7 @@ namespace grender
                     light->m_main_program->activate();
                     light->m_main_state.set_uniform("world_matrix", transform->m_transform);
                     light->m_main_state.set_uniform("screen_size", glm::vec2(get_target_size()));
-                    light->m_main_state.set_uniform("camera_world_matrix", glm::inverse(view_matrix));
+                    light->m_main_state.set_uniform("camera_world_matrix", camera_world_matrix);
                     light->m_main_state.set_uniform("diffuse_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::diffuse), uniform_variant::type::sampler_2d });
                     light->m_main_state.set_uniform("position_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::position), uniform_variant::type::sampler_2d });
                     light->m_main_state.set_uniform("normal_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::normal), uniform_variant::type::sampler_2d });
@@ -149,7 +149,7 @@ namespace grender
     {
         m_frame_buffer.bind_for_geometry();
         gl_exec(glEnable, GL_DEPTH_TEST);
-        gl_exec(glDepthMask, GL_TRUE);
+        gl_exec(glDepthMask, static_cast<GLboolean>(GL_TRUE));
         gl_exec(glDepthFunc, GL_LESS);
         gl_exec(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }

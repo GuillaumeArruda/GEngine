@@ -7,6 +7,6 @@ namespace gcore
     {
         virtual ~system() {};
 
-        virtual void connect_to_world(gcore::world& world) {};
+        virtual void connect_to_world(gcore::world&) {};
     };
 }

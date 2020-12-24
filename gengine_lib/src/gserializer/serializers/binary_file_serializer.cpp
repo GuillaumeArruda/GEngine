@@ -95,7 +95,7 @@ namespace gserializer
         m_write_stream.open(file_path, std::ios::binary);
     }
     
-    void binary_file_writer::process(const char* name, std::string& value)
+    void binary_file_writer::process(const char*, std::string& value)
     {
         std::size_t size = value.size();
         process("", size);
@@ -149,7 +149,7 @@ namespace gserializer
         m_write_stream.write(value.string().data(), size);
     }
 
-    void binary_file_writer::open_array(const char* name, std::size_t& element_count)
+    void binary_file_writer::open_array(const char*, std::size_t& element_count)
     {
         process("",element_count);
     }

@@ -89,35 +89,35 @@ namespace grender
         if (m_vbo[vbo_type::position] != 0)
         {
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::position]);
-            gl_exec(glVertexAttribPointer, vbo_type::position, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+            gl_exec(glVertexAttribPointer, vbo_type::position, 3, GL_FLOAT, static_cast<GLboolean>(GL_FALSE), 0, nullptr);
             gl_exec(glEnableVertexAttribArray, vbo_type::position);
         }
 
         if (m_vbo[vbo_type::normal] != 0)
         {
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::normal]);
-            gl_exec(glVertexAttribPointer, vbo_type::normal, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+            gl_exec(glVertexAttribPointer, vbo_type::normal, 3, GL_FLOAT, static_cast<GLboolean>(GL_FALSE), 0, nullptr);
             gl_exec(glEnableVertexAttribArray, vbo_type::normal);
         }
 
         if (m_vbo[vbo_type::uv] != 0)
         {
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::uv]);
-            gl_exec(glVertexAttribPointer, vbo_type::uv, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+            gl_exec(glVertexAttribPointer, vbo_type::uv, 2, GL_FLOAT, static_cast<GLboolean>(GL_FALSE), 0, nullptr);
             gl_exec(glEnableVertexAttribArray, vbo_type::uv);
         }
 
         if (m_vbo[vbo_type::tangent] != 0)
         {
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::tangent]);
-            gl_exec(glVertexAttribPointer, vbo_type::tangent, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+            gl_exec(glVertexAttribPointer, vbo_type::tangent, 3, GL_FLOAT, static_cast<GLboolean>(GL_FALSE), 0, nullptr);
             gl_exec(glEnableVertexAttribArray, vbo_type::tangent);
         }
 
         if (m_vbo[vbo_type::bitangent] != 0)
         {
             gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_vbo[vbo_type::bitangent]);
-            gl_exec(glVertexAttribPointer, vbo_type::bitangent, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+            gl_exec(glVertexAttribPointer, vbo_type::bitangent, 3, GL_FLOAT, static_cast<GLboolean>(GL_FALSE), 0, nullptr);
             gl_exec(glEnableVertexAttribArray, vbo_type::bitangent);
         }
 

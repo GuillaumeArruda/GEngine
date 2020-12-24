@@ -15,11 +15,11 @@ namespace grender
         gl_exec(glGenBuffers, 2, m_line_vbos);
         // positions
         gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_line_vbos[0]);
-        gl_exec(glVertexAttribPointer, 0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+        gl_exec(glVertexAttribPointer, 0, 3, GL_FLOAT, static_cast<GLboolean>(GL_FALSE), 0, nullptr);
         gl_exec(glEnableVertexAttribArray, 0);
         //colors
         gl_exec(glBindBuffer, GL_ARRAY_BUFFER, m_line_vbos[1]);
-        gl_exec(glVertexAttribPointer, 1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+        gl_exec(glVertexAttribPointer, 1, 3, GL_FLOAT, static_cast<GLboolean>(GL_FALSE), 0, nullptr);
         gl_exec(glEnableVertexAttribArray, 1);
 
         gl_exec(glBindBuffer, GL_ARRAY_BUFFER, 0);

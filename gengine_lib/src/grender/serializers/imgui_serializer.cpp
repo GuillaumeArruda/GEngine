@@ -142,7 +142,7 @@ namespace grender
         m_array_element_stack.push_back(element_count);
     }
 
-    void imgui_serializer::close_array(const char* name)
+    void imgui_serializer::close_array(const char*)
     {
         if (should_display())
         {

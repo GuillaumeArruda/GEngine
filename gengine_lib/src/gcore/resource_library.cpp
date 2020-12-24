@@ -149,7 +149,7 @@ namespace gcore
     void resource_library::update()
     {
         {
-            std::unique_lock lock(m_file_change_lock);
+            std::unique_lock file_lock(m_file_change_lock);
             for (auto const& path : m_file_changes)
             {
                 if (path.extension() == std::filesystem::path(".json"))
@@ -172,14 +172,14 @@ namespace gcore
                     }
                 }
 
-                if (auto const it = m_file_dependant_map.find(std::filesystem::hash_value(path));
-                    it != m_file_dependant_map.end())
+                if (auto const file_it = m_file_dependant_map.find(std::filesystem::hash_value(path));
+                    file_it != m_file_dependant_map.end())
                 {
-                    for (auto const& uuid : it->second)
+                    for (auto const& uuid : file_it->second)
                     {
                         std::unique_lock lock(m_lock);
-                        auto it = m_proxy_map.find(uuid);
-                        if (it != m_proxy_map.end())
+                        if (auto proxy_it = m_proxy_map.find(uuid); 
+                            proxy_it != m_proxy_map.end())
                         {
                             reload_resource(uuid);
                         }
@@ -270,7 +270,7 @@ namespace gcore
         }
 
         //small workaround to go around copy requirement of std::function and the inability to go from shared_ptr to unique_ptr
-        m_jobs.submit([res = std::shared_ptr<resource>(res_to_load.release(), [](resource* res) {}), this]() mutable
+        m_jobs.submit([res = std::shared_ptr<resource>(res_to_load.release(), [](resource*) {}), this]() mutable
             {
                 assert(res.use_count() == 1);
                 std::unique_ptr<resource> real_owner = std::unique_ptr<resource>(res.get());
@@ -293,15 +293,15 @@ namespace gcore
             {
                 load_resource(std::move(new_resource));
 
-                auto uuid_it = m_uuid_dependant_map.find(uuid);
-                if (uuid_it != m_uuid_dependant_map.end())
+                if (auto uuid_it = m_uuid_dependant_map.find(uuid); 
+                    uuid_it != m_uuid_dependant_map.end())
                 {
-                    for (auto const& uuid : uuid_it->second)
+                    for (auto const& dependant_uuid : uuid_it->second)
                     {
-                        auto it = m_proxy_map.find(uuid);
+                        auto it = m_proxy_map.find(dependant_uuid);
                         if (it != m_proxy_map.end())
                         {
-                            reload_resource(uuid);
+                            reload_resource(dependant_uuid);
                         }
                     }
                 }
