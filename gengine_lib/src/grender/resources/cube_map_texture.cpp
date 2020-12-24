@@ -1,15 +1,14 @@
 #include "stdafx.h"
 
-
-#undef _UNICODE
-#include <IL\il.h>
-#define _UNICODE
+#include <fmt/format.h>
 
 #include "grender/resources/cube_map_texture.h"
 
 #include "gserializer/serializer.h"
+#include "gserializer/serializers/binary_file_serializer.h"
 
 #include "grender/utils.h"
+#include "grender/dds_image_data.h"
 
 GSERIALIZER_DEFINE_SUBCLASS_FACTORY_REGISTRATION(grender::cube_map_texture);
 
@@ -40,43 +39,18 @@ namespace grender
 
         for (int i = 0; i < 6; i++)
         {
-            ILuint imageId = ilGenImage();
+            dds_image_data data;
+            gserializer::binary_file_reader reader(m_texture_files[i].string().data());
+            data.process(reader);
 
-            ilBindImage(imageId);
-            ILboolean success = ilLoadImage(m_texture_files[i].string().data());
-            if (!success)
+            if (!data.is_valid())
             {
-                ilDeleteImage(imageId);
                 gl_exec(glDeleteTextures, 1, &m_texture_id);
-                m_texture_id = 0;
-                std::cerr << "Error while loading the texture file: " << m_texture_files[i] << std::endl;
+                std::cerr << fmt::format("Error while loading file: {}. It is not a valid .dds file.\n", m_texture_files[i].string());
                 return false;
             }
 
-            int const width = ilGetInteger(IL_IMAGE_WIDTH);
-            int const height = ilGetInteger(IL_IMAGE_HEIGHT);
-            int const bytePerPixel = ilGetInteger(IL_IMAGE_BPP);
-            GLuint format;
-            switch (bytePerPixel)
-            {
-            case 1:
-                format = GL_R;
-                break;
-            case 2:
-                format = GL_RG;
-                break;
-            case 3:
-                format = GL_RGB;
-                break;
-            case 4:
-                format = GL_RGBA;
-                break;
-            default:
-                format = GL_RGBA;
-                break;
-            }
-            gl_exec(glTexImage2D, target[i], 0, format, width, height, 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
-            ilDeleteImage(imageId);
+            gl_exec(glCompressedTexImage2D, target[i], 0, data.get_opengl_format(), data.m_header.m_width, data.m_header.m_height, 0, static_cast<GLsizei>(data.m_data.size()), data.m_data.data());
         }
         gl_exec(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         gl_exec(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

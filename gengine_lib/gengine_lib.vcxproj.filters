@@ -246,6 +246,9 @@
     <ClInclude Include="src\gtl\callbacks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\grender\dds_image_data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -399,6 +402,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gphys\motion_state.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\dds_image_data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

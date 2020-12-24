@@ -32,6 +32,8 @@ namespace gserializer
         bool open_array_element(const char* name) override;
         void close_array_element(const char* name) override;
 
+        void read_data(std::size_t number_of_bytes, char* destination);
+
         std::vector<std::size_t> m_array_element_stack;
         std::ifstream m_read_stream;
     };

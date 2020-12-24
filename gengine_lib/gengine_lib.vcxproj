@@ -44,6 +44,7 @@
     <ClInclude Include="src\grender\components\camera_component.h" />
     <ClInclude Include="src\grender\components\light_component.h" />
     <ClInclude Include="src\grender\components\skybox_component.h" />
+    <ClInclude Include="src\grender\dds_image_data.h" />
     <ClInclude Include="src\grender\frame_buffer.h" />
     <ClInclude Include="src\grender\render_target.h" />
     <ClInclude Include="src\grender\resources\cube_map_texture.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="src\grender\components\camera_component.cpp" />
     <ClCompile Include="src\grender\components\light_component.cpp" />
     <ClCompile Include="src\grender\components\skybox_component.cpp" />
+    <ClCompile Include="src\grender\dds_image_data.cpp" />
     <ClCompile Include="src\grender\frame_buffer.cpp" />
     <ClCompile Include="src\grender\render_target.cpp" />
     <ClCompile Include="src\grender\resources\cube_map_texture.cpp" />

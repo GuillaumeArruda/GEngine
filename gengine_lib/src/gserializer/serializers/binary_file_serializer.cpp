@@ -90,6 +90,11 @@ namespace gserializer
     {
     }
 
+    void binary_file_reader::read_data(std::size_t number_of_bytes, char* destination)
+    {
+        m_read_stream.read(destination, number_of_bytes);
+    }
+
     binary_file_writer::binary_file_writer(const char* file_path)
     {
         m_write_stream.open(file_path, std::ios::binary);
