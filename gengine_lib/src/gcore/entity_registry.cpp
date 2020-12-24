@@ -25,6 +25,7 @@ namespace gcore
                     remove_component_from_map(entity, component_id(typeid(*component.get())));
                 }
             }
+            std::vector<std::unique_ptr<component>> holder = std::move(it->second);
             m_entity_to_component.erase(it);
             warn_group_of_component_removal(entity);
         }
@@ -38,10 +39,16 @@ namespace gcore
     void entity_registry::remove_component(entity entity, component_id component_type)
     {
         remove_component_from_map(entity, component_type);
+        std::unique_ptr<component> holder;
         if (auto it = m_entity_to_component.find(entity);
             it != m_entity_to_component.end())
         {
-            it->second.erase(std::find_if(it->second.begin(), it->second.end(), [&](std::unique_ptr<component> const& comp) { return component_id(typeid(*comp.get())) == component_type; }));
+            auto component_it = std::find_if(it->second.begin(), it->second.end(), [&](std::unique_ptr<component> const& comp) { return component_id(typeid(*comp.get())) == component_type; });
+            if (component_it != it->second.end())
+            {
+                holder = std::move(*component_it);
+                it->second.erase(component_it);
+            }
         }
         warn_group_of_component_removal(entity);
 
@@ -128,7 +135,11 @@ namespace gcore
     void entity_registry::rebuild_component_type_map()
     {
         m_component_type_map.clear();
-        m_group_map.clear();
+
+        for (auto& group : m_group_map)
+        {
+            group.second->clear();
+        }
 
         for (auto& entity : m_entity_to_component)
         {
@@ -151,9 +162,9 @@ namespace gcore
                     return true;
                 }
             ), entity.second.end());
-            for (auto& comp : entity.second)
+            for (auto& group : m_group_map)
             {
-               
+                group.second->on_component_added(*this, entity.first);
             }
         }
     }
@@ -162,7 +173,10 @@ namespace gcore
     {
         std::unique_lock lock(m_lock);
         m_component_type_map.clear();
-        m_group_map.clear();
+        for (auto& group : m_group_map)
+        {
+            group.second->clear();
+        }
         m_entity_to_component.clear();
     }
 

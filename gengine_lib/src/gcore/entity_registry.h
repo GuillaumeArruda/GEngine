@@ -10,6 +10,7 @@
 #include "gtl/span.h"
 #include "gtl/cast.h"
 #include "gtl/uuid.h"
+#include "gtl/callbacks.h"
 
 #include "gcore/component.h"
 
@@ -17,7 +18,6 @@ namespace gserializer
 {
     struct serializer;
 }
-
 
 namespace gcore
 {
@@ -125,6 +125,7 @@ namespace gcore
             virtual void on_component_added(entity_registry const& registry, entity entity) = 0;
             virtual void on_component_removed(entity_registry const& registry, entity entity) = 0;
             virtual gtl::span<component_id const> get_component_types() const noexcept = 0;
+            virtual void clear() = 0;
         };
 
         template<class ... ComponentTypes>
@@ -150,19 +151,20 @@ namespace gcore
     private:
         friend view;
         friend entity_registry;
-        
+        using tuple_type = std::tuple<entity, typename details::component_type_info<ComponentTypes>::component_type*...>;
         void on_component_added(entity_registry const& registry, entity new_entity) override
         {
             if (registry.has_components(new_entity, m_component_ids))
             {
                 auto const it = std::lower_bound(m_entities_components.begin(), m_entities_components.end(), new_entity,
-                    [](std::tuple<entity, typename details::component_type_info<ComponentTypes>::component_type*...> const& tuple, entity const& to_find) {
+                    [](tuple_type const& tuple, entity const& to_find) {
                     return to_find < std::get<entity>(tuple);
                 });
 
                 if (it == m_entities_components.end() || std::get<entity>(*it) != new_entity)
                 {
-                     m_entities_components.insert(it, get_components_entity_tuple(registry, new_entity));
+                     auto new_value = m_entities_components.insert(it, get_components_entity_tuple(registry, new_entity));
+                     m_on_added(*new_value);
                 }
                 else
                 {
@@ -174,7 +176,7 @@ namespace gcore
         void on_component_removed(entity_registry const& registry, entity entity_removed) override
         {
             auto const it = std::lower_bound(m_entities_components.begin(), m_entities_components.end(), entity_removed,
-                [](std::tuple<entity, typename details::component_type_info<ComponentTypes>::component_type*...> const& tuple, entity const& to_find) {
+                [](tuple_type  const& tuple, entity const& to_find) {
                 return to_find < std::get<entity>(tuple);
             });
 
@@ -182,6 +184,7 @@ namespace gcore
             {
                 if (!registry.has_components(entity_removed, m_component_ids) || !registry.has_any_component(entity_removed))
                 {
+                    m_on_removed(*it);
                     m_entities_components.erase(it);
                 }
                 else
@@ -190,13 +193,24 @@ namespace gcore
                 }
             }
         }
+
+        void clear()
+        {
+            for (auto& tuple : m_entities_components)
+            {
+                m_on_removed(tuple);
+            }
+            m_entities_components.clear();
+        }
+
         gtl::span<component_id const> get_component_types() const noexcept { return m_component_ids; }
 
         component_id const m_component_ids[sizeof...(ComponentTypes)] = { details::component_type_info<ComponentTypes>::has_type_id... };;
-        std::vector<std::tuple<entity, typename details::component_type_info<ComponentTypes>::component_type*...>> m_entities_components;
-
+        std::vector<tuple_type > m_entities_components;
+        gtl::callbacks<void (tuple_type)> m_on_added;
+        gtl::callbacks<void (tuple_type)> m_on_removed;
     private:
-        std::tuple<entity, typename details::component_type_info<ComponentTypes>::component_type*...> get_components_entity_tuple(entity_registry const& registry, entity ent) const
+        tuple_type get_components_entity_tuple(entity_registry const& registry, entity ent) const
         {
             if constexpr (sizeof...(ComponentTypes) == 1)
             {
@@ -214,8 +228,8 @@ namespace gcore
     struct entity_registry::view
     {
         using group_type = group_impl<ComponentTypes...>;
-        using iterator = std::tuple<typename details::component_type_info<ComponentTypes>::component_type*...>*;
-        using const_iterator = std::tuple<typename details::component_type_info<ComponentTypes>::component_type...> const*;
+        using iterator = typename group_type::tuple_type*;
+        using const_iterator = typename group_type::tuple_type const*;
 
         view(group_type& group) : m_group(group) {}
 
@@ -224,6 +238,29 @@ namespace gcore
 
         auto end() const noexcept { return m_group.m_entities_components.end(); }
         auto cend() const noexcept { return m_group.m_entities_components.cend(); }
+
+        template<class CallbackTypeObject>
+        gtl::callback_id add_on_added_callback(CallbackTypeObject&& callback)
+        {
+            return m_group.m_on_added.add_callback(std::forward<CallbackTypeObject>(callback));
+        }
+
+        template<class CallbackTypeObject>
+        gtl::callback_id add_on_removed_callback(CallbackTypeObject&& callback)
+        {
+            return m_group.m_on_removed.add_callback(std::forward<CallbackTypeObject>(callback));
+        }
+
+        void remove_on_added_callback(gtl::callback_id id)
+        {
+            m_group.m_on_added.remove_callback(id);
+        }
+
+        void remove_on_removed_callback(gtl::callback_id id)
+        {
+            m_group.m_on_removed.remove_callback(id);
+        }
+
 
     private:
         group_type& m_group;

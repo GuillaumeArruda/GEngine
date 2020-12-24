@@ -13,6 +13,7 @@
 #include "gcore/components/input_component.h"
 #include "gcore/components/transform_component.h"
 #include "gcore/components/name_component.h"
+#include "gcore/serializers/dependency_gatherer_serializer.h"
 #include "gcore/world.h"
 
 #include "grender/serializers/imgui_serializer.h"
@@ -102,8 +103,19 @@ namespace gtool
             ImGui::SameLine();
             if (ImGui::Button("Load"))
             {
-                gserializer::json_read_serializer json_read(m_filepath.c_str());
+                gcore::dependency_gatherer_serializer gatherer;
+                gatherer.process("", world.get_entity_registry());
+                gcore::resource_library& lib = *world.get_resource_library();
+                std::vector<gcore::resource_handle<gcore::resource>> resources; // Keep resource alive until end of serialization to avoid reloading everything
+                for (auto const& uuid : gatherer.m_uuids)
+                {
+                    resources.push_back(lib.get_resource<gcore::resource>(uuid));
+                }
+                
                 world.get_entity_registry().clear();
+                
+                
+                gserializer::json_read_serializer json_read(m_filepath.c_str());
                 json_read.set_in_context(std::ref(*world.get_resource_library()));
                 json_read.process("entity_registry", world.get_entity_registry());
                 world.get_entity_registry().rebuild_component_type_map();

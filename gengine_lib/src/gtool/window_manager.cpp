@@ -15,6 +15,8 @@
 #include "grender/systems/render_system.h"
 #include "grender/utils.h"
 
+#include "gphys/systems/physic_systems.h"
+
 #include "gtool/window.h"
 #include "gtool/windows/entity_view_window.h"
 #include "gtool/windows/resource_view_window.h"
@@ -76,10 +78,12 @@ namespace gtool
 		grender::render_system* render = systems.get_system<grender::render_system>();
 		gcore::input_system* input_system = systems.get_system<gcore::input_system>();
 		gcore::flying_controller_system* controller_system = systems.get_system<gcore::flying_controller_system>();
+		gphys::physic_system* phys_system = systems.get_system<gphys::physic_system>();
 
 		input_system->update(world);
 		controller_system->update(world);
-		render->render(registry);
+		phys_system->update(world);
+		render->render(world);
 		lib->update();
 
 		ImGuiViewport* viewport = ImGui::GetMainViewport();

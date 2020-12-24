@@ -6,7 +6,7 @@
 
 #include "gcore/components/transform_component.h"
 #include "gcore/components/extent_component.h"
-#include "gcore/entity_registry.h"
+#include "gcore/world.h"
 
 
 #include "grender/components/camera_component.h"
@@ -16,12 +16,15 @@
 #include "grender/resources/mesh_resource.h"
 #include "grender/resources/program.h"
 #include "grender/utils.h"
+#include "grender/systems/debug_render_system.h"
 
 namespace grender
 {
-    void render_system::render(gcore::entity_registry& registry)
+    void render_system::render(gcore::world& world)
     {
+
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
+        gcore::entity_registry& registry = world.get_entity_registry();
         auto camera_view = registry.get_view<gcore::transform_component, camera_component>();       
         glm::ivec2 const size = get_target_size();
         float const aspect_ratio = size[0] / static_cast<float>(size[1]);
@@ -36,8 +39,16 @@ namespace grender
                 render_meshes(projection, view_matrix, registry);
                 render_lights(projection, view_matrix, registry);
                 render_skybox(projection, view_matrix, registry);
+
+                if (debug_render_system* debug = world.get_system_registry().get_system<debug_render_system>())
+                {
+                    debug->draw_primitives(projection, view_matrix);
+                }
             }
         }
+
+
+
         m_frame_buffer.unbind();
     }
 

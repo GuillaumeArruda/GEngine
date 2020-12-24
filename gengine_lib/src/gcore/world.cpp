@@ -5,5 +5,8 @@
 
 namespace gcore
 {
-
+    void world::initialize_systems()
+    {
+        m_system_registry.connect_systems_to_world(*this);
+    }
 }

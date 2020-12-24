@@ -1,0 +1,23 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::program",
+        "data": {
+            "uuid": "5fe3cac284fd2c73e312df4c0afd7e5c",
+            "name": "Primitive_program",
+            "shaders": [                
+				{
+                    "key": "shader::type::vertex",
+                    "data": "data\\programs\\vertex\\primitive_vertex.glsl"
+                },
+                {
+                    "key": "shader::type::fragment",
+                    "data": "data\\programs\\fragment\\primitive_fragment.glsl"
+                }
+			],
+            "default uniforms": {
+                "uniforms": []
+            }
+        }
+    }
+}

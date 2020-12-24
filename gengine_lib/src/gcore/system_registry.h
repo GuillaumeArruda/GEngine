@@ -9,6 +9,8 @@
 
 namespace gcore
 {
+    struct world;
+
     using system_id = std::type_index;
     struct system_registry
     {
@@ -40,6 +42,9 @@ namespace gcore
                 return gtl::cast<SystemType const *>(it->second.get());
             return nullptr;
         }
+
+        void connect_systems_to_world(gcore::world& world);
+
     private:
         std::unordered_map<system_id, std::unique_ptr<system>> m_system_map;
     };

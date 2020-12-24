@@ -8,6 +8,7 @@
 
 namespace gcore
 {
+    struct world;
     struct entity_registry;
 }
 
@@ -15,7 +16,7 @@ namespace grender
 {
     struct render_system : gcore::system
     {
-        void render(gcore::entity_registry& registry);
+        void render(gcore::world& registry);
 
         void set_target_size(std::size_t width, std::size_t height);
         glm::ivec2 get_target_size() const;

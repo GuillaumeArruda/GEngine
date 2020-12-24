@@ -14,6 +14,9 @@
 #include "gcore/systems/flying_controller_system.h"
 
 #include "grender/systems/render_system.h"
+#include "grender/systems/debug_render_system.h"
+
+#include "gphys/systems/physic_systems.h"
 
 #include "gtool/window_manager.h"
 
@@ -31,11 +34,11 @@ int main()
         systems.add_system(std::make_unique<grender::render_system>());
         systems.add_system(std::make_unique<gcore::input_system>());
         systems.add_system(std::make_unique<gcore::flying_controller_system>());
+        systems.add_system(std::make_unique<gphys::physic_system>());
+        systems.add_system(std::make_unique<grender::debug_render_system>());
+        systems.get_system<grender::debug_render_system>()->init_resources(*lib);
 
-        grender::render_system* render = systems.get_system<grender::render_system>();
-        gcore::input_system* input_system = systems.get_system<gcore::input_system>();
-        gcore::flying_controller_system* controller_system = systems.get_system<gcore::flying_controller_system>();
-
+        world.initialize_systems();
         {
 
             filewatch::FileWatch<std::wstring> watcher(L"./",
