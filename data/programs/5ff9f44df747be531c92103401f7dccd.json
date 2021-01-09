@@ -1,0 +1,23 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::program",
+        "data": {
+            "uuid": "5ff9f44df747be531c92103401f7dccd",
+            "name": "directional_light_program",
+            "shaders": [
+				{
+                    "key": "shader::type::vertex",
+                    "data": "data\\programs\\vertex\\fullscreen_quad.glsl"
+                },
+				{
+					"key" : "shader::type::fragment",
+					"data": "data\\programs\\fragment\\directional_light_fragment.glsl"
+				}
+			],
+            "default uniforms": {
+                "uniforms": []
+            }
+        }
+    }
+}
