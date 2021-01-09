@@ -48,7 +48,7 @@ namespace gphys
             {
                 btCollisionShape* collisionShape = physic_component->m_phys_shape->get_shape();
                 btVector3 fall_inertia = btVector3(0.f, 0.f, 0.f);
-                collisionShape->calculateLocalInertia(1.f, fall_inertia);
+                collisionShape->calculateLocalInertia(physic_component->m_mass, fall_inertia);
 
                 btRigidBody::btRigidBodyConstructionInfo constructionInfo(physic_component->m_mass, &physic_component->m_motion_state, collisionShape, fall_inertia);
                 physic_component->m_motion_state.m_transform = transform;
