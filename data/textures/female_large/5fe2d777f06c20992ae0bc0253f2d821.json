@@ -1,7 +1,7 @@
 {
     "resource": {
         "is_valid": true,
-        "type_name": "grender::texture",
+        "type_name": "grender::texture_2d",
         "data": {
             "uuid": "5fe2d777f06c20992ae0bc0253f2d821",
             "name": "female_large_head_rough",

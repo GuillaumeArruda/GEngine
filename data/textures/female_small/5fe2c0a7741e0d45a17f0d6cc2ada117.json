@@ -1,7 +1,7 @@
 {
     "resource": {
         "is_valid": true,
-        "type_name": "grender::texture",
+        "type_name": "grender::texture_2d",
         "data": {
             "uuid": "5fe2c0a7741e0d45a17f0d6cc2ada117",
             "name": "female_small_hair_norm",

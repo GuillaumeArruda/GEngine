@@ -1,7 +1,7 @@
 {
     "resource": {
         "is_valid": true,
-        "type_name": "grender::texture",
+        "type_name": "grender::texture_2d",
         "data": {
             "uuid": "5fe2d2f3abb263948e2787f8edff5fc0",
             "name": "female_large_cornea_norm",

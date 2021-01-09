@@ -20,7 +20,7 @@
 #include "gcore/resource_library.h"
 
 #include "grender/resources/mesh_resource.h"
-#include "grender/resources/texture.h"
+#include "grender/resources/texture_2d.h"
 
 #include "gtl/scope_timer.h"
 
@@ -85,7 +85,7 @@ namespace gtool
         ilDeleteImage(imageId);
         if (!already_exist)
         {
-            auto texture_res = std::make_unique<grender::texture>();
+            auto texture_res = std::make_unique<grender::texture_2d>();
             texture_res->set_name(base_name + "_" + export_path.stem().string());
             texture_res->set_filepath(export_path);
 

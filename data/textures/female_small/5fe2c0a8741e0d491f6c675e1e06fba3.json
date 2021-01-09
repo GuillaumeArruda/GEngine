@@ -1,7 +1,7 @@
 {
     "resource": {
         "is_valid": true,
-        "type_name": "grender::texture",
+        "type_name": "grender::texture_2d",
         "data": {
             "uuid": "5fe2c0a8741e0d491f6c675e1e06fba3",
             "name": "female_small_teeth_norm",

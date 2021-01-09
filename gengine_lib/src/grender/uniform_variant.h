@@ -6,6 +6,7 @@
 #include "gtl/uuid.h" 
 
 #include "gcore/resource_handle.h"
+#include "grender/resources/texture.h"
 
 namespace gcore
 {
@@ -112,10 +113,12 @@ namespace grender
         void move(uniform_variant&& move);
         void copy(uniform_variant const& copy);
 
+        GLint get_gl_texture_type() const;
+
         struct texture_info
         {
             gtl::uuid m_texture_uuid;
-            gcore::resource_handle<gcore::resource> m_texture;
+            gcore::resource_handle<texture> m_texture;
             GLuint m_texture_id = 0;
         };
 

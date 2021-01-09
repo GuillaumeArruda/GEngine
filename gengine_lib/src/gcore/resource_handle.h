@@ -82,7 +82,7 @@ namespace gcore
         ResourceType const* get() const { return m_proxy ? dynamic_cast<ResourceType const*>(m_proxy->get_target()) : nullptr; }
 
         ResourceType* operator->() { return get(); }
-        ResourceType const operator->() const { return get(); }
+        ResourceType const* operator->() const { return get(); }
 
         ResourceType& operator*() { return *get(); }
         ResourceType const& operator*() const { return *get(); }

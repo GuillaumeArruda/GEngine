@@ -133,50 +133,31 @@ namespace grender
         case type::sampler_1d:
         case type::sampler_2d:
         case type::sampler_3d:
-        {
-            if (m_texture_info.m_texture_id == 0)
-            {
-                if (m_texture_info.m_texture.is_loaded())
-                {
-                    if (texture const* tex = m_texture_info.m_texture.as<texture>())
-                    {
-                        gl_exec(glActiveTexture, GL_TEXTURE0 + location);
-                        gl_exec(glBindTexture, GL_TEXTURE_2D, tex->get_id());
-                        gl_exec(glUniform1i, location, location);
-                    }
-                }
-            }
-            else
-            {
-                gl_exec(glActiveTexture, GL_TEXTURE0 + location);
-                gl_exec(glBindTexture, GL_TEXTURE_2D, m_texture_info.m_texture_id);
-                gl_exec(glUniform1i, location, location);
-            }
-            break;
-        }
         case type::sampler_cube:
         {
             if (m_texture_info.m_texture_id == 0)
             {
                 if (m_texture_info.m_texture.is_loaded())
                 {
-                    if (cube_map_texture const* tex = m_texture_info.m_texture.as<cube_map_texture>())
-                    {
-                        gl_exec(glActiveTexture, GL_TEXTURE0 + location);
-                        gl_exec(glBindTexture, GL_TEXTURE_CUBE_MAP, tex->get_id());
-                        gl_exec(glUniform1i, location, location);
-                    }
+                    gl_exec(glActiveTexture, GL_TEXTURE0 + location);
+                    gl_exec(glBindTexture, get_gl_texture_type(), m_texture_info.m_texture->get_id());
+                    gl_exec(glUniform1i, location, location);
+                }
+                else
+                {
+                    gl_exec(glActiveTexture, GL_TEXTURE0 + location);
+                    gl_exec(glBindTexture, get_gl_texture_type(), 0);
+                    gl_exec(glUniform1i, location, location);
                 }
             }
             else
             {
                 gl_exec(glActiveTexture, GL_TEXTURE0 + location);
-                gl_exec(glBindTexture, GL_TEXTURE_CUBE_MAP, m_texture_info.m_texture_id);
+                gl_exec(glBindTexture, get_gl_texture_type(), m_texture_info.m_texture_id);
                 gl_exec(glUniform1i, location, location);
             }
             break;
         }
-        
         case type::invalid:     break;
         }
     }
@@ -366,6 +347,18 @@ namespace grender
             new((void*)&m_texture_info) texture_info(copy.m_texture_info); break;
         case type::invalid:     break;
         }
+    }
+    GLint uniform_variant::get_gl_texture_type() const
+    {
+        switch (m_type)
+        {
+        case uniform_variant::type::sampler_1d: return GL_TEXTURE_1D;
+        case uniform_variant::type::sampler_2d: return GL_TEXTURE_2D;
+        case uniform_variant::type::sampler_3d: return GL_TEXTURE_3D;
+        case uniform_variant::type::sampler_cube: return GL_TEXTURE_CUBE_MAP;
+        }
+        assert(false);
+        return GL_SAMPLER_1D;
     }
     uniform_variant::type get_type_from_gl_enum(GLenum enum_type)
     {

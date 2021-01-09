@@ -1,7 +1,7 @@
 {
     "resource": {
         "is_valid": true,
-        "type_name": "grender::texture",
+        "type_name": "grender::texture_2d",
         "data": {
             "uuid": "5fe2d2f4abb26397eef54b6a2c7b66f4",
             "name": "female_large_hair_albedo",

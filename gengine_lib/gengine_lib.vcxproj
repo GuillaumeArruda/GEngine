@@ -49,6 +49,7 @@
     <ClInclude Include="src\grender\dds_image_data.h" />
     <ClInclude Include="src\grender\frame_buffer.h" />
     <ClInclude Include="src\grender\render_target.h" />
+    <ClInclude Include="src\grender\resources\texture_2d.h" />
     <ClInclude Include="src\grender\resources\cube_map_texture.h" />
     <ClInclude Include="src\grender\resources\texture.h" />
     <ClInclude Include="src\grender\systems\debug_render_system.h" />
@@ -130,6 +131,7 @@
     <ClCompile Include="src\grender\render_target.cpp" />
     <ClCompile Include="src\grender\resources\cube_map_texture.cpp" />
     <ClCompile Include="src\grender\resources\texture.cpp" />
+    <ClCompile Include="src\grender\resources\texture_2d.cpp" />
     <ClCompile Include="src\grender\systems\debug_render_system.cpp" />
     <ClCompile Include="src\grender\uniform_variant.cpp" />
     <ClCompile Include="src\gserializer\serializers\binary_file_serializer.cpp" />
