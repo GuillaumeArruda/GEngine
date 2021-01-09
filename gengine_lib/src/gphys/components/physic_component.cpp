@@ -13,6 +13,7 @@ namespace gphys
     void physic_component::process(gserializer::serializer& serializer)
     {
         serializer.process("phys_shape", m_phys_shape_uuid, m_phys_shape);
+        serializer.process("mass", m_mass);
     }
 
     physic_component::~physic_component() = default;

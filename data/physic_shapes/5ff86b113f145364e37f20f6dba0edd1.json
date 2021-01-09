@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "gphys::heightfield_shape",
+      "data": {
+        "uuid": "5ff86b113f145364e37f20f6dba0edd1",
+        "name": "terrain_phys_heightfield",
+        "heightfield_path": "data\\textures\\heightmap_terrain\\heightmap.dds"
+      }
+    }
+}

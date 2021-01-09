@@ -1,4 +1,5 @@
 #include <IL/il.h>
+#include <IL/ilu.h>
 
 #include <FileWatch/FileWatch.h>
 
@@ -18,6 +19,7 @@ int main()
 {
     {
         ilInit();
+        iluInit();
         gtool::window_manager tool_window_manager;
         std::shared_ptr<gcore::resource_library> lib = std::make_shared<gcore::resource_library>(tool_window_manager.get_window());
         lib->scan_directory("data\\");

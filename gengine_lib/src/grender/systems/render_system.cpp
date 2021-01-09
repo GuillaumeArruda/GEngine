@@ -152,6 +152,7 @@ namespace grender
         gl_exec(glDepthMask, static_cast<GLboolean>(GL_TRUE));
         gl_exec(glDepthFunc, GL_LESS);
         gl_exec(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
     }
 
     void render_system::setup_lightning_pass()

@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "5ff320d718c5fb565ad58318467ac0b9",
+            "name": "terrain_Plane",
+            "bin_file_path": "data\\meshes\\terrain\\terrain_Plane.meshbin",
+            "primitive_type": "mesh_resource::primitive_type::patch"
+        }
+    }
+}

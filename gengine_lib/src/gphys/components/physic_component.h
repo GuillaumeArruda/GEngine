@@ -5,7 +5,7 @@
 #include "gcore/component.h"
 #include "gcore/resource_handle.h"
 
-#include "gphys/resources/mesh_shape.h"
+#include "gphys/resources/collision_shape.h"
 #include "gphys/motion_state.h"
 
 class btRigidBody;
@@ -26,9 +26,11 @@ namespace gphys
         physic_component operator=(physic_component const&) = delete;
 
         gtl::uuid m_phys_shape_uuid;
-        gcore::resource_handle<mesh_shape> m_phys_shape;
+        gcore::resource_handle<collision_shape> m_phys_shape;
         std::unique_ptr<btRigidBody> m_rigid_body;
         motion_state m_motion_state;
+        float m_mass = 1.f;
+
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
     };
 }

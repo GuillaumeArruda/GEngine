@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture",
+        "data": {
+            "uuid": "5ff35cd06c345a56ccabd704812fac61",
+            "name": "heightmap_terrain_heightmap",
+            "file": "data\\textures\\heightmap_terrain\\heightmap.dds"
+        }
+    }
+}

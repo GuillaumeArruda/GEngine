@@ -31,9 +31,11 @@ namespace gtool
     void import_model_file(std::string const& base_name, std::filesystem::path const& model_file_path, std::filesystem::path const& export_to_path, float scale_modifier)
     {
         Assimp::Importer importer;
+        importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_POINT | aiPrimitiveType_LINE);
         aiScene const* scene = importer.ReadFile(model_file_path.string().c_str(),
             static_cast<unsigned int>(
                 aiProcess_Triangulate |
+                aiProcess_SortByPType |
                 aiProcess_ImproveCacheLocality |
                 aiProcess_FixInfacingNormals |
                 aiProcess_OptimizeGraph |

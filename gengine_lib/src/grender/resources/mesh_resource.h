@@ -34,6 +34,12 @@ namespace grender
 
     struct mesh_resource : gcore::resource
     {
+        enum class primitive_type
+        {
+            triangle,
+            patch,
+        };
+
         void process(gserializer::serializer& serializer) override;
         void draw();
 
@@ -61,6 +67,7 @@ namespace grender
         std::array<GLuint, vbo_type::count> m_vbo = { 0 };
         GLuint m_number_of_element = 0;
         gmath::axis_aligned_box<gcore::model_space> m_extent;
+        primitive_type m_type = primitive_type::triangle;
         std::filesystem::path m_bin_filepath;
 
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();

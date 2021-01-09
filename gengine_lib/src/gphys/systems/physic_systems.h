@@ -50,10 +50,6 @@ namespace gphys
         std::unique_ptr<btCollisionDispatcher> m_collision_dispatcher;
         std::unique_ptr<btSequentialImpulseConstraintSolver> m_constraint_solver;
         std::unique_ptr<btDiscreteDynamicsWorld> m_phys_world;
-        //ground 
-        std::unique_ptr<btCollisionShape> m_shape;
-        std::unique_ptr<btDefaultMotionState> m_motion_state;
-        std::unique_ptr<btRigidBody> m_rigidBody;
 
         gtl::callback_id m_on_removed_callback_id = 0;
 

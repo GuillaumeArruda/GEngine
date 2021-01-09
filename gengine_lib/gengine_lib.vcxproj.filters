@@ -249,6 +249,12 @@
     <ClInclude Include="src\grender\dds_image_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gphys\resources\collision_shape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gphys\resources\heightfield_shape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -405,6 +411,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\grender\dds_image_data.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gphys\resources\heightfield_shape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gphys\resources\collision_shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

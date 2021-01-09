@@ -189,42 +189,38 @@ namespace gtool
                     });
                     sort_spec->SpecsDirty = false;
                 }
-                ImGuiListClipper clipper;
-                clipper.Begin(static_cast<int>(m_resources_info.size()));
-                
-                while (clipper.Step())
+
+                for (std::size_t row_n = 0; row_n < m_resources_info.size(); row_n++)
                 {
-                    for (int row_n = clipper.DisplayStart; row_n < clipper.DisplayEnd; row_n++)
-                    {
-                        if ((m_filter_by == column_id::name && m_filter.PassFilter(m_resources_info[row_n].m_name.c_str()))
-                        ||  (m_filter_by == column_id::type && m_filter.PassFilter(m_resources_info[row_n].m_resource_type.c_str()))
-                        ||  (m_filter_by == column_id::uuid && m_filter.PassFilter(m_resources_info[row_n].m_uuid.to_string().c_str())))
+                    if ((m_filter_by == column_id::name && m_filter.PassFilter(m_resources_info[row_n].m_name.c_str()))
+                    ||  (m_filter_by == column_id::type && m_filter.PassFilter(m_resources_info[row_n].m_resource_type.c_str()))
+                    ||  (m_filter_by == column_id::uuid && m_filter.PassFilter(m_resources_info[row_n].m_uuid.to_string().c_str())))
+                    {                            
+                        ImGui::TableNextColumn(); 
+                        if (ImGui::Selectable(m_resources_info[row_n].m_name.c_str(), false, ImGuiSelectableFlags_SpanAllColumns))
+                            ImGui::OpenPopup(m_resources_info[row_n].m_name.c_str());
+
+                        if (ImGui::BeginPopup(m_resources_info[row_n].m_name.c_str()))
                         {
-                            ImGui::TableNextColumn(); 
-                            if (ImGui::Selectable(m_resources_info[row_n].m_name.c_str(), false, ImGuiSelectableFlags_SpanAllColumns))
-                                ImGui::OpenPopup(m_resources_info[row_n].m_name.c_str());
-
-                            if (ImGui::BeginPopup(m_resources_info[row_n].m_name.c_str()))
+                            if (ImGui::Selectable("Open"))
                             {
-                                if (ImGui::Selectable("Open"))
-                                {
-                                    viewer_widget.m_uuid = m_resources_info[row_n].m_uuid.to_string().c_str();
-                                    ImGui::CloseCurrentPopup();
-                                }
-
-                                if (ImGui::Selectable("Copy UUID"))
-                                {
-                                    ImGui::SetClipboardText(m_resources_info[row_n].m_uuid.to_string().c_str());
-                                    ImGui::CloseCurrentPopup();
-                                }
-                                ImGui::EndPopup();
+                                viewer_widget.m_uuid = m_resources_info[row_n].m_uuid.to_string().c_str();
+                                ImGui::CloseCurrentPopup();
                             }
 
-                            ImGui::TableNextColumn(); ImGui::Text(m_resources_info[row_n].m_resource_type.c_str());
-                            ImGui::TableNextColumn(); ImGui::Text(m_resources_info[row_n].m_uuid.to_string().c_str());
+                            if (ImGui::Selectable("Copy UUID"))
+                            {
+                                ImGui::SetClipboardText(m_resources_info[row_n].m_uuid.to_string().c_str());
+                                ImGui::CloseCurrentPopup();
+                            }
+                            ImGui::EndPopup();
                         }
+
+                        ImGui::TableNextColumn(); ImGui::Text(m_resources_info[row_n].m_resource_type.c_str());
+                        ImGui::TableNextColumn(); ImGui::Text(m_resources_info[row_n].m_uuid.to_string().c_str());
                     }
                 }
+               
                 ImGui::EndTable();
             }
             ImGui::PopID();

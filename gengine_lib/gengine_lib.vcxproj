@@ -37,6 +37,8 @@
     <ClInclude Include="src\gcore\systems\input_system.h" />
     <ClInclude Include="src\gphys\components\physic_component.h" />
     <ClInclude Include="src\gphys\debug_drawer.h" />
+    <ClInclude Include="src\gphys\resources\collision_shape.h" />
+    <ClInclude Include="src\gphys\resources\heightfield_shape.h" />
     <ClInclude Include="src\gphys\resources\mesh_shape.h" />
     <ClInclude Include="src\gphys\motion_state.h" />
     <ClInclude Include="src\gphys\systems\physic_systems.h" />
@@ -114,6 +116,8 @@
     <ClCompile Include="src\gcore\systems\input_system.cpp" />
     <ClCompile Include="src\gphys\components\physic_component.cpp" />
     <ClCompile Include="src\gphys\debug_drawer.cpp" />
+    <ClCompile Include="src\gphys\resources\collision_shape.cpp" />
+    <ClCompile Include="src\gphys\resources\heightfield_shape.cpp" />
     <ClCompile Include="src\gphys\resources\mesh_shape.cpp" />
     <ClCompile Include="src\gphys\motion_state.cpp" />
     <ClCompile Include="src\gphys\systems\physic_systems.cpp" />
@@ -241,6 +245,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <AdditionalOptions>/experimental:external /external:anglebrackets /external:W3 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(VcpkgRoot)..\$(VCPKG_DEFAULT_TRIPLET)\include\bullet\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -258,6 +263,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <AdditionalOptions>/experimental:external /external:anglebrackets /external:W3 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(VcpkgRoot)..\$(VCPKG_DEFAULT_TRIPLET)\include\bullet\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -275,6 +281,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <AdditionalOptions>/experimental:external /external:anglebrackets /external:W3 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(VcpkgRoot)..\$(VCPKG_DEFAULT_TRIPLET)\include\bullet\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -292,6 +299,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <AdditionalOptions>/experimental:external /external:anglebrackets /external:W3 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(VcpkgRoot)..\$(VCPKG_DEFAULT_TRIPLET)\include\bullet\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>

@@ -5,6 +5,7 @@
 #include "gserializer/gmath_serialization.h"
 #include "gserializer/serializer.h"
 #include "gserializer/serializers/binary_file_serializer.h"
+#include "gserializer/enum.h"
 
 #include "grender/utils.h"
 
@@ -13,16 +14,30 @@ GSERIALIZER_DEFINE_SUBCLASS_FACTORY_REGISTRATION(grender::mesh_resource);
 
 namespace grender
 {
+    GSERIALIZER_BEGIN_ENUM_HANDLER(mesh_resource::primitive_type)
+        GSERIALIZER_ADD_ENUM_ELEMENT(mesh_resource::primitive_type::triangle)
+        GSERIALIZER_ADD_ENUM_ELEMENT(mesh_resource::primitive_type::patch)
+    GSERIALIZER_END_ENUM_HANDLER(mesh_resource::primitive_type)
+
     void mesh_resource::process(gserializer::serializer& serializer)
     {
         resource::process(serializer);
         serializer.process("bin_file_path", m_bin_filepath);
+        serializer.process("primitive_type", m_type);
     }
 
     void mesh_resource::draw()
     {
         gl_exec(glBindVertexArray, m_vao);
-        gl_exec(glDrawElements, GL_TRIANGLES, m_number_of_element, GL_UNSIGNED_INT, nullptr);
+        if (m_type == primitive_type::triangle)
+        {
+            gl_exec(glDrawElements, GL_TRIANGLES, m_number_of_element, GL_UNSIGNED_INT, nullptr);
+        }
+        else
+        {
+            gl_exec(glPatchParameteri, GL_PATCH_VERTICES, 3);
+            gl_exec(glDrawElements, GL_PATCHES, m_number_of_element, GL_UNSIGNED_INT, nullptr);
+        }
         gl_exec(glBindVertexArray, 0);
     }
 
