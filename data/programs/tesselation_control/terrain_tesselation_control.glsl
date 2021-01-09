@@ -8,7 +8,7 @@ in vec2 f_uv[];
 out vec3 te_world_pos[];
 out vec2 te_uv[];
 
-const int tesselation_level = 64;
+const int tesselation_level = 1;
 
 void main()
 {
