@@ -28,7 +28,6 @@ namespace gphys
     {
         collision_shape::process(serializer);
         serializer.process("heightfield_path", m_heightfield_path);
-
     }
 
     bool heightfield_shape::do_load_async()
@@ -50,6 +49,7 @@ namespace gphys
         auto const size_of_data = ilGetInteger(IL_IMAGE_SIZE_OF_DATA);
         auto const data = ilGetData();
         iluFlipImage();
+
         
        std::unique_ptr<unsigned char[]> heightfield_data = std::make_unique<unsigned char[]>(size_of_data / byte_per_pixel);
         for (size_t i = 0; i < size_of_data / byte_per_pixel; ++i)

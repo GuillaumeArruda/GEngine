@@ -31,9 +31,14 @@ int main()
         systems.add_system(std::make_unique<gcore::flying_controller_system>());
         systems.add_system(std::make_unique<gphys::physic_system>());
         systems.add_system(std::make_unique<grender::debug_render_system>());
-        systems.get_system<grender::debug_render_system>()->init_resources(*lib);
 
         world.initialize_systems();
+
+        auto input_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gcore::input_system>()->update(world); });
+        auto flying_controller_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gcore::flying_controller_system>()->update(world); });
+        auto physic_system_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gphys::physic_system>()->update(world); });
+        world.m_update_tasks.add_parent(flying_controller_task, input_task);
+
         {
 
             filewatch::FileWatch<std::wstring> watcher(L"./",

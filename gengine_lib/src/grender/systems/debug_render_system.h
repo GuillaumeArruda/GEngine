@@ -34,7 +34,7 @@ namespace grender
             glm::vec3 m_max;
         };
 
-        void init_resources(gcore::resource_library& library);
+        void connect_to_world(gcore::world& world) override;
 
         void draw_line(glm::vec3 start, glm::vec3 end, glm::vec3 color = glm::vec3(1.f));
 

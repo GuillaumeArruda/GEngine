@@ -1,5 +1,7 @@
 #pragma once
 
+#include "gthread/task_group.h"
+
 #include "gcore/entity_registry.h"
 #include "gcore/system_registry.h"
 #include "gcore/resource_library.h"
@@ -22,6 +24,7 @@ namespace gcore
         resource_library* get_resource_library() { return m_resource_library.get(); }
         resource_library const* get_resource_library() const { return m_resource_library.get();  }
 
+        gthread::task_group m_update_tasks;
     private:
         std::shared_ptr<resource_library> m_resource_library;
         entity_registry m_entity_registry;

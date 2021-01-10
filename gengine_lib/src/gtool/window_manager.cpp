@@ -71,19 +71,11 @@ namespace gtool
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		auto& systems = world.get_system_registry();
-		auto lib = world.get_resource_library();
+		grender::render_system* render = world.get_system_registry().get_system<grender::render_system>();
 
-		grender::render_system* render = systems.get_system<grender::render_system>();
-		gcore::input_system* input_system = systems.get_system<gcore::input_system>();
-		gcore::flying_controller_system* controller_system = systems.get_system<gcore::flying_controller_system>();
-		gphys::physic_system* phys_system = systems.get_system<gphys::physic_system>();
-
-		input_system->update(world);
-		controller_system->update(world);
-		phys_system->update(world);
+		world.m_update_tasks.run_tasks(m_jobs);
 		render->render(world);
-		lib->update();
+		world.get_resource_library()->update();
 
 		ImGuiViewport* viewport = ImGui::GetMainViewport();
 		ImGui::SetNextWindowPos(viewport->Pos);

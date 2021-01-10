@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "grender/systems/debug_render_system.h"
 
+#include "gcore/world.h"
 #include "gcore/resource_library.h"
 
 #include "grender/utils.h"
@@ -33,9 +34,9 @@ namespace grender
     }
 
 
-    void debug_render_system::init_resources(gcore::resource_library& library)
+    void debug_render_system::connect_to_world(gcore::world& world)
     {
-        m_program = library.get_resource<program>("5fe3cac284fd2c73e312df4c0afd7e5c"_gtl_uuid);
+        m_program = world.get_resource_library()->get_resource<program>("5fe3cac284fd2c73e312df4c0afd7e5c"_gtl_uuid);
     }
 
     void debug_render_system::draw_line(glm::vec3 start, glm::vec3 end, glm::vec3 color)
