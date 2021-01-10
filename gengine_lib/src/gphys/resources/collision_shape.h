@@ -17,8 +17,8 @@ namespace gphys
         collision_shape(collision_shape const&) = delete;
         collision_shape& operator=(collision_shape const&) = delete;
 
-        btCollisionShape* get_shape() { return m_shape.get(); }
+        std::shared_ptr<btCollisionShape> const& get_shape() { return m_shape; }
     protected:
-        std::unique_ptr<btCollisionShape> m_shape;
+        std::shared_ptr<btCollisionShape> m_shape;
     };
 }

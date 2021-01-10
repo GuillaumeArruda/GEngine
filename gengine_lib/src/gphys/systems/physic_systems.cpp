@@ -46,11 +46,11 @@ namespace gphys
         {
             if (physic_component->m_phys_shape.is_loaded() && !physic_component->m_rigid_body)
             {
-                btCollisionShape* collisionShape = physic_component->m_phys_shape->get_shape();
+                physic_component->m_collision_shape = physic_component->m_phys_shape->get_shape();
                 btVector3 fall_inertia = btVector3(0.f, 0.f, 0.f);
-                collisionShape->calculateLocalInertia(physic_component->m_mass, fall_inertia);
+                physic_component->m_collision_shape->calculateLocalInertia(physic_component->m_mass, fall_inertia);
 
-                btRigidBody::btRigidBodyConstructionInfo constructionInfo(physic_component->m_mass, &physic_component->m_motion_state, collisionShape, fall_inertia);
+                btRigidBody::btRigidBodyConstructionInfo constructionInfo(physic_component->m_mass, &physic_component->m_motion_state, physic_component->m_collision_shape.get(), fall_inertia);
                 physic_component->m_motion_state.m_transform = transform;
                 physic_component->m_motion_state.m_offset = glm::vec3(0.f, 1.f, 0.f);
                 constructionInfo.m_startWorldTransform = to_bullet(transform->m_transform);

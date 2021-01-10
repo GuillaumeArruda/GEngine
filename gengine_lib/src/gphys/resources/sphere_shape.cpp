@@ -18,7 +18,7 @@ namespace gphys
 
     bool sphere_shape::do_load_async()
     {
-        m_shape = std::make_unique<btSphereShape>(m_radius);
+        m_shape = std::make_shared<btSphereShape>(m_radius);
         return true;
     }
 }
