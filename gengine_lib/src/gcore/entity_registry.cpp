@@ -50,7 +50,6 @@ namespace gcore
             }
         }
         warn_group_of_component_removal(entity);
-
     }
 
     bool entity_registry::has_components(entity entity, gtl::span<component_id const> component_types) const

@@ -258,6 +258,12 @@
     <ClInclude Include="src\grender\resources\texture_2d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gphys\resources\capsule_shape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gphys\resources\sphere_shape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -423,6 +429,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\grender\resources\texture_2d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gphys\resources\capsule_shape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gphys\resources\sphere_shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -37,10 +37,12 @@
     <ClInclude Include="src\gcore\systems\input_system.h" />
     <ClInclude Include="src\gphys\components\physic_component.h" />
     <ClInclude Include="src\gphys\debug_drawer.h" />
+    <ClInclude Include="src\gphys\resources\capsule_shape.h" />
     <ClInclude Include="src\gphys\resources\collision_shape.h" />
     <ClInclude Include="src\gphys\resources\heightfield_shape.h" />
     <ClInclude Include="src\gphys\resources\mesh_shape.h" />
     <ClInclude Include="src\gphys\motion_state.h" />
+    <ClInclude Include="src\gphys\resources\sphere_shape.h" />
     <ClInclude Include="src\gphys\systems\physic_systems.h" />
     <ClInclude Include="src\gphys\utils.h" />
     <ClInclude Include="src\grender\components\camera_component.h" />
@@ -117,10 +119,12 @@
     <ClCompile Include="src\gcore\systems\input_system.cpp" />
     <ClCompile Include="src\gphys\components\physic_component.cpp" />
     <ClCompile Include="src\gphys\debug_drawer.cpp" />
+    <ClCompile Include="src\gphys\resources\capsule_shape.cpp" />
     <ClCompile Include="src\gphys\resources\collision_shape.cpp" />
     <ClCompile Include="src\gphys\resources\heightfield_shape.cpp" />
     <ClCompile Include="src\gphys\resources\mesh_shape.cpp" />
     <ClCompile Include="src\gphys\motion_state.cpp" />
+    <ClCompile Include="src\gphys\resources\sphere_shape.cpp" />
     <ClCompile Include="src\gphys\systems\physic_systems.cpp" />
     <ClCompile Include="src\gphys\utils.cpp" />
     <ClCompile Include="src\grender\components\camera_component.cpp" />

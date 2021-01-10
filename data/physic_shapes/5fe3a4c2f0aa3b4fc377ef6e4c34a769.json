@@ -1,10 +1,12 @@
 {
     "resource": {
         "is_valid": true,
-        "type_name": "gphys::mesh_shape",
+        "type_name": "gphys::capsule_shape",
         "data": {
             "uuid": "5fe3a4c2f0aa3b4fc377ef6e4c34a769",
-            "name": "capsule_shape"
+            "name": "capsule_shape",
+			"half_height": 0.8,
+			"radius": 0.5
         }
     }
 }
