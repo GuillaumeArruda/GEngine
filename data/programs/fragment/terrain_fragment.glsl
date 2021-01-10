@@ -14,12 +14,20 @@ uniform float max_height;
 
 vec3 compute_normal(vec2 uv_coord)
 {
-	const float multiplicator = 2 * max_height;
 	const float above =  textureOffset(height_map, uv_coord, ivec2(0, 1)).x;
 	const float below =  textureOffset(height_map, uv_coord, ivec2(0, -1)).x;
 	const float left =   textureOffset(height_map, uv_coord, ivec2(1, 0)).x;
 	const float right =  textureOffset(height_map, uv_coord, ivec2(-1, 0)).x;
-	return normalize(vec3(multiplicator * (right - left), 4, multiplicator * (below - above)));
+	const float above_left =  textureOffset(height_map, uv_coord, ivec2(1, 1)).x;
+	const float below_left =   textureOffset(height_map, uv_coord, ivec2(1, -1)).x;
+	const float above_right = textureOffset(height_map, uv_coord, ivec2(-1, 1)).x;
+	const float below_right = textureOffset(height_map, uv_coord, ivec2(-1, -1)).x;
+	
+	const float x = (above_right + 2 * right + below_right - below_left - 2 * left - above_left) * max_height;
+	const float y = 8.0;
+	const float z = (2 * below + below_left + below_right - 2 * above - above_right - above_left) * max_height;
+	
+	return normalize(vec3(x,y,z));
 }
 
 void main()
@@ -27,5 +35,5 @@ void main()
 	diffuse_target = vec3(0.5);
 	position_target = f_world_pos;
 	normal_target = compute_normal(f_uv);
-	specular_target = vec4(0.5);
+	specular_target = vec4(10);
 }
