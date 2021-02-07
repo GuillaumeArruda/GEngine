@@ -80,5 +80,15 @@
             <Item Name="[z]" Condition="$T1 > 2" Optional="true">z</Item>
             <Item Name="[w]" Condition="$T1 > 3" Optional="true">w</Item>
         </Expand>
-    </Type>    
+    </Type>
+    <Type Name="gcore::node_data">
+        <DisplayString Condition="m_type_id != 0">{{type={gcore::node_data_type_registry::m_instance.m_node_data_types._Mypair._Myval2._Myfirst[m_type_id - 1].m_name}, count={m_is_inline ? 1 : m_pointer_info.m_number_of_elements}}}</DisplayString>
+        <DisplayString Condition="m_type_id == 0">{{Empty}}</DisplayString>
+        <Expand>
+            <Item Name="[type]" Condition="m_type_id != 0">gcore::node_data_type_registry::m_instance.m_node_data_types._Mypair._Myval2._Myfirst[m_type_id - 1].m_name</Item>
+            <Item Name="[cast to correct type]" Condition="m_is_inline &amp;&amp; m_type_id != 0">&amp;m_inline_info.m_buffer</Item>
+            <Item Name="[cast to correct type]" Condition="!m_is_inline &amp;&amp; m_type_id != 0">m_pointer_info.m_pointer_to_data</Item>
+            <Item Name="[size]" Condition="!m_is_inline &amp;&amp; m_type_id != 0">m_pointer_info.m_number_of_elements</Item>
+        </Expand>
+    </Type>
 </AutoVisualizer>

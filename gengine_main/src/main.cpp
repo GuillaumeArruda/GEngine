@@ -8,10 +8,15 @@
 #include "gcore/systems/input_system.h"
 #include "gcore/systems/flying_controller_system.h"
 
+#include "gcore/core_script_registration.h"
+#include "gcore/script/node_data.h"
+
+#include "grender/render_script_registration.h"
 #include "grender/systems/render_system.h"
 #include "grender/systems/debug_render_system.h"
 
 #include "gphys/systems/physic_systems.h"
+#include "gphys/phys_script_registration.h"
 
 #include "gtool/window_manager.h"
 
@@ -25,6 +30,10 @@ int main()
         lib->scan_directory("data\\");
         gcore::world world(lib);
         auto& systems = world.get_system_registry();
+
+        gcore::register_node_data_type();
+        grender::register_node_datat_type();
+        gphys::register_node_data_type();
 
         systems.add_system(std::make_unique<grender::render_system>());
         systems.add_system(std::make_unique<gcore::input_system>());
