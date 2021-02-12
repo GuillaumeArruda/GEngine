@@ -140,5 +140,10 @@ namespace gcore
             }
         }
     }
+
+    template<class ResourceType>
+    void process(gserializer::serializer&, gcore::resource_handle<ResourceType>&)
+    {
+    }
 }
 

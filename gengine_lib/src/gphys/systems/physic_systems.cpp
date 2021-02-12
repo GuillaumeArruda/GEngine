@@ -40,7 +40,7 @@ namespace gphys
     void physic_system::update(gcore::world& world)
     {
         m_phys_world->stepSimulation(0.01f);
-        //m_phys_world->debugDrawWorld();
+        m_phys_world->debugDrawWorld();
         auto view = world.get_entity_registry().get_view<gcore::transform_component, physic_component>();
         for (auto& [entity, transform, physic_component] : view)
         {

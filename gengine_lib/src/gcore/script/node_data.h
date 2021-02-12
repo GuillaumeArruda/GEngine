@@ -91,6 +91,10 @@ namespace gcore
 
         void clear();
 
+        node_data_type::id_type get_type_id() const { return m_type_id; }
+        void set_type_id(node_data_type::id_type type_id);
+
+        void process(gserializer::serializer& serializer);
     private:
         static constexpr std::size_t internal_buffer_size = 24;
         static constexpr std::size_t internal_buffer_alignment = 16;

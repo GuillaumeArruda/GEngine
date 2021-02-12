@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "gserializer/serializer.h"
 
 namespace gcore 
 {  
@@ -16,6 +17,8 @@ namespace gcore
             void (*m_move_single_element)(void*, void*);
             void (*m_copy_single_element)(void const*, void*);
             void* (*m_copy_array)(void const*, std::size_t);
+            bool (*m_can_fit_in_buffer)(std::size_t, std::size_t);
+            void (*process)(gserializer::serializer&, void* buffer, std::size_t number_of_element);
         };
 
         using id_type = std::uint16_t;
@@ -81,6 +84,33 @@ namespace gcore
                 new(static_cast<void*>(data + i)) Type(*(source_data + i));
             return data;
         }
+
+        template<class Type>
+        bool can_fit_in_buffer(std::size_t buffer_size, std::size_t alignement)
+        {
+            return sizeof(Type) <= buffer_size && alignof(Type) <= alignement;
+        }
+
+        template<class Type>
+        void process(gserializer::serializer& serializer, void* buffer, std::size_t number_of_element)
+        {
+            using gserializer::process;
+            Type* value = static_cast<Type*>(buffer);
+            if (number_of_element == 1)
+            {
+                process(serializer, *value);
+            }
+            else
+            {
+                for (std::size_t i = 0; i < number_of_element; ++i)
+                {
+                    serializer.open_array_element("value");
+                    process(serializer, *(value + i));
+                    serializer.close_array_element("value");
+
+                }
+            }
+        }
     }
 
     template<class Type>
@@ -94,6 +124,8 @@ namespace gcore
             &node_data_vtable::move_single_element<Type>,
             &node_data_vtable::copy_single_element<Type>,
             &node_data_vtable::copy_array<Type>,
+            &node_data_vtable::can_fit_in_buffer<Type>,
+            &node_data_vtable::process<Type>,
         };
     }
 
@@ -102,7 +134,7 @@ namespace gcore
         template<class Type>
         static node_data_type::id_type get_type_id()
         {
-            static const node_data_type::id_type id = ++get_id_generator();
+            static const node_data_type::id_type id = get_type_id_internal<std::remove_const_t<Type>>();
             return id;
         }
 
@@ -122,7 +154,16 @@ namespace gcore
             return m_node_data_types.at(id - 1);
         }
 
+        node_data_type const* get_by_name(std::string_view name) const;
+
     private:
+        template<class Type>
+        static node_data_type::id_type get_type_id_internal()
+        {
+            static const node_data_type::id_type id = ++get_id_generator();
+            return id;
+        }
+
         static node_data_type::id_type& get_id_generator()
         {
             static node_data_type::id_type generator = 0;

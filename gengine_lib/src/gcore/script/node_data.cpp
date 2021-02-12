@@ -62,6 +62,31 @@ namespace gcore
         m_is_inline = false;
     }
 
+    void node_data::set_type_id(node_data_type::id_type type_id)
+    {
+        if (m_type_id == type_id)
+            return;
+
+        clear();
+        m_type_id = type_id;
+        node_data_type const& data_type = node_data_type_registry::get().get_node_data_type(m_type_id);
+        if(data_type.m_vtable.m_can_fit_in_buffer(internal_buffer_size, internal_buffer_alignment))
+        {
+            m_is_inline = true;
+            data_type.m_vtable.m_construct_single_element(static_cast<void*>(&m_inline_info.m_buffer));
+        }
+        else
+        {
+            m_is_inline = false;
+            m_pointer_info.m_pointer_to_data = data_type.m_vtable.m_new_array(1);
+            m_pointer_info.m_number_of_elements = 1;
+        }
+    }
+
+    void node_data::process(gserializer::serializer&)
+    {
+    }
+
     node_data& node_data::operator=(node_data&& move)
     {
         if (&move == this)
@@ -95,6 +120,7 @@ namespace gcore
         if (copy.m_type_id == node_data_type::invalid_id)
             return *this;
 
+        m_type_id = copy.m_type_id;
         m_is_inline = copy.m_is_inline;
         node_data_type const& data_type = node_data_type_registry::get().get_node_data_type(m_type_id);
         if (copy.m_is_inline)
