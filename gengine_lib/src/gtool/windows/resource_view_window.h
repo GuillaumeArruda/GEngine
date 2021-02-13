@@ -4,6 +4,7 @@
 #include "gtool/common_widgets.h"
 
 #include "gcore/resource.h"
+#include "gcore/resource_handle.h"
 
 #include <imgui/imgui.h>
 
@@ -30,6 +31,7 @@ namespace gtool
     {
         void update(gcore::resource_library& library);
         std::string m_uuid;
+        gcore::resource_handle<gcore::resource> m_resource;
     };
 
     struct resource_browser_widget

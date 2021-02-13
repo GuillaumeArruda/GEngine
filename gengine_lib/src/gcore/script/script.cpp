@@ -3,6 +3,7 @@
 #include "gcore/script/script.h"
 #include "gcore/script/script_context.h"
 #include "gcore/script/nodes/constant_node.h"
+#include "gcore/script/node_factory.h"
 
 #include "gcore/script/nodes/comparison_nodes.h"
 
@@ -15,6 +16,26 @@ GSERIALIZER_DEFINE_SUBCLASS_FACTORY_REGISTRATION(gcore::script);
 
 namespace gcore
 {
+    pin_descriptor const* script_descriptor::get_pin_descriptor(node_id_t node_id, int pin_id) const
+    {
+        auto const node_it = std::find_if(m_nodes.begin(), m_nodes.end(), [&](node_descriptor const& node_desc) { return node_desc.m_node->get_node_id() == node_id; });
+        if (node_it == m_nodes.end())
+            return nullptr;
+
+        node::pin_descriptors const descriptors = node_it->m_node->get_pin_descriptors();
+
+        for (gtl::span<pin_descriptor const> pin_descriptors : descriptors)
+        {
+            auto const it = std::find_if(pin_descriptors.begin(), pin_descriptors.end(), [&](pin_descriptor const& desc) { return desc.m_id == pin_id; });
+            if (it != pin_descriptors.end())
+            {
+                return &(*it);
+            }
+        }
+
+        return nullptr;
+    }
+
     void script_descriptor::process(gserializer::serializer& serializer)
     {
         serializer.process("nodes", m_nodes, "node");
@@ -26,7 +47,7 @@ namespace gcore
     {
         serializer.process("name", m_name);
         serializer.process("position", m_position);
-        //serializer.process("node", m_node);
+        serializer.process("node", m_node, node_factory::get());
     }
 
     void script_descriptor::connection::process(gserializer::serializer& serializer)
@@ -98,10 +119,10 @@ namespace gcore
             }
         }
 
-        m_node_buffer = std::make_unique<char[]>(node_memory_to_allocate);
 
-        //Create final node resting location
+        //Create final node location
         {
+            m_node_buffer = std::make_unique<char[]>(node_memory_to_allocate);
             char* current_location = m_node_buffer.get();
             m_nodes.reserve(descriptor.m_nodes.size());
             for (auto const& node : descriptor.m_nodes)

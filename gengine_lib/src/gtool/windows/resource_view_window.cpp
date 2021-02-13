@@ -71,9 +71,9 @@ namespace gtool
             gtl::uuid const uid = gtl::uuid::from_string(m_uuid);
             if (uid.is_valid())
             {
-                if (auto resource = library.get_resource<gcore::resource>(uid))
+                if (m_resource = library.get_resource<gcore::resource>(uid))
                 {
-                    std::unique_ptr<gcore::resource> s(resource.get());
+                    std::unique_ptr<gcore::resource> s(m_resource.get());
                     grender::imgui_serializer serializer("Resource");
                     serializer.process("Resource", s, gcore::resource::factory());
                     if (ImGui::Button("Save"))

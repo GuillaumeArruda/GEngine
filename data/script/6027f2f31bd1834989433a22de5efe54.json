@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "gcore::script",
+        "data": {
+            "uuid": "6027f2f31bd1834989433a22de5efe54",
+            "name": "test_script",
+            "descriptor_file": "data/script/test_script.json"
+        }
+    }
+}

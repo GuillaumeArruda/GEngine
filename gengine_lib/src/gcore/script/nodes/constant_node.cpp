@@ -14,5 +14,10 @@ namespace gcore
         m_pin_descriptor = pin_descriptor{ "value",output_index, output_id, m_data.get_type_id(), pin_type::output };
         return { gtl::span<pin_descriptor const>(), gtl::span<pin_descriptor const>(m_pin_descriptor) };
     }
+    void constant_node::process(gserializer::serializer& serializer)
+    {
+        node::process(serializer);
+        serializer.process("value", m_data);
+    }
 }
 

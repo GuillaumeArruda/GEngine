@@ -107,7 +107,6 @@ namespace gcore
                     serializer.open_array_element("value");
                     process(serializer, *(value + i));
                     serializer.close_array_element("value");
-
                 }
             }
         }

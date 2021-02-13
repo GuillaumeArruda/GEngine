@@ -30,13 +30,16 @@ namespace gcore
         struct node_descriptor
         {
             std::unique_ptr<node> m_node;
-            glm::ivec2 m_position;
+            glm::vec2 m_position;
             std::string m_name;
             void process(gserializer::serializer& serializer);
         };
 
+        pin_descriptor const* get_pin_descriptor(gcore::node_id_t node_id, int pin_id) const;
+
         std::vector<node_descriptor> m_nodes;
         std::unordered_map<node_id_t, std::vector<connection>> m_connections;
+        gcore::node_id_t m_node_id_generator = 1;
         void process(gserializer::serializer& serializer);
     };
 

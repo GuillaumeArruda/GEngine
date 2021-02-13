@@ -22,6 +22,8 @@ namespace gcore
         node::pin_descriptors get_pin_descriptors() const override;
 
         node_data& get_node_data() { return m_data; }
+
+        void process(gserializer::serializer& serializer) override;
     private:
         node_data m_data;
         mutable pin_descriptor m_pin_descriptor;

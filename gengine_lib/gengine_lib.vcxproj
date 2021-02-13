@@ -30,12 +30,14 @@
     <ClInclude Include="src\gcore\resource_handle.h" />
     <ClInclude Include="src\gcore\resource.h" />
     <ClInclude Include="src\gcore\resource_library.h" />
+    <ClInclude Include="src\gcore\script\nodes\arithmetic_nodes.h" />
     <ClInclude Include="src\gcore\script\nodes\comparison_nodes.h" />
     <ClInclude Include="src\gcore\script\node.h" />
     <ClInclude Include="src\gcore\script\nodes\constant_node.h" />
     <ClInclude Include="src\gcore\script\node_data.h" />
     <ClInclude Include="src\gcore\script\node_data_type.h" />
     <ClInclude Include="src\gcore\core_script_registration.h" />
+    <ClInclude Include="src\gcore\script\node_factory.h" />
     <ClInclude Include="src\gcore\script\node_helper.h" />
     <ClInclude Include="src\gcore\script\script.h" />
     <ClInclude Include="src\gcore\script\script_context.h" />
@@ -108,6 +110,7 @@
     <ClInclude Include="src\gtl\cast.h" />
     <ClInclude Include="src\gtl\span.h" />
     <ClInclude Include="src\gtl\uuid.h" />
+    <ClInclude Include="src\gtool\windows\node_editor_window.h" />
     <ClInclude Include="src\gtool\windows\resource_view_window.h" />
     <ClInclude Include="src\gtool\window.h" />
     <ClInclude Include="src\gtool\windows\viewport_window.h" />
@@ -131,6 +134,7 @@
     <ClCompile Include="src\gcore\script\node_data.cpp" />
     <ClCompile Include="src\gcore\script\node_data_type.cpp" />
     <ClCompile Include="src\gcore\core_script_registration.cpp" />
+    <ClCompile Include="src\gcore\script\node_factory.cpp" />
     <ClCompile Include="src\gcore\script\script.cpp" />
     <ClCompile Include="src\gcore\script\script_context.cpp" />
     <ClCompile Include="src\gcore\serializers\dependency_gatherer_serializer.cpp" />
@@ -177,6 +181,7 @@
     <ClCompile Include="src\gthread\task_group.cpp" />
     <ClCompile Include="src\gthread\thread_group.cpp" />
     <ClCompile Include="src\gtl\uuid.cpp" />
+    <ClCompile Include="src\gtool\windows\node_editor_window.cpp" />
     <ClCompile Include="src\gtool\windows\resource_view_window.cpp" />
     <ClCompile Include="src\gtool\windows\viewport_window.cpp" />
     <ClCompile Include="src\gtool\window_manager.cpp" />
@@ -192,6 +197,9 @@
     <Natvis Include="src\gengine.natvis" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ax_NodeEditor\ax_NodeEditor.vcxproj">
+      <Project>{05fa3646-f9ea-4f0f-9bbd-c2ed90355eef}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\imgui\imgui.vcxproj">
       <Project>{701cea89-ecd9-42cf-8337-5a9f72dc6897}</Project>
     </ProjectReference>

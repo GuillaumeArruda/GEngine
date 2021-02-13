@@ -300,6 +300,15 @@
     <ClInclude Include="src\gcore\script\nodes\constant_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gcore\script\node_factory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gtool\windows\node_editor_window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gcore\script\nodes\arithmetic_nodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -498,6 +507,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gcore\script\nodes\constant_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gcore\script\node_factory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gtool\windows\node_editor_window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

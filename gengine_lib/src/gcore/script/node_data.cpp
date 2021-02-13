@@ -83,8 +83,59 @@ namespace gcore
         }
     }
 
-    void node_data::process(gserializer::serializer&)
+    void node_data::process(gserializer::serializer& serializer)
     {
+        std::string type_name;
+        if (m_type_id != node_data_type::invalid_id)
+        {
+            type_name = node_data_type_registry::get().get_node_data_type(m_type_id).get_name();
+        }
+
+        serializer.process("type_name", type_name);
+        node_data_type const* new_node_type = node_data_type_registry::get().get_by_name(type_name);
+        if (!new_node_type)
+        {
+            clear();
+            return;
+        }
+
+        std::size_t number_of_elements = 0;
+        if (m_is_inline)
+        {
+            number_of_elements = 1;
+        }
+        else
+        {
+            number_of_elements = m_pointer_info.m_number_of_elements;
+        }
+        serializer.process("number_of_elements", number_of_elements);
+
+
+        if (new_node_type->get_id() != m_type_id)
+        {
+            clear();
+            m_type_id = new_node_type->get_id();
+            if (number_of_elements == 1 && new_node_type->m_vtable.m_can_fit_in_buffer(internal_buffer_size, internal_buffer_alignment))
+            {
+                m_is_inline = true;
+                new_node_type->m_vtable.m_construct_single_element(m_inline_info.m_buffer);
+            }
+            else
+            {
+                m_is_inline = false;
+                m_pointer_info.m_pointer_to_data = new_node_type->m_vtable.m_new_array(number_of_elements);
+                m_pointer_info.m_number_of_elements = number_of_elements;
+            }
+        }
+
+        if (m_is_inline)
+        {
+            new_node_type->m_vtable.process(serializer, m_inline_info.m_buffer, 1);
+        }
+        else
+        {
+            new_node_type->m_vtable.process(serializer, m_pointer_info.m_pointer_to_data, m_pointer_info.m_number_of_elements);
+        }
     }
 
     node_data& node_data::operator=(node_data&& move)

@@ -25,15 +25,17 @@ int main()
     {
         ilInit();
         iluInit();
+
+        gcore::register_node_data_type();
+        gcore::register_node_type();
+        grender::register_node_datat_type();
+        gphys::register_node_data_type();
+
         gtool::window_manager tool_window_manager;
         std::shared_ptr<gcore::resource_library> lib = std::make_shared<gcore::resource_library>(tool_window_manager.get_window());
         lib->scan_directory("data\\");
         gcore::world world(lib);
         auto& systems = world.get_system_registry();
-
-        gcore::register_node_data_type();
-        grender::register_node_datat_type();
-        gphys::register_node_data_type();
 
         systems.add_system(std::make_unique<grender::render_system>());
         systems.add_system(std::make_unique<gcore::input_system>());

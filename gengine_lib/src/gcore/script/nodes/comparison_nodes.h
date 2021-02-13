@@ -83,7 +83,7 @@ namespace gcore
             static pin_descriptor const output_descriptors[] = {
                 super::out_pin::get("result"),
             };
-            return { input_descriptors,  output_pin_descriptor };
+            return { input_descriptors,  output_descriptors };
         }
     };
 
@@ -110,7 +110,7 @@ namespace gcore
             static pin_descriptor const output_descriptors[] = {
                 super::out_pin::get("result"),
             };
-            return { input_descriptors,  output_pin_descriptor };
+            return { input_descriptors,  output_descriptors };
         }
     };
 
@@ -137,7 +137,7 @@ namespace gcore
             static pin_descriptor const output_descriptors[] = {
                 super::out_pin::get("result"),
             };
-            return { input_descriptors,  output_pin_descriptor };
+            return { input_descriptors,  output_descriptors };
         }
     };
 
@@ -164,7 +164,18 @@ namespace gcore
             static pin_descriptor const output_descriptors[] = {
                 super::out_pin::get("result"),
             };
-            return { input_descriptors,  output_pin_descriptor };
+            return { input_descriptors,  output_descriptors };
         }
     };
+
+#define GCORE_REGISTER_EQUALITY_NODES(Type, DisplayName)                                                                                    \
+                factory.register_type<gcore::equal_node<Type>>("gcore::equal_node<"#Type">", "Equal ("DisplayName")");                      \
+                factory.register_type<gcore::not_equal_node<Type>>("gcore::not_equal_node<"#Type">", "Not Equal ("DisplayName")");
+
+#define GCORE_REGISTER_COMPARISON_NODES(Type, DisplayName)                                                                                  \
+    GCORE_REGISTER_EQUALITY_NODES(Type, DisplayName)                                                                                        \
+    factory.register_type<gcore::less_node<Type>>("gcore::less_node<"#Type">", "Less ("DisplayName")");                                     \
+    factory.register_type<gcore::less_or_equal_node<Type>>("gcore::less_or_equal_node<"#Type">", "Less Or Equal ("DisplayName")");          \
+    factory.register_type<gcore::greater_node<Type>>("gcore::greater_node<"#Type">", "Greater ("DisplayName")");                            \
+    factory.register_type<gcore::greater_or_equal_node<Type>>("gcore::greater_or_equal_node<"#Type">", "Greater Or Equal ("DisplayName")");
 }
