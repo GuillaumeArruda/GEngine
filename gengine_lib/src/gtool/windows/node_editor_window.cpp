@@ -327,8 +327,11 @@ namespace gtool
         namespace ne = ax::NodeEditor;
         if (ne::ShowBackgroundContextMenu())
         {
+            ne::Suspend();
             ImGui::OpenPopup("Create Node");
+            ne::Resume();
         }
+
         ne::Suspend();
         if (ImGui::BeginPopup("Create Node"))
         {
