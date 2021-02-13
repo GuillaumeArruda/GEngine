@@ -10,8 +10,8 @@ namespace gcore
         GCORE_DECLARE_NODE_TYPE(add_node);
         using super = node_helper_2_in_1_out<add_node<T>, T, T, T>;
 
-        bool is_const() const { return false; }
-        bool is_static() const { return true; }
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
 
         void execute_on_element(node_context&, T const& left, T const& right, T& out) const
         {
@@ -37,8 +37,8 @@ namespace gcore
         GCORE_DECLARE_NODE_TYPE(substract_node);
         using super = node_helper_2_in_1_out<substract_node<T>, T, T, T>;
 
-        bool is_const() const { return false; }
-        bool is_static() const { return true; }
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
 
         void execute_on_element(node_context&, T const& left, T const& right, T& out) const
         {
@@ -64,8 +64,8 @@ namespace gcore
         GCORE_DECLARE_NODE_TYPE(multiply_node);
         using super = node_helper_2_in_1_out<multiply_node<T>, T, T, T>;
 
-        bool is_const() const { return false; }
-        bool is_static() const { return true; }
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
 
         void execute_on_element(node_context&, T const& left, T const& right, T& out) const
         {
@@ -91,8 +91,8 @@ namespace gcore
         GCORE_DECLARE_NODE_TYPE(divide_node);
         using super = node_helper_2_in_1_out<divide_node<T>, T, T, T>;
 
-        bool is_const() const { return false; }
-        bool is_static() const { return true; }
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
 
         void execute_on_element(node_context&, T const& left, T const& right, T& out) const
         {

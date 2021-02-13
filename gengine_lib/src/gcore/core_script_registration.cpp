@@ -9,6 +9,8 @@
 #include "gcore/script/nodes/comparison_nodes.h"
 #include "gcore/script/nodes/arithmetic_nodes.h"
 #include "gcore/script/nodes//constant_node.h"
+#include "gcore/script/nodes/bool_operation_node.h"
+#include "gcore/script/nodes/conversion_node.h"
 
 #include "gserializer/gmath_serialization.h"
 
@@ -58,5 +60,13 @@ namespace gcore
         GCORE_REGISTER_ARITHMETIC_NODES(gmath::degree, "Degrees");
 
         factory.register_type<gcore::constant_node>("gcore::constant_node", "Constant");
+        factory.register_type<gcore::and_node>("gcore::and_node", "And");
+        factory.register_type<gcore::or_node>("gcore::or_node", "Or");
+        factory.register_type<gcore::not_node>("gcore::not_node", "Not");
+
+        factory.register_conversion<int, float>("gcore::conversion_node<int, float>");
+        factory.register_conversion<float, int>("gcore::conversion_node<float, int>"); 
+        factory.register_conversion<float, gmath::degree>("gcore::conversion_node<float, gmath::degree>");
+        factory.register_conversion<gmath::degree, float>("gcore::conversion_node<gmath::degree, float>");
     }
 }

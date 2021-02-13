@@ -21,6 +21,8 @@ namespace gcore
     {
         struct connection
         {
+            connection() = default;
+            connection(node_id_t source_id, int source_pin, int destination_pin) : m_source_id(source_id), m_source_pin_id(source_pin), m_destination_pin_id(destination_pin) {}
             node_id_t m_source_id = 0;
             int m_source_pin_id = 0;
             int m_destination_pin_id = 0;

@@ -9,6 +9,16 @@ namespace gcore
         return m_instance;
     }
 
+    std::unique_ptr<node> node_factory::try_get_conversion(node_data_type::id_type from, node_data_type::id_type to) const
+    {
+        auto it = std::find_if(m_conversions.begin(), m_conversions.end(), [&](conversion_info const& conversion) { return conversion.m_from_id == from && conversion.m_to_id == to; });
+        if (it != m_conversions.end())
+        {
+            return create(it->m_node_type_name);
+        }
+        return std::unique_ptr<node>();
+    }
+
     std::string const& node_factory::get_display_name(node const& node) const
     {
         static std::string const empty_string;

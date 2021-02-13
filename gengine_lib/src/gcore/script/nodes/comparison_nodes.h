@@ -12,8 +12,8 @@ namespace gcore
         GCORE_DECLARE_NODE_TYPE(equal_node);
         using super = node_helper_2_in_1_out<equal_node<T>, T, T, bool>;
 
-        bool is_const() const { return false; }
-        bool is_static() const { return true; }
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
 
         void execute_on_element(node_context&, T const& left, T const& right, bool& out) const
         {
@@ -39,8 +39,8 @@ namespace gcore
         GCORE_DECLARE_NODE_TYPE(not_equal_node);
         using super = node_helper_2_in_1_out<not_equal_node<T>, T, T, bool>;
 
-        bool is_const() const { return false; }
-        bool is_static() const { return true; }
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
 
         void execute_on_element(node_context&, T const& left, T const& right, bool& out) const
         {
@@ -66,8 +66,8 @@ namespace gcore
         GCORE_DECLARE_NODE_TYPE(less_node);
         using super = node_helper_2_in_1_out<less_node<T>, T, T, bool>;
 
-        bool is_const() const { return false; }
-        bool is_static() const { return true; }
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
 
         void execute_on_element(node_context&, T const& left, T const& right, bool& out) const
         {
@@ -93,8 +93,8 @@ namespace gcore
         GCORE_DECLARE_NODE_TYPE(less_or_equal_node);
         using super = node_helper_2_in_1_out<less_or_equal_node<T>, T, T, bool>;
         
-        bool is_const() const { return false; }
-        bool is_static() const { return true; }
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
 
         void execute_on_element(node_context&, T const& left, T const& right, bool& out) const
         {
@@ -120,8 +120,8 @@ namespace gcore
         GCORE_DECLARE_NODE_TYPE(greater_node);
         using super = node_helper_2_in_1_out<greater_node<T>, T, T, bool>;
 
-        bool is_const() const { return false; }
-        bool is_static() const { return true; }
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
 
         void execute_on_element(node_context&, T const& left, T const& right, bool& out) const
         {
@@ -147,8 +147,8 @@ namespace gcore
         GCORE_DECLARE_NODE_TYPE(greater_or_equal_node);
         using super = node_helper_2_in_1_out<greater_or_equal_node<T>, T, T, bool>;
 
-        bool is_const() const { return false; }
-        bool is_static() const { return true; }
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
 
         void execute_on_element(node_context&, T const& left, T const& right, bool& out) const
         {
