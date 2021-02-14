@@ -238,43 +238,23 @@ namespace gtool
                     node_pin_id source_node_pin_id(in_id.Get());
                     node_pin_id const destination_node_pin_id(out_id.Get());
 
-                    gcore::pin_descriptor const* source_pin_desc = m_descriptor.get_pin_descriptor(source_node_pin_id.get_node_id(), source_node_pin_id.get_pin_id());
-                    gcore::pin_descriptor const* destination_pin_desc = m_descriptor.get_pin_descriptor(destination_node_pin_id.get_node_id(), destination_node_pin_id.get_pin_id());
-                    std::unique_ptr<gcore::node> conversion_node = gcore::node_factory::get().try_get_conversion(source_pin_desc->m_type_id, destination_pin_desc->m_type_id);
-                    if (source_pin_desc && destination_pin_desc && (source_pin_desc->m_type_id == destination_pin_desc->m_type_id || conversion_node) && source_pin_desc->m_pin_type == gcore::pin_type::output && destination_pin_desc->m_pin_type == gcore::pin_type::input)
+                    if (m_descriptor.can_add_connection(source_node_pin_id.get_node_id(), source_node_pin_id.get_pin_id(), destination_node_pin_id.get_node_id(), destination_node_pin_id.get_pin_id()))
                     {
                         if (ne::AcceptNewItem())
                         {
-                            if (conversion_node)
+                            gcore::node* conversion_node = nullptr;
+                            if (m_descriptor.add_connection(source_node_pin_id.get_node_id(), source_node_pin_id.get_pin_id(), destination_node_pin_id.get_node_id(), destination_node_pin_id.get_pin_id(), conversion_node))
                             {
-                                conversion_node->set_node_id(m_descriptor.m_node_id_generator++);
-                                auto& connections = m_descriptor.m_connections[conversion_node->get_node_id()];
-                                gcore::node::pin_descriptors const pins = conversion_node->get_pin_descriptors();
-
-                                assert(pins[gtl::to_underlying(gcore::pin_type::output)].size() == 1);
-                                assert(pins[gtl::to_underlying(gcore::pin_type::input)].size() == 1);
-
-                                connections.emplace_back(source_node_pin_id.get_node_id(), source_node_pin_id.get_pin_id(), pins[gtl::to_underlying(gcore::pin_type::input)][0].m_id);
-
-                                ImVec2 const from_position = ne::GetNodePosition(source_node_pin_id.get_node_id());
-                                ImVec2 const to_position = ne::GetNodePosition(destination_node_pin_id.get_node_id());
-                                ImVec2 conversion_position;
-                                conversion_position.x = (from_position.x + to_position.x) / 2.f;
-                                conversion_position.y = (from_position.y + to_position.y) / 2.f;
-                                ne::SetNodePosition(conversion_node->get_node_id(), conversion_position);
-
-                                source_node_pin_id = node_pin_id(conversion_node->get_node_id(), pins[gtl::to_underlying(gcore::pin_type::output)][0].m_id);
-                                gcore::script_descriptor::node_descriptor node_desc;
-                                node_desc.m_node = std::move(conversion_node);
-                                m_descriptor.m_nodes.push_back(std::move(node_desc));
+                                if (conversion_node)
+                                {
+                                       ImVec2 const from_position = ne::GetNodePosition(source_node_pin_id.get_node_id());
+                                       ImVec2 const to_position = ne::GetNodePosition(destination_node_pin_id.get_node_id());
+                                       ImVec2 conversion_position;
+                                       conversion_position.x = (from_position.x + to_position.x) / 2.f;
+                                       conversion_position.y = (from_position.y + to_position.y) / 2.f;
+                                       ne::SetNodePosition(conversion_node->get_node_id(), conversion_position);
+                                }
                             }
-
-                            auto& connections = m_descriptor.m_connections[destination_node_pin_id.get_node_id()];
-                            auto const it = std::find_if(connections.begin(), connections.end(), [&](gcore::script_descriptor::connection const& connection) { return connection.m_destination_pin_id == destination_node_pin_id.get_pin_id(); });
-                            if (it != connections.end())
-                                connections.erase(it);
-
-                            connections.emplace_back(source_node_pin_id.get_node_id(), source_node_pin_id.get_pin_id(), destination_node_pin_id.get_pin_id());
                         }
                     }
                     else
@@ -298,8 +278,7 @@ namespace gtool
                 if (ne::AcceptDeletedItem())
                 {
                     node_pin_id const destination_node_pin_id(link_id.Get());
-                    auto& connections = m_descriptor.m_connections[destination_node_pin_id.get_node_id()];
-                    connections.erase(std::remove_if(connections.begin(), connections.end(), [&](gcore::script_descriptor::connection const& connection) { return connection.m_destination_pin_id == destination_node_pin_id.get_pin_id(); }), connections.end());
+                    m_descriptor.remove_connection(destination_node_pin_id.get_node_id(), destination_node_pin_id.get_pin_id());
                 }
             }
 
@@ -372,12 +351,12 @@ namespace gtool
         gcore::script_descriptor::node_descriptor node_descriptor;
         node_descriptor.m_node = std::move(new_node);
         node_descriptor.m_node->set_node_id(m_descriptor.m_node_id_generator++);
-        
+        gcore::node_id_t const new_node_id = node_descriptor.m_node->get_node_id();
+        m_descriptor.m_nodes.push_back(std::move(node_descriptor));
+
+        gcore::node::pin_descriptors const pin_descriptors = m_descriptor.m_nodes.back().m_node->get_pin_descriptors();
+
         auto const node_position = ImGui::GetMousePos();
-
-        std::vector<gcore::script_descriptor::connection>& connections = m_descriptor.m_connections[node_descriptor.m_node->get_node_id()];
-        gcore::node::pin_descriptors const pin_descriptors = node_descriptor.m_node->get_pin_descriptors();
-
         constexpr int constant_node_x_offset = -80;
         constexpr int constant_node_y_offset = 50;
         auto constant_position = node_position;
@@ -385,19 +364,23 @@ namespace gtool
 
         for (gcore::pin_descriptor const& input : pin_descriptors[gtl::to_underlying(gcore::pin_type::input)])
         {
+            if (input.m_is_optional)
+                continue;
+           
             gcore::script_descriptor::node_descriptor constant_descriptor;
             constant_descriptor.m_node = std::make_unique<gcore::constant_node>();
             constant_descriptor.m_node->set_node_id(m_descriptor.m_node_id_generator++);
+            gcore::node_id_t const node_id = constant_descriptor.m_node->get_node_id();
             static_cast<gcore::constant_node*>(constant_descriptor.m_node.get())->get_node_data().set_type_id(input.m_type_id);
-
-            connections.emplace_back(constant_descriptor.m_node->get_node_id(), gcore::constant_node::output_id, input.m_id);
-            ne::SetNodePosition(constant_descriptor.m_node->get_node_id(), constant_position);
-            constant_position.y += constant_node_y_offset;
             m_descriptor.m_nodes.push_back(std::move(constant_descriptor));
+
+            gcore::node* node = nullptr;
+            m_descriptor.add_connection(node_id, gcore::constant_node::output_id, new_node_id, input.m_id, node);
+            ne::SetNodePosition(node_id, constant_position);
+            constant_position.y += constant_node_y_offset;
         }
 
-        ne::SetNodePosition(node_descriptor.m_node->get_node_id(), node_position);
-        m_descriptor.m_nodes.push_back(std::move(node_descriptor));
+        ne::SetNodePosition(new_node_id, node_position);
     }
 
     void node_viewer_widget::update(gcore::script_descriptor& script_descriptor)

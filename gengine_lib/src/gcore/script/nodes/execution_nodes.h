@@ -10,7 +10,9 @@ namespace gcore
     {
         GCORE_DECLARE_NODE_TYPE(root_execution_node);
 
-        using in_pin = input_pin_descriptor<execution_pin_data, 0, 0>;
+        root_execution_node();
+
+        using in_pin = input_pin_descriptor<execution_pin_data, 0, 0, true>;
 
         bool is_const() const override { return false; }
         bool is_pure() const override { return false; }
@@ -19,5 +21,11 @@ namespace gcore
         void execute(node_context& context) const override;
 
         node::pin_descriptors get_pin_descriptors() const override;
+        void on_input_pin_state_changed(int pin_id, pin_state state) override;
+        void process(gserializer::serializer& serializer) override;
+
+    private:
+        void fill_descriptors();
+        std::vector<pin_descriptor> m_descriptors;
     };
 }

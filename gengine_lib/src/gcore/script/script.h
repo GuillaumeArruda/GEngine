@@ -38,6 +38,13 @@ namespace gcore
         };
 
         pin_descriptor const* get_pin_descriptor(gcore::node_id_t node_id, int pin_id) const;
+        pin_descriptor* get_pin_descriptor(gcore::node_id_t node_id, int pin_id);
+        node_descriptor const* get_node_descriptor(gcore::node_id_t node_id) const;
+        node_descriptor* get_node_descriptor(gcore::node_id_t node_id);
+
+        bool can_add_connection(node_id_t source, int source_pin_id, node_id_t destination, int destination_pin_id) const;
+        bool add_connection(node_id_t source, int source_pin_id, node_id_t destination, int destination_pin_id, node*& out_conversion_node);
+        void remove_connection(node_id_t destination, int destination_pin_id);
 
         std::vector<node_descriptor> m_nodes;
         std::unordered_map<node_id_t, std::vector<connection>> m_connections;

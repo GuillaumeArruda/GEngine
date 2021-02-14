@@ -16,13 +16,13 @@ GSERIALIZER_DEFINE_SUBCLASS_FACTORY_REGISTRATION(gcore::script);
 
 namespace gcore
 {
-    pin_descriptor const* script_descriptor::get_pin_descriptor(node_id_t node_id, int pin_id) const
+    pin_descriptor const* script_descriptor::get_pin_descriptor(gcore::node_id_t node_id, int pin_id) const
     {
-        auto const node_it = std::find_if(m_nodes.begin(), m_nodes.end(), [&](node_descriptor const& node_desc) { return node_desc.m_node->get_node_id() == node_id; });
-        if (node_it == m_nodes.end())
+        node_descriptor const* node_desc = get_node_descriptor(node_id);
+        if (!node_desc)
             return nullptr;
 
-        node::pin_descriptors const descriptors = node_it->m_node->get_pin_descriptors();
+        node::pin_descriptors const descriptors = node_desc->m_node->get_pin_descriptors();
 
         for (gtl::span<pin_descriptor const> pin_descriptors : descriptors)
         {
@@ -34,6 +34,82 @@ namespace gcore
         }
 
         return nullptr;
+    }
+
+    pin_descriptor* script_descriptor::get_pin_descriptor(node_id_t node_id, int pin_id)
+    {
+        return const_cast<pin_descriptor*>(static_cast<script_descriptor const*>(this)->get_pin_descriptor(node_id, pin_id));
+    }
+
+    script_descriptor::node_descriptor const* script_descriptor::get_node_descriptor(gcore::node_id_t node_id) const
+    {
+        auto const node_it = std::find_if(m_nodes.begin(), m_nodes.end(), [&](node_descriptor const& node_desc) { return node_desc.m_node->get_node_id() == node_id; });
+        if (node_it != m_nodes.end())
+            return &(*node_it);
+
+        return nullptr;
+    }
+
+    script_descriptor::node_descriptor* script_descriptor::get_node_descriptor(gcore::node_id_t node_id)
+    {
+        return const_cast<node_descriptor*>(static_cast<script_descriptor const*>(this)->get_node_descriptor(node_id));
+    }
+
+    bool script_descriptor::can_add_connection(node_id_t source, int source_pin_id, node_id_t destination, int destination_pin_id) const
+    {
+        gcore::pin_descriptor const* source_pin_desc = get_pin_descriptor(source, source_pin_id);
+        gcore::pin_descriptor const* destination_pin_desc = get_pin_descriptor(destination, destination_pin_id);
+        return source_pin_desc && destination_pin_desc && (source_pin_desc->m_type_id == destination_pin_desc->m_type_id || gcore::node_factory::get().has_conversion(source_pin_desc->m_type_id, destination_pin_desc->m_type_id)) && source_pin_desc->m_pin_type == gcore::pin_type::output && destination_pin_desc->m_pin_type == gcore::pin_type::input;
+    }
+
+    bool script_descriptor::add_connection(node_id_t source, int source_pin_id, node_id_t destination, int destination_pin_id, node*& out_conversion_node)
+    {
+        if (can_add_connection(source, source_pin_id, destination, destination_pin_id))
+        {
+            gcore::pin_descriptor const* source_pin_desc = get_pin_descriptor(source, source_pin_id);
+            gcore::pin_descriptor const* destination_pin_desc = get_pin_descriptor(destination, destination_pin_id);
+
+            if (std::unique_ptr<node> conversion_node = gcore::node_factory::get().try_get_conversion(source_pin_desc->m_type_id, destination_pin_desc->m_type_id))
+            {
+                conversion_node->set_node_id(m_node_id_generator++);
+                auto& connections = m_connections[conversion_node->get_node_id()];
+                gcore::node::pin_descriptors const pins = conversion_node->get_pin_descriptors();
+
+                assert(pins[gtl::to_underlying(gcore::pin_type::output)].size() == 1);
+                assert(pins[gtl::to_underlying(gcore::pin_type::input)].size() == 1);
+
+                connections.emplace_back(source, source_pin_id, pins[gtl::to_underlying(gcore::pin_type::input)][0].m_id);
+                source = conversion_node->get_node_id();
+                source_pin_id = pins[gtl::to_underlying(gcore::pin_type::output)][0].m_id;
+
+                out_conversion_node = conversion_node.get();
+                conversion_node->on_input_pin_state_changed(pins[gtl::to_underlying(gcore::pin_type::input)][0].m_id, pin_state::connected);
+                gcore::script_descriptor::node_descriptor node_desc;
+                node_desc.m_node = std::move(conversion_node);
+                m_nodes.push_back(std::move(node_desc));
+            }
+
+            auto& connections = m_connections[destination];
+            auto const it = std::find_if(connections.begin(), connections.end(), [&](gcore::script_descriptor::connection const& connection) { return connection.m_destination_pin_id == destination_pin_id; });
+            if (it != connections.end())
+                connections.erase(it);
+
+            connections.emplace_back(source, source_pin_id, destination_pin_id);
+            get_node_descriptor(destination)->m_node->on_input_pin_state_changed(destination_pin_id, pin_state::connected);
+            return true;
+        }
+        return false;
+    }
+
+    void script_descriptor::remove_connection(node_id_t destination, int destination_pin_id)
+    {
+        auto& connections = m_connections[destination];
+        auto const it = std::find_if(connections.begin(), connections.end(), [&](connection const& connection) { return connection.m_destination_pin_id == destination_pin_id; });
+        if (it != connections.end())
+        {
+            connections.erase(it);
+            get_node_descriptor(destination)->m_node->on_input_pin_state_changed(destination_pin_id, pin_state::disconnected);
+        }
     }
 
     void script_descriptor::process(gserializer::serializer& serializer)
@@ -94,7 +170,7 @@ namespace gcore
             for (gcore::pin_descriptor const& input_descriptor : pins[gtl::to_underlying(pin_type::input)])
             {
                 auto const it = std::find_if(node_connections.begin(), node_connections.end(), [&](script_descriptor::connection const& connection) { return connection.m_destination_pin_id == input_descriptor.m_id; });
-                if (it == node_connections.end())
+                if (it == node_connections.end() && !input_descriptor.m_is_optional)
                 {
                     new_constant_node.push_back(std::make_unique<constant_node>());
                     std::unique_ptr<constant_node>& constant = new_constant_node.back();
@@ -148,6 +224,7 @@ namespace gcore
                 for (std::size_t i = 0; i < pins[gtl::to_underlying(pin_type::input)].size(); ++i)
                 {
                     new(current_location) in_pin_data();
+                    reinterpret_cast<in_pin_data*>(current_location)->m_is_optional = pins[gtl::to_underlying(pin_type::input)][i].m_is_optional;
                     current_location += sizeof(in_pin_data);
                 }
 

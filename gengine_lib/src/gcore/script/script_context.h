@@ -16,32 +16,35 @@ namespace gcore
         int m_id = 0;
         node_data_type::id_type m_type_id = node_data_type::invalid_id;
         pin_type m_pin_type = pin_type::input;
+        bool m_is_optional = false;
         bool operator==(int id) const { return m_id == id; }
     };
 
-    template<class DataType, int Index, int Id>
+    template<class DataType, int Index, int Id, bool IsOptional = false>
     struct input_pin_descriptor
     {
         using type = DataType;
         static constexpr int index = Index;
         static constexpr int id = Id;
         static constexpr pin_type pin_type = pin_type::input;
+        static constexpr bool is_optional = IsOptional;
         static pin_descriptor get(const char* name)
         {
-            return pin_descriptor{ name, index, id, node_data_type_registry::get_type_id<type>(), pin_type };
+            return pin_descriptor{ name, index, id, node_data_type_registry::get_type_id<type>(), pin_type, is_optional };
         }
     };
 
-    template<class DataType, int Index, int Id>
+    template<class DataType, int Index, int Id, bool IsOptional = false>
     struct output_pin_descriptor
     {
         using type = DataType;
         static constexpr int index = Index;
         static constexpr int id = Id;
         static constexpr pin_type pin_type = pin_type::output;
+        static constexpr bool is_optional = IsOptional;
         static pin_descriptor get(const char* name)
         {
-            return pin_descriptor{ name, index, id, node_data_type_registry::get_type_id<type>(), pin_type };
+            return pin_descriptor{ name, index, id, node_data_type_registry::get_type_id<type>(), pin_type, is_optional};
         }
     };
 
@@ -52,6 +55,7 @@ namespace gcore
         std::uint32_t m_node_index = 0;
         mutable bool m_has_been_written : 1 = false;
         bool m_is_constant : 1 = false;
+        bool m_is_optional : 1 = false;
     };
 
     struct script_context;
@@ -72,13 +76,22 @@ namespace gcore
         gtl::span<typename PinDescriptor::type const> read() const
         {
             static_assert(PinDescriptor::pin_type == gcore::pin_type::input, "Trying to read a non input pin type");
-            in_pin_data const& data = m_input_data[PinDescriptor::index];
+            return read<typename PinDescriptor::type>(PinDescriptor::index);
+        }
+
+        template<class Type>
+        gtl::span<Type const> read(int index) const
+        {
+            in_pin_data const& data = m_input_data[index];
+            if (data.m_is_optional && data.m_diff_to_node_data == 0)
+                return {};
+
             if (!data.m_has_been_written || !data.m_is_constant)
             {
                 evaluate_input(data.m_node_index);
                 data.m_has_been_written = true;
             }
-            return m_input_data[PinDescriptor::index].get_node_data().read<typename PinDescriptor::type const>();
+            return m_input_data[index].get_node_data().read<Type const>();
         }
 
         template<class PinDescriptor>

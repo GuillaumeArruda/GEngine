@@ -9,5 +9,11 @@ namespace gcore
         count
     };
 
+    enum class pin_state : char
+    {
+        connected,
+        disconnected,
+    };
+
     using node_id_t = std::uint32_t;
 }

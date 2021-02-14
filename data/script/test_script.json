@@ -36,14 +36,15 @@
         {
             "name": "",
             "position": {
-                "x": 2337.0,
+                "x": 2369.0,
                 "y": 672.0
             },
             "node": {
                 "is_valid": true,
                 "type_name": "gcore::root_execution_node",
                 "data": {
-                    "node_id": 26
+                    "node_id": 27,
+                    "connected_inputs": 5
                 }
             }
         }
@@ -60,12 +61,17 @@
             ]
         },
         {
-            "key": 26,
+            "key": 27,
             "data": [
                 {
                     "source": 21,
                     "source_pin": 100,
                     "destination_pin": 0
+                },
+                {
+                    "source": 21,
+                    "source_pin": 100,
+                    "destination_pin": 3
                 }
             ]
         }

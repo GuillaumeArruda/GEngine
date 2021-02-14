@@ -50,6 +50,8 @@ namespace gcore
         node_id_t get_node_id() const { return m_node_id; }
         void set_node_id(node_id_t id) { assert(m_node_id == 0); m_node_id = id; }
 
+        virtual void on_input_pin_state_changed(int /*pin_id*/, pin_state /*pin_state*/) {};
+
     private:
         node_id_t m_node_id = 0;
     };

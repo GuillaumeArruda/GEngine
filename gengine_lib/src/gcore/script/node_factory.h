@@ -34,6 +34,7 @@ namespace gcore
         }
 
         std::unique_ptr<node> try_get_conversion(node_data_type::id_type from, node_data_type::id_type to) const;
+        bool has_conversion(node_data_type::id_type from, node_data_type::id_type to) const;
 
         std::string const& get_display_name(node const& node) const;
     private:
