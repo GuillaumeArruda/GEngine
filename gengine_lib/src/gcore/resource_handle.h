@@ -108,6 +108,9 @@ namespace gcore
 
         void reset() { m_proxy.reset(); }
 
+        bool operator==(resource_handle const& rhs) const { return m_proxy == rhs.m_proxy; }
+        bool operator!=(resource_handle const rhs) const { return m_proxy != rhs.m_proxy; }
+
     private:
         void verify_type()
         {

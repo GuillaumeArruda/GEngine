@@ -14,6 +14,14 @@ namespace gtool
         gcore::node_id_t m_node_id = 0;
     };
 
+    struct create_node_widget
+    {
+        std::unique_ptr<gcore::node> update();
+        bool m_has_just_opened = false;
+        ImVec2 m_open_mouse_position;
+        ImGuiTextFilter m_filter;
+    };
+
     struct node_editor_window : window
     {
         node_editor_window();
@@ -33,9 +41,9 @@ namespace gtool
         void setup_new_node(std::unique_ptr<gcore::node> new_node);
 
         node_viewer_widget m_node_viewer;
-        ImGuiTextFilter m_node_filter;
+        create_node_widget m_create_node_widget;
+
         std::string m_opened_file;
-        std::vector<std::string> m_possible_type_names;
         ax::NodeEditor::EditorContext* m_context;
         gcore::script_descriptor m_descriptor;
         bool m_display = false;

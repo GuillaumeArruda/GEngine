@@ -3,7 +3,7 @@
 #include <unordered_map>
 
 #include "gcore/script/node.h"
-#include "gcore/script/nodes/comparison_nodes.h"
+#include "gcore/script/nodes/conversion_node.h"
 #include "gcore/script/node_data_type.h"
 
 
@@ -21,6 +21,7 @@ namespace gcore
         {
             gserializer::type_factory<node>::register_type<NodeType>(serialization_name);
             m_type_id_hash_to_display_name[std::type_index(typeid(NodeType))] = display_name;
+            m_display_name_to_serialization_name[std::string(display_name)] = serialization_name;
         }
 
         template<class From, class To, class NodeType = gcore::conversion_node<From,To>>
@@ -37,6 +38,8 @@ namespace gcore
         bool has_conversion(node_data_type::id_type from, node_data_type::id_type to) const;
 
         std::string const& get_display_name(node const& node) const;
+
+        std::unordered_map<std::string, std::string> const& get_display_to_serialization() const { return m_display_name_to_serialization_name; }
     private:
         struct conversion_info
         {
@@ -45,6 +48,7 @@ namespace gcore
             std::string m_node_type_name;
         };
         std::unordered_map<std::type_index, std::string> m_type_id_hash_to_display_name;
+        std::unordered_map<std::string, std::string> m_display_name_to_serialization_name;
         std::vector<conversion_info> m_conversions;
         node_factory() = default;
     };

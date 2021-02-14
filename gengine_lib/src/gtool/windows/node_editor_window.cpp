@@ -28,7 +28,6 @@ namespace gtool
     };
 
     node_editor_window::node_editor_window()
-        : m_possible_type_names(gcore::node_factory::get().get_possible_type_names())
     {
         m_context = ax::NodeEditor::CreateEditor();
     }
@@ -309,46 +308,19 @@ namespace gtool
         {
             ne::Suspend();
             ImGui::OpenPopup("Create Node");
+            m_create_node_widget.m_has_just_opened = true;
             ne::Resume();
         }
 
-        ne::Suspend();
-        if (ImGui::BeginPopup("Create Node"))
-        {
-            std::unique_ptr<gcore::node> new_node;
-            gcore::node_factory& factory = gcore::node_factory::get();
-
-            m_node_filter.Draw();
-            for (std::string const& type_name : m_possible_type_names)
-            {
-                if (m_node_filter.PassFilter(type_name.c_str()))
-                {
-                    if (ImGui::MenuItem(type_name.c_str()))
-                    {
-                        new_node = factory.create(type_name);
-                    }
-                }
-            }
-
-            if (new_node)
-            {
-                setup_new_node(std::move(new_node));
-            }
-
-            ImGui::EndPopup(); 
-        }
-
-        if (!ImGui::IsPopupOpen("Create Node"))
-        {
-            m_node_filter.Clear();
-        }
-
-        ne::Resume();
+        std::unique_ptr<gcore::node> new_node = m_create_node_widget.update();
+        if (new_node)
+            setup_new_node(std::move(new_node));
     }
 
     void node_editor_window::setup_new_node(std::unique_ptr<gcore::node> new_node)
     {
         namespace ne = ax::NodeEditor;
+        ne::Suspend();
         gcore::script_descriptor::node_descriptor node_descriptor;
         node_descriptor.m_node = std::move(new_node);
         node_descriptor.m_node->set_node_id(m_descriptor.m_node_id_generator++);
@@ -357,7 +329,7 @@ namespace gtool
 
         gcore::node::pin_descriptors const pin_descriptors = m_descriptor.m_nodes.back().m_node->get_pin_descriptors();
 
-        auto const node_position = ne::ScreenToCanvas(ImGui::GetMousePos());
+        auto const node_position = ne::ScreenToCanvas(m_create_node_widget.m_open_mouse_position);
         constexpr int constant_node_x_offset = -80;
         constexpr int constant_node_y_offset = 50;
         auto constant_position = node_position;
@@ -380,7 +352,7 @@ namespace gtool
             ne::SetNodePosition(node_id, constant_position);
             constant_position.y += constant_node_y_offset;
         }
-
+        ne::Resume();
         ne::SetNodePosition(new_node_id, node_position);
     }
 
@@ -398,5 +370,42 @@ namespace gtool
             }
         }
         ImGui::End();
+    }
+
+    std::unique_ptr<gcore::node> create_node_widget::update()
+    {
+        std::unique_ptr<gcore::node> new_node;
+        namespace ne = ax::NodeEditor;
+        ne::Suspend();
+        if (ImGui::BeginPopup("Create Node"))
+        {
+            gcore::node_factory& factory = gcore::node_factory::get();
+
+            m_filter.Draw();
+            if (m_has_just_opened)
+            {
+                ImGui::SetKeyboardFocusHere();
+                m_open_mouse_position = ImGui::GetMousePos();
+                m_has_just_opened = false;
+            }
+            for (std::pair<std::string, std::string> const& names : gcore::node_factory::get().get_display_to_serialization())
+            {
+                if (m_filter.PassFilter(names.first.c_str()))
+                {
+                    if (ImGui::MenuItem(names.first.c_str()))
+                    {
+                        new_node = factory.create(names.second);
+                    }
+                }
+            }
+            ImGui::EndPopup();
+        }
+
+        if (!ImGui::IsPopupOpen("Create Node"))
+        {
+            m_filter.Clear();
+        }
+        ne::Resume();
+        return new_node;
     }
 }

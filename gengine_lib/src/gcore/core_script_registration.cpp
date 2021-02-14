@@ -34,7 +34,6 @@ namespace gcore
         registry.register_type<float>("Float");
         registry.register_type<bool>("Bool");
 
-
         registry.register_type<std::string>("String");
         registry.register_type<gtl::uuid>("UUID");
         registry.register_type<gcore::resource_handle<resource>>("Resource");
@@ -57,25 +56,28 @@ namespace gcore
         node_factory& factory = node_factory::get();
         GCORE_REGISTER_COMPARISON_NODES(int, "Integer");
         GCORE_REGISTER_ARITHMETIC_NODES(int, "Integer");
-        factory.register_type<select_node<int>>("gcore::select_node<int>", "Select (Integer)");
+        GCORE_REGISTER_SELECT_NODE(int, "Integer");
         
         GCORE_REGISTER_COMPARISON_NODES(float, "Float");
         GCORE_REGISTER_ARITHMETIC_NODES(float, "Float");
-        factory.register_type<select_node<float>>("gcore::select_node<float>", "Select (Float)");
+        GCORE_REGISTER_SELECT_NODE(float, "Float");
 
         GCORE_REGISTER_COMPARISON_NODES(bool, "Bool");
-        factory.register_type<select_node<bool>>("gcore::select_node<bool>", "Select (Bool)");
+        GCORE_REGISTER_SELECT_NODE(bool, "Bool");
 
         GCORE_REGISTER_COMPARISON_NODES(std::string, "String");
-        factory.register_type<select_node<std::string>>("gcore::select_node<std::string>", "Select (String)");
+        GCORE_REGISTER_SELECT_NODE(std::string, "String");
         
         GCORE_REGISTER_COMPARISON_NODES(gtl::uuid, "UUID");
-        factory.register_type<select_node<gtl::uuid>>("gcore::select_node<gtl::uuid>", "Select (UUID)");
+        GCORE_REGISTER_SELECT_NODE(gtl::uuid, "UUID");
         
         GCORE_REGISTER_COMPARISON_NODES(gmath::degree, "Degrees");
         GCORE_REGISTER_ARITHMETIC_NODES(gmath::degree, "Degrees");
-        factory.register_type<select_node<gmath::degree>>("gcore::select_node<gmath::degree>", "Select (gmath::degree)");
+        GCORE_REGISTER_SELECT_NODE(gmath::degree, "Degrees");
         
+        GCORE_REGISTER_EQUALITY_NODES(gcore::resource_handle<resource>, "Resource");
+        GCORE_REGISTER_SELECT_NODE(gcore::resource_handle<resource>, "Resource");
+
 
         factory.register_type<gcore::constant_node>("gcore::constant_node", "Constant");
         factory.register_type<gcore::and_node>("gcore::and_node", "And");

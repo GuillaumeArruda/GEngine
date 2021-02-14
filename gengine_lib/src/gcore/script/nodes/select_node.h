@@ -75,4 +75,7 @@ namespace gcore
     private:
         bool m_type_inputs_guaranteed_same_size = true;
     };
+
+#define GCORE_REGISTER_SELECT_NODE(Type, DisplayName)                                                                           \
+        factory.register_type<gcore::select_node<Type>>("gcore::select_node<"#Type">", "Select (" DisplayName")");
 }

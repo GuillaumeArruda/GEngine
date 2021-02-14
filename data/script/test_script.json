@@ -36,8 +36,8 @@
         {
             "name": "",
             "position": {
-                "x": 2433.0,
-                "y": 528.0
+                "x": 2177.0,
+                "y": 527.0
             },
             "node": {
                 "is_valid": true,
@@ -170,6 +170,16 @@
     ],
     "connections": [
         {
+            "key": 21,
+            "data": [
+                {
+                    "source": 30,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
             "key": 37,
             "data": [
                 {
@@ -181,16 +191,6 @@
                     "source": 39,
                     "source_pin": 1,
                     "destination_pin": 1
-                }
-            ]
-        },
-        {
-            "key": 21,
-            "data": [
-                {
-                    "source": 30,
-                    "source_pin": 100,
-                    "destination_pin": 0
                 }
             ]
         },
