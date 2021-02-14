@@ -324,6 +324,12 @@
     <ClInclude Include="src\gcore\script\nodes\print_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gcore\script\nodes\select_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gcore\script\nodes\random_nodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -537,6 +543,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gcore\script\nodes\print_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gcore\script\nodes\random_nodes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

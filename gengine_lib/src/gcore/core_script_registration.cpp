@@ -13,6 +13,8 @@
 #include "gcore/script/nodes/conversion_node.h"
 #include "gcore/script/nodes/execution_nodes.h"
 #include "gcore/script/nodes/print_node.h"
+#include "gcore/script/nodes/select_node.h"
+#include "gcore/script/nodes/random_nodes.h"
 
 #include "gserializer/gmath_serialization.h"
 
@@ -55,13 +57,25 @@ namespace gcore
         node_factory& factory = node_factory::get();
         GCORE_REGISTER_COMPARISON_NODES(int, "Integer");
         GCORE_REGISTER_ARITHMETIC_NODES(int, "Integer");
+        factory.register_type<select_node<int>>("gcore::select_node<int>", "Select (Integer)");
+        
         GCORE_REGISTER_COMPARISON_NODES(float, "Float");
         GCORE_REGISTER_ARITHMETIC_NODES(float, "Float");
+        factory.register_type<select_node<float>>("gcore::select_node<float>", "Select (Float)");
+
         GCORE_REGISTER_COMPARISON_NODES(bool, "Bool");
+        factory.register_type<select_node<bool>>("gcore::select_node<bool>", "Select (Bool)");
+
         GCORE_REGISTER_COMPARISON_NODES(std::string, "String");
+        factory.register_type<select_node<std::string>>("gcore::select_node<std::string>", "Select (String)");
+        
         GCORE_REGISTER_COMPARISON_NODES(gtl::uuid, "UUID");
+        factory.register_type<select_node<gtl::uuid>>("gcore::select_node<gtl::uuid>", "Select (UUID)");
+        
         GCORE_REGISTER_COMPARISON_NODES(gmath::degree, "Degrees");
         GCORE_REGISTER_ARITHMETIC_NODES(gmath::degree, "Degrees");
+        factory.register_type<select_node<gmath::degree>>("gcore::select_node<gmath::degree>", "Select (gmath::degree)");
+        
 
         factory.register_type<gcore::constant_node>("gcore::constant_node", "Constant");
         factory.register_type<gcore::and_node>("gcore::and_node", "And");
@@ -70,6 +84,10 @@ namespace gcore
 
         factory.register_type<print_node>("gcore::print_node", "Print");
         factory.register_type<root_execution_node>("gcore::root_execution_node", "Root Execute");
+        factory.register_type<sequence_execution_node>("gcore::sequence_execution_node", "Execute Sequence");
+        factory.register_type<select_execution_node>("gcore::select_execution_node", "Select Execution");
+
+        factory.register_type<random_integer_range_node>("gcore::random_integer_range_node", "Random Integer In Range");
 
         factory.register_conversion<int, float>("gcore::conversion_node<int, float>");
         factory.register_conversion<float, int>("gcore::conversion_node<float, int>"); 

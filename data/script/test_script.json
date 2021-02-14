@@ -3,8 +3,8 @@
         {
             "name": "",
             "position": {
-                "x": 2030.0,
-                "y": 672.0
+                "x": 1614.0,
+                "y": 544.0
             },
             "node": {
                 "is_valid": true,
@@ -22,8 +22,8 @@
         {
             "name": "",
             "position": {
-                "x": 2145.0,
-                "y": 672.0
+                "x": 1961.0,
+                "y": 528.0
             },
             "node": {
                 "is_valid": true,
@@ -36,26 +36,160 @@
         {
             "name": "",
             "position": {
-                "x": 2369.0,
-                "y": 672.0
+                "x": 2433.0,
+                "y": 528.0
             },
             "node": {
                 "is_valid": true,
                 "type_name": "gcore::root_execution_node",
                 "data": {
                     "node_id": 27,
-                    "connected_inputs": 5
+                    "connected_inputs": 2
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1778.0,
+                "y": 526.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::select_node<std::string>",
+                "data": {
+                    "node_id": 30,
+                    "type_inputs_guaranteed_same_size": true
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1614.0,
+                "y": 592.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 33,
+                    "value": {
+                        "type_name": "String",
+                        "number_of_elements": 1,
+                        "value": "Bye World!"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1569.0,
+                "y": 463.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::greater_or_equal_node<int>",
+                "data": {
+                    "node_id": 34
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1438.0,
+                "y": 496.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 36,
+                    "value": {
+                        "type_name": "Integer",
+                        "number_of_elements": 1,
+                        "value": 50
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1324.0,
+                "y": 415.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::random_integer_range_node",
+                "data": {
+                    "node_id": 37
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1184.0,
+                "y": 390.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 38,
+                    "value": {
+                        "type_name": "Integer",
+                        "number_of_elements": 1,
+                        "value": 0
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1184.0,
+                "y": 440.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 39,
+                    "value": {
+                        "type_name": "Integer",
+                        "number_of_elements": 1,
+                        "value": 100
+                    }
                 }
             }
         }
     ],
     "connections": [
         {
+            "key": 37,
+            "data": [
+                {
+                    "source": 38,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 39,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
             "key": 21,
             "data": [
                 {
-                    "source": 3,
-                    "source_pin": 1,
+                    "source": 30,
+                    "source_pin": 100,
                     "destination_pin": 0
                 }
             ]
@@ -67,11 +201,41 @@
                     "source": 21,
                     "source_pin": 100,
                     "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 30,
+            "data": [
+                {
+                    "source": 33,
+                    "source_pin": 1,
+                    "destination_pin": 2
                 },
                 {
-                    "source": 21,
+                    "source": 3,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 34,
                     "source_pin": 100,
-                    "destination_pin": 3
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 34,
+            "data": [
+                {
+                    "source": 36,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 37,
+                    "source_pin": 100,
+                    "destination_pin": 0
                 }
             ]
         }

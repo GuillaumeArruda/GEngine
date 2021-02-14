@@ -66,7 +66,7 @@ namespace gcore
         }
 
         template<class Type>
-        gtl::span<Type> write_values(gtl::span<Type> values)
+        gtl::span<Type> write_values(gtl::span<Type const> values)
         {
             clear();
             m_type_id = node_data_type_registry::get_type_id<Type>();
@@ -77,13 +77,13 @@ namespace gcore
             if (values.size() == 1 && sizeof(Type) <= internal_buffer_size && alignof(Type) <= internal_buffer_alignment)
             {
                 m_is_inline = true;
-                data_type.m_vtable.m_copy_single_element(static_cast<void*>(values.data()), &m_inline_info.m_buffer);
+                data_type.m_vtable.m_copy_single_element(static_cast<void const*>(values.data()), &m_inline_info.m_buffer);
                 return { *reinterpret_cast<Type*>(&m_inline_info.m_buffer) };
             }
             else
             {
                 m_is_inline = false;
-                m_pointer_info.m_pointer_to_data = data_type.m_vtable.m_copy_array(static_cast<void*>(values.data()), values.size());
+                m_pointer_info.m_pointer_to_data = data_type.m_vtable.m_copy_array(static_cast<void const*>(values.data()), values.size());
                 m_pointer_info.m_number_of_elements = values.size();
                 return { static_cast<Type*>(m_pointer_info.m_pointer_to_data), m_pointer_info.m_number_of_elements };
             }

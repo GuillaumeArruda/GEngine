@@ -45,6 +45,7 @@ namespace gtool
 
         ax::NodeEditor::SetCurrentEditor(m_context);
         gserializer::json_read_serializer serializer(m_opened_file.c_str());
+        m_descriptor = gcore::script_descriptor();
         m_descriptor.process(serializer);
 
         m_descriptor.m_node_id_generator = 0;
@@ -356,7 +357,7 @@ namespace gtool
 
         gcore::node::pin_descriptors const pin_descriptors = m_descriptor.m_nodes.back().m_node->get_pin_descriptors();
 
-        auto const node_position = ImGui::GetMousePos();
+        auto const node_position = ne::ScreenToCanvas(ImGui::GetMousePos());
         constexpr int constant_node_x_offset = -80;
         constexpr int constant_node_y_offset = 50;
         auto constant_position = node_position;
@@ -399,5 +400,3 @@ namespace gtool
         ImGui::End();
     }
 }
-
-

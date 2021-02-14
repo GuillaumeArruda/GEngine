@@ -102,7 +102,7 @@ namespace gcore
         }
 
         template<class PinDescriptor> 
-        gtl::span<typename PinDescriptor::type> write_values(gtl::span<typename PinDescriptor::type> values)
+        gtl::span<typename PinDescriptor::type> write_values(gtl::span<typename PinDescriptor::type const> values)
         {
             static_assert(PinDescriptor::pin_type == gcore::pin_type::output, "Trying to write a non output pin type");
             return m_output_data[PinDescriptor::index].write_values<typename PinDescriptor::type>(values);
