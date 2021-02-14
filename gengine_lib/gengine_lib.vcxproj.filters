@@ -315,6 +315,15 @@
     <ClInclude Include="src\gcore\script\nodes\conversion_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gcore\script\nodes\execution_nodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gcore\script\execution_defines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gcore\script\nodes\print_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -522,6 +531,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gcore\script\nodes\bool_operation_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gcore\script\nodes\execution_nodes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gcore\script\nodes\print_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

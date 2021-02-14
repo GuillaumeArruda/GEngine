@@ -39,6 +39,7 @@ namespace gcore
         
         virtual bool is_const() const { return true; } // const node will only be called once to setup their output value
         virtual bool is_pure() const { return is_const(); } // pure node will propagate the constness of their input. 
+        virtual bool is_root() const { return false; }  // If true, the node will be executed when the script start
 
         using pin_descriptors = std::array<gtl::span<pin_descriptor const>, gtl::to_underlying(pin_type::count)>;
 

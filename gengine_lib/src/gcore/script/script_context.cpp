@@ -126,6 +126,14 @@ namespace gcore
         return *this;
     }
 
+    void script_context::execute()
+    {
+        for (std::uint32_t root_index : m_script->get_root_node_indexes())
+        {
+            execute_node(root_index);
+        }
+    }
+
     void script_context::execute_node(std::uint32_t node_index)
     {
         assert(node_index < m_node_contexts.size());

@@ -36,6 +36,9 @@
     <ClInclude Include="src\gcore\script\node.h" />
     <ClInclude Include="src\gcore\script\nodes\constant_node.h" />
     <ClInclude Include="src\gcore\script\nodes\conversion_node.h" />
+    <ClInclude Include="src\gcore\script\execution_defines.h" />
+    <ClInclude Include="src\gcore\script\nodes\execution_nodes.h" />
+    <ClInclude Include="src\gcore\script\nodes\print_node.h" />
     <ClInclude Include="src\gcore\script\node_data.h" />
     <ClInclude Include="src\gcore\script\node_data_type.h" />
     <ClInclude Include="src\gcore\core_script_registration.h" />
@@ -134,6 +137,8 @@
     <ClCompile Include="src\gcore\script\node.cpp" />
     <ClCompile Include="src\gcore\script\nodes\bool_operation_node.cpp" />
     <ClCompile Include="src\gcore\script\nodes\constant_node.cpp" />
+    <ClCompile Include="src\gcore\script\nodes\execution_nodes.cpp" />
+    <ClCompile Include="src\gcore\script\nodes\print_node.cpp" />
     <ClCompile Include="src\gcore\script\node_data.cpp" />
     <ClCompile Include="src\gcore\script\node_data_type.cpp" />
     <ClCompile Include="src\gcore\core_script_registration.cpp" />

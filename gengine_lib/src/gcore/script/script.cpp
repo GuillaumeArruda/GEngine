@@ -61,14 +61,7 @@ namespace gcore
     {
         gserializer::json_read_serializer serializer(m_descriptor_path.string().c_str());
         script_descriptor descriptor;
-        serializer.process("script_descriptor", descriptor);
-
-        {
-            auto& connection = descriptor.m_connections[3];
-            connection.push_back(script_descriptor::connection{ 1, 100, 0 });
-            connection.push_back(script_descriptor::connection{ 2, 100, 1 });
-        }
-
+        descriptor.process(serializer);
 
         std::size_t node_memory_to_allocate = 0;
         std::size_t number_of_input_to_allocate = 0;
@@ -129,6 +122,10 @@ namespace gcore
             {
                 m_nodes.push_back(node.m_node->clone(static_cast<void*>(current_location)));
                 current_location += node.m_node->byte_size();
+                if (m_nodes.back()->is_root())
+                {
+                    m_root_node_indexes.push_back(static_cast<std::uint32_t>(m_nodes.size() - 1));
+                }
             }
             for (auto const& node : new_constant_node)
             {

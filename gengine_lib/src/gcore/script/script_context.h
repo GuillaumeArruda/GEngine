@@ -118,6 +118,7 @@ namespace gcore
         script_context& operator=(script_context const& copy);
         script_context& operator=(script_context&& move);
 
+        void execute();
         void execute_node(std::uint32_t);
         friend script;
     private:

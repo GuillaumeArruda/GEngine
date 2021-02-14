@@ -11,6 +11,8 @@
 #include "gcore/script/nodes//constant_node.h"
 #include "gcore/script/nodes/bool_operation_node.h"
 #include "gcore/script/nodes/conversion_node.h"
+#include "gcore/script/nodes/execution_nodes.h"
+#include "gcore/script/nodes/print_node.h"
 
 #include "gserializer/gmath_serialization.h"
 
@@ -44,6 +46,8 @@ namespace gcore
         registry.register_type<glm::mat4>("Matrix4");
         registry.register_type<glm::mat3>("Matrix3");
         registry.register_type<gmath::degree>("Degrees");
+
+        registry.register_type<execution_pin_data>("Execute");
     }
 
     void register_node_type()
@@ -63,6 +67,9 @@ namespace gcore
         factory.register_type<gcore::and_node>("gcore::and_node", "And");
         factory.register_type<gcore::or_node>("gcore::or_node", "Or");
         factory.register_type<gcore::not_node>("gcore::not_node", "Not");
+
+        factory.register_type<print_node>("gcore::print_node", "Print");
+        factory.register_type<root_execution_node>("gcore::root_execution_node", "Root Execute");
 
         factory.register_conversion<int, float>("gcore::conversion_node<int, float>");
         factory.register_conversion<float, int>("gcore::conversion_node<float, int>"); 

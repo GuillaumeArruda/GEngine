@@ -33,6 +33,7 @@ namespace gtool
         void setup_new_node(std::unique_ptr<gcore::node> new_node);
 
         node_viewer_widget m_node_viewer;
+        ImGuiTextFilter m_node_filter;
         std::string m_opened_file;
         std::vector<std::string> m_possible_type_names;
         ax::NodeEditor::EditorContext* m_context;

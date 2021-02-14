@@ -60,6 +60,7 @@ namespace gcore
         std::size_t get_necessary_memory_for_context() const { return m_number_of_bytes_for_context; }
 
         script_context create_context() const;
+        gtl::span<std::uint32_t const> get_root_node_indexes() const { return m_root_node_indexes; }
 
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
     private:
@@ -68,6 +69,7 @@ namespace gcore
         std::filesystem::path m_descriptor_path;
         std::unique_ptr<char[]> m_node_buffer;
         std::vector<node*> m_nodes;
+        std::vector<std::uint32_t> m_root_node_indexes;
         std::unique_ptr<script_context> m_default_script_context;
         std::size_t m_number_of_bytes_for_context = 0;
     };

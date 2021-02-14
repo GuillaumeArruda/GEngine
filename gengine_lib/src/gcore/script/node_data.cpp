@@ -57,9 +57,10 @@ namespace gcore
         }
         else
         {
-            data_type.m_vtable.m_delete_array(m_pointer_info.m_pointer_to_data);
+            data_type.m_vtable.m_delete_array(m_pointer_info.m_pointer_to_data, m_pointer_info.m_number_of_elements);
         }
         m_is_inline = false;
+        m_type_id = node_data_type::invalid_id;
     }
 
     void node_data::set_type_id(node_data_type::id_type type_id)
@@ -130,11 +131,11 @@ namespace gcore
 
         if (m_is_inline)
         {
-            new_node_type->m_vtable.process(serializer, m_inline_info.m_buffer, 1);
+            new_node_type->m_vtable.m_process(serializer, m_inline_info.m_buffer, 1);
         }
         else
         {
-            new_node_type->m_vtable.process(serializer, m_pointer_info.m_pointer_to_data, m_pointer_info.m_number_of_elements);
+            new_node_type->m_vtable.m_process(serializer, m_pointer_info.m_pointer_to_data, m_pointer_info.m_number_of_elements);
         }
     }
 

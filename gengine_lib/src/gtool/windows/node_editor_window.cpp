@@ -338,11 +338,15 @@ namespace gtool
             std::unique_ptr<gcore::node> new_node;
             gcore::node_factory& factory = gcore::node_factory::get();
 
+            m_node_filter.Draw();
             for (std::string const& type_name : m_possible_type_names)
             {
-                if (ImGui::MenuItem(type_name.c_str()))
+                if (m_node_filter.PassFilter(type_name.c_str()))
                 {
-                    new_node = factory.create(type_name);
+                    if (ImGui::MenuItem(type_name.c_str()))
+                    {
+                        new_node = factory.create(type_name);
+                    }
                 }
             }
 
@@ -353,6 +357,12 @@ namespace gtool
 
             ImGui::EndPopup(); 
         }
+
+        if (!ImGui::IsPopupOpen("Create Node"))
+        {
+            m_node_filter.Clear();
+        }
+
         ne::Resume();
     }
 

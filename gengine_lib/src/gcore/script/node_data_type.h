@@ -13,12 +13,12 @@ namespace gcore
             void (*m_construct_single_element)(void*);
             void* (*m_new_array)(std::size_t);
             void (*m_destroy_single_element)(void*);
-            void (*m_delete_array)(void*);
+            void (*m_delete_array)(void*, std::size_t);
             void (*m_move_single_element)(void*, void*);
             void (*m_copy_single_element)(void const*, void*);
             void* (*m_copy_array)(void const*, std::size_t);
             bool (*m_can_fit_in_buffer)(std::size_t, std::size_t);
-            void (*process)(gserializer::serializer&, void* buffer, std::size_t number_of_element);
+            void (*m_process)(gserializer::serializer&, void* buffer, std::size_t number_of_element);
         };
 
         using id_type = std::uint16_t;
@@ -47,7 +47,9 @@ namespace gcore
         template<class Type>
         void* new_array(std::size_t number_of_elements)
         {
-            Type* data = new Type[number_of_elements];
+            Type* data = static_cast<Type*>(operator new(number_of_elements * sizeof(Type)));
+            for (size_t i = 0; i < number_of_elements; ++i)
+                new(static_cast<void*>(data + i)) Type();
             return static_cast<void*>(data);
         }
 
@@ -58,9 +60,14 @@ namespace gcore
         }
 
         template<class Type>
-        void delete_array(void* array)
+        void delete_array(void* array, std::size_t number_of_elements)
         {
-            delete[] static_cast<Type*>(array);
+            Type* data = static_cast<Type*>(array);
+            for (std::size_t i = 0; i < number_of_elements; ++i)
+            {
+                (data + i)->~Type();
+            }
+            operator delete(array);
         }
 
         template<class Type>
@@ -79,7 +86,7 @@ namespace gcore
         void* copy_array(void const* source, std::size_t number_of_elements)
         {
             Type const* source_data = static_cast<Type const*>(source);
-            Type* data = static_cast<Type*>(operator new[](number_of_elements * sizeof(Type)));
+            Type* data = static_cast<Type*>(operator new(number_of_elements * sizeof(Type)));
             for (size_t i = 0; i < number_of_elements; ++i)
                 new(static_cast<void*>(data + i)) Type(*(source_data + i));
             return data;

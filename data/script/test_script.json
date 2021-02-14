@@ -3,27 +3,8 @@
         {
             "name": "",
             "position": {
-                "x": 1506.0,
-                "y": 608.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::constant_node",
-                "data": {
-                    "node_id": 2,
-                    "value": {
-                        "type_name": "String",
-                        "number_of_elements": 1,
-                        "value": "Hello"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 1506.0,
-                "y": 658.0
+                "x": 2030.0,
+                "y": 672.0
             },
             "node": {
                 "is_valid": true,
@@ -33,7 +14,7 @@
                     "value": {
                         "type_name": "String",
                         "number_of_elements": 1,
-                        "value": "World "
+                        "value": "Hello World"
                     }
                 }
             }
@@ -41,125 +22,48 @@
         {
             "name": "",
             "position": {
-                "x": 1586.0,
-                "y": 608.0
+                "x": 2145.0,
+                "y": 672.0
             },
             "node": {
                 "is_valid": true,
-                "type_name": "gcore::not_equal_node<std::string>",
+                "type_name": "gcore::print_node",
                 "data": {
-                    "node_id": 1
+                    "node_id": 21
                 }
             }
         },
         {
             "name": "",
             "position": {
-                "x": 1505.0,
-                "y": 463.0
+                "x": 2337.0,
+                "y": 672.0
             },
             "node": {
                 "is_valid": true,
-                "type_name": "gcore::constant_node",
+                "type_name": "gcore::root_execution_node",
                 "data": {
-                    "node_id": 5,
-                    "value": {
-                        "type_name": "Float",
-                        "number_of_elements": 1,
-                        "value": 10.0
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 1505.0,
-                "y": 513.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::constant_node",
-                "data": {
-                    "node_id": 6,
-                    "value": {
-                        "type_name": "Float",
-                        "number_of_elements": 1,
-                        "value": -100.0
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 1585.0,
-                "y": 463.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::less_or_equal_node<float>",
-                "data": {
-                    "node_id": 4
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 1809.0,
-                "y": 527.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::equal_node<bool>",
-                "data": {
-                    "node_id": 7
+                    "node_id": 26
                 }
             }
         }
     ],
     "connections": [
         {
-            "key": 1,
+            "key": 21,
             "data": [
-                {
-                    "source": 2,
-                    "source_pin": 1,
-                    "destination_pin": 0
-                },
                 {
                     "source": 3,
                     "source_pin": 1,
-                    "destination_pin": 1
-                }
-            ]
-        },
-        {
-            "key": 4,
-            "data": [
-                {
-                    "source": 5,
-                    "source_pin": 1,
                     "destination_pin": 0
-                },
-                {
-                    "source": 6,
-                    "source_pin": 1,
-                    "destination_pin": 1
                 }
             ]
         },
         {
-            "key": 7,
+            "key": 26,
             "data": [
                 {
-                    "source": 1,
-                    "source_pin": 100,
-                    "destination_pin": 1
-                },
-                {
-                    "source": 4,
+                    "source": 21,
                     "source_pin": 100,
                     "destination_pin": 0
                 }
