@@ -10,6 +10,7 @@
 #include "gcore/script/script_context.h"
 #include "gcore/script/nodes/constant_node.h"
 #include "gcore/script/node_factory.h"
+#include "gcore/world.h"
 
 #include "grender/serializers/imgui_serializer.h"
 
@@ -37,13 +38,14 @@ namespace gtool
         ax::NodeEditor::DestroyEditor(m_context);
     }
 
-    void node_editor_window::open_file()
+    void node_editor_window::open_file(gcore::resource_library& library)
     {
         ax::NodeEditor::DestroyEditor(m_context);
         m_context = ax::NodeEditor::CreateEditor();
 
         ax::NodeEditor::SetCurrentEditor(m_context);
         gserializer::json_read_serializer serializer(m_opened_file.c_str());
+        serializer.set_in_context(std::ref(library));
         m_descriptor = gcore::script_descriptor();
         m_descriptor.process(serializer);
 
@@ -73,7 +75,7 @@ namespace gtool
         serializer.write_to_file(m_opened_file.c_str());
     }
 
-    void node_editor_window::update(gcore::world&, window_manager&)
+    void node_editor_window::update(gcore::world& world, window_manager&)
     {
         namespace ne = ax::NodeEditor;
         if (m_display)
@@ -114,7 +116,7 @@ namespace gtool
                 ImGui::InputText("File", &m_opened_file);
                 if (ImGui::Button("Open"))
                 {
-                    open_file();
+                    open_file(*world.get_resource_library());
                     ImGui::CloseCurrentPopup();
                 }
                 ImGui::EndPopup();
@@ -172,7 +174,7 @@ namespace gtool
             ne::End();
             ne::SetCurrentEditor(nullptr);
 
-            m_node_viewer.update(m_descriptor);
+            m_node_viewer.update(m_descriptor, *world.get_resource_library());
 
             ImGui::End();
         }
@@ -356,7 +358,7 @@ namespace gtool
         ne::SetNodePosition(new_node_id, node_position);
     }
 
-    void node_viewer_widget::update(gcore::script_descriptor& script_descriptor)
+    void node_viewer_widget::update(gcore::script_descriptor& script_descriptor, gcore::resource_library& library)
     {
         if (ImGui::Begin("Node viewer"))
         {
@@ -365,6 +367,7 @@ namespace gtool
             {
                 ImGui::PushID(m_node_id);
                 grender::imgui_serializer serializer("Node Data");
+                serializer.set_in_context(std::ref(library));
                 it->process(serializer);
                 ImGui::PopID();
             }

@@ -132,6 +132,16 @@ namespace grender
         set_uniform(get_uniform_location(name), variant);
     }
 
+    uniform_variant::type program_uniform_state::get_type_at_index(std::size_t index) const
+    {
+        return m_uniforms.at(index).m_uniform.get_type();
+    }
+
+    std::string const& program_uniform_state::get_name_at_index(std::size_t index) const
+    {
+        return m_uniforms.at(index).m_name;
+    }
+
     void program_uniform_state::process(gserializer::serializer& serializer)
     {
         serializer.process("uniforms", m_uniforms, "Uniform");
@@ -230,6 +240,12 @@ namespace grender
     {
         serializer.process("name", m_name);
         m_uniform.process(serializer);
+    }
+
+    void program_pin_data::process(gserializer::serializer& serializer)
+    {
+        serializer.process("program", m_program);
+        serializer.process("state", m_state);
     }
 
 }

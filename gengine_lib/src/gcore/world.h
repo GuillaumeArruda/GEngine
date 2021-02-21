@@ -4,15 +4,15 @@
 
 #include "gcore/entity_registry.h"
 #include "gcore/system_registry.h"
-#include "gcore/resource_library.h"
 
 namespace gcore
 {
     struct system;
+    struct resource_library;
     struct world
     {
         world(std::shared_ptr<resource_library> library) : m_resource_library(std::move(library)) {}
-
+        ~world();
         void initialize_systems();
 
         entity_registry& get_entity_registry() { return m_entity_registry; }

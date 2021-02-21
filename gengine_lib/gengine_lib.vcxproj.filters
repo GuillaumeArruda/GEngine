@@ -330,6 +330,15 @@
     <ClInclude Include="src\gcore\script\nodes\random_nodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gtl\crc32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\nodes\configure_program_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\nodes\render_mesh_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -546,6 +555,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gcore\script\nodes\random_nodes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\nodes\configure_program_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\nodes\render_mesh_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

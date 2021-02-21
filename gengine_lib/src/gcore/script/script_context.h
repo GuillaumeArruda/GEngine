@@ -80,7 +80,7 @@ namespace gcore
         }
 
         template<class Type>
-        gtl::span<Type const> read(int index) const
+        gtl::span<Type const> read(std::size_t index) const
         {
             in_pin_data const& data = m_input_data[index];
             if (data.m_is_optional && data.m_diff_to_node_data == 0)

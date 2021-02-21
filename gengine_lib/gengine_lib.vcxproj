@@ -70,6 +70,8 @@
     <ClInclude Include="src\grender\components\skybox_component.h" />
     <ClInclude Include="src\grender\dds_image_data.h" />
     <ClInclude Include="src\grender\frame_buffer.h" />
+    <ClInclude Include="src\grender\nodes\configure_program_node.h" />
+    <ClInclude Include="src\grender\nodes\render_mesh_node.h" />
     <ClInclude Include="src\grender\render_target.h" />
     <ClInclude Include="src\grender\resources\texture_2d.h" />
     <ClInclude Include="src\grender\resources\cube_map_texture.h" />
@@ -79,6 +81,7 @@
     <ClInclude Include="src\grender\uniform_variant.h" />
     <ClInclude Include="src\gserializer\serializers\binary_file_serializer.h" />
     <ClInclude Include="src\gtl\callbacks.h" />
+    <ClInclude Include="src\gtl\crc32.h" />
     <ClInclude Include="src\gtl\scope_timer.h" />
     <ClInclude Include="src\gtl\utility.h" />
     <ClInclude Include="src\gtool\common_widgets.h" />
@@ -167,6 +170,8 @@
     <ClCompile Include="src\grender\components\skybox_component.cpp" />
     <ClCompile Include="src\grender\dds_image_data.cpp" />
     <ClCompile Include="src\grender\frame_buffer.cpp" />
+    <ClCompile Include="src\grender\nodes\configure_program_node.cpp" />
+    <ClCompile Include="src\grender\nodes\render_mesh_node.cpp" />
     <ClCompile Include="src\grender\render_target.cpp" />
     <ClCompile Include="src\grender\resources\cube_map_texture.cpp" />
     <ClCompile Include="src\grender\resources\texture.cpp" />
@@ -292,6 +297,7 @@
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <AdditionalOptions>/experimental:external /external:anglebrackets /external:W3 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(VcpkgRoot)..\$(VCPKG_DEFAULT_TRIPLET)\include\bullet\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MaxFilesInUnityFile>10</MaxFilesInUnityFile>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -310,6 +316,7 @@
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <AdditionalOptions>/experimental:external /external:anglebrackets /external:W3 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(VcpkgRoot)..\$(VCPKG_DEFAULT_TRIPLET)\include\bullet\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MaxFilesInUnityFile>10</MaxFilesInUnityFile>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -328,6 +335,10 @@
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <AdditionalOptions>/experimental:external /external:anglebrackets /external:W3 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(VcpkgRoot)..\$(VCPKG_DEFAULT_TRIPLET)\include\bullet\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <IncludeInUnityFile>true</IncludeInUnityFile>
+      <MinFilesInUnityFile>1</MinFilesInUnityFile>
+      <MaxFilesInUnityFile>10</MaxFilesInUnityFile>
+      <UnityFilesDirectory>$(SolutionDir)unity\$(ProjectName)\</UnityFilesDirectory>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -346,6 +357,10 @@
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <AdditionalOptions>/experimental:external /external:anglebrackets /external:W3 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(VcpkgRoot)..\$(VCPKG_DEFAULT_TRIPLET)\include\bullet\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <IncludeInUnityFile>true</IncludeInUnityFile>
+      <MinFilesInUnityFile>1</MinFilesInUnityFile>
+      <MaxFilesInUnityFile>10</MaxFilesInUnityFile>
+      <UnityFilesDirectory>$(SolutionDir)unity\$(ProjectName)\</UnityFilesDirectory>
     </ClCompile>
     <Link>
       <SubSystem>

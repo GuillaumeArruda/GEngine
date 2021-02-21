@@ -48,7 +48,7 @@ namespace gcore
 
         std::vector<node_descriptor> m_nodes;
         std::unordered_map<node_id_t, std::vector<connection>> m_connections;
-        gcore::node_id_t m_node_id_generator = 1;
+        gcore::node_id_t m_node_id_generator = 1; 
         void process(gserializer::serializer& serializer);
     };
 

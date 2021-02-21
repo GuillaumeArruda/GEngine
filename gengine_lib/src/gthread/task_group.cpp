@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "gthread/task_group.h"
 #include "gthread/latch.h"
+#include "gthread/job_manager.h"
 
 #include <algorithm>
 

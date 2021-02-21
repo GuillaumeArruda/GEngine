@@ -10,6 +10,9 @@
 
 #include "grender/resources/texture.h"
 #include "grender/resources/mesh_resource.h"
+#include "grender/resources/program.h"
+
+#include "grender/nodes/configure_program_node.h"
 
 namespace grender
 {
@@ -18,6 +21,7 @@ namespace grender
         gcore::node_data_type_registry& registry = gcore::node_data_type_registry::get();
         registry.register_type<gcore::resource_handle<grender::texture>>("Texture");
         registry.register_type<gcore::resource_handle<grender::mesh_resource>>("Mesh");
+        registry.register_type<program_pin_data>("Program");
     }
 
     void register_node_type()
@@ -29,6 +33,8 @@ namespace grender
 
         GCORE_REGISTER_SELECT_NODE(gcore::resource_handle<grender::mesh_resource>, "Mesh");
         GCORE_REGISTER_EQUALITY_NODES(gcore::resource_handle<grender::mesh_resource>, "Mesh");
+
+        factory.register_type<grender::configure_program_node>("grender::configure_program_node", "Configure Render Program");
 
         gcore::resource_handle<grender::texture> t;
         gcore::resource_handle<gcore::resource> t2 = static_cast<gcore::resource_handle<gcore::resource>>(t);

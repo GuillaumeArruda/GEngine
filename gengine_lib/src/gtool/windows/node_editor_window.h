@@ -6,11 +6,16 @@
 
 #include "gcore/script/script.h"
 
+namespace gcore
+{
+    struct resource_library;
+}
+
 namespace gtool
 {
     struct node_viewer_widget
     {
-        void update(gcore::script_descriptor& script_descriptor);
+        void update(gcore::script_descriptor& script_descriptor, gcore::resource_library& library);
         gcore::node_id_t m_node_id = 0;
     };
 
@@ -32,7 +37,7 @@ namespace gtool
         virtual bool& get_should_display() { return m_display; }
 
     private:
-        void open_file();
+        void open_file(gcore::resource_library& library);
         void save_file();
         void display_node(gcore::script_descriptor::node_descriptor& node_desc);
         void create_new_elements();

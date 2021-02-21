@@ -28,7 +28,8 @@ int main()
 
         gcore::register_node_data_type();
         gcore::register_node_type();
-        grender::register_node_datat_type();
+        grender::register_node_data_type();
+        grender::register_node_type();
         gphys::register_node_data_type();
 
         gtool::window_manager tool_window_manager;

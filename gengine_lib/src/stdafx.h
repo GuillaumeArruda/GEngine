@@ -6,5 +6,18 @@
 #include <unordered_map>
 #include <filesystem>
 #include <string>
+#include <optional>
+#include <deque>
+#include <array>
+#include <any>
+#include <thread>
+#include <mutex>
 
 #include <glm/glm.hpp>
+
+#include <GL/glew.h>
+
+#include "gtl/span.h"
+#include "gtl/uuid.h"
+
+#include "gserializer/type_factory.h"

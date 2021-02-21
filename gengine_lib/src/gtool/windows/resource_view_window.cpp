@@ -11,9 +11,9 @@
 #include "gserializer/serializers/json_serializer.h"
 
 #include "gcore/world.h"
+#include "gcore/resource_library.h"
 
 #include "grender/serializers/imgui_serializer.h"
-#include "resource_view_window.h"
 
 #include "gtool/importer.h"
 

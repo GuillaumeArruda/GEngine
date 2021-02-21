@@ -15,6 +15,7 @@
 #include "gcore/components/name_component.h"
 #include "gcore/serializers/dependency_gatherer_serializer.h"
 #include "gcore/world.h"
+#include "gcore/resource_library.h"
 
 #include "grender/serializers/imgui_serializer.h"
 #include "grender/components/camera_component.h"

@@ -1,10 +1,11 @@
 #pragma once
 
 #include "gthread/task.h"
-#include "gthread/job_manager.h"
 
 namespace gthread
 {
+    struct job_manager;
+    struct latch;
     struct task_group
     {
         task::id add_task(std::function<void()> function);

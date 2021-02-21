@@ -1,0 +1,22 @@
+{
+    "nodes": [
+        {
+            "name": "",
+            "position": {
+                "x": 1343.0,
+                "y": 112.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 1,
+                    "program": {
+                        "value": "5fdb7534af7c1b239419bb136a2b00e7"
+                    }
+                }
+            }
+        }
+    ],
+    "connections": []
+}
