@@ -80,6 +80,7 @@
     <ClInclude Include="src\grender\systems\debug_render_system.h" />
     <ClInclude Include="src\grender\uniform_variant.h" />
     <ClInclude Include="src\gserializer\serializers\binary_file_serializer.h" />
+    <ClInclude Include="src\gtl\any_map.h" />
     <ClInclude Include="src\gtl\callbacks.h" />
     <ClInclude Include="src\gtl\crc32.h" />
     <ClInclude Include="src\gtl\scope_timer.h" />

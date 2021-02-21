@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gtl/span.h"
+#include "gtl/any_map.h"
 
 #include "gcore/script/node_data.h"
 
@@ -134,9 +135,23 @@ namespace gcore
         void execute();
         void execute_node(std::uint32_t);
         friend script;
+
+        template<class ContextElement>
+        void set_in_context(ContextElement&& element)
+        {
+            m_context.set(std::forward<ContextElement>(element));
+        }
+
+        template<class ContextElement>
+        ContextElement* get_in_context()
+        {
+            return m_context.get<ContextElement>();
+        }
+
     private:
         script* m_script = nullptr;
         std::unique_ptr<char[]> m_memory_buffer;
         std::vector<node_context> m_node_contexts;
+        gtl::any_map m_context;
     };
 }
