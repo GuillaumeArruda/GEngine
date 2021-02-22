@@ -11,6 +11,9 @@ namespace gserializer
 
 namespace gcore
 {
+    struct resource_library;
+    template<class ResType>
+    struct resource_handle;
     struct resource
     {
         enum class loading_state
@@ -38,13 +41,19 @@ namespace gcore
         GSERIALIZER_DECLARE_FACTORY_BASE(resource);
 
         void set_name(std::string name) { m_name = std::move(name); }
+        void set_library(resource_library* library) { m_library = library; }
+
+    protected:
+        void ensure_all_dependant_resources_loaded(std::vector<resource_handle<resource>> const& resources);
+
     private:
         virtual bool do_load_async() { return true; };
         virtual bool do_load_sync() = 0;
         virtual void do_unload() = 0;
 
-        gtl::uuid m_uuid = gtl::uuid::generate();
         std::string m_name;
+        gtl::uuid m_uuid = gtl::uuid::generate();
         loading_state m_loading_state = loading_state::pending_async;
+        resource_library* m_library = nullptr;
     };
 }

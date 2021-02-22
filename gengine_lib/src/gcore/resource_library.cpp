@@ -25,24 +25,27 @@ namespace gcore
 
     resource_library::~resource_library()
     {
-        for (auto& proxy : m_proxy_map)
         {
-            if (auto shared_proxy = proxy.second.lock())
+            std::unique_lock lock(m_lock);
+            for (auto& proxy : m_proxy_map)
             {
-                shared_proxy->set_target(nullptr);
+                if (auto shared_proxy = proxy.second.lock())
+                {
+                    shared_proxy->set_target(nullptr);
+                }
             }
-        }
 
-        for (auto& res : m_resource_map)
-        {
-            if (res.second->get_state() == resource::loading_state::loaded)
-                res.second->unload();
-        }
+            for (auto& res : m_resource_map)
+            {
+                if (res.second->get_state() == resource::loading_state::loaded)
+                    res.second->unload();
+            }
 
-        for (auto& res : m_res_to_unload)
-        {
-            if (res->get_state() == resource::loading_state::loaded)
-                res->unload();
+            for (auto& res : m_res_to_unload)
+            {
+                if (res->get_state() == resource::loading_state::loaded)
+                    res->unload();
+            }
         }
 
         m_jobs.stop_and_join();
@@ -100,6 +103,7 @@ namespace gcore
                 serializer.process("resource", resource_to_load, resource::factory());
                 if (resource_to_load)
                 {
+                    resource_to_load->set_library(this);
                     proxy = std::make_shared<resource_proxy>(resource_to_load.get(), this);
                     load_resource(std::move(resource_to_load));
                     it->second = proxy;
@@ -188,6 +192,7 @@ namespace gcore
             }
             m_file_changes.clear();
 
+            std::vector<std::unique_ptr<resource>> resource_to_unload;
             {
                 std::unique_lock lock(m_lock);
                 for (auto& res_to_load : m_res_to_load_sync)
@@ -214,21 +219,21 @@ namespace gcore
                 }
                 m_res_to_load_sync.clear();
 
-                m_res_to_unload.erase(
-                    std::remove_if(
-                        m_res_to_unload.begin(), m_res_to_unload.end(),
-                        [](std::unique_ptr<resource> const& res)
-                        {
-                            if (res->get_state() == resource::loading_state::loaded)
-                            {
-                                res->unload();
-                                return true;
-                            }
-                            return res->get_state() == resource::loading_state::failed;
-                        })
-                    , m_res_to_unload.end());
+                resource_to_unload = std::move(m_res_to_unload); // Unloading resource can trigger the unloading of more resource. Move the data to the stack and unlock the lock to avoid deadlock and iterating over a modified vector.
+            }
+
+            for (std::unique_ptr<resource>& res : resource_to_unload)
+            {
+                if (res->get_state() == resource::loading_state::loaded)
+                    res->unload();
             }
         }
+    }
+
+    void resource_library::run_loading_job()
+    {
+        assert(m_jobs.is_currently_on_job_thread());
+        m_jobs.try_run_job();
     }
 
     void resource_library::request_unload(resource* res_to_unload)

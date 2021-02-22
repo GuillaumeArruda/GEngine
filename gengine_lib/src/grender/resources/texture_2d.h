@@ -6,15 +6,6 @@ namespace grender
 {
     struct texture_2d : texture
     {
-        texture_2d() = default;
-        ~texture_2d();
-
-        texture_2d(texture_2d&& move) noexcept;
-        texture_2d& operator=(texture_2d&& move) noexcept;
-
-        texture_2d(texture_2d const&) = delete;
-        texture_2d& operator=(texture_2d const&) = delete;
-
         void process(gserializer::serializer & serializer) override;
 
         GLuint get_id() const { return m_texture_id; }

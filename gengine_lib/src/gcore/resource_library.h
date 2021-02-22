@@ -55,6 +55,8 @@ namespace gcore
 
         std::unordered_map<gtl::uuid, std::filesystem::path> const& get_uuid_to_resource_files() const { return m_uuid_to_resource_file; }
 
+        void run_loading_job();
+
     private:
         friend struct resource_proxy;
         void request_unload(resource* res_to_unload);

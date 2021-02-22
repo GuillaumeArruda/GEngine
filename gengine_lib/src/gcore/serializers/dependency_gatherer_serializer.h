@@ -8,31 +8,40 @@ namespace gcore
 {
     struct dependency_gatherer_serializer : gserializer::serializer
     {
+        dependency_gatherer_serializer(bool can_write_to_object = false) : m_can_write_to_object(can_write_to_object) {}
         using serializer::process;
-        virtual bool is_reading_from_object() const { return true; };
+        bool is_reading_from_object() const override { return true; };
+        bool is_writing_to_object() const override { return m_can_write_to_object; }
 
-        virtual void process(const char* , std::string& ) {};
-        virtual void process(const char* , std::uint32_t& ) {};
-        virtual void process(const char* , std::uint64_t& ) {};
-        virtual void process(const char* , std::int32_t& ) {};
-        virtual void process(const char* , std::int64_t& ) {};
-        virtual void process(const char* , float& ) {};
-        virtual void process(const char* , double& ) {};
-        virtual void process(const char* , bool& ) {};
-        virtual void process(const char* name, gtl::uuid& value);
-        virtual void process(const char* name, std::filesystem::path& value);
+        void process(const char* , std::string& ) override {};
+        void process(const char* , std::uint32_t& ) override {};
+        void process(const char* , std::uint64_t& ) override {};
+        void process(const char* , std::int32_t& ) override {};
+        void process(const char* , std::int64_t& ) override {};
+        void process(const char* , float& ) override {};
+        void process(const char* , double& ) override {};
+        void process(const char* , bool& ) override {};
+        void process(const char* name, gtl::uuid& value) override;
+        void process(const char* name, std::filesystem::path& value) override;
 
         std::vector<gtl::uuid> m_uuids;
         std::vector<std::filesystem::path> m_files;
 
     private:
-        virtual void open_scope(const char*) {};
-        virtual void close_scope(const char*) {};
-        virtual bool enum_as_string() const { return false; };
+        bool m_can_write_to_object;
+        struct array_information
+        {
+            std::size_t m_location = 0;
+            std::size_t m_size = 0;
+        };
+        std::vector<array_information> m_array_size_stack;
+        void open_scope(const char*) override {};
+        void close_scope(const char*) override {};
+        bool enum_as_string() const override { return false; };
 
-        virtual void open_array(const char*, std::size_t&) {};
-        virtual void close_array(const char*) {};
-        virtual bool open_array_element(const char*) { return true; }
-        virtual void close_array_element(const char*) {};
+        void open_array(const char*, std::size_t&) override;
+        void close_array(const char*) override;
+        bool open_array_element(const char*) override;
+        void close_array_element(const char*) override;;
     };
 }

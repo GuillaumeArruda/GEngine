@@ -8,7 +8,8 @@ namespace grender
     }
 
     texture::texture(texture&& move) noexcept
-        : m_texture_id(move.m_texture_id)
+        : resource(std::move(move))
+        , m_texture_id(move.m_texture_id)
     {
         move.m_texture_id = 0;
     }
@@ -18,6 +19,7 @@ namespace grender
         if (this == &move)
             return *this;
 
+        resource::operator=(std::move(move));
         unload();
         m_texture_id = move.m_texture_id;
         move.m_texture_id = 0;

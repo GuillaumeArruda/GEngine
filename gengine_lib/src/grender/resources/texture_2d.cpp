@@ -14,12 +14,6 @@ GSERIALIZER_DEFINE_SUBCLASS_FACTORY_REGISTRATION(grender::texture_2d)
 
 namespace grender
 {
-    texture_2d::~texture_2d() = default;
-
-    texture_2d::texture_2d(texture_2d&& move) noexcept = default;
-
-    texture_2d& texture_2d::operator=(texture_2d&& move) noexcept = default;
-
     void texture_2d::process(gserializer::serializer & serializer)
     {
         texture::process(serializer);
