@@ -110,7 +110,7 @@ namespace grender
         case uniform_variant::type::sampler_2d:
         case uniform_variant::type::sampler_3d:
         case uniform_variant::type::sampler_cube:
-            return registry.get_type_id<gcore::resource_handle<texture()>>();
+            return registry.get_type_id<gcore::resource_handle<texture>>();
         default:
             assert(false); // Unsupported data type
         }

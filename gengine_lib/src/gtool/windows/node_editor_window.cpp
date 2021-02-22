@@ -21,7 +21,7 @@ namespace gtool
         node_pin_id(std::uint64_t id = 0) : m_id(id) {}
         node_pin_id(gcore::node_id_t node_id, int pin_id) { set(node_id, pin_id); }
         
-        void set(gcore::node_id_t node_id, int pin_id) { m_id = static_cast<uint64_t>(node_id) << 32 | pin_id; }
+        void set(gcore::node_id_t node_id, int pin_id) { m_id = static_cast<std::uint64_t>(node_id) << 32 | static_cast<std::uint32_t>(pin_id); }
         gcore::node_id_t get_node_id() const { return static_cast<gcore::node_id_t>(m_id >> 32); }
         int get_pin_id() const { return static_cast<int>(m_id); }
         

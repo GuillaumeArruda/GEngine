@@ -15,6 +15,7 @@
 #include "gcore/script/nodes/print_node.h"
 #include "gcore/script/nodes/select_node.h"
 #include "gcore/script/nodes/random_nodes.h"
+#include "gcore/script/nodes/get_resource_node.h"
 
 #include "gserializer/gmath_serialization.h"
 
@@ -90,6 +91,8 @@ namespace gcore
         factory.register_type<select_execution_node>("gcore::select_execution_node", "Select Execution");
 
         factory.register_type<random_integer_range_node>("gcore::random_integer_range_node", "Random Integer In Range");
+
+        factory.register_type<get_resource_node<resource>>("gcore::get_resource_node<resource>", "Get Resource (Resource)");
 
         factory.register_conversion<int, float>("gcore::conversion_node<int, float>");
         factory.register_conversion<float, int>("gcore::conversion_node<float, int>"); 

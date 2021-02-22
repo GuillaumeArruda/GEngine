@@ -16,7 +16,125 @@
                     }
                 }
             }
+        },
+        {
+            "name": "Normal",
+            "position": {
+                "x": 1097.0,
+                "y": 159.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_resource_node<grender::texture>",
+                "data": {
+                    "node_id": 2,
+                    "resource_uuid": {
+                        "value": "5fe2c0a9741e0d4b307c09fafb716e6a"
+                    }
+                }
+            }
+        },
+        {
+            "name": "Albedo",
+            "position": {
+                "x": 1097.0,
+                "y": 96.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_resource_node<grender::texture>",
+                "data": {
+                    "node_id": 3,
+                    "resource_uuid": {
+                        "value": "5fe2c0a9741e0d4af143fdc9dc907fd5"
+                    }
+                }
+            }
+        },
+        {
+            "name": "Specular",
+            "position": {
+                "x": 1097.0,
+                "y": 224.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_resource_node<grender::texture>",
+                "data": {
+                    "node_id": 4,
+                    "resource_uuid": {
+                        "value": "5fe2c132741e0d532011d4306dd7bca4"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1661.0,
+                "y": 164.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_mesh_node",
+                "data": {
+                    "node_id": 5
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1369.0,
+                "y": 288.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_resource_node<grender::mesh_resource>",
+                "data": {
+                    "node_id": 6,
+                    "resource_uuid": {
+                        "value": "5fe2c8364bd246afe97674fd475a0add"
+                    }
+                }
+            }
         }
     ],
-    "connections": []
+    "connections": [
+        {
+            "key": 1,
+            "data": [
+                {
+                    "source": 2,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 3,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 4,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
+                }
+            ]
+        },
+        {
+            "key": 5,
+            "data": [
+                {
+                    "source": 1,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 6,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                }
+            ]
+        }
+    ]
 }

@@ -39,6 +39,7 @@
     <ClInclude Include="src\gcore\script\nodes\conversion_node.h" />
     <ClInclude Include="src\gcore\script\execution_defines.h" />
     <ClInclude Include="src\gcore\script\nodes\execution_nodes.h" />
+    <ClInclude Include="src\gcore\script\nodes\get_resource_node.h" />
     <ClInclude Include="src\gcore\script\nodes\print_node.h" />
     <ClInclude Include="src\gcore\script\nodes\random_nodes.h" />
     <ClInclude Include="src\gcore\script\nodes\select_node.h" />

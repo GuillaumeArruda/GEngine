@@ -342,6 +342,12 @@
     <ClInclude Include="src\gtl\any_map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gcore\resource_dependency_tracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gcore\script\nodes\get_resource_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -564,6 +570,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\grender\nodes\render_mesh_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gcore\resource_dependency_tracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

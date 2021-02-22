@@ -5,6 +5,7 @@
 #include "gcore/script/node_factory.h"
 #include "gcore/script/nodes/comparison_nodes.h"
 #include "gcore/script/nodes/select_node.h"
+#include "gcore/script/nodes/get_resource_node.h"
 
 #include "grender/render_script_registration.h"
 
@@ -38,8 +39,8 @@ namespace grender
         factory.register_type<grender::configure_program_node>("grender::configure_program_node", "Configure Render Program");
         factory.register_type<grender::render_mesh_node>("grender::render_mesh_node", "Render Mesh");
 
-        gcore::resource_handle<grender::texture> t;
-        gcore::resource_handle<gcore::resource> t2 = static_cast<gcore::resource_handle<gcore::resource>>(t);
+        factory.register_type<gcore::get_resource_node<mesh_resource>>("gcore::get_resource_node<grender::mesh_resource>", "Get Resource (Mesh)");
+        factory.register_type<gcore::get_resource_node<texture>>("gcore::get_resource_node<grender::texture>", "Get Resource (Texture)");
 
         factory.register_conversion<gcore::resource_handle<grender::texture>, gcore::resource_handle<gcore::resource>>("gcore::conversion_node<gcore::resource_handle<grender::texture>, gcore::resource_handle<gcore::resource>>");
         factory.register_conversion<gcore::resource_handle<gcore::resource>, gcore::resource_handle<grender::texture>>("gcore::conversion_node<gcore::resource_handle<gcore::resource>, gcore::resource_handle<grender::texture>>");
