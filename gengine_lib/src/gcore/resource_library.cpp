@@ -167,26 +167,17 @@ namespace gcore
                         {
                             reload_resource(uuid);
                         }
-
-                        if (auto const it = m_uuid_to_resource_file.find(uuid);
-                            it == m_uuid_to_resource_file.end())
-                        {
-                            m_uuid_to_resource_file[uuid] = path;
-                        }
+                        m_uuid_to_resource_file[uuid] = path;
                     }
                 }
 
-                if (auto const file_it = m_file_dependant_map.find(std::filesystem::hash_value(path));
-                    file_it != m_file_dependant_map.end())
+                for (auto const& uuid : m_dependency_tracker.get_uuid_depending_on_file(path))
                 {
-                    for (auto const& uuid : file_it->second)
+                    std::unique_lock lock(m_lock);
+                    if (auto proxy_it = m_proxy_map.find(uuid); 
+                        proxy_it != m_proxy_map.end())
                     {
-                        std::unique_lock lock(m_lock);
-                        if (auto proxy_it = m_proxy_map.find(uuid); 
-                            proxy_it != m_proxy_map.end())
-                        {
-                            reload_resource(uuid);
-                        }
+                        reload_resource(uuid);
                     }
                 }
             }
@@ -250,29 +241,7 @@ namespace gcore
 
     void resource_library::load_resource(std::unique_ptr<resource> res_to_load)
     {
-        gcore::dependency_gatherer_serializer dependency;
-        dependency.process("resource", *res_to_load);
-        for (auto const& uuid : dependency.m_uuids)
-        {
-            if (uuid != res_to_load->get_uuid() && uuid.is_valid())
-            {
-                auto& dependant_vector = m_uuid_dependant_map[uuid];
-                if (auto it = std::find(dependant_vector.begin(), dependant_vector.end(), res_to_load->get_uuid());
-                    it == dependant_vector.end())
-                {
-                    dependant_vector.push_back(res_to_load->get_uuid());
-                }
-            }
-        }
-        for (auto const& file : dependency.m_files)
-        {
-            auto& dependant_vector = m_file_dependant_map[std::filesystem::hash_value(std::filesystem::absolute(file).make_preferred())];
-            if (auto it = std::find(dependant_vector.begin(), dependant_vector.end(), res_to_load->get_uuid());
-                it == dependant_vector.end())
-            {
-                dependant_vector.push_back(res_to_load->get_uuid());
-            }
-        }
+        m_dependency_tracker.on_resource_loaded(*res_to_load);
 
         //small workaround to go around copy requirement of std::function and the inability to go from shared_ptr to unique_ptr
         m_jobs.submit([res = std::shared_ptr<resource>(res_to_load.release(), [](resource*) {}), this]() mutable
@@ -297,17 +266,12 @@ namespace gcore
             if (new_resource)
             {
                 load_resource(std::move(new_resource));
-
-                if (auto uuid_it = m_uuid_dependant_map.find(uuid); 
-                    uuid_it != m_uuid_dependant_map.end())
+                for (auto const& dependant_uuid : m_dependency_tracker.get_uuid_depending_on_uuid(uuid))
                 {
-                    for (auto const& dependant_uuid : uuid_it->second)
+                    auto it = m_proxy_map.find(dependant_uuid);
+                    if (it != m_proxy_map.end())
                     {
-                        auto it = m_proxy_map.find(dependant_uuid);
-                        if (it != m_proxy_map.end())
-                        {
-                            reload_resource(dependant_uuid);
-                        }
+                        reload_resource(dependant_uuid);
                     }
                 }
             }

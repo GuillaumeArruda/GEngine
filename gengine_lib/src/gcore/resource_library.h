@@ -12,6 +12,7 @@
 
 #include "gcore/resource.h"
 #include "gcore/resource_handle.h"
+#include "gcore/resource_dependency_tracker.h"
 
 struct GLFWwindow;
 
@@ -70,14 +71,14 @@ namespace gcore
         std::unordered_map<gtl::uuid, std::filesystem::path> m_uuid_to_resource_file;
         std::unordered_map<gtl::uuid, std::unique_ptr<resource>> m_resource_map;
         std::unordered_map<gtl::uuid, std::weak_ptr<resource_proxy>> m_proxy_map;
-        std::unordered_map<gtl::uuid, std::vector<gtl::uuid>> m_uuid_dependant_map;
-        std::unordered_map<std::size_t, std::vector<gtl::uuid>> m_file_dependant_map;
         
         std::vector<std::unique_ptr<resource>> m_res_to_unload;
         std::vector<std::unique_ptr<resource>> m_res_to_load_sync;
 
         std::mutex m_file_change_lock;
         std::vector<std::filesystem::path> m_file_changes;
+
+        resource_dependency_tracker m_dependency_tracker;
 
         gthread::job_manager m_jobs{ 1u };
         GLFWwindow* m_loading_context = nullptr;
