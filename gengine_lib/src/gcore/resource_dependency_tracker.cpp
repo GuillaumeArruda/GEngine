@@ -10,32 +10,34 @@ namespace gcore
         gcore::dependency_gatherer_serializer dependency;
         dependency.process("resource", res);
 
-        for (auto const& uuid : dependency.m_uuids)
+        add_dependencies(res.get_uuid(), dependency.m_uuids, dependency.m_files);
+    }
+
+    void resource_dependency_tracker::add_dependencies(gtl::uuid const& resource_uuid, gtl::span<gtl::uuid const> uuids, gtl::span<std::filesystem::path const> files)
+    {
+        std::unique_lock lock(m_lock);
+        for (auto const& uuid : uuids)
         {
-            if (uuid != res.get_uuid())
+            if (uuid != resource_uuid)
             {
                 auto& dependant_vector = m_uuid_dependant_map[uuid];
-                if (auto it = std::find(dependant_vector.begin(), dependant_vector.end(), res.get_uuid());
+                if (auto it = std::find(dependant_vector.begin(), dependant_vector.end(), resource_uuid);
                     it == dependant_vector.end())
                 {
-                    dependant_vector.push_back(res.get_uuid());
+                    dependant_vector.push_back(resource_uuid);
                 }
             }
         }
 
-        m_uuid_depending_map[res.get_uuid()] = std::move(dependency.m_uuids);
-
-        for (auto const& file : dependency.m_files)
+        for (auto const& file : files)
         {
             auto& dependant_vector = m_file_dependant_map[std::filesystem::hash_value(std::filesystem::absolute(file).make_preferred())];
-            if (auto it = std::find(dependant_vector.begin(), dependant_vector.end(), res.get_uuid());
+            if (auto it = std::find(dependant_vector.begin(), dependant_vector.end(), resource_uuid);
                 it == dependant_vector.end())
             {
-                dependant_vector.push_back(res.get_uuid());
+                dependant_vector.push_back(resource_uuid);
             }
         }
-
-        m_file_depending_map[res.get_uuid()] = std::move(dependency.m_files);
     }
 
     gtl::span<gtl::uuid const> resource_dependency_tracker::get_uuid_depending_on_uuid(gtl::uuid const& uuid) const

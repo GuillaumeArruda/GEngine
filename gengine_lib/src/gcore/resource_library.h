@@ -58,6 +58,9 @@ namespace gcore
 
         void run_loading_job();
 
+        resource_dependency_tracker& get_dependency_tracker() { return m_dependency_tracker; }
+        resource_dependency_tracker const& get_dependency_tracker() const { return m_dependency_tracker; }
+
     private:
         friend struct resource_proxy;
         void request_unload(resource* res_to_unload);

@@ -4,8 +4,9 @@
 #include "gcore/script/script_context.h"
 #include "gcore/script/nodes/constant_node.h"
 #include "gcore/script/node_factory.h"
+#include "gcore/serializers/dependency_gatherer_serializer.h"
+#include "gcore/resource_library.h"
 
-#include "gcore/script/nodes/comparison_nodes.h"
 
 #include "gserializer/serializer.h"
 
@@ -136,8 +137,26 @@ namespace gcore
     bool script::do_load_async()
     {
         gserializer::json_read_serializer serializer(m_descriptor_path.string().c_str());
+        serializer.set_in_context(std::ref(*m_library));
         script_descriptor descriptor;
         descriptor.process(serializer);
+
+        dependency_gatherer_serializer gatherer(true);
+        descriptor.process(gatherer);
+
+        std::vector<resource_handle<resource>> resources;
+        for (gtl::uuid const& uuid : gatherer.m_uuids)
+        {
+            if (get_uuid() == uuid)
+                continue;
+
+            if (resource_handle<resource> res = m_library->try_get_resource<resource>(uuid))
+            {
+                resources.push_back(std::move(res));
+            }
+        }
+        m_library->get_dependency_tracker().add_dependencies(get_uuid(), gatherer.m_uuids, gatherer.m_files);
+        ensure_all_dependant_resources_loaded(resources);
 
         std::size_t node_memory_to_allocate = 0;
         std::size_t number_of_input_to_allocate = 0;

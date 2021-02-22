@@ -11,6 +11,7 @@
 #include "gcore/world.h"
 #include "gcore/systems/input_system.h"
 #include "gcore/systems/flying_controller_system.h"
+#include "gcore/resource_library.h"
 
 #include "grender/systems/render_system.h"
 #include "grender/utils.h"
