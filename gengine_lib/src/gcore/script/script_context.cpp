@@ -12,6 +12,7 @@ namespace gcore
 
     node_context::node_context(script_context& context, node_context const& copy, char*& memory_location)
         : m_script_context(&context)
+        , m_node_data(copy.m_node_data)
     {       
         char* const input_beginning = memory_location;
         for (in_pin_data const& input: copy.m_input_data)

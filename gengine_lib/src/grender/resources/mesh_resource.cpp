@@ -26,7 +26,7 @@ namespace grender
         serializer.process("primitive_type", m_type);
     }
 
-    void mesh_resource::draw()
+    void mesh_resource::draw() const
     {
         gl_exec(glBindVertexArray, m_vao);
         if (m_type == primitive_type::triangle)

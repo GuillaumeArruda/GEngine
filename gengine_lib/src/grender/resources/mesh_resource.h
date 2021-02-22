@@ -41,7 +41,7 @@ namespace grender
         };
 
         void process(gserializer::serializer& serializer) override;
-        void draw();
+        void draw() const;
 
         gmath::axis_aligned_box<gcore::model_space> const& get_extent() const { return m_extent; }
 

@@ -13,6 +13,7 @@
 #include "grender/resources/program.h"
 
 #include "grender/nodes/configure_program_node.h"
+#include "grender/nodes/render_mesh_node.h"
 
 namespace grender
 {
@@ -35,6 +36,7 @@ namespace grender
         GCORE_REGISTER_EQUALITY_NODES(gcore::resource_handle<grender::mesh_resource>, "Mesh");
 
         factory.register_type<grender::configure_program_node>("grender::configure_program_node", "Configure Render Program");
+        factory.register_type<grender::render_mesh_node>("grender::render_mesh_node", "Render Mesh");
 
         gcore::resource_handle<grender::texture> t;
         gcore::resource_handle<gcore::resource> t2 = static_cast<gcore::resource_handle<gcore::resource>>(t);

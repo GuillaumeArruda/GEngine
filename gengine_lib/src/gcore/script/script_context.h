@@ -114,6 +114,12 @@ namespace gcore
             m_output_data[output_index] = data;
         }
 
+        template<class ContextElement>
+        void set_in_context(ContextElement&& element);
+
+        template<class ContextElement>
+        ContextElement* get_in_context();
+
         friend script;
     private:
         void clear();
@@ -121,6 +127,7 @@ namespace gcore
         script_context* m_script_context;
         gtl::span<in_pin_data> m_input_data;
         gtl::span<node_data> m_output_data;
+        std::any m_node_data;
     };
 
     struct script_context
@@ -154,4 +161,16 @@ namespace gcore
         std::vector<node_context> m_node_contexts;
         gtl::any_map m_context;
     };
+
+    template<class ContextElement>
+    void node_context::set_in_context(ContextElement&& element)
+    {
+        m_script_context->set_in_context(std::forward<ContextElement>(element));
+    }
+
+    template<class ContextElement>
+    ContextElement* node_context::get_in_context()
+    {
+        return m_script_context->get_in_context<ContextElement>();
+    }
 }
