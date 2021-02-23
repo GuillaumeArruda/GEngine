@@ -14,8 +14,8 @@ namespace grender
 
     void graphic_component::mesh_info::process(gserializer::serializer& serializer)
     {
-        serializer.process("mesh", m_mesh_id, m_mesh);
-        serializer.process("program", m_program_id, m_program);
+        serializer.process("mesh", m_mesh);
+        serializer.process("program", m_program);
         serializer.process("uniform state", m_uniform_state);
         serializer.process("active", m_active);
     }

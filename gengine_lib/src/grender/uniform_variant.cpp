@@ -207,7 +207,7 @@ namespace grender
         case type::sampler_2d:
         case type::sampler_3d:
         case type::sampler_cube:
-            process(serializer, m_texture_info.m_texture_uuid, m_texture_info.m_texture); break;
+            process(serializer, m_texture_info.m_texture); break;
         }
     }
 

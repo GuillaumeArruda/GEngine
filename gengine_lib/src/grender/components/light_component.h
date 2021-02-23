@@ -11,9 +11,6 @@ namespace grender
     {
         void process(gserializer::serializer& serializer) override;
 
-        gtl::uuid m_main_program_uuid;
-        gtl::uuid m_stencil_program_uuid;
-        gtl::uuid m_mesh_uuid;
         gcore::resource_handle<program> m_main_program;
         gcore::resource_handle<program> m_stencil_program;
         gcore::resource_handle<mesh_resource> m_mesh;

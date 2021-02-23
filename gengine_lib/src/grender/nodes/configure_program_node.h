@@ -25,7 +25,6 @@ namespace grender
         void set_state_at_index(gcore::node_context& context, program_uniform_state& state, std::size_t index) const;
         gcore::node_data_type::id_type get_variant_type_id(program_uniform_state const& state, std::size_t index) const;
 
-        gtl::uuid m_program_uuid;
         gcore::resource_handle<program> m_program;
         mutable std::vector<gcore::pin_descriptor> m_descriptors;
     };

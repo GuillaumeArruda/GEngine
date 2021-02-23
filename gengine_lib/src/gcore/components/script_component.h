@@ -12,7 +12,6 @@ namespace gcore
     {
         struct script_info
         {
-            gtl::uuid m_script_uuid;
             resource_handle<script> m_script;
             script_context m_context;
             void process(gserializer::serializer& serializer);

@@ -26,7 +26,7 @@ namespace grender
     void configure_program_node::process(gserializer::serializer& serializer)
     {
         node::process(serializer);
-        serializer.process("program", m_program_uuid, m_program);
+        serializer.process("program", m_program);
     }
 
     gcore::node::pin_descriptors configure_program_node::get_pin_descriptors() const

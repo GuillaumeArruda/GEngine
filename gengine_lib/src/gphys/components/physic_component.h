@@ -26,7 +26,6 @@ namespace gphys
         physic_component(physic_component const&) = delete;
         physic_component operator=(physic_component const&) = delete;
 
-        gtl::uuid m_phys_shape_uuid;
         gcore::resource_handle<collision_shape> m_phys_shape;
         std::unique_ptr<btRigidBody> m_rigid_body;
         std::shared_ptr<btCollisionShape> m_collision_shape;

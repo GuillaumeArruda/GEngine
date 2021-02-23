@@ -14,8 +14,6 @@ namespace grender
     {
         struct mesh_info
         {
-            gtl::uuid m_mesh_id;
-            gtl::uuid m_program_id;
             gcore::resource_handle<mesh_resource> m_mesh;
             gcore::resource_handle<program> m_program;
             program_uniform_state m_uniform_state;

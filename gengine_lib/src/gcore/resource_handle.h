@@ -108,6 +108,8 @@ namespace gcore
 
         void reset() { m_proxy.reset(); }
 
+        gtl::uuid get_uuid() const { return m_proxy ? m_proxy.get()->get_target()->get_uuid() : gtl::uuid(); }
+
         bool operator==(resource_handle const& rhs) const { return m_proxy == rhs.m_proxy; }
         bool operator!=(resource_handle const rhs) const { return m_proxy != rhs.m_proxy; }
 
@@ -127,9 +129,10 @@ namespace gcore
     void process(gserializer::serializer& serializer, gtl::uuid& uuid, gcore::resource_handle<gcore::resource>& target_handle);
 
     template<class ResourceType>
-    void process(gserializer::serializer& serializer, gtl::uuid& uuid, gcore::resource_handle<ResourceType>& target_handle)
+    void process(gserializer::serializer& serializer, gcore::resource_handle<ResourceType>& handle)
     {
-        gcore::resource_handle<gcore::resource> temp(target_handle);
+        gtl::uuid uuid = handle.get_uuid();
+        gcore::resource_handle<gcore::resource> temp(handle);
         process(serializer, uuid, temp);
         if (static_cast<bool>(temp) == uuid.is_valid() && temp.as<ResourceType>())
         {
@@ -139,14 +142,9 @@ namespace gcore
             }
             else
             {
-                target_handle = std::move(temp);
+                handle = std::move(temp);
             }
         }
-    }
-
-    template<class ResourceType>
-    void process(gserializer::serializer&, gcore::resource_handle<ResourceType>&)
-    {
     }
 }
 

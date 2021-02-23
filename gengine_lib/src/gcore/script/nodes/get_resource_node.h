@@ -22,7 +22,7 @@ namespace gcore
         void process(gserializer::serializer& serializer)
         {
             node::process(serializer);
-            serializer.process("resource_uuid", m_resource_uuid, m_handle);
+            serializer.process("resource_uuid", m_handle);
         }
 
         node::pin_descriptors get_pin_descriptors() const override
@@ -34,7 +34,6 @@ namespace gcore
         }
 
     private:
-        gtl::uuid m_resource_uuid;
         resource_handle<ResourceType> m_handle;
     };
 }

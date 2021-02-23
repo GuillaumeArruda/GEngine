@@ -14,7 +14,7 @@ namespace gcore
 
     void script_component::script_info::process(gserializer::serializer& serializer)
     {
-        serializer.process("script", m_script_uuid, m_script);
+        serializer.process("script", m_script);
     }
 }
 
