@@ -121,7 +121,9 @@ namespace gcore
         ContextElement* get_in_context();
 
         friend script;
+        friend script_context;
     private:
+        void set_context(script_context* context) { m_script_context = context; };
         void clear();
         void evaluate_input(std::uint32_t index) const;
         script_context* m_script_context;
@@ -141,6 +143,9 @@ namespace gcore
 
         void execute();
         void execute_node(std::uint32_t);
+        void prepare();
+        bool is_prepared() const { return m_has_been_prepared; }
+
         friend script;
 
         template<class ContextElement>
@@ -160,6 +165,7 @@ namespace gcore
         std::unique_ptr<char[]> m_memory_buffer;
         std::vector<node_context> m_node_contexts;
         gtl::any_map m_context;
+        bool m_has_been_prepared = false;
     };
 
     template<class ContextElement>

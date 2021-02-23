@@ -94,6 +94,8 @@ namespace gcore
         , m_node_contexts(std::move(move.m_node_contexts))
     {
         move.m_script = nullptr;
+        for (node_context& context : m_node_contexts)
+            context.set_context(this);
     }
 
     script_context& script_context::operator=(script_context const& copy)
@@ -113,6 +115,7 @@ namespace gcore
             m_node_contexts.emplace_back(*this, context, location);
         }
 
+        m_has_been_prepared = false;
         return *this;
     }
 
@@ -124,6 +127,10 @@ namespace gcore
         m_node_contexts = std::move(move.m_node_contexts);
         m_memory_buffer = std::move(move.m_memory_buffer);
         m_script = move.m_script;
+        m_has_been_prepared = move.m_has_been_prepared;
+        for (node_context& context : m_node_contexts)
+            context.set_context(this);
+
         return *this;
     }
 
@@ -139,6 +146,15 @@ namespace gcore
     {
         assert(node_index < m_node_contexts.size());
         m_script->get_node(node_index)->execute(m_node_contexts[node_index]);
+    }
+
+    void script_context::prepare()
+    {
+        for (std::uint32_t i =0; i < m_node_contexts.size(); ++i)
+        {
+            m_script->get_node(i)->prepare(m_node_contexts[i]);
+        }
+        m_has_been_prepared = true;
     }
 }
 

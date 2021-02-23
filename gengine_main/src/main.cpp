@@ -7,7 +7,7 @@
 #include "gcore/resource_library.h"
 #include "gcore/systems/input_system.h"
 #include "gcore/systems/flying_controller_system.h"
-
+#include "gcore/systems/script_system.h"
 #include "gcore/core_script_registration.h"
 #include "gcore/script/node_data.h"
 
@@ -43,12 +43,14 @@ int main()
         systems.add_system(std::make_unique<gcore::flying_controller_system>());
         systems.add_system(std::make_unique<gphys::physic_system>());
         systems.add_system(std::make_unique<grender::debug_render_system>());
+        systems.add_system(std::make_unique<gcore::script_system>());
 
         world.initialize_systems();
 
         auto input_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gcore::input_system>()->update(world); });
         auto flying_controller_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gcore::flying_controller_system>()->update(world); });
         auto physic_system_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gphys::physic_system>()->update(world); });
+        auto script_system_task = world.m_update_tasks.add_task([&] {world.get_system_registry().get_system<gcore::script_system>()->update(world); });
         world.m_update_tasks.add_parent(flying_controller_task, input_task);
 
         {

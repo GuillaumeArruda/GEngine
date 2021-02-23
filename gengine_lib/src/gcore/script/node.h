@@ -31,7 +31,7 @@ namespace gcore
     {
         virtual ~node() = default;
 
-        virtual void prepare(node_context&) {};
+        virtual void prepare(node_context&) const {};
         virtual void execute(node_context& context) const = 0;
 
         virtual node* clone(void* location) const = 0;
