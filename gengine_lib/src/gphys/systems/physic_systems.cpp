@@ -39,8 +39,8 @@ namespace gphys
 
     void physic_system::update(gcore::world& world)
     {
-        m_phys_world->stepSimulation(0.01f);
-        m_phys_world->debugDrawWorld();
+        float const delta_time = gcore::time::to_float(world.get_time().get_delta_time());
+        m_phys_world->stepSimulation(delta_time);
         auto view = world.get_entity_registry().get_view<gcore::transform_component, physic_component>();
         for (auto& [entity, transform, physic_component] : view)
         {

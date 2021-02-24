@@ -21,7 +21,7 @@ namespace gcore
     {
         using gmath::vector;
         using gmath::direction;
-        constexpr float dt = 0.01f;
+        float const dt = time::to_float(world.get_time().get_delta_time());
         auto view = world.get_entity_registry().get_view<transform_component, input_component, flying_controller_component>();
         for (auto& [entity, transform, input, controller] : view)
         {

@@ -74,9 +74,9 @@ namespace gtool
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		grender::render_system* render = world.get_system_registry().get_system<grender::render_system>();
-
+		world.get_time().new_frame();
 		world.m_update_tasks.run_tasks(m_jobs);
+		grender::render_system* render = world.get_system_registry().get_system<grender::render_system>();
 		render->render(world);
 		world.get_resource_library()->update();
 

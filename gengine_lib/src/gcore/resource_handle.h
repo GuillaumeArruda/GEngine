@@ -138,7 +138,7 @@ namespace gcore
         {
             if (temp && !temp.as<ResourceType>())
             {
-                uuid = gtl::uuid();
+                handle.reset();
             }
             else
             {
