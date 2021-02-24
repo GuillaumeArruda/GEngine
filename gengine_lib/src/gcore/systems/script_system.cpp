@@ -6,6 +6,12 @@
 
 namespace gcore
 {
+    void script_system::connect_to_world(gcore::world& world)
+    {
+        auto view = world.get_entity_registry().get_view<script_component>();
+        view.add_on_added_callback([&](std::tuple<entity, script_component*> added_entity) {this->on_added_script_entity(added_entity); });
+    }
+
     void script_system::update(world& world)
     {
         auto view = world.get_entity_registry().get_view<script_component>();
@@ -13,15 +19,20 @@ namespace gcore
         {
             for (script_component::script_info& script_info : script_comp->m_scripts)
             {
-                if (script_info.m_script.is_loaded())
-                {
-                    if (!script_info.m_context.is_prepared())
-                    {
-                        script_info.m_context = script_info.m_script->create_context();
-                        script_info.m_context.prepare();
-                    }
+                if (script_info.m_context.is_prepared())
                     script_info.m_context.execute();
-                }
+            }
+        }
+    }
+
+    void script_system::on_added_script_entity(std::tuple<entity, script_component*>& added_entity)
+    {
+        for (script_component::script_info& script_info : std::get<script_component*>(added_entity)->m_scripts)
+        {
+            if (script_info.m_script.is_loaded())
+            {
+                script_info.m_context = script_info.m_script->create_context();
+                script_info.m_context.prepare();
             }
         }
     }

@@ -12,7 +12,7 @@ namespace gcore
     struct resource_library;
     struct world
     {
-        world(std::shared_ptr<resource_library> library) : m_resource_library(std::move(library)) {}
+        world(std::shared_ptr<resource_library> library) : m_resource_library(std::move(library)), m_entity_registry(m_resource_library) {}
         ~world();
         void initialize_systems();
 

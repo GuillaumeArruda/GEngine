@@ -43,7 +43,8 @@ namespace gphys
 
         void update(gcore::world& world);
 
-        void on_physic_entity_removed(std::tuple<gcore::entity, gcore::transform_component*, physic_component*> removed_entity);
+        void on_physic_entity_added(std::tuple<gcore::entity, gcore::transform_component*, physic_component*>& added_entity);
+        void on_physic_entity_removed(std::tuple<gcore::entity, gcore::transform_component*, physic_component*>& removed_entity);
 
         std::unique_ptr<btBroadphaseInterface> m_broadphase;
         std::unique_ptr<btCollisionConfiguration> m_collision_configuration;
@@ -52,6 +53,7 @@ namespace gphys
         std::unique_ptr<btDiscreteDynamicsWorld> m_phys_world;
 
         gtl::callback_id m_on_removed_callback_id = 0;
+        gtl::callback_id m_on_added_callback_id = 0;
 
         debug_drawer m_debug_drawer;
     };

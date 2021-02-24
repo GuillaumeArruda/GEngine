@@ -113,11 +113,14 @@ namespace gtool
                 
                 world.get_entity_registry().clear();
                 
-                
                 gserializer::json_read_serializer json_read(m_filepath.c_str());
+                gcore::layer_descriptor layer;
                 json_read.set_in_context(std::ref(*world.get_resource_library()));
-                json_read.process("entity_registry", world.get_entity_registry());
-                world.get_entity_registry().rebuild_component_type_map();
+                json_read.process("entity_registry", layer);
+                for (auto& [entity, components] : layer.m_entity_to_component)
+                {
+                    world.get_entity_registry().add_components(entity, components);
+                }
             }
             ImGui::PopID();
         }

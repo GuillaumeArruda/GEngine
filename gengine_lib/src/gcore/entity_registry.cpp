@@ -5,6 +5,9 @@
 
 #include "gcore/entity_registry.h"
 
+#include "gcore/resource_library.h"
+#include "gcore/serializers/dependency_gatherer_serializer.h"
+
 namespace gcore
 {
     entity entity_registry::create_entity() 
@@ -28,6 +31,11 @@ namespace gcore
             m_entity_to_component.erase(it);
             warn_group_of_component_removal(entity);
         }
+        if (auto loading_it = m_loading_component_entity.find(entity);
+            loading_it != m_loading_component_entity.end())
+        {
+            m_loading_component_entity.erase(loading_it);
+        }
     }
 
     void entity_registry::process(gserializer::serializer& serializer)
@@ -50,6 +58,20 @@ namespace gcore
             }
         }
         warn_group_of_component_removal(entity);
+    }
+
+    void entity_registry::add_loaded_component(entity entity, std::unique_ptr<component> component)
+    {
+        auto& entity_comp_id_list = m_entity_to_component[entity];
+        entity_component_list& ent_comp_list = m_component_type_map[component_id(typeid((*component.get())))];
+
+        auto const entity_insert_position = std::lower_bound(ent_comp_list.m_entities.begin(), ent_comp_list.m_entities.end(), entity);
+        auto const diff = std::distance(ent_comp_list.m_entities.begin(), entity_insert_position);
+        auto const component_insert_position = ent_comp_list.m_components.begin() + diff;
+
+        ent_comp_list.m_entities.insert(entity_insert_position, entity);
+        ent_comp_list.m_components.insert(component_insert_position, component.get());
+        entity_comp_id_list.push_back(std::move(component));
     }
 
     bool entity_registry::has_components(entity entity, gtl::span<component_id const> component_types) const
@@ -130,43 +152,6 @@ namespace gcore
         return false;
     }
 
-    void entity_registry::rebuild_component_type_map()
-    {
-        m_component_type_map.clear();
-
-        for (auto& group : m_group_map)
-        {
-            group.second->clear();
-        }
-
-        for (auto& entity : m_entity_to_component)
-        {
-            entity.second.erase(
-                std::remove_if(entity.second.begin(), entity.second.end(),
-                [&](auto& comp) 
-                {
-                    if (comp)
-                    {
-                        entity_component_list& ent_comp_list = m_component_type_map[component_id(typeid((*comp.get())))];
-
-                        auto const entity_insert_position = std::lower_bound(ent_comp_list.m_entities.begin(), ent_comp_list.m_entities.end(), entity.first);
-                        auto const diff = std::distance(ent_comp_list.m_entities.begin(), entity_insert_position);
-                        auto const component_insert_position = ent_comp_list.m_components.begin() + diff;
-
-                        ent_comp_list.m_entities.insert(entity_insert_position, entity.first);
-                        ent_comp_list.m_components.insert(component_insert_position, comp.get());
-                        return false;
-                    }
-                    return true;
-                }
-            ), entity.second.end());
-            for (auto& group : m_group_map)
-            {
-                group.second->on_component_added(*this, entity.first);
-            }
-        }
-    }
-
     void entity_registry::clear()
     {
         std::unique_lock lock(m_lock);
@@ -176,31 +161,77 @@ namespace gcore
             group.second->clear();
         }
         m_entity_to_component.clear();
+        m_loading_component_entity.clear();
+    }
+
+    void entity_registry::update()
+    {
+        std::erase_if(m_loading_component_entity, 
+            [&](auto& loading_info) 
+            {
+                std::size_t const removed_element = 
+                    std::erase_if(loading_info.second, 
+                        [&](loading_component_info& info)
+                        {
+                            return std::all_of(info.m_resources.begin(), info.m_resources.end(), [](resource_handle<resource> const& res) { return res.is_loaded(); }) 
+                                && (add_loaded_component(loading_info.first, std::move(info.m_component)), true);
+                        });
+                if (removed_element != 0)
+                {
+                    for (auto& group : m_group_map)
+                    {
+                        group.second->on_component_added(*this, loading_info.first);
+                    }
+                }
+                return loading_info.second.size() == 0;
+            });
     }
 
     void entity_registry::add_components(entity entity, gtl::span<std::unique_ptr<component>> components)
     {
-        auto& entity_comp_id_list = m_entity_to_component[entity];
+        bool has_added_component = false;
+        gcore::dependency_gatherer_serializer serializer;
         for (auto& component : components)
         {
             if (component)
             {
-                entity_component_list& ent_comp_list = m_component_type_map[component_id(typeid((*component.get())))];
+                serializer.m_uuids.clear();
+                serializer.m_files.clear();
+                component->process(serializer);
 
-                auto const entity_insert_position = std::lower_bound(ent_comp_list.m_entities.begin(), ent_comp_list.m_entities.end(), entity);
-                auto const diff = std::distance(ent_comp_list.m_entities.begin(), entity_insert_position);
-                auto const component_insert_position = ent_comp_list.m_components.begin() + diff;
+                std::vector<resource_handle<resource>> resources;
+                for (gtl::uuid const& res_uuid : serializer.m_uuids)
+                {
+                    if (resource_handle<resource> res = m_res_library->try_get_resource<resource>(res_uuid))
+                    {
+                        resources.push_back(std::move(res));
+                    }
+                }
 
-                ent_comp_list.m_entities.insert(entity_insert_position, entity);
-                ent_comp_list.m_components.insert(component_insert_position, component.get());
-                entity_comp_id_list.push_back(std::move(component));
+                if (std::all_of(resources.begin(), resources.end(), [](resource_handle<resource> const& res) { return res.is_loaded(); }))
+                {
+                    has_added_component = true;
+                    add_loaded_component(entity, std::move(component));
+                }
+                else
+                {
+                    m_loading_component_entity[entity].push_back({ std::move(component), std::move(resources) });
+                }
             }
+        }
 
-        }
-        for (auto& group : m_group_map)
+        if (has_added_component)
         {
-            group.second->on_component_added(*this, entity);
+            for (auto& group : m_group_map)
+            {
+                group.second->on_component_added(*this, entity);
+            }
         }
+    }
+
+    void layer_descriptor::process(gserializer::serializer& serializer)
+    {
+        serializer.process("Entities", m_entity_to_component, "Entity", "Component", component::factory());
     }
 
 }

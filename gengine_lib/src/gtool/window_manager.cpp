@@ -77,8 +77,9 @@ namespace gtool
 		world.get_time().new_frame();
 		world.m_update_tasks.run_tasks(m_jobs);
 		grender::render_system* render = world.get_system_registry().get_system<grender::render_system>();
-		render->render(world);
+		render->update(world);
 		world.get_resource_library()->update();
+		world.get_entity_registry().update();
 
 		ImGuiViewport* viewport = ImGui::GetMainViewport();
 		ImGui::SetNextWindowPos(viewport->Pos);

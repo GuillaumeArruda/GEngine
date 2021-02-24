@@ -13,6 +13,7 @@
 #include "gtl/callbacks.h"
 
 #include "gcore/component.h"
+#include "gcore/resource_handle.h"
 
 namespace gserializer
 {
@@ -52,10 +53,16 @@ namespace gcore
         };
     }
 
-
+    struct layer_descriptor
+    {
+        std::unordered_map<entity, std::vector<std::unique_ptr<component>>> m_entity_to_component;
+        void process(gserializer::serializer& serializer);
+    };
 
     struct entity_registry
     {
+        entity_registry(std::shared_ptr<resource_library> res_lib) : m_res_library(std::move(res_lib)) {}
+
         [[nodiscard]] entity create_entity();
         void remove_entity(entity entity);
         
@@ -112,9 +119,10 @@ namespace gcore
         gtl::span<std::unique_ptr<component>> see_components(entity entity);
         [[nodiscard]] bool has_any_component(entity entity) const;
 
-        void rebuild_component_type_map();
         void clear();
+        void update();
     private:
+        void add_loaded_component(entity entity, std::unique_ptr<component> component);
         bool has_components(entity entity, gtl::span<component_id const> component_types) const;
         void remove_component_from_map(entity entity_to_remove, component_id id);
         void warn_group_of_component_removal(entity changed_entity);
@@ -137,9 +145,18 @@ namespace gcore
             std::vector<component*> m_components;
         };
         
+
+        struct loading_component_info
+        {
+            std::unique_ptr<component> m_component;
+            std::vector<resource_handle<resource>> m_resources;
+        };
+
+        std::unordered_map<entity, std::vector<loading_component_info>> m_loading_component_entity;
         std::unordered_map<entity, std::vector<std::unique_ptr<component>>> m_entity_to_component;
         std::unordered_map<component_id, entity_component_list> m_component_type_map;
         std::unordered_map<view_id, std::unique_ptr<group_base>> m_group_map;
+        std::shared_ptr<resource_library> m_res_library;
         std::shared_mutex m_lock;
     };
 
@@ -207,8 +224,8 @@ namespace gcore
 
         component_id const m_component_ids[sizeof...(ComponentTypes)] = { details::component_type_info<ComponentTypes>::has_type_id... };;
         std::vector<tuple_type > m_entities_components;
-        gtl::callbacks<void (tuple_type)> m_on_added;
-        gtl::callbacks<void (tuple_type)> m_on_removed;
+        gtl::callbacks<void (tuple_type&)> m_on_added;
+        gtl::callbacks<void (tuple_type&)> m_on_removed;
     private:
         tuple_type get_components_entity_tuple(entity_registry const& registry, entity ent) const
         {

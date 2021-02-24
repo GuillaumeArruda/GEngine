@@ -33,6 +33,7 @@ namespace gphys
     {
         auto view = world.get_entity_registry().get_view<gcore::transform_component, physic_component>();
         m_on_removed_callback_id = view.add_on_removed_callback([this](std::tuple<gcore::entity, gcore::transform_component*, physic_component*> info) { this->on_physic_entity_removed(info); });
+        m_on_added_callback_id = view.add_on_added_callback([this](std::tuple<gcore::entity, gcore::transform_component*, physic_component*> info) { this->on_physic_entity_added(info); });
 
         m_debug_drawer.m_debug_render = world.get_system_registry().get_system<grender::debug_render_system>();
     }
@@ -41,26 +42,28 @@ namespace gphys
     {
         float const delta_time = gcore::time::to_float(world.get_time().get_delta_time());
         m_phys_world->stepSimulation(delta_time);
-        auto view = world.get_entity_registry().get_view<gcore::transform_component, physic_component>();
-        for (auto& [entity, transform, physic_component] : view)
-        {
-            if (physic_component->m_phys_shape.is_loaded() && !physic_component->m_rigid_body)
-            {
-                physic_component->m_collision_shape = physic_component->m_phys_shape->get_shape();
-                btVector3 fall_inertia = btVector3(0.f, 0.f, 0.f);
-                physic_component->m_collision_shape->calculateLocalInertia(physic_component->m_mass, fall_inertia);
+    }
 
-                btRigidBody::btRigidBodyConstructionInfo constructionInfo(physic_component->m_mass, &physic_component->m_motion_state, physic_component->m_collision_shape.get(), fall_inertia);
-                physic_component->m_motion_state.m_transform = transform;
-                physic_component->m_motion_state.m_offset = glm::vec3(0.f, 1.f, 0.f);
-                constructionInfo.m_startWorldTransform = to_bullet(transform->m_transform);
-                physic_component->m_rigid_body = std::make_unique<btRigidBody>(constructionInfo);
-                m_phys_world->addRigidBody(physic_component->m_rigid_body.get());
-            }
+    void physic_system::on_physic_entity_added(std::tuple<gcore::entity, gcore::transform_component*, physic_component*>& added_entity)
+    {
+        physic_component* phys_comp = std::get<physic_component*>(added_entity);
+        if (phys_comp->m_phys_shape.is_loaded())
+        {
+            gcore::transform_component* transform = std::get<gcore::transform_component*>(added_entity);
+            phys_comp->m_collision_shape = phys_comp->m_phys_shape->get_shape();
+            btVector3 fall_inertia = btVector3(0.f, 0.f, 0.f);
+            phys_comp->m_collision_shape->calculateLocalInertia(phys_comp->m_mass, fall_inertia);
+
+            btRigidBody::btRigidBodyConstructionInfo constructionInfo(phys_comp->m_mass, &phys_comp->m_motion_state, phys_comp->m_collision_shape.get(), fall_inertia);
+            phys_comp->m_motion_state.m_transform = transform;
+            phys_comp->m_motion_state.m_offset = glm::vec3(0.f, 1.f, 0.f);
+            constructionInfo.m_startWorldTransform = to_bullet(transform->m_transform);
+            phys_comp->m_rigid_body = std::make_unique<btRigidBody>(constructionInfo);
+            m_phys_world->addRigidBody(phys_comp->m_rigid_body.get());
         }
     }
 
-    void physic_system::on_physic_entity_removed(std::tuple<gcore::entity, gcore::transform_component*, physic_component*> removed_entity)
+    void physic_system::on_physic_entity_removed(std::tuple<gcore::entity, gcore::transform_component*, physic_component*>& removed_entity)
     {
         if (auto rigid_body = std::get<physic_component*>(removed_entity)->m_rigid_body.get())
         {

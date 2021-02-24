@@ -20,9 +20,8 @@
 
 namespace grender
 {
-    void render_system::render(gcore::world& world)
+    void render_system::update(gcore::world& world)
     {
-
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
         gcore::entity_registry& registry = world.get_entity_registry();
         auto camera_view = registry.get_view<gcore::transform_component, camera_component>();       
@@ -47,9 +46,19 @@ namespace grender
             }
         }
 
-
-
         m_frame_buffer.unbind();
+    }
+
+    void render_system::connect_to_world(gcore::world& world)
+    {
+        auto graphic_comp_view = world.get_entity_registry().get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
+        graphic_comp_view.add_on_added_callback([&](auto& added_entity) { this->on_mesh_entity_added(added_entity); });
+        
+        auto light_view = world.get_entity_registry().get_view<gcore::transform_component, light_component>();
+        light_view.add_on_added_callback([&](auto& added_entity) { this->on_light_entity_added(added_entity); });
+        
+        auto skybox_view = world.get_entity_registry().get_view<grender::skybox_component>();
+        skybox_view.add_on_added_callback([&](auto& added_entity) { this->on_skybox_entity_added(added_entity); });
     }
 
     void render_system::set_target_size(std::size_t width, std::size_t height)
@@ -80,19 +89,14 @@ namespace grender
             glm::mat3 const normal_matrix = glm::transpose(glm::inverse(glm::mat3(transform->m_transform)));
             for (auto& mesh_info : graphic_comp->m_meshes)
             {
-                if (mesh_info.m_mesh.is_loaded() && mesh_info.m_program.is_loaded() && mesh_info.m_active)
+                if (mesh_info.m_active && mesh_info.m_mesh.is_loaded() && mesh_info.m_program.is_loaded())
                 {
                     mesh_info.m_program->activate();
-                    mesh_info.m_uniform_state.reconcile(mesh_info.m_program->get_default_state());
                     mesh_info.m_uniform_state.set_uniform("mvp", mvp);
                     mesh_info.m_uniform_state.set_uniform("normal_matrix", normal_matrix);
                     mesh_info.m_uniform_state.set_uniform("world_matrix", transform->m_transform);
                     mesh_info.m_uniform_state.apply();
                     mesh_info.m_mesh->draw();
-                    if (extent)
-                    {
-                        extent->m_extent = extent->m_extent.merge(mesh_info.m_mesh->get_extent());
-                    }
                 }
             }
         }
@@ -135,8 +139,6 @@ namespace grender
         {
             if (skybox->m_program.is_loaded() && skybox->m_mesh.is_loaded())
             {
-                skybox->m_program_state.reconcile(skybox->m_program->get_default_state());
-
                 skybox->m_program->activate();
                 skybox->m_program_state.set_uniform("mvp", projection * glm::mat4(glm::mat3(view_matrix)));
                 skybox->m_program_state.apply();
@@ -172,6 +174,45 @@ namespace grender
         gl_exec(glDepthFunc, GL_LEQUAL);
         gl_exec(glDisable, GL_CULL_FACE);
         m_frame_buffer.bind_for_skybox();
+    }
+
+    void render_system::on_mesh_entity_added(std::tuple<gcore::entity, gcore::transform_component*, graphic_component*, gcore::extent_component*>& added_entity)
+    {
+        auto& [entity, transform, graphic_comp, extent] = added_entity;
+        for (auto& mesh_info : graphic_comp->m_meshes)
+        {
+            if (mesh_info.m_mesh.is_loaded() && mesh_info.m_program.is_loaded())
+            {
+                mesh_info.m_uniform_state.reconcile(mesh_info.m_program->get_default_state());
+                if (extent)
+                {
+                    extent->m_extent = extent->m_extent.merge(mesh_info.m_mesh->get_extent());
+                }
+            }
+            else
+            {
+                mesh_info.m_active = false;
+            }
+
+        }
+    }
+
+    void render_system::on_light_entity_added(std::tuple<gcore::entity, gcore::transform_component*, light_component*>& added_entity)
+    {
+        auto& [entity, transform, light] = added_entity;
+        if (light->m_mesh.is_loaded() && light->m_main_program.is_loaded())
+        {
+            light->m_main_state.reconcile(light->m_main_program->get_default_state());
+        }
+    }
+
+    void render_system::on_skybox_entity_added(std::tuple<gcore::entity, skybox_component*>& added_entity)
+    {
+        auto& [entity, skybox] = added_entity;
+        if (skybox->m_program.is_loaded())
+        {
+            skybox->m_program_state.reconcile(skybox->m_program->get_default_state());
+        }
     }
 }
 
