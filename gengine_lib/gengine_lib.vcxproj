@@ -26,7 +26,9 @@
     <ClInclude Include="src\gcore\components\name_component.h" />
     <ClInclude Include="src\gcore\components\script_component.h" />
     <ClInclude Include="src\gcore\components\transform_component.h" />
+    <ClInclude Include="src\gcore\entity_dependency_tracker.h" />
     <ClInclude Include="src\gcore\entity_registry.h" />
+    <ClInclude Include="src\gcore\gcore_defines.h" />
     <ClInclude Include="src\gcore\input_key.h" />
     <ClInclude Include="src\gcore\resource_dependency_tracker.h" />
     <ClInclude Include="src\gcore\resource_handle.h" />
@@ -141,6 +143,7 @@
     <ClCompile Include="src\gcore\components\name_component.cpp" />
     <ClCompile Include="src\gcore\components\script_component.cpp" />
     <ClCompile Include="src\gcore\components\transform_component.cpp" />
+    <ClCompile Include="src\gcore\entity_dependency_tracker.cpp" />
     <ClCompile Include="src\gcore\entity_registry.cpp" />
     <ClCompile Include="src\gcore\input_key.cpp" />
     <ClCompile Include="src\gcore\resource_dependency_tracker.cpp" />

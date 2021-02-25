@@ -23,5 +23,6 @@ namespace gphys
     private:
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION()
         std::filesystem::path m_heightfield_path;
+        std::unique_ptr<unsigned char[]> m_height_field_data;
     };
 }

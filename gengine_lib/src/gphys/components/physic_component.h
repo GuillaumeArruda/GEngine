@@ -28,7 +28,6 @@ namespace gphys
 
         gcore::resource_handle<collision_shape> m_phys_shape;
         std::unique_ptr<btRigidBody> m_rigid_body;
-        std::shared_ptr<btCollisionShape> m_collision_shape;
         motion_state m_motion_state;
         float m_mass = 1.f;
 

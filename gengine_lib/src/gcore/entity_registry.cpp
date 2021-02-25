@@ -10,7 +10,18 @@
 
 namespace gcore
 {
-    entity entity_registry::create_entity() 
+    entity_registry::entity_registry(std::shared_ptr<resource_library> res_lib) 
+        : m_res_library(std::move(res_lib))
+    {
+        m_resource_reloaded_id = m_res_library->on_resource_reloaded.add_callback([&](gtl::uuid uuid) { on_resource_reloaded(uuid); });
+    }
+
+    entity_registry::~entity_registry()
+    {
+        m_res_library->on_resource_reloaded.remove_callback(m_resource_reloaded_id);
+    }
+
+    entity entity_registry::create_entity()
     { 
         return entity::generate();
     }
@@ -22,20 +33,20 @@ namespace gcore
         {
             for (std::unique_ptr<component>& component : it->second)
             {
-                if (component)
-                {
-                    remove_component_from_map(entity, component_id(typeid(*component.get())));
-                }
+                remove_component_from_map(entity, component_id(typeid(*component.get())));
             }
             std::vector<std::unique_ptr<component>> holder = std::move(it->second);
             m_entity_to_component.erase(it);
             warn_group_of_component_removal(entity);
         }
+
         if (auto loading_it = m_loading_component_entity.find(entity);
             loading_it != m_loading_component_entity.end())
         {
             m_loading_component_entity.erase(loading_it);
         }
+
+        m_dependency_tracker.remove_entity(entity);
     }
 
     void entity_registry::process(gserializer::serializer& serializer)
@@ -63,14 +74,7 @@ namespace gcore
     void entity_registry::add_loaded_component(entity entity, std::unique_ptr<component> component)
     {
         auto& entity_comp_id_list = m_entity_to_component[entity];
-        entity_component_list& ent_comp_list = m_component_type_map[component_id(typeid((*component.get())))];
-
-        auto const entity_insert_position = std::lower_bound(ent_comp_list.m_entities.begin(), ent_comp_list.m_entities.end(), entity);
-        auto const diff = std::distance(ent_comp_list.m_entities.begin(), entity_insert_position);
-        auto const component_insert_position = ent_comp_list.m_components.begin() + diff;
-
-        ent_comp_list.m_entities.insert(entity_insert_position, entity);
-        ent_comp_list.m_components.insert(component_insert_position, component.get());
+        add_component_to_map(entity, *component);
         entity_comp_id_list.push_back(std::move(component));
     }
 
@@ -84,6 +88,18 @@ namespace gcore
             { return comp_type == component_id(typeid(*comp.get())); }) != it->second.end(); });
         }
         return false;
+    }
+
+    void entity_registry::add_component_to_map(entity entity_to_add, component& comp)
+    {
+        entity_component_list& ent_comp_list = m_component_type_map[component_id(typeid(comp))];
+
+        auto const entity_insert_position = std::lower_bound(ent_comp_list.m_entities.begin(), ent_comp_list.m_entities.end(), entity_to_add);
+        auto const diff = std::distance(ent_comp_list.m_entities.begin(), entity_insert_position);
+        auto const component_insert_position = ent_comp_list.m_components.begin() + diff;
+
+        ent_comp_list.m_entities.insert(entity_insert_position, entity_to_add);
+        ent_comp_list.m_components.insert(component_insert_position, &comp);
     }
 
     void entity_registry::remove_component_from_map(entity entity_to_remove, component_id id)
@@ -105,11 +121,38 @@ namespace gcore
         }
     }
 
+    void entity_registry::warn_group_of_component_addition(entity changed_entity)
+    {
+        for (auto& group : m_group_map)
+        {
+            group.second->on_component_added(*this, changed_entity);
+        }
+    }
+
     void entity_registry::warn_group_of_component_removal(entity changed_entity)
     {
         for (auto& group : m_group_map)
         {
             group.second->on_component_removed(*this, changed_entity);
+        }
+    }
+
+    void entity_registry::on_resource_reloaded(gtl::uuid const& resource_uuid)
+    {
+        gtl::span<entity_dependency_tracker::entity_component const> changed_comp = m_dependency_tracker.get_dependant_components(resource_uuid);
+
+        for (entity_dependency_tracker::entity_component const& entity_comp : changed_comp)
+        {
+            std::vector<std::unique_ptr<component>>& components = m_entity_to_component[entity_comp.m_entity];
+            auto it = std::find_if(components.begin(), components.end(), [&](std::unique_ptr<component> const& comp) { return component_id(typeid(*comp)) == entity_comp.m_component; });
+            if (it == components.end())
+                continue;
+         
+            std::unique_ptr<component> holder = std::move(*it);
+            components.erase(it);
+            warn_group_of_component_removal(entity_comp.m_entity);
+            components.push_back(std::move(holder));
+            warn_group_of_component_addition(entity_comp.m_entity);
         }
     }
 
@@ -178,10 +221,7 @@ namespace gcore
                         });
                 if (removed_element != 0)
                 {
-                    for (auto& group : m_group_map)
-                    {
-                        group.second->on_component_added(*this, loading_info.first);
-                    }
+                    warn_group_of_component_addition(loading_info.first);
                 }
                 return loading_info.second.size() == 0;
             });
@@ -208,6 +248,8 @@ namespace gcore
                     }
                 }
 
+                m_dependency_tracker.add_dependencies(entity, component_id(typeid(*component.get())), resources);
+
                 if (std::all_of(resources.begin(), resources.end(), [](resource_handle<resource> const& res) { return res.is_loaded(); }))
                 {
                     has_added_component = true;
@@ -222,10 +264,7 @@ namespace gcore
 
         if (has_added_component)
         {
-            for (auto& group : m_group_map)
-            {
-                group.second->on_component_added(*this, entity);
-            }
+            warn_group_of_component_addition(entity);
         }
     }
 

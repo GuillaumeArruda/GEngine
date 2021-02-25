@@ -19,7 +19,7 @@ namespace gphys
 
     bool capsule_shape::do_load_async()
     {
-        m_shape = std::make_shared<btCapsuleShape>(m_radius, m_half_height);
+        m_shape = std::make_unique<btCapsuleShape>(m_radius, m_half_height);
         return true;
     }
 

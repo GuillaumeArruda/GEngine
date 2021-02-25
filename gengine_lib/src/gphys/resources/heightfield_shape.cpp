@@ -51,13 +51,12 @@ namespace gphys
         iluFlipImage();
 
         
-       std::unique_ptr<unsigned char[]> heightfield_data = std::make_unique<unsigned char[]>(size_of_data / byte_per_pixel);
+        m_height_field_data = std::make_unique<unsigned char[]>(size_of_data / byte_per_pixel);
         for (size_t i = 0; i < size_of_data / byte_per_pixel; ++i)
         {
-            heightfield_data[i] = data[i * byte_per_pixel];
+            m_height_field_data[i] = data[i * byte_per_pixel];
         }
-        const void* void_data = static_cast<const void*>(heightfield_data.get());
-        m_shape = std::shared_ptr<btCollisionShape>(new btHeightfieldTerrainShape(width, height, void_data, 20.f / 255.f, -126.f, 128.f, 1, PHY_UCHAR, false), [height_data = std::move(heightfield_data)](btCollisionShape* ptr) { delete ptr; });
+        m_shape = std::make_unique<btHeightfieldTerrainShape>(width, height, static_cast<void*>(m_height_field_data.get()), 20.f / 255.f, -126.f, 128.f, 1, PHY_UCHAR, false);
 
         ilDeleteImage(imageId);
         return true;
@@ -71,6 +70,7 @@ namespace gphys
     void heightfield_shape::do_unload()
     {
         m_shape.reset();
+        m_height_field_data.reset();
     }
 }
 

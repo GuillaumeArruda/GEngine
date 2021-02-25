@@ -7,6 +7,7 @@
 #include <filesystem>
 
 #include "gtl/uuid.h"
+#include "gtl/callbacks.h"
 
 #include "gthread/job_manager.h"
 
@@ -60,6 +61,8 @@ namespace gcore
 
         resource_dependency_tracker& get_dependency_tracker() { return m_dependency_tracker; }
         resource_dependency_tracker const& get_dependency_tracker() const { return m_dependency_tracker; }
+
+        gtl::callbacks<void(gtl::uuid)> on_resource_reloaded;
 
     private:
         friend struct resource_proxy;

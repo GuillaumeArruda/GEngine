@@ -103,7 +103,6 @@ namespace gcore
                 serializer.process("resource", resource_to_load, resource::factory());
                 if (resource_to_load)
                 {
-                    resource_to_load->set_library(this);
                     proxy = std::make_shared<resource_proxy>(resource_to_load.get(), this);
                     load_resource(std::move(resource_to_load));
                     it->second = proxy;
@@ -200,6 +199,7 @@ namespace gcore
                             {
                                 proxy->set_target(res_to_load.get());
                                 m_res_to_unload.push_back(std::move(it->second));
+                                on_resource_reloaded(res_to_load->get_uuid());
                             }
                             it->second = std::move(res_to_load);
                             continue;
@@ -241,6 +241,7 @@ namespace gcore
 
     void resource_library::load_resource(std::unique_ptr<resource> res_to_load)
     {
+        res_to_load->set_library(this);
         m_dependency_tracker.on_resource_loaded(*res_to_load);
 
         //small workaround to go around copy requirement of std::function and the inability to go from shared_ptr to unique_ptr

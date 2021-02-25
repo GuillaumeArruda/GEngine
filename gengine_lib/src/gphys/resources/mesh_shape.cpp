@@ -24,7 +24,7 @@ namespace gphys
 
     bool mesh_shape::do_load_async() 
     {
-        m_shape = std::make_shared<btCapsuleShape>(0.5f, 0.8f);
+        m_shape = std::make_unique<btCapsuleShape>(0.5f, 0.8f);
         return true;
     }
 

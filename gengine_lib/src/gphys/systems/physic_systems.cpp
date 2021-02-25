@@ -42,6 +42,7 @@ namespace gphys
     {
         float const delta_time = gcore::time::to_float(world.get_time().get_delta_time());
         m_phys_world->stepSimulation(delta_time);
+        m_phys_world->debugDrawWorld();
     }
 
     void physic_system::on_physic_entity_added(std::tuple<gcore::entity, gcore::transform_component*, physic_component*>& added_entity)
@@ -50,11 +51,10 @@ namespace gphys
         if (phys_comp->m_phys_shape.is_loaded())
         {
             gcore::transform_component* transform = std::get<gcore::transform_component*>(added_entity);
-            phys_comp->m_collision_shape = phys_comp->m_phys_shape->get_shape();
             btVector3 fall_inertia = btVector3(0.f, 0.f, 0.f);
-            phys_comp->m_collision_shape->calculateLocalInertia(phys_comp->m_mass, fall_inertia);
+            phys_comp->m_phys_shape->get_shape()->calculateLocalInertia(phys_comp->m_mass, fall_inertia);
 
-            btRigidBody::btRigidBodyConstructionInfo constructionInfo(phys_comp->m_mass, &phys_comp->m_motion_state, phys_comp->m_collision_shape.get(), fall_inertia);
+            btRigidBody::btRigidBodyConstructionInfo constructionInfo(phys_comp->m_mass, &phys_comp->m_motion_state, phys_comp->m_phys_shape->get_shape().get(), fall_inertia);
             phys_comp->m_motion_state.m_transform = transform;
             phys_comp->m_motion_state.m_offset = glm::vec3(0.f, 1.f, 0.f);
             constructionInfo.m_startWorldTransform = to_bullet(transform->m_transform);

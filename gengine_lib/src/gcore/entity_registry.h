@@ -12,8 +12,10 @@
 #include "gtl/uuid.h"
 #include "gtl/callbacks.h"
 
+#include "gcore/gcore_defines.h"
 #include "gcore/component.h"
 #include "gcore/resource_handle.h"
+#include "gcore/entity_dependency_tracker.h"
 
 namespace gserializer
 {
@@ -22,9 +24,6 @@ namespace gserializer
 
 namespace gcore
 {
-    using entity = gtl::uuid;
-    using component_id = std::type_index;
-    using view_id = std::type_index;
     struct optional_comp_base {};
 
     template<class ComponentType>
@@ -61,7 +60,8 @@ namespace gcore
 
     struct entity_registry
     {
-        entity_registry(std::shared_ptr<resource_library> res_lib) : m_res_library(std::move(res_lib)) {}
+        entity_registry(std::shared_ptr<resource_library> res_lib);
+        ~entity_registry();
 
         [[nodiscard]] entity create_entity();
         void remove_entity(entity entity);
@@ -122,10 +122,16 @@ namespace gcore
         void clear();
         void update();
     private:
-        void add_loaded_component(entity entity, std::unique_ptr<component> component);
         bool has_components(entity entity, gtl::span<component_id const> component_types) const;
+        
+        void add_loaded_component(entity entity, std::unique_ptr<component> component);
+        void add_component_to_map(entity entity_to_add, component& component);
         void remove_component_from_map(entity entity_to_remove, component_id id);
+
+        void warn_group_of_component_addition(entity changed_entity);
         void warn_group_of_component_removal(entity changed_entity);
+
+        void on_resource_reloaded(gtl::uuid const& resource_uuid);
 
         struct group_base
         {
@@ -152,12 +158,14 @@ namespace gcore
             std::vector<resource_handle<resource>> m_resources;
         };
 
+        entity_dependency_tracker m_dependency_tracker;
         std::unordered_map<entity, std::vector<loading_component_info>> m_loading_component_entity;
         std::unordered_map<entity, std::vector<std::unique_ptr<component>>> m_entity_to_component;
         std::unordered_map<component_id, entity_component_list> m_component_type_map;
         std::unordered_map<view_id, std::unique_ptr<group_base>> m_group_map;
         std::shared_ptr<resource_library> m_res_library;
         std::shared_mutex m_lock;
+        gtl::callback_id m_resource_reloaded_id;
     };
 
 
