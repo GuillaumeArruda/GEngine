@@ -7,6 +7,7 @@
 #include "gcore/components/transform_component.h"
 #include "gcore/components/extent_component.h"
 #include "gcore/world.h"
+#include "gcore/console.h"
 
 
 #include "grender/components/camera_component.h"
@@ -20,8 +21,12 @@
 
 namespace grender
 {
+    GCORE_REGISTER_CONSOLE_VALUE("render.enable", bool, enable_render, true);
     void render_system::update(gcore::world& world)
     {
+        if (!enable_render)
+            return;
+
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
         gcore::entity_registry& registry = world.get_entity_registry();
         auto camera_view = registry.get_view<gcore::transform_component, camera_component>();       

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <GL/glew.h>
+#include <charconv>
 
 #include "gtool/window_manager.h"
 
@@ -9,9 +10,8 @@
 #include <GLFW/glfw3.h>
 
 #include "gcore/world.h"
-#include "gcore/systems/input_system.h"
-#include "gcore/systems/flying_controller_system.h"
 #include "gcore/resource_library.h"
+#include "gcore/console.h"
 
 #include "grender/systems/render_system.h"
 #include "grender/utils.h"
@@ -24,6 +24,7 @@
 #include "gtool/windows/viewport_window.h"
 #include "gtool/windows/node_editor_window.h"
 #include "gtool/windows/console_window.h"
+#include "gtool/windows/frame_view_window.h"
 
 
 namespace gtool
@@ -45,22 +46,38 @@ namespace gtool
 		m_window = glfwCreateWindow(1920, 1080, "gengine", nullptr, nullptr);
 
 		glfwMakeContextCurrent(m_window);
+
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 		ImGui::StyleColorsDark();
-
+		
 		ImGui_ImplGlfw_InitForOpenGL(m_window, true);
 		ImGui_ImplOpenGL3_Init(nullptr);
 		grender::gl_exec(glewInit);
+
+		gcore::console::get().register_callback("window.enable_vsync",
+			[&](std::string_view value) {
+			int swap_interval = 0;
+			auto const results = std::from_chars(value.data(), value.data() + value.size(), swap_interval);
+			if (results.ec == std::errc())
+			{
+				glfwSwapInterval(swap_interval);
+				return true;
+			}
+			return false;
+		});
 
         m_windows.push_back(std::make_unique<entity_view_window>());
         m_windows.push_back(std::make_unique<resource_view_window>());
 		m_windows.push_back(std::make_unique<viewport_window>());
 		m_windows.push_back(std::make_unique<node_editor_window>());
 		m_windows.push_back(std::make_unique<console_window>());
+		m_windows.push_back(std::make_unique<frame_view_window>());
+
+
     }
 
 	window_manager::~window_manager()

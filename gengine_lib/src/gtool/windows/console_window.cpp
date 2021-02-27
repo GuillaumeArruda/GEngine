@@ -50,6 +50,7 @@ namespace gtool
             m_log.push_back(log_entry{ std::move(m_current_input), success });
             m_current_input.clear();
             m_suggestions.clear();
+            m_selected_history_index.reset();
             ImGui::SetKeyboardFocusHere();
         }
 
@@ -59,7 +60,7 @@ namespace gtool
             ImGui::TextUnformatted(suggestion.c_str());
         }
         ImGui::PopStyleVar();
-
+        
         ImGui::End();
     }
 

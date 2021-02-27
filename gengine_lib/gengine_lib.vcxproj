@@ -130,6 +130,7 @@
     <ClInclude Include="src\gtl\cast.h" />
     <ClInclude Include="src\gtl\span.h" />
     <ClInclude Include="src\gtl\uuid.h" />
+    <ClInclude Include="src\gtool\windows\frame_view_window.h" />
     <ClInclude Include="src\gtool\windows\node_editor_window.h" />
     <ClInclude Include="src\gtool\windows\resource_view_window.h" />
     <ClInclude Include="src\gtool\window.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="src\gthread\task_group.cpp" />
     <ClCompile Include="src\gthread\thread_group.cpp" />
     <ClCompile Include="src\gtl\uuid.cpp" />
+    <ClCompile Include="src\gtool\windows\frame_view_window.cpp" />
     <ClCompile Include="src\gtool\windows\node_editor_window.cpp" />
     <ClCompile Include="src\gtool\windows\resource_view_window.cpp" />
     <ClCompile Include="src\gtool\windows\viewport_window.cpp" />

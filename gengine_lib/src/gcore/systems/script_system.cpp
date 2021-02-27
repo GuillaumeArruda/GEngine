@@ -2,10 +2,13 @@
 
 #include "gcore/systems/script_system.h"
 #include "gcore/world.h"
+#include "gcore/console.h"
 #include "gcore/components/script_component.h"
 
 namespace gcore
 {
+    GCORE_REGISTER_CONSOLE_VALUE("script.enable", bool, script_enable, true);
+
     void script_system::connect_to_world(gcore::world& world)
     {
         auto view = world.get_entity_registry().get_view<script_component>();
@@ -14,6 +17,9 @@ namespace gcore
 
     void script_system::update(world& world)
     {
+        if (!script_enable)
+            return;
+
         auto view = world.get_entity_registry().get_view<script_component>();
         for (auto& [entity, script_comp] : view)
         {

@@ -15,6 +15,7 @@
 namespace gphys
 {
     GCORE_REGISTER_CONSOLE_VALUE("physic.display", bool, physic_display, false);
+    GCORE_REGISTER_CONSOLE_VALUE("physic.enable", bool, physic_enable, true);
 
     physic_system::physic_system()
     {
@@ -43,6 +44,9 @@ namespace gphys
 
     void physic_system::update(gcore::world& world)
     {
+        if (!physic_enable)
+            return;
+
         float const delta_time = gcore::time::to_float(world.get_time().get_delta_time());
         m_phys_world->stepSimulation(delta_time);
         if(physic_display)
