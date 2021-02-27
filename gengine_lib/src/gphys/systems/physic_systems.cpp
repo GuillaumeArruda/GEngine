@@ -5,6 +5,7 @@
 
 #include "gcore/world.h"
 #include "gcore/components/transform_component.h"
+#include "gcore/console.h"
 
 #include "grender/systems/debug_render_system.h"
 
@@ -13,6 +14,8 @@
 
 namespace gphys
 {
+    GCORE_REGISTER_CONSOLE_VALUE("physic.display", bool, physic_display, false);
+
     physic_system::physic_system()
     {
         m_broadphase = std::make_unique<btDbvtBroadphase>();
@@ -42,7 +45,8 @@ namespace gphys
     {
         float const delta_time = gcore::time::to_float(world.get_time().get_delta_time());
         m_phys_world->stepSimulation(delta_time);
-        m_phys_world->debugDrawWorld();
+        if(physic_display)
+            m_phys_world->debugDrawWorld();
     }
 
     void physic_system::on_physic_entity_added(std::tuple<gcore::entity, gcore::transform_component*, physic_component*>& added_entity)

@@ -23,6 +23,7 @@
 #include "gtool/windows/resource_view_window.h"
 #include "gtool/windows/viewport_window.h"
 #include "gtool/windows/node_editor_window.h"
+#include "gtool/windows/console_window.h"
 
 
 namespace gtool
@@ -59,6 +60,7 @@ namespace gtool
         m_windows.push_back(std::make_unique<resource_view_window>());
 		m_windows.push_back(std::make_unique<viewport_window>());
 		m_windows.push_back(std::make_unique<node_editor_window>());
+		m_windows.push_back(std::make_unique<console_window>());
     }
 
 	window_manager::~window_manager()
