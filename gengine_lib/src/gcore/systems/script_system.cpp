@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#include <optick/optick.h>
+
 #include "gcore/systems/script_system.h"
 #include "gcore/world.h"
 #include "gcore/console.h"
@@ -17,6 +19,7 @@ namespace gcore
 
     void script_system::update(world& world)
     {
+        OPTICK_EVENT();
         if (!script_enable)
             return;
 
@@ -26,7 +29,11 @@ namespace gcore
             for (script_component::script_info& script_info : script_comp->m_scripts)
             {
                 if (script_info.m_context.is_prepared())
+                {
+                    OPTICK_EVENT("Script Update");
+                    OPTICK_TAG("Script Name", script_info.m_script->get_name().c_str());
                     script_info.m_context.execute();
+                }
             }
         }
     }

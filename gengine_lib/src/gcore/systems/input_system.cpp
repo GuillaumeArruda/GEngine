@@ -1,11 +1,14 @@
 #include "stdafx.h"
 
+#include<GLFW/glfw3.h>
+#include <optick/optick.h>
+
+
 #include "gcore/systems/input_system.h"
 
 #include "gcore/components/input_component.h"
 #include "gcore/world.h"
 
-#include<GLFW/glfw3.h>
 
 namespace gcore
 {
@@ -14,6 +17,7 @@ namespace gcore
 
     void input_system::update(world& world)
     {
+        OPTICK_EVENT();
         if (!m_window)
             return;
         

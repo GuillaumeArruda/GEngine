@@ -1,5 +1,7 @@
 #include "stdafx.h"
+
 #include <algorithm>
+#include <optick/optick.h>
 
 #include "gserializer/serializer.h"
 
@@ -209,6 +211,7 @@ namespace gcore
 
     void entity_registry::update()
     {
+        OPTICK_EVENT();
         std::erase_if(m_loading_component_entity, 
             [&](auto& loading_info) 
             {

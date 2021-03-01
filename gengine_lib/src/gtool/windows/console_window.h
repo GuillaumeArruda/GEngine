@@ -25,6 +25,7 @@ namespace gtool
         int text_edit_callback(struct ImGuiInputTextCallbackData* data);
         void clear_history();
         void clear_log();
+        bool display_value(std::string_view name);
 
 
         std::vector<std::string> m_history;

@@ -1,7 +1,9 @@
 #include "stdafx.h"
 
 #include <imgui/imgui.h>
-#include "imgui/imgui_stdlib.h"
+#include <imgui/imgui_stdlib.h>
+
+#include <optick/optick.h>
 
 #include "gtool/windows/node_editor_window.h"
 
@@ -86,7 +88,7 @@ namespace gtool
                 ImGui::End();
                 return;
             }
-
+            OPTICK_EVENT();
             const char* menu_action = nullptr;
 
             if (ImGui::BeginMenuBar())

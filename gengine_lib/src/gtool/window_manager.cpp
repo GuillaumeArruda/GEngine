@@ -9,6 +9,8 @@
 #include <imgui/imgui_impl_opengl3.h>
 #include <GLFW/glfw3.h>
 
+#include <optick/optick.h>
+
 #include "gcore/world.h"
 #include "gcore/resource_library.h"
 #include "gcore/console.h"
@@ -88,64 +90,82 @@ namespace gtool
 
     void window_manager::update(gcore::world& world)
     {
-		glfwPollEvents();
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-
-		world.get_time().new_frame();
-		world.m_update_tasks.run_tasks(m_jobs);
-		grender::render_system* render = world.get_system_registry().get_system<grender::render_system>();
-		render->update(world);
-		world.get_resource_library()->update();
-		world.get_entity_registry().update();
-
-		ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(viewport->Pos);
-		ImGui::SetNextWindowSize(viewport->Size);
-		ImGui::SetNextWindowViewport(viewport->ID);
-		ImGuiWindowFlags const window_flags = 
-			ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking
-			| ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse
-			| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove
-			| ImGuiWindowFlags_NoBringToFrontOnFocus;
-
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-		if (ImGui::Begin("Master DockSpace", NULL, window_flags))
+		OPTICK_FRAME("Main Thread");
 		{
-			ImGuiID dockMain = ImGui::GetID("MyDockspace");
+			
+			glfwPollEvents();
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplGlfw_NewFrame();
+			ImGui::NewFrame();
 
-			ImGui::DockSpace(dockMain);
-			if (ImGui::BeginMenuBar())
 			{
-				if (ImGui::BeginMenu("Windows"))
+				OPTICK_EVENT("World Update");
+				world.get_time().new_frame();
+				world.m_update_tasks.run_tasks(m_jobs);
+				grender::render_system* render = world.get_system_registry().get_system<grender::render_system>();
+				render->update(world);
+				world.get_resource_library()->update();
+				world.get_entity_registry().update();
+			}
+
+			{
+				OPTICK_EVENT("Tool Update");
+				ImGuiViewport* viewport = ImGui::GetMainViewport();
+				ImGui::SetNextWindowPos(viewport->Pos);
+				ImGui::SetNextWindowSize(viewport->Size);
+				ImGui::SetNextWindowViewport(viewport->ID);
+				ImGuiWindowFlags const window_flags =
+					ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking
+					| ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse
+					| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove
+					| ImGuiWindowFlags_NoBringToFrontOnFocus;
+
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+				if (ImGui::Begin("Master DockSpace", NULL, window_flags))
 				{
+					ImGuiID dockMain = ImGui::GetID("MyDockspace");
+
+					ImGui::DockSpace(dockMain);
+					if (ImGui::BeginMenuBar())
+					{
+						if (ImGui::BeginMenu("Windows"))
+						{
+							for (std::unique_ptr<window>& window : m_windows)
+							{
+								if (ImGui::MenuItem(window->get_name()))
+								{
+									window->get_should_display() = true;
+								}
+							}
+							ImGui::EndMenu();
+						}
+						ImGui::EndMenuBar();
+					}
+
 					for (std::unique_ptr<window>& window : m_windows)
 					{
-						if (ImGui::MenuItem(window->get_name()))
-						{
-							window->get_should_display() = true;
-						}
+						window->update(world, *this);
 					}
-					ImGui::EndMenu();
 				}
-				ImGui::EndMenuBar();
-			}
 
-			for (std::unique_ptr<window>& window : m_windows)
-			{
-				window->update(world, *this);
+				ImGui::End();
+				ImGui::PopStyleVar(3);
+
+				{
+					OPTICK_EVENT("ImGui Render");
+					ImGui::Render();
+					ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+				}
+				
 			}
 		}
+		{
+			OPTICK_EVENT("Swap Buffers");
+			glfwSwapBuffers(m_window);
+		}
 
-		ImGui::End();
-		ImGui::PopStyleVar(3);
-
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		glfwSwapBuffers(m_window);
     }
 
 	bool window_manager::wants_to_close() const

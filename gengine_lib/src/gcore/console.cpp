@@ -55,6 +55,13 @@ namespace gcore
     void console::register_value(std::string_view name, value value)
     {
         m_values[name] = std::move(value);
+        m_has_been_modified = true;
+    }
+
+    void console::unregister_value(std::string_view name)
+    {
+        m_values.erase(name);
+        m_has_been_modified = true;
     }
 
     bool console::execute(std::string_view console_view)
@@ -76,6 +83,22 @@ namespace gcore
         for (auto& [name, value] : m_values)
             commands.push_back(name);
         return commands;
+    }
+
+    console::value const* console::get_value(std::string_view name) const
+    {
+        if (auto const it = m_values.find(name); 
+            it != m_values.end())
+        {
+            return &it->second;
+        }
+        return nullptr;
+    }
+    bool console::consume_has_been_modified()
+    {
+        bool const has_been_modified = m_has_been_modified;
+        m_has_been_modified = false;
+        return has_been_modified;
     }
 }
 

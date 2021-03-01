@@ -3,6 +3,10 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_stdlib.h>
 
+#include <optick/optick.h>
+
+#include <fmt/format.h>
+
 #include "gtool/windows/console_window.h"
 
 #include "gcore/console.h"
@@ -13,6 +17,7 @@ namespace gtool
     {
         gcore::console::get().register_callback("console.clear", [&](std::string_view) { clear_log(); return true; });
         gcore::console::get().register_callback("console.clear_history", [&](std::string_view) { clear_history(); return true; });
+        gcore::console::get().register_callback("console.display_value", [&](std::string_view name) { return display_value(name); });
         m_possible_commands = gcore::console::get().get_possible_commands();
         m_suggestions.reserve(3);
     }
@@ -25,6 +30,13 @@ namespace gtool
         {
             ImGui::End();
             return;
+        }
+
+        OPTICK_EVENT();
+
+        if (gcore::console::get().consume_has_been_modified())
+        {
+            m_possible_commands = gcore::console::get().get_possible_commands();
         }
 
         const float footer_height_to_reserve = (ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing()) * max_number_of_suggestion;
@@ -45,9 +57,13 @@ namespace gtool
         ImGuiInputTextFlags const flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory | ImGuiInputTextFlags_CallbackEdit;
         if (ImGui::InputText("Input", &m_current_input, flags, [](ImGuiInputTextCallbackData* data) { return static_cast<console_window*>(data->UserData)->text_edit_callback(data); }, static_cast<void*>(this)))
         {
-            bool const success = gcore::console::get().execute(m_current_input);
             m_history.push_back(m_current_input);
-            m_log.push_back(log_entry{ std::move(m_current_input), success });
+            m_log.push_back(log_entry{ m_current_input, false });
+            std::size_t const index = m_log.size() - 1;
+            bool const success = gcore::console::get().execute(m_current_input);
+            if (m_log.size() > index)
+                m_log[index].m_success = success;
+
             m_current_input.clear();
             m_suggestions.clear();
             m_selected_history_index.reset();
@@ -140,8 +156,41 @@ namespace gtool
         m_history.clear();
         m_selected_history_index.reset();
     }
+
     void console_window::clear_log()
     {
         m_log.clear();
+    }
+
+    bool console_window::display_value(std::string_view name)
+    {
+        gcore::console::value const* value = gcore::console::get().get_value(name);
+        if (!value)
+            return false;
+
+        std::visit([&](auto const& t) 
+        {
+            if constexpr (std::is_same_v<std::decay_t<decltype(t)>, int*>)
+            {
+                m_log.push_back(log_entry{ fmt::format("{} -> Int : {}\n", name, *t), true });
+            }
+            else if constexpr (std::is_same_v<std::decay_t<decltype(t)>, float*>)
+            {
+                m_log.push_back(log_entry{ fmt::format("{} -> Float : {}\n", name, *t), true });
+            }
+            else if constexpr (std::is_same_v<std::decay_t<decltype(t)>, bool*>)
+            {
+                m_log.push_back(log_entry{ fmt::format("{} -> Bool : {}\n", name, *t), true });
+            }
+            else if constexpr (std::is_same_v<std::decay_t<decltype(t)>, std::string*>)
+            {
+                m_log.push_back(log_entry{ fmt::format("{} -> String : {}\n", name, *t), true });
+            }
+            else if constexpr (std::is_same_v<std::decay_t<decltype(t)>, std::function<bool(std::string_view)>>)
+            {
+                m_log.push_back(log_entry{ fmt::format("{} -> Callback : {}\n", name, t.target_type().name()), true });
+            }
+        }, *value);
+        return true;
     }
 }

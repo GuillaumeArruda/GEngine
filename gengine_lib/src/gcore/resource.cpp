@@ -1,5 +1,8 @@
 #include "stdafx.h"
 
+#include <optick/optick.h>
+#include <fmt/format.h>
+
 #include "gcore/resource.h"
 #include "gcore/resource_handle.h"
 #include "gcore/resource_library.h"
@@ -24,6 +27,8 @@ namespace gcore
 
     void resource::load_async()
     { 
+        OPTICK_EVENT();
+        OPTICK_TAG("Res Name", m_name.c_str());
         dependency_gatherer_serializer gatherer(true);
         gatherer.set_in_context(std::ref(*m_library));
         process(gatherer);
@@ -41,8 +46,6 @@ namespace gcore
         ensure_all_dependant_resources_loaded(resources);
 
         assert(m_loading_state == loading_state::pending_async);
-        std::string name = "load_async " + m_name;
-        gtl::scope_timer const s(name.c_str());
         if (do_load_async())
         {
             m_loading_state = loading_state::pending_sync;
@@ -55,9 +58,9 @@ namespace gcore
 
     void resource::load_sync()
     {
+        OPTICK_EVENT();
+        OPTICK_TAG("Res Name", m_name.c_str());
         assert(m_loading_state == loading_state::pending_sync || m_loading_state == loading_state::failed);
-        std::string name = "load_sync " + m_name;
-        gtl::scope_timer const s(name.c_str());
         if (m_loading_state == loading_state::pending_sync)
         {
             if (do_load_sync())
@@ -73,9 +76,9 @@ namespace gcore
 
     void resource::unload()
     {
+        OPTICK_EVENT();
+        OPTICK_TAG("Res Name", m_name.c_str());
         assert(m_loading_state == loading_state::loaded);
-        std::string name = "unload " + m_name;
-        gtl::scope_timer const s(name.c_str());
         do_unload();
         m_loading_state = loading_state::unloaded;
     }

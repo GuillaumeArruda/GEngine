@@ -15,10 +15,13 @@
 
 #include <iostream>
 
+#include <optick/optick.h>
+
 namespace gcore
 {
     void flying_controller_system::update(world& world)
     {
+        OPTICK_EVENT();
         using gmath::vector;
         using gmath::direction;
         float const dt = time::to_float(world.get_time().get_delta_time());

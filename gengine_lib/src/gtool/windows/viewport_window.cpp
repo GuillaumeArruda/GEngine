@@ -2,6 +2,7 @@
 #include "gtool/windows/viewport_window.h"
 
 #include <imgui/imgui.h>
+#include <optick/optick.h>
 
 #include "gcore/world.h"
 #include "gcore/systems/input_system.h"
@@ -22,6 +23,8 @@ namespace gtool
                 return;
             }
 
+            OPTICK_EVENT();
+            
             ImVec2 const content_min = ImGui::GetWindowContentRegionMin();
             ImVec2 const content_max = ImGui::GetWindowContentRegionMax();
             ImVec2 const window_size ( content_max[0] - content_min[0], content_max[1] - content_min[1]);

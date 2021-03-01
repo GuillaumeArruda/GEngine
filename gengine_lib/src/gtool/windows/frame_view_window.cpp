@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include <imgui/imgui.h>
+#include <optick/optick.h>
 
 #include "gcore/console.h"
 
@@ -13,6 +14,7 @@ namespace gtool
 {
     void frame_view_window::update(gcore::world&, window_manager&)
     {
+        OPTICK_EVENT();
         auto const now = std::chrono::high_resolution_clock::now();
         std::chrono::duration<float> const frame_time = now - m_last_frame_begin;
         m_last_frame_begin = now;

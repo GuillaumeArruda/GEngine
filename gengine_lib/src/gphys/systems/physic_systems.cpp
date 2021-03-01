@@ -2,6 +2,7 @@
 #include "gphys/systems/physic_systems.h"
 
 #include <bullet/btBulletDynamicsCommon.h>
+#include <optick/optick.h>
 
 #include "gcore/world.h"
 #include "gcore/components/transform_component.h"
@@ -46,6 +47,8 @@ namespace gphys
     {
         if (!physic_enable)
             return;
+
+        OPTICK_EVENT();
 
         float const delta_time = gcore::time::to_float(world.get_time().get_delta_time());
         m_phys_world->stepSimulation(delta_time);

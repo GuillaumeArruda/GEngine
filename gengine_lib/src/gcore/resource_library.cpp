@@ -2,6 +2,8 @@
 
 #include <filesystem>
 #include <algorithm>
+#include <GLFW/glfw3.h>
+#include <optick/optick.h>
 
 #include "gcore/resource_library.h"
 
@@ -10,7 +12,7 @@
 
 #include "gcore/serializers/dependency_gatherer_serializer.h"
 
-#include <GLFW/glfw3.h>
+
 
 namespace gcore
 {
@@ -151,6 +153,7 @@ namespace gcore
 
     void resource_library::update()
     {
+        OPTICK_EVENT();
         {
             std::unique_lock file_lock(m_file_change_lock);
             for (auto const& path : m_file_changes)

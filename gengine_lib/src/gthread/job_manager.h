@@ -13,7 +13,7 @@ namespace gthread
 {
     struct job_manager
     {
-        job_manager(unsigned int number_of_thread) : m_job_queues(number_of_thread), m_threads(number_of_thread, [&](unsigned index) { process_job(index); }) {}
+        job_manager(unsigned int number_of_thread);
         ~job_manager();
 
         job_manager(job_manager const&) = delete;

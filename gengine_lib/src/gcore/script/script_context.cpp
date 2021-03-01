@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "gcore/script/script_context.h"
 
+#include "gcore/script/node_factory.h"
+
+#include <optick/optick.h>
+#include <fmt/format.h>
+
 namespace gcore
 {
     node_context::node_context(script_context& context, gtl::span<in_pin_data> input_data, gtl::span<node_data> output_data)
@@ -145,7 +150,13 @@ namespace gcore
     void script_context::execute_node(std::uint32_t node_index)
     {
         assert(node_index < m_node_contexts.size());
-        m_script->get_node(node_index)->execute(m_node_contexts[node_index]);
+        node const* node = m_script->get_node(node_index);
+#if GCORE_ENABLE_HEAVY_SCRIPT_PROFILE()
+        OPTICK_EVENT_DYNAMIC(typeid(*node).name());
+        OPTICK_TAG("Node Id", node->get_node_id());
+#endif //GCORE_ENABLE_HEAVY_SCRIPT_PROFILE()
+        
+        node->execute(m_node_contexts[node_index]);
     }
 
     void script_context::prepare()

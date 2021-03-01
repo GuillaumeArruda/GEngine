@@ -7,6 +7,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <optick/optick.h>
+
 #include "gserializer/serializers/json_serializer.h"
 
 #include "gcore/components/extent_component.h"
@@ -29,6 +31,7 @@ namespace gtool
     {
         if (m_display)
         {
+            OPTICK_EVENT();
             if (!ImGui::Begin(get_name(), &m_display))
             {
                 ImGui::End();

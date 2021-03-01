@@ -238,6 +238,9 @@
     <ProjectReference Include="..\imgui\imgui.vcxproj">
       <Project>{701cea89-ecd9-42cf-8337-5a9f72dc6897}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\optick\optick.vcxproj">
+      <Project>{0d68149d-afac-4ce5-9833-5726e2bc696b}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

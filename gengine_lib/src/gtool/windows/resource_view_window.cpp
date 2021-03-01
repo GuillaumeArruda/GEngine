@@ -4,7 +4,8 @@
 #include <iostream>
 
 #include <imgui/imgui.h>
-#include "imgui/imgui_stdlib.h"
+#include <imgui/imgui_stdlib.h>
+#include <optick/optick.h>
 
 #include "gtl/uuid.h"
 
@@ -98,6 +99,7 @@ namespace gtool
                 ImGui::End();
                 return;
             }
+            OPTICK_EVENT();
             gcore::resource_library& library = *world.get_resource_library();
 
             m_resource_viewer_widget.update(library);

@@ -3,8 +3,16 @@
 #include <iostream>
 #include "gthread/job_manager.h"
 
+#include <fmt/format.h>
+#include <optick/optick.h>
+
 namespace gthread
 {
+    job_manager::job_manager(unsigned int number_of_thread) 
+        : m_job_queues(number_of_thread)
+        ,  m_threads(number_of_thread, [&](unsigned index) { OPTICK_THREAD(fmt::format("Worker thread: {}", index).c_str()); process_job(index); }) 
+    {}
+
     job_manager::~job_manager()
     {
         for (auto& queue : m_job_queues)

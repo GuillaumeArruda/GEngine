@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <optick/optick.h>
 
 #include "grender/systems/render_system.h"
 
@@ -26,6 +27,8 @@ namespace grender
     {
         if (!enable_render)
             return;
+
+        OPTICK_EVENT();
 
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
         gcore::entity_registry& registry = world.get_entity_registry();
@@ -86,6 +89,7 @@ namespace grender
 
     void render_system::render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry)
     {
+        OPTICK_EVENT();
         setup_geometry_pass();
         auto graphic_comp_view = registry.get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
         for (auto& [entity, transform, graphic_comp, extent] : graphic_comp_view)
@@ -109,6 +113,7 @@ namespace grender
 
     void render_system::render_lights(glm::mat4 const& camera_world_matrix, gcore::entity_registry& registry)
     {
+        OPTICK_EVENT();
         setup_lightning_pass();
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
         auto light_view = registry.get_view<gcore::transform_component, light_component>();
@@ -138,6 +143,7 @@ namespace grender
 
     void render_system::render_skybox(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry)
     {
+        OPTICK_EVENT();
         setup_skybox_pass();
         auto view = registry.get_view<grender::skybox_component>();
         for (auto& [entity, skybox] : view)

@@ -13,6 +13,8 @@ namespace gserializer
     struct serializer;
 }
 
+#define GCORE_ENABLE_HEAVY_SCRIPT_PROFILE() 1
+
 namespace gcore
 {
     struct script_context;
