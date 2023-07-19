@@ -15,7 +15,7 @@
 
 #include <glm/glm.hpp>
 
-#include <GL/glew.h>
+#include <gl/glew.h>
 
 #include "gtl/span.h"
 #include "gtl/uuid.h"

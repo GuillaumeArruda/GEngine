@@ -49,8 +49,8 @@ int main()
 
         auto input_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gcore::input_system>()->update(world); });
         auto flying_controller_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gcore::flying_controller_system>()->update(world); });
-        auto physic_system_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gphys::physic_system>()->update(world); });
-        auto script_system_task = world.m_update_tasks.add_task([&] {world.get_system_registry().get_system<gcore::script_system>()->update(world); });
+        [[maybe_unused]] auto physic_system_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gphys::physic_system>()->update(world); });
+        [[maybe_unused]] auto script_system_task = world.m_update_tasks.add_task([&] {world.get_system_registry().get_system<gcore::script_system>()->update(world); });
         world.m_update_tasks.add_parent(flying_controller_task, input_task);
 
         {

@@ -19,6 +19,8 @@
 # include <algorithm>
 # include <sstream>
 
+#define _SILENCE_CXX23_ALIGNED_STORAGE_DEPRECATION_WARNING
+
 # ifndef CRUDE_ASSERT
 #     include <cassert>
 #     define CRUDE_ASSERT(expr) assert(expr)
@@ -131,7 +133,7 @@ private:
 # undef CRUDE_MAX4
 # undef CRUDE_MAX3
 # undef CRUDE_MAX2
-    using storage_t = std::aligned_storage<max_size, max_align>::type;
+    using storage_t = std::byte[max_size];
 
     static       object*   object_ptr(      storage_t& storage) { return reinterpret_cast<       object*>(&storage); }
     static const object*   object_ptr(const storage_t& storage) { return reinterpret_cast<const  object*>(&storage); }
@@ -201,7 +203,7 @@ private:
 
     void dump(dump_context_t& context, int level) const;
 
-    storage_t m_Storage;
+    alignas(max_align) storage_t m_Storage;
     type_t    m_Type;
 };
 

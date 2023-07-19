@@ -24,12 +24,6 @@
     <ClCompile Include="src\optick_gpu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\optick_gpu.d3d12.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\optick_gpu.vulkan.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\optick_message.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
