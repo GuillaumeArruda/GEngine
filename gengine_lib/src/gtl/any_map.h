@@ -41,7 +41,7 @@ namespace gtl
         template<class ContextElement>
         bool has() const
         {
-            return m_map.find(std::type_index(type_id(ContextElement))) != m_map.end();
+            return m_map.find(std::type_index(typeid(ContextElement))) != m_map.end();
         }
 
     private:

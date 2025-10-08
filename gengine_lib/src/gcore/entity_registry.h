@@ -100,9 +100,9 @@ namespace gcore
 
 
         template<class ... ComponentType>
-        [[nodiscard]] bool has_components(entity) const { 
+        [[nodiscard]] bool has_components(entity e) const { 
             static component_id const component_types[] = { details::component_type_info<ComponentType>::has_type_id };
-            return has_component(entity, component_types); 
+            return has_component(e, component_types); 
         }
 
         template<class ...>
