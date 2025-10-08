@@ -10,7 +10,7 @@ namespace gtl
     struct uuid
     {
         static uuid generate();
-        static uuid from_string(std::string_view string);
+        static constexpr uuid from_string(std::string_view string);
 
        constexpr uuid(std::uint64_t high = 0, std::uint64_t low = 0) : m_array{ high, low} {}
         
@@ -22,6 +22,23 @@ namespace gtl
         friend std::hash<uuid>;
         std::uint64_t m_array[2] = { 0ull, 0ull };
     };
+
+    constexpr uuid uuid::from_string(std::string_view string)
+    {
+        std::uint64_t high = 0;
+        std::uint64_t low = 0;
+        if (auto const from_char_result_high = std::from_chars(string.data(), string.data() + std::min(string.size(), (CHAR_BIT * sizeof(std::uint64_t) >> 2)), high, 16);
+            from_char_result_high.ec == std::errc())
+        {
+            if (auto const from_char_result_low = std::from_chars(from_char_result_high.ptr, string.data() + string.size(), low, 16);
+                from_char_result_low.ec == std::errc())
+
+            {
+                return uuid(high, low);
+            }
+        }
+        return uuid();
+    }
 }
 
 namespace std
@@ -38,7 +55,7 @@ namespace std
     };
 }
 
-inline gtl::uuid operator"" _gtl_uuid(const char* string, std::size_t length)
+inline consteval gtl::uuid operator"" _gtl_uuid(const char* string, std::size_t length)
 {
     return gtl::uuid::from_string({ string, length });
 }

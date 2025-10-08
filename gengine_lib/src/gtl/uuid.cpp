@@ -21,22 +21,6 @@ namespace gtl
         return uuid(high, low);
     }
 
-    uuid uuid::from_string(std::string_view string)
-    {
-        std::uint64_t high = 0;
-        std::uint64_t low = 0;
-        if (auto const from_char_result_high = std::from_chars(string.data(), string.data() + std::min(string.size(), (CHAR_BIT * sizeof(std::uint64_t) >> 2)), high, 16);
-            from_char_result_high.ec == std::errc())
-        {
-            if (auto const from_char_result_low = std::from_chars(from_char_result_high.ptr, string.data() + string.size(), low, 16);
-                from_char_result_low.ec == std::errc())
-                
-            {
-                return uuid(high, low);
-            }
-        }
-        return uuid();
-    }
     std::string uuid::to_string() const
     {
         constexpr std::size_t buffer_size = ((CHAR_BIT * sizeof(std::uint64_t) * 2) >> 2) + 1;
