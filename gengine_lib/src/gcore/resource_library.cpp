@@ -127,9 +127,10 @@ namespace gcore
     void resource_library::scan_directory(const char* directory)
     {
         namespace fs = std::filesystem;
+        const auto json_extension = fs::path(".json");
         for (auto& path : fs::recursive_directory_iterator(directory))
         {
-            if (path.is_regular_file() && path.path().extension() == fs::path(".json"))
+            if (path.is_regular_file() && path.path().extension() == json_extension)
             {
                 gtl::uuid const uuid = gtl::uuid::from_string(path.path().stem().string());
                 if (uuid.is_valid())
