@@ -23,8 +23,19 @@ namespace gserializer
     template<class TypeToSerialize>
     auto process(serializer& serializer, TypeToSerialize& value) -> decltype(value.process(serializer))
     {
-        value.process(serializer);
+        return value.process(serializer);
     }
+
+    template<class TypeToSerialize>
+    struct type_serialization_flags_base
+    {
+        enum {
+            is_array = false,
+        };
+    };
+
+    template<class TypeToSerialize>
+    struct type_serialization_flags : type_serialization_flags_base<TypeToSerialize> {};
 
     struct serializer
     {
@@ -32,6 +43,14 @@ namespace gserializer
         {
             scope(const char* name, serializer& serializer) : m_name(name), m_serializer(serializer) { serializer.open_scope(m_name); };
             ~scope() { m_serializer.close_scope(m_name); }
+            const char* m_name;
+            serializer& m_serializer;
+        };
+
+        struct array_scope
+        {
+            array_scope(const char* name, std::size_t element_count, serializer& serializer) : m_name(name) , m_serializer(serializer) { serializer.open_array(m_name, element_count); }
+            ~array_scope() { m_serializer.close_array(m_name); }
             const char* m_name;
             serializer& m_serializer;
         };
@@ -55,69 +74,16 @@ namespace gserializer
         void process(const char* name, TypeToSerialize& value, ExtraType&& ... extras)
         {
             using gserializer::process;
-            scope s(name, *this);
-            process(*this, value, std::forward<ExtraType>(extras)...);
+            if constexpr (type_serialization_flags<TypeToSerialize>::is_array)
+            {
+                process(*this, name, value, std::forward<ExtraType>(extras)...);
+            }
+            else
+            {
+                scope s(name, *this);
+                process(*this, value, std::forward<ExtraType>(extras)...);
+            }
         }
-
-        template<class TypeToSerialize, class ...ExtraType >
-        void process(const char* name, std::vector<TypeToSerialize>& container, const char* element_name, ExtraType&&... extras)
-        {
-            using gserializer::process;
-            std::size_t element_count = container.size();
-            open_array(name, element_count);
-            if (is_reading_from_object())
-            {
-                for (auto& value : container)
-                {
-                    open_array_element(element_name);
-                    process(*this, value, std::forward<ExtraType>(extras)...);
-                    close_array_element(element_name);
-                }
-            }
-            if(is_writing_to_object())
-            {
-                container.reserve(element_count);
-                while (open_array_element(element_name))
-                {
-                    TypeToSerialize& element = container.emplace_back();
-                    process(*this, element , std::forward<ExtraType>(extras)...);
-                    close_array_element(element_name);
-                }
-            }
-            close_array(name);
-        }
-
-        template<class Key, class TypeToSerialize, class ...ExtraType>
-        void process(const char* name, std::unordered_map<Key, TypeToSerialize>& container, const char* element_name, ExtraType&&... extras)
-        {
-            using gserializer::process;
-            std::size_t element_count = container.size();
-            open_array(name, element_count);
-            if (is_reading_from_object())
-            {
-                for (auto& value : container)
-                {
-                    open_array_element(element_name);
-                    Key key = value.first;
-                    this->process("key", key);
-                    this->process("data", value.second, std::forward<ExtraType>(extras)...);
-                    close_array_element(element_name);
-                }
-            }
-            if(is_writing_to_object())
-            {
-                container.reserve(element_count);
-                while (open_array_element(element_name))
-                {
-                    Key key{};
-                    this->process("key", key);
-                    this->process("data", container[key], std::forward<ExtraType>(extras)...);
-                    close_array_element(element_name);
-                }
-            }
-            close_array(name);
-        }
-
 
         template<class EnumToSerialize>
         auto process(const char* name, EnumToSerialize& value) -> std::enable_if_t<std::is_enum_v<EnumToSerialize>>
@@ -157,7 +123,6 @@ namespace gserializer
         {
             return m_context.get<ContextElement>();
         }
-
 
         virtual void open_scope(const char* name) = 0;
         virtual void close_scope(const char* name) = 0;
@@ -237,6 +202,10 @@ namespace gserializer
                 value = std::make_unique<TypeToSerialize>();
                 serializer.process("data", *value);
             }
+            else
+            {
+                value.reset();
+            }
         }
     }
 
@@ -265,6 +234,10 @@ namespace gserializer
                 }
             }
         }
+        else
+        {
+            value.reset();
+        }
     }
 
     template<class TypeToSerialize>
@@ -283,6 +256,10 @@ namespace gserializer
             {
                 value = std::make_shared<TypeToSerialize>();
                 serializer.process("data", *value);
+            }
+            else
+            {
+                value.reset();
             }
         }
     }
@@ -327,6 +304,79 @@ namespace gserializer
                 serializer.close_array_element(element_name);
             }
             serializer.close_array("span");
+        }
+    }
+
+    template<class TypeToSerialize>
+    struct type_serialization_flags<std::vector<TypeToSerialize>> : type_serialization_flags_base<std::vector<TypeToSerialize>>
+    {
+        enum {
+            is_array = true,
+        };
+    };
+
+    template<class TypeToSerialize, class ...ExtraType>
+    void process(serializer& serializer, const char* name, std::vector<TypeToSerialize>& container, const char* element_name, ExtraType&&... extras)
+    {
+        using gserializer::process;
+        std::size_t element_count = container.size();
+        serializer::array_scope array_scope(name, element_count, serializer);
+        if (serializer.is_reading_from_object())
+        {
+            for (auto& value : container)
+            {
+                serializer.open_array_element(element_name);
+                process(serializer, value, std::forward<ExtraType>(extras)...);
+                serializer.close_array_element(element_name);
+            }
+        }
+        if (serializer.is_writing_to_object())
+        {
+            container.reserve(element_count);
+            while (serializer.open_array_element(element_name))
+            {
+                TypeToSerialize& element = container.emplace_back();
+                process(serializer, element, std::forward<ExtraType>(extras)...);
+                serializer.close_array_element(element_name);
+            }
+        }
+    }
+
+    template<class Key, class TypeToSerialize>
+    struct type_serialization_flags<std::unordered_map<Key, TypeToSerialize>> : type_serialization_flags_base<std::unordered_map<Key, TypeToSerialize>>
+    {
+        enum {
+            is_array = true,
+        };
+    };
+
+    template<class Key, class TypeToSerialize, class ...ExtraType>
+    void process(serializer& serializer, const char* name, std::unordered_map<Key, TypeToSerialize>& container, const char* element_name, ExtraType&&... extras)
+    {
+        using gserializer::process;
+        std::size_t element_count = container.size();
+        serializer::array_scope array_scope(name, element_count, serializer);
+        if (serializer.is_reading_from_object())
+        {
+            for (auto& value : container)
+            {
+                serializer.open_array_element(element_name);
+                Key key = value.first;
+                serializer.process("key", key);
+                serializer.process("data", value.second, std::forward<ExtraType>(extras)...);
+                serializer.close_array_element(element_name);
+            }
+        }
+        if (serializer.is_writing_to_object())
+        {
+            container.reserve(element_count);
+            while (serializer.open_array_element(element_name))
+            {
+                Key key{};
+                serializer.process("key", key);
+                serializer.process("data", container[key], std::forward<ExtraType>(extras)...);
+                serializer.close_array_element(element_name);
+            }
         }
     }
 }
