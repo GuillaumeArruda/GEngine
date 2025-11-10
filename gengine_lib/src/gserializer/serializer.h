@@ -24,7 +24,18 @@ namespace gserializer
     auto process(serializer& serializer, TypeToSerialize& value) -> decltype(value.process(serializer))
     {
         return value.process(serializer);
-    } 
+    }
+
+    template<class TypeToSerialize>
+    struct type_serialization_flags_base
+    {
+        enum {
+            is_array = false,
+        };
+    };
+
+    template<class TypeToSerialize>
+    struct type_serialization_flags : type_serialization_flags_base<TypeToSerialize> {};
 
     struct serializer
     {
@@ -63,7 +74,15 @@ namespace gserializer
         void process(const char* name, TypeToSerialize& value, ExtraType&& ... extras)
         {
             using gserializer::process;
-            process(*this, name, value, std::forward<ExtraType>(extras)...);
+            if constexpr (type_serialization_flags<TypeToSerialize>::is_array)
+            {
+                process(*this, name, value, std::forward<ExtraType>(extras)...);
+            }
+            else
+            {
+                scope s(name, *this);
+                process(*this, value, std::forward<ExtraType>(extras)...);
+            }
         }
 
         template<class EnumToSerialize>
@@ -167,10 +186,8 @@ namespace gserializer
     }
 
     template<class TypeToSerialize>
-    void process(serializer& serializer, const char* name, std::unique_ptr<TypeToSerialize>& value)
+    void process(serializer& serializer, std::unique_ptr<TypeToSerialize>& value)
     {
-        serializer::scope scope(name, serializer);
-
         bool is_valid = static_cast<bool>(value);
         serializer.process("is_valid", is_valid);
         if (serializer.is_reading_from_object())
@@ -193,10 +210,8 @@ namespace gserializer
     }
 
     template<class TypeToSerialize, class Factory>
-    void process(serializer& serializer, const char* name, std::unique_ptr<TypeToSerialize>& value, Factory const& factory)
+    void process(serializer& serializer, std::unique_ptr<TypeToSerialize>& value, Factory const& factory)
     {
-        serializer::scope scope(name, serializer);
-
         bool is_valid = static_cast<bool>(value);
         serializer.process("is_valid", is_valid);
         if (is_valid)
@@ -226,10 +241,8 @@ namespace gserializer
     }
 
     template<class TypeToSerialize>
-    void process(serializer& serializer, const char* name, std::shared_ptr<TypeToSerialize>& value)
+    void process(serializer& serializer, std::shared_ptr<TypeToSerialize>& value)
     {
-        serializer::scope scope(name, serializer);
-
         bool is_valid = static_cast<bool>(value);
         serializer.process("is_valid", is_valid);
         if (serializer.is_reading_from_object())
@@ -252,10 +265,8 @@ namespace gserializer
     }
 
     template<class TypeToSerialize, class Factory>
-    void process(serializer& serializer, const char* name, std::shared_ptr<TypeToSerialize>& value, Factory const& factory)
+    void process(serializer& serializer, std::shared_ptr<TypeToSerialize>& value, Factory const& factory)
     {
-        serializer::scope scope(name, serializer);
-
         bool is_valid = static_cast<bool>(value);
         serializer.process("is_valid", is_valid);
         if (is_valid)
@@ -279,21 +290,30 @@ namespace gserializer
     }
 
     template<class TypeToSerialize, class ... ExtraTypes>
-    void process(serializer& serializer, const char* name, gtl::span<TypeToSerialize>& container, const char* element_name, ExtraTypes&&... args)
+    void process(serializer& serializer, gtl::span<TypeToSerialize>& container, const char* element_name, ExtraTypes&&... args)
     {
         using gserializer::process;
         if (serializer.is_reading_from_object())
         {
             std::size_t size = container.size();
-            serializer::array_scope scope(name, size, serializer);
+            serializer.open_array("span", size);
             for (auto& value : container)
             {
                 serializer.open_array_element(element_name);
                 process(serializer, value, std::forward<ExtraTypes>(args)...);
                 serializer.close_array_element(element_name);
             }
+            serializer.close_array("span");
         }
     }
+
+    template<class TypeToSerialize>
+    struct type_serialization_flags<std::vector<TypeToSerialize>> : type_serialization_flags_base<std::vector<TypeToSerialize>>
+    {
+        enum {
+            is_array = true,
+        };
+    };
 
     template<class TypeToSerialize, class ...ExtraType>
     void process(serializer& serializer, const char* name, std::vector<TypeToSerialize>& container, const char* element_name, ExtraType&&... extras)
@@ -321,6 +341,14 @@ namespace gserializer
             }
         }
     }
+
+    template<class Key, class TypeToSerialize>
+    struct type_serialization_flags<std::unordered_map<Key, TypeToSerialize>> : type_serialization_flags_base<std::unordered_map<Key, TypeToSerialize>>
+    {
+        enum {
+            is_array = true,
+        };
+    };
 
     template<class Key, class TypeToSerialize, class ...ExtraType>
     void process(serializer& serializer, const char* name, std::unordered_map<Key, TypeToSerialize>& container, const char* element_name, ExtraType&&... extras)
