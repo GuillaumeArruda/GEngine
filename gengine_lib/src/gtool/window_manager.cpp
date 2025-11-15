@@ -58,7 +58,8 @@ namespace gtool
 		
 		ImGui_ImplGlfw_InitForOpenGL(m_window, true);
 		ImGui_ImplOpenGL3_Init(nullptr);
-		grender::gl_exec(glewInit);
+		using namespace grender;
+		gl_exec(glewInit);
 
 		gcore::console::get().register_callback("window.enable_vsync",
 			[&](std::string_view value) {

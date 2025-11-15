@@ -204,16 +204,16 @@ namespace grender
         gl_exec(glLinkProgram, m_program_id);
 
         GLint isLinked = 0;
-        glGetProgramiv(m_program_id, GL_LINK_STATUS, &isLinked);
+        gl_exec(glGetProgramiv, m_program_id, GL_LINK_STATUS, &isLinked);
         if (isLinked == GL_FALSE)
         {
             GLint logSize = 0;
-            glGetProgramiv(m_program_id, GL_INFO_LOG_LENGTH, &logSize);
+            gl_exec(glGetProgramiv, m_program_id, GL_INFO_LOG_LENGTH, &logSize);
 
             auto log = std::make_unique<GLchar[]>(logSize);
-            glGetProgramInfoLog(m_program_id, logSize, &logSize, log.get());
+            gl_exec(glGetProgramInfoLog, m_program_id, logSize, &logSize, log.get());
             std::cerr << log << "\n";
-            glDeleteProgram(m_program_id);
+            gl_exec(glDeleteProgram, m_program_id);
             m_shaders.clear();
             m_program_id = 0;
             return false;
@@ -226,7 +226,7 @@ namespace grender
 
     void program::do_unload()
     {
-        glDeleteProgram(m_program_id);
+        gl_exec(glDeleteProgram, m_program_id);
         m_shaders.clear();
         m_program_id = 0;
     }

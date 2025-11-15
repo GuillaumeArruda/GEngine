@@ -4,8 +4,10 @@
 
 #include <GL/glew.h>
 
+#define GLCHECKERROR 1
 namespace grender
 {
+#if GLCHECKERROR
     template<class Function, class ... Args>
     void gl_exec(Function function, Args&& ... args)
     {
@@ -39,4 +41,7 @@ namespace grender
             }
         }
     }
+#else
+    #define gl_exec(Function, ...) Function(__VA_ARGS__);
+#endif
 }
