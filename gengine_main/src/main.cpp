@@ -52,7 +52,6 @@ int main()
         [[maybe_unused]] auto physic_system_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gphys::physic_system>()->update(world); });
         [[maybe_unused]] auto script_system_task = world.m_update_tasks.add_task([&] {world.get_system_registry().get_system<gcore::script_system>()->update(world); });
         world.m_update_tasks.add_parent(flying_controller_task, input_task);
-
         {
 
             filewatch::FileWatch<std::wstring> watcher(L"./",
@@ -66,8 +65,9 @@ int main()
                 tool_window_manager.update(world);
             }
         }
-    }
 
+        world.deinitialize_systems();
+    }
 
     return 0;
 }

@@ -14,7 +14,13 @@ namespace gcore
     void script_system::connect_to_world(gcore::world& world)
     {
         auto view = world.get_entity_registry().get_view<script_component>();
-        view.add_on_added_callback([&](std::tuple<entity, script_component*> added_entity) {this->on_added_script_entity(added_entity); });
+       m_on_added_callback_id = view.add_on_added_callback([&](std::tuple<entity, script_component*> added_entity) {this->on_added_script_entity(added_entity); });
+    }
+
+    void script_system::disconnect_from_world(gcore::world& world)
+    {
+        auto view = world.get_entity_registry().get_view<script_component>();
+        view.remove_on_added_callback(m_on_added_callback_id);
     }
 
     void script_system::update(world& world)

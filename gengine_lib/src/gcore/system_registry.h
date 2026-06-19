@@ -44,6 +44,7 @@ namespace gcore
         }
 
         void connect_systems_to_world(gcore::world& world);
+        void disconnect_systems_from_world(gcore::world& world);
 
     private:
         std::unordered_map<system_id, std::unique_ptr<system>> m_system_map;

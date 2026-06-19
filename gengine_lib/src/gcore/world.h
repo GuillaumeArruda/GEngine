@@ -15,6 +15,7 @@ namespace gcore
         world(std::shared_ptr<resource_library> library) : m_resource_library(std::move(library)), m_entity_registry(m_resource_library) {}
         ~world();
         void initialize_systems();
+        void deinitialize_systems();
 
         entity_registry& get_entity_registry() { return m_entity_registry; }
         entity_registry const& get_entity_registry() const { return m_entity_registry; }

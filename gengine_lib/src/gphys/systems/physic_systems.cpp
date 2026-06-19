@@ -43,6 +43,13 @@ namespace gphys
         m_debug_drawer.m_debug_render = world.get_system_registry().get_system<grender::debug_render_system>();
     }
 
+    void physic_system::disconnect_from_world(gcore::world& world)
+    {
+        auto view = world.get_entity_registry().get_view<gcore::transform_component, physic_component>();
+        view.remove_on_added_callback(m_on_added_callback_id);
+        view.remove_on_removed_callback(m_on_removed_callback_id);
+    }
+
     void physic_system::update(gcore::world& world)
     {
         if (!physic_enable)

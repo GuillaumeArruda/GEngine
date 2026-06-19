@@ -40,6 +40,7 @@ namespace gphys
         physic_system& operator=(physic_system const&) = delete;
 
         void connect_to_world(gcore::world& world) override;
+        void disconnect_from_world(gcore::world& world) override;
 
         void update(gcore::world& world);
 

@@ -20,4 +20,12 @@ namespace gcore
         }
     }
 
+    void system_registry::disconnect_systems_from_world(gcore::world& world)
+    {
+        for (auto& system : m_system_map)
+        {
+            system.second->disconnect_from_world(world);
+        }
+    }
+
 }

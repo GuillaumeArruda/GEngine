@@ -60,13 +60,25 @@ namespace grender
     void render_system::connect_to_world(gcore::world& world)
     {
         auto graphic_comp_view = world.get_entity_registry().get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
-        graphic_comp_view.add_on_added_callback([&](auto& added_entity) { this->on_mesh_entity_added(added_entity); });
+        m_graphic_comp_added_id = graphic_comp_view.add_on_added_callback([&](auto& added_entity) { this->on_mesh_entity_added(added_entity); });
         
         auto light_view = world.get_entity_registry().get_view<gcore::transform_component, light_component>();
-        light_view.add_on_added_callback([&](auto& added_entity) { this->on_light_entity_added(added_entity); });
+        m_light_comp_added_id = light_view.add_on_added_callback([&](auto& added_entity) { this->on_light_entity_added(added_entity); });
         
         auto skybox_view = world.get_entity_registry().get_view<grender::skybox_component>();
-        skybox_view.add_on_added_callback([&](auto& added_entity) { this->on_skybox_entity_added(added_entity); });
+        m_skybox_comp_added_id = skybox_view.add_on_added_callback([&](auto& added_entity) { this->on_skybox_entity_added(added_entity); });
+    }
+
+    void render_system::disconnect_from_world(gcore::world& world)
+    {
+        auto graphic_comp_view = world.get_entity_registry().get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
+        graphic_comp_view.remove_on_added_callback(m_graphic_comp_added_id);
+
+        auto light_view = world.get_entity_registry().get_view<gcore::transform_component, light_component>();
+        light_view.remove_on_added_callback(m_light_comp_added_id);
+
+        auto skybox_view = world.get_entity_registry().get_view<grender::skybox_component>();
+        skybox_view.remove_on_added_callback(m_skybox_comp_added_id);
     }
 
     void render_system::set_target_size(std::size_t width, std::size_t height)

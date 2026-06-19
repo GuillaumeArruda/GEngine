@@ -34,7 +34,7 @@ namespace gtl
         struct callback
         {
             std::function<void (Args...)> m_function;
-            std::size_t m_id = 0;
+            callback_id m_id = 0;
             bool operator==(callback_id const& rhs) const noexcept { return m_id == rhs; }
         };
 

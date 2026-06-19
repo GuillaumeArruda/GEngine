@@ -24,6 +24,7 @@ namespace grender
     struct render_system : gcore::system
     {
         void connect_to_world(gcore::world& world) override;
+        void disconnect_from_world(gcore::world& world) override;
         void update(gcore::world& world);
 
         void set_target_size(std::size_t width, std::size_t height);
@@ -44,5 +45,8 @@ namespace grender
         void on_skybox_entity_added(std::tuple<gcore::entity, skybox_component*>& added_entity);
 
         frame_buffer m_frame_buffer = frame_buffer(0ull, 0ull);
+        gtl::callback_id m_graphic_comp_added_id = 0;
+        gtl::callback_id m_light_comp_added_id = 0;
+        gtl::callback_id m_skybox_comp_added_id = 0;
     };
 }

@@ -11,4 +11,9 @@ namespace gcore
     {
         m_system_registry.connect_systems_to_world(*this);
     }
+
+    void world::deinitialize_systems()
+    {
+        m_system_registry.disconnect_systems_from_world(*this);
+    }
 }
