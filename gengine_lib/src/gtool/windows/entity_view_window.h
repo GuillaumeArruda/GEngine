@@ -26,7 +26,7 @@ namespace gtool
     {
         void update(gcore::world& world);
     private:
-        std::string m_filepath;
+        std::string m_filepath = "data/test.json";
     };
 
     struct selected_entity_widget
