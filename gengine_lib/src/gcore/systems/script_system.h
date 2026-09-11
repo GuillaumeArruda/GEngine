@@ -1,6 +1,8 @@
 #pragma once
 
 #include "gcore/system.h"
+#include "gcore/gcore_defines.h"
+#include "gtl/callbacks.h"
 
 namespace gcore
 {

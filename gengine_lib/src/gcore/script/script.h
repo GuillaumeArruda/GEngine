@@ -57,6 +57,8 @@ namespace gcore
 
     struct script : resource
     {
+        ~script();
+
         using super = resource;
         bool do_load_async() override;
         bool do_load_sync() override { return true; }
@@ -65,6 +67,7 @@ namespace gcore
         void process(gserializer::serializer& serializer) override;
 
         node const* get_node(std::uint32_t node_index) const { return m_nodes[node_index]; }
+        gtl::span<node const* const> get_nodes() const { return m_nodes; }
 
         std::size_t get_necessary_memory_for_context() const { return m_number_of_bytes_for_context; }
 

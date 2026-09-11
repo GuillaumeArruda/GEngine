@@ -129,7 +129,7 @@ namespace gcore
         script_context* m_script_context;
         gtl::span<in_pin_data> m_input_data;
         gtl::span<node_data> m_output_data;
-        std::any m_node_data;
+        std::uint32_t m_last_execution_id = 0;
     };
 
     struct script_context
@@ -165,6 +165,7 @@ namespace gcore
         std::unique_ptr<char[]> m_memory_buffer;
         std::vector<node_context> m_node_contexts;
         gtl::any_map m_context;
+        std::uint32_t m_execution_id = 0;
         bool m_has_been_prepared = false;
     };
 

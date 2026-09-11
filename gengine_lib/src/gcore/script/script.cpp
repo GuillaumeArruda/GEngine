@@ -134,6 +134,8 @@ namespace gcore
         serializer.process("destination_pin", m_destination_pin_id);
     }
 
+    script::~script() = default;
+
     bool script::do_load_async()
     {
         gserializer::json_read_serializer serializer(m_descriptor_path.string().c_str());

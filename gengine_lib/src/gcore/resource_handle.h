@@ -5,11 +5,12 @@
 #include "gtl/uuid.h"
 #include "gtl/cast.h"
 
+#include "gcore/resource.h"
+
 namespace gserializer
 {
     struct serializer;
 }
-
 
 namespace gcore
 {

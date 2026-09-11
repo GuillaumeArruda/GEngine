@@ -17,7 +17,6 @@ namespace gcore
 
     node_context::node_context(script_context& context, node_context const& copy, char*& memory_location)
         : m_script_context(&context)
-        , m_node_data(copy.m_node_data)
     {       
         char* const input_beginning = memory_location;
         for (in_pin_data const& input: copy.m_input_data)
@@ -141,6 +140,10 @@ namespace gcore
 
     void script_context::execute()
     {
+        if (!m_script)
+            return;
+
+        ++m_execution_id;
         for (std::uint32_t root_index : m_script->get_root_node_indexes())
         {
             execute_node(root_index);
@@ -151,12 +154,16 @@ namespace gcore
     {
         assert(node_index < m_node_contexts.size());
         node const* node = m_script->get_node(node_index);
+        node_context& node_context = m_node_contexts[node_index];
+        if (node_context.m_last_execution_id != m_execution_id)
+        {
+            node_context.m_last_execution_id = m_execution_id;
 #if GCORE_ENABLE_HEAVY_SCRIPT_PROFILE()
-        OPTICK_EVENT_DYNAMIC(typeid(*node).name());
-        OPTICK_TAG("Node Id", node->get_node_id());
+            OPTICK_EVENT_DYNAMIC(typeid(*node).name());
+            OPTICK_TAG("Node Id", node->get_node_id());
 #endif //GCORE_ENABLE_HEAVY_SCRIPT_PROFILE()
-        
-        node->execute(m_node_contexts[node_index]);
+            node->execute(node_context);
+        }
     }
 
     void script_context::prepare()
