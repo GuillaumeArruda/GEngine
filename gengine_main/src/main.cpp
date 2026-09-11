@@ -10,6 +10,7 @@
 #include "gcore/systems/script_system.h"
 #include "gcore/core_script_registration.h"
 #include "gcore/script/node_data.h"
+#include "gcore/console.h"
 
 #include "grender/render_script_registration.h"
 #include "grender/systems/render_system.h"
@@ -19,6 +20,8 @@
 #include "gphys/phys_script_registration.h"
 
 #include "gtool/window_manager.h"
+
+#include "optick\optick.h"
 
 int main()
 {
@@ -46,6 +49,10 @@ int main()
         systems.add_system(std::make_unique<gcore::script_system>());
 
         world.initialize_systems();
+
+        gcore::console& console = gcore::console::get();
+        console.register_callback("profile.start", [](std::string_view) { OPTICK_START_CAPTURE(); return true; });
+        console.register_callback("profile.stop", [](std::string_view input) { OPTICK_STOP_CAPTURE(); OPTICK_SAVE_CAPTURE(input.data()); return true; });
 
         auto input_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gcore::input_system>()->update(world); });
         auto flying_controller_task = world.m_update_tasks.add_task([&] { world.get_system_registry().get_system<gcore::flying_controller_system>()->update(world); });

@@ -1904,11 +1904,6 @@ bool EndsWith(const char* str, const char* substr)
 OPTICK_API bool SaveCapture(const char* path, bool force /*= true*/)
 {
 	char filePath[512] = { 0 };
-#if defined(OPTICK_MSVC)
-	strcpy_s(filePath, 512, path);
-#else
-	strcpy(filePath, path);
-#endif
 	
 	if (path == nullptr || !EndsWith(path, ".opt"))
 	{
@@ -1925,6 +1920,14 @@ OPTICK_API bool SaveCapture(const char* path, bool force /*= true*/)
 		strcat_s(filePath, 512, timeStr);
 #else
 		strcat(filePath, timeStr);
+#endif
+	}
+	else
+	{
+#if defined(OPTICK_MSVC)
+		strcpy_s(filePath, 512, path);
+#else
+		strcpy(filePath, path);
 #endif
 	}
 
