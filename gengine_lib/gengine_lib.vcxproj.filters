@@ -270,9 +270,6 @@
     <ClInclude Include="src\gcore\script\node_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\grender\render_script_registration.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\gcore\core_script_registration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -375,7 +372,13 @@
     <ClInclude Include="src\grender\resources\graphic_script.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\grender\nodes\get_render_matrices_node.h">
+    <ClInclude Include="src\grender\nodes\get_input_frame_data_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gcore\script\nodes\matrix_nodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\render_script_registration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -557,9 +560,6 @@
     <ClCompile Include="src\gcore\script\node_data_type.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\grender\render_script_registration.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\gcore\core_script_registration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -629,7 +629,10 @@
     <ClCompile Include="src\grender\resources\graphic_script.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\grender\nodes\get_render_matrices_node.cpp">
+    <ClCompile Include="src\grender\nodes\get_input_frame_data_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\render_script_registration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

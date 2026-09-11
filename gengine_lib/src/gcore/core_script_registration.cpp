@@ -16,6 +16,7 @@
 #include "gcore/script/nodes/select_node.h"
 #include "gcore/script/nodes/random_nodes.h"
 #include "gcore/script/nodes/get_resource_node.h"
+#include "gcore/script/nodes/matrix_nodes.h"
 
 #include "gserializer/gmath_serialization.h"
 
@@ -79,7 +80,6 @@ namespace gcore
         GCORE_REGISTER_EQUALITY_NODES(gcore::resource_handle<resource>, "Resource");
         GCORE_REGISTER_SELECT_NODE(gcore::resource_handle<resource>, "Resource");
 
-
         factory.register_type<gcore::constant_node>("gcore::constant_node", "Constant");
         factory.register_type<gcore::and_node>("gcore::and_node", "And");
         factory.register_type<gcore::or_node>("gcore::or_node", "Or");
@@ -94,9 +94,19 @@ namespace gcore
 
         factory.register_type<get_resource_node<resource>>("gcore::get_resource_node<resource>", "Get Resource (Resource)");
 
+        factory.register_type<inverse_matrix_node<glm::mat4>>("gcore::inverse_matrix_node<glm::mat4>", "Inverse Mat4");
+        factory.register_type<transpose_matrix_node<glm::mat4>>("gcore::transpose_matrix_node<glm::mat4>", "Transpose Mat4");
+        factory.register_type<multiply_node<glm::mat4>>("gcore::multiply_node<glm::mat4>", "Multiply (Mat4)");
+
+        factory.register_type<inverse_matrix_node<glm::mat3>>("gcore::inverse_matrix_node<glm::mat3>", "Inverse Mat3");
+        factory.register_type<transpose_matrix_node<glm::mat3>>("gcore::transpose_matrix_node<glm::mat3>", "Transpose Mat3");
+        factory.register_type<multiply_node<glm::mat3>>("gcore::multiply_node<glm::mat3>", "Multiply (Mat3)");
+
         factory.register_conversion<int, float>("gcore::conversion_node<int, float>");
         factory.register_conversion<float, int>("gcore::conversion_node<float, int>"); 
         factory.register_conversion<float, gmath::degree>("gcore::conversion_node<float, gmath::degree>");
         factory.register_conversion<gmath::degree, float>("gcore::conversion_node<gmath::degree, float>");
+        factory.register_conversion<glm::mat4, glm::mat3>("gcore::conversion_node<glm::mat4, glm::mat3>");
+        factory.register_conversion<glm::mat3, glm::mat4>("gcore::conversion_node<glm::mat3, glm::mat4>");
     }
 }

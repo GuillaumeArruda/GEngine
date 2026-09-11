@@ -7,16 +7,16 @@
 
 namespace grender
 {
-    struct get_render_matrices_node : gcore::node 
+    struct get_input_frame_data_node : gcore::node 
     {
-        GCORE_DECLARE_NODE_TYPE(get_render_matrices_node);
+        GCORE_DECLARE_NODE_TYPE(get_input_frame_data_node);
         bool is_const() const override { return false; }
         bool is_pure() const override { return false; }
         bool is_root() const override { return false; }
 
-        using out_mvp_pin = gcore::output_pin_descriptor<glm::mat4x4, 0, 1>;
-        using out_normal_matrix_pin = gcore::output_pin_descriptor<glm::mat3x3, 1, 2>;
-        using out_world_matrix_pin = gcore::output_pin_descriptor<glm::mat4x4, 2, 3>;
+        using out_transform_matrix_pin = gcore::output_pin_descriptor<glm::mat4, 0, 1>;
+        using out_view_matrix_pin = gcore::output_pin_descriptor<glm::mat4, 1, 2>;
+        using out_projection_matrix_pin = gcore::output_pin_descriptor<glm::mat4, 2, 3>;
 
         void execute(gcore::node_context& context) const override;
 

@@ -69,20 +69,6 @@
             }
         },
         {
-            "name": "",
-            "position": {
-                "x": 657.0,
-                "y": 671.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "grender::get_render_matrices_node",
-                "data": {
-                    "node_id": 9
-                }
-            }
-        },
-        {
             "name": "Clothes",
             "position": {
                 "x": 1633.0,
@@ -455,9 +441,103 @@
                     }
                 }
             }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 175.0,
+                "y": 480.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::get_input_frame_data_node",
+                "data": {
+                    "node_id": 48
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 513.0,
+                "y": 512.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::multiply_node<glm::mat4>",
+                "data": {
+                    "node_id": 49
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 702.0,
+                "y": 479.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::multiply_node<glm::mat4>",
+                "data": {
+                    "node_id": 52
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 439.0,
+                "y": 710.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::inverse_matrix_node<glm::mat3>",
+                "data": {
+                    "node_id": 55
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 440.0,
+                "y": 656.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::conversion_node<glm::mat4, glm::mat3>",
+                "data": {
+                    "node_id": 57
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 446.0,
+                "y": 768.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::transpose_matrix_node<glm::mat3>",
+                "data": {
+                    "node_id": 58
+                }
+            }
         }
     ],
     "connections": [
+        {
+            "key": 33,
+            "data": [
+                {
+                    "source": 35,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                }
+            ]
+        },
         {
             "key": 1,
             "data": [
@@ -472,59 +552,24 @@
                     "destination_pin": -1818423387
                 },
                 {
-                    "source": 9,
-                    "source_pin": 1,
-                    "destination_pin": -1775358419
-                },
-                {
-                    "source": 9,
-                    "source_pin": 2,
-                    "destination_pin": 1941987014
-                },
-                {
-                    "source": 9,
-                    "source_pin": 3,
-                    "destination_pin": 1745697932
-                },
-                {
                     "source": 3,
                     "source_pin": 1,
                     "destination_pin": 1530753153
-                }
-            ]
-        },
-        {
-            "key": 21,
-            "data": [
+                },
                 {
-                    "source": 9,
+                    "source": 48,
                     "source_pin": 1,
-                    "destination_pin": -1775358419
-                },
-                {
-                    "source": 9,
-                    "source_pin": 2,
-                    "destination_pin": 1941987014
-                },
-                {
-                    "source": 9,
-                    "source_pin": 3,
                     "destination_pin": 1745697932
                 },
                 {
-                    "source": 24,
-                    "source_pin": 1,
-                    "destination_pin": -1818423387
+                    "source": 52,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
                 },
                 {
-                    "source": 25,
-                    "source_pin": 1,
-                    "destination_pin": 1530753153
-                },
-                {
-                    "source": 26,
-                    "source_pin": 1,
-                    "destination_pin": -880639002
+                    "source": 58,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
                 }
             ]
         },
@@ -547,29 +592,54 @@
                     "destination_pin": 1530753153
                 },
                 {
-                    "source": 9,
+                    "source": 48,
                     "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 52,
+                    "source_pin": 100,
                     "destination_pin": -1775358419
                 },
                 {
-                    "source": 9,
-                    "source_pin": 2,
+                    "source": 58,
+                    "source_pin": 100,
                     "destination_pin": 1941987014
-                },
-                {
-                    "source": 9,
-                    "source_pin": 3,
-                    "destination_pin": 1745697932
                 }
             ]
         },
         {
-            "key": 18,
+            "key": 21,
             "data": [
                 {
-                    "source": 21,
-                    "source_pin": 12000,
-                    "destination_pin": 1
+                    "source": 24,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
+                },
+                {
+                    "source": 25,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 26,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 48,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 52,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 58,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
                 }
             ]
         },
@@ -578,6 +648,16 @@
             "data": [
                 {
                     "source": 1,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 18,
+            "data": [
+                {
+                    "source": 21,
                     "source_pin": 12000,
                     "destination_pin": 1
                 }
@@ -604,33 +684,8 @@
             ]
         },
         {
-            "key": 33,
-            "data": [
-                {
-                    "source": 35,
-                    "source_pin": 12000,
-                    "destination_pin": 1
-                }
-            ]
-        },
-        {
             "key": 35,
             "data": [
-                {
-                    "source": 9,
-                    "source_pin": 1,
-                    "destination_pin": -1775358419
-                },
-                {
-                    "source": 9,
-                    "source_pin": 2,
-                    "destination_pin": 1941987014
-                },
-                {
-                    "source": 9,
-                    "source_pin": 3,
-                    "destination_pin": 1745697932
-                },
                 {
                     "source": 37,
                     "source_pin": 1,
@@ -645,6 +700,21 @@
                     "source": 41,
                     "source_pin": 1,
                     "destination_pin": -1818423387
+                },
+                {
+                    "source": 48,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 52,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 58,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
                 }
             ]
         },
@@ -662,21 +732,6 @@
             "key": 44,
             "data": [
                 {
-                    "source": 9,
-                    "source_pin": 1,
-                    "destination_pin": -1775358419
-                },
-                {
-                    "source": 9,
-                    "source_pin": 2,
-                    "destination_pin": 1941987014
-                },
-                {
-                    "source": 9,
-                    "source_pin": 3,
-                    "destination_pin": 1745697932
-                },
-                {
                     "source": 45,
                     "source_pin": 1,
                     "destination_pin": 1530753153
@@ -690,6 +745,81 @@
                     "source": 47,
                     "source_pin": 1,
                     "destination_pin": -1818423387
+                },
+                {
+                    "source": 48,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 52,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 58,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
+                }
+            ]
+        },
+        {
+            "key": 49,
+            "data": [
+                {
+                    "source": 48,
+                    "source_pin": 3,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 48,
+                    "source_pin": 2,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 52,
+            "data": [
+                {
+                    "source": 49,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 48,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 55,
+            "data": [
+                {
+                    "source": 57,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 57,
+            "data": [
+                {
+                    "source": 48,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 58,
+            "data": [
+                {
+                    "source": 55,
+                    "source_pin": 100,
+                    "destination_pin": 0
                 }
             ]
         }

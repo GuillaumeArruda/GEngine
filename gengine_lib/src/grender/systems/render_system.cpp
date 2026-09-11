@@ -100,21 +100,6 @@ namespace grender
         return m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::final_color);
     }
 
-    glm::mat4x4 render_system::get_transform() const
-    {
-        return m_transform;
-    }
-
-    glm::mat4x4 render_system::get_mvp() const
-    {
-        return m_mvp;
-    }
-
-    glm::mat3x3 render_system::get_normal_matrix() const
-    {
-        return m_normal_matrix;
-    }
-
     void render_system::render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry)
     {
         OPTICK_EVENT();
@@ -126,10 +111,14 @@ namespace grender
             {
                 OPTICK_EVENT("Graphic Script Update");
                 OPTICK_TAG("Script Name", graphic_comp->m_script->get_name().c_str());
-                m_transform = static_cast<glm::mat4>(transform->m_transform);
-                m_mvp = projection * view_matrix * m_transform;
-                m_normal_matrix = glm::transpose(glm::inverse(glm::mat3(m_transform)));
 
+                graphic_script_frame_input_data const input_data
+                {
+                    transform->m_transform,
+                    projection,
+                    view_matrix
+                };
+                graphic_comp->m_script_context.set_in_context(input_data);
                 graphic_comp->m_script_context.execute();
             }
         }
@@ -230,7 +219,6 @@ namespace grender
             }
 
             graphic_comp->m_script_context = graphic_comp->m_script->create_context();
-            graphic_comp->m_script_context.set_in_context(static_cast<render_system const*>(this));
             graphic_comp->m_script_context.prepare();
         }
     }

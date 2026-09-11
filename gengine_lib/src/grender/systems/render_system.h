@@ -31,10 +31,6 @@ namespace grender
         glm::ivec2 get_target_size() const;
         GLuint get_target_id() const;
 
-        glm::mat4x4 get_transform() const;
-        glm::mat4x4 get_mvp() const;
-        glm::mat3x3 get_normal_matrix() const;
-
     private:
         void render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry);
         void render_lights(glm::mat4 const& camera_world_matrix, gcore::entity_registry& registry);
