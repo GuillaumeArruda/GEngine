@@ -9,15 +9,7 @@ namespace grender
 {
     void graphic_component::process(gserializer::serializer& serializer)
     {
-        serializer.process("meshes", m_meshes, "Mesh");
-    }
-
-    void graphic_component::mesh_info::process(gserializer::serializer& serializer)
-    {
-        serializer.process("mesh", m_mesh);
-        serializer.process("program", m_program);
-        serializer.process("uniform state", m_uniform_state);
-        serializer.process("active", m_active);
+        serializer.process("script", m_script);
     }
 }
 

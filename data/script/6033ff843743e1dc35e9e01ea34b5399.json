@@ -1,7 +1,7 @@
 {
     "resource": {
         "is_valid": true,
-        "type_name": "gcore::script",
+        "type_name": "grender::graphic_script",
         "data": {
             "uuid": "6033ff843743e1dc35e9e01ea34b5399",
             "name": "female_small_script",

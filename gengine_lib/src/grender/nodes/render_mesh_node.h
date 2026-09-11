@@ -16,10 +16,16 @@ namespace grender
         bool is_root() const override { return true; }
 
         using in_program_pin = gcore::input_pin_descriptor<program_pin_data, 0, 1>;
-        using in_mesh_pin = gcore::input_pin_descriptor<gcore::resource_handle<mesh_resource>, 1, 0>;
 
         void execute(gcore::node_context& context) const override;
 
+        void process(gserializer::serializer& serializer) override;
+
         node::pin_descriptors get_pin_descriptors() const override;
+
+        gcore::resource_handle<mesh_resource> get_mesh() const { return m_mesh; }
+
+    private:
+        gcore::resource_handle<mesh_resource> m_mesh;
     };
 }

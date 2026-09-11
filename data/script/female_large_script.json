@@ -29,7 +29,7 @@
                 "data": {
                     "node_id": 2,
                     "resource_uuid": {
-                        "value": "5fe2c0a9741e0d4b307c09fafb716e6a"
+                        "value": "5fe2d2efabb263919fcb8628fbb4785d"
                     }
                 }
             }
@@ -46,7 +46,7 @@
                 "data": {
                     "node_id": 3,
                     "resource_uuid": {
-                        "value": "5fe2c0a9741e0d4af143fdc9dc907fd5"
+                        "value": "5fe2d2ecabb2639018979066b5d71624"
                     }
                 }
             }
@@ -63,7 +63,7 @@
                 "data": {
                     "node_id": 4,
                     "resource_uuid": {
-                        "value": "5fe2c132741e0d532011d4306dd7bca4"
+                        "value": "5fe2d685f06c20932c578380a7bfeb46"
                     }
                 }
             }
@@ -94,7 +94,7 @@
                 "data": {
                     "node_id": 10,
                     "mesh": {
-                        "value": "5fe2c8364bd246aef5e7aafe19c49cb"
+                        "value": "5fe2d2eaabb26389895505ea75b72ff0"
                     }
                 }
             }
@@ -111,7 +111,7 @@
                 "data": {
                     "node_id": 11,
                     "mesh": {
-                        "value": "5fe2c8364bd246adae1001d82e9b6258"
+                        "value": "5fe2d2eaabb263878658dde0ef0e35fb"
                     }
                 }
             }
@@ -145,7 +145,7 @@
                 "data": {
                     "node_id": 15,
                     "resource_uuid": {
-                        "value": "5fe2c0a8741e0d491f6c675e1e06fba3"
+                        "value": "5fe2d2eaabb2638fc8dea16c26aab47e"
                     }
                 }
             }
@@ -162,7 +162,7 @@
                 "data": {
                     "node_id": 16,
                     "resource_uuid": {
-                        "value": "5fe2c0f1741e0d4f21555d4e641cd1a3"
+                        "value": "5fe2d6d2f06c20953a476a4fb893be85"
                     }
                 }
             }
@@ -179,7 +179,7 @@
                 "data": {
                     "node_id": 17,
                     "resource_uuid": {
-                        "value": "5fe2c0a8741e0d4871fecb86c4749f0c"
+                        "value": "5fe2d2eaabb2638ecb6a9c28190af07e"
                     }
                 }
             }
@@ -196,7 +196,7 @@
                 "data": {
                     "node_id": 18,
                     "mesh": {
-                        "value": "5fe2c8364bd246ac9a2352248f18fe96"
+                        "value": "5fe2d2eaabb2638a9417f1be7b3802dd"
                     }
                 }
             }
@@ -230,7 +230,7 @@
                 "data": {
                     "node_id": 22,
                     "mesh": {
-                        "value": "5fe2c8364bd246afe97674fd475a0add"
+                        "value": "5fe2d2eaabb2638cf5fad9b69942e869"
                     }
                 }
             }
@@ -239,7 +239,7 @@
             "name": "",
             "position": {
                 "x": 975.0,
-                "y": 528.0
+                "y": 592.0
             },
             "node": {
                 "is_valid": true,
@@ -264,7 +264,7 @@
                 "data": {
                     "node_id": 25,
                     "resource_uuid": {
-                        "value": "5fe2c0a8741e0d46d2c3f0515a1d1270"
+                        "value": "5fe2d2f1abb263924aede2a889d9cf8d"
                     }
                 }
             }
@@ -273,7 +273,7 @@
             "name": "",
             "position": {
                 "x": 975.0,
-                "y": 592.0
+                "y": 528.0
             },
             "node": {
                 "is_valid": true,
@@ -281,92 +281,7 @@
                 "data": {
                     "node_id": 26,
                     "resource_uuid": {
-                        "value": "5fe2c0a8741e0d47ac12b6fdb59312ec"
-                    }
-                }
-            }
-        },
-        {
-            "name": "Cornea",
-            "position": {
-                "x": 1633.0,
-                "y": 720.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "grender::render_mesh_node",
-                "data": {
-                    "node_id": 27,
-                    "mesh": {
-                        "value": "5fe2c8364bd246b07176fd8be6f56b73"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 1377.0,
-                "y": 736.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "grender::configure_program_node",
-                "data": {
-                    "node_id": 29,
-                    "program": {
-                        "value": "5fdb7534af7c1b239419bb136a2b00e7"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 720.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 30,
-                    "resource_uuid": {
-                        "value": "5fe2c0a9741e0d4c85434c337f4c9dca"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 768.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 31,
-                    "resource_uuid": {
-                        "value": "5fe2c0a9741e0d4e79cc6d7044b340ba"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 816.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 32,
-                    "resource_uuid": {
-                        "value": "5fe2c12a741e0d52603ffa83f3d56b74"
+                        "value": "5fe2d2f3abb2639389d81949149e78da"
                     }
                 }
             }
@@ -375,7 +290,7 @@
             "name": "Iris",
             "position": {
                 "x": 1633.0,
-                "y": 975.0
+                "y": 660.0
             },
             "node": {
                 "is_valid": true,
@@ -383,7 +298,7 @@
                 "data": {
                     "node_id": 33,
                     "mesh": {
-                        "value": "5fe2c8364bd246b1cc0685d57b87edd"
+                        "value": "5fe2d2eaabb2638b107b65b14fbebe2e"
                     }
                 }
             }
@@ -392,7 +307,7 @@
             "name": "",
             "position": {
                 "x": 1375.0,
-                "y": 987.0
+                "y": 672.0
             },
             "node": {
                 "is_valid": true,
@@ -409,7 +324,7 @@
             "name": "",
             "position": {
                 "x": 975.0,
-                "y": 976.0
+                "y": 661.0
             },
             "node": {
                 "is_valid": true,
@@ -417,7 +332,7 @@
                 "data": {
                     "node_id": 36,
                     "resource_uuid": {
-                        "value": "5fe2c0a9741e0d4c85434c337f4c9dca"
+                        "value": "5fe2d2f3abb26395f51fdccf1c834bde"
                     }
                 }
             }
@@ -426,7 +341,7 @@
             "name": "",
             "position": {
                 "x": 975.0,
-                "y": 1024.0
+                "y": 709.0
             },
             "node": {
                 "is_valid": true,
@@ -434,7 +349,7 @@
                 "data": {
                     "node_id": 37,
                     "resource_uuid": {
-                        "value": "5fe2c0a9741e0d4df8c6c22818073392"
+                        "value": "5fe2d2f3abb26396934cd7ababa78b6c"
                     }
                 }
             }
@@ -443,7 +358,7 @@
             "name": "",
             "position": {
                 "x": 975.0,
-                "y": 1072.0
+                "y": 757.0
             },
             "node": {
                 "is_valid": true,
@@ -451,7 +366,7 @@
                 "data": {
                     "node_id": 41,
                     "resource_uuid": {
-                        "value": "5fe2c105741e0d507f9ab2902442802b"
+                        "value": "5fe2d6c6f06c20944ef85a31bcc8296c"
                     }
                 }
             }
@@ -460,7 +375,7 @@
             "name": "Hair",
             "position": {
                 "x": 1633.0,
-                "y": 1200.0
+                "y": 885.0
             },
             "node": {
                 "is_valid": true,
@@ -468,7 +383,7 @@
                 "data": {
                     "node_id": 42,
                     "mesh": {
-                        "value": "5fe2c8364bd246ab3f1076560c11aee8"
+                        "value": "5fe2d2eaabb26388212b2624b8baef1"
                     }
                 }
             }
@@ -477,7 +392,7 @@
             "name": "",
             "position": {
                 "x": 1375.0,
-                "y": 1216.0
+                "y": 901.0
             },
             "node": {
                 "is_valid": true,
@@ -494,7 +409,7 @@
             "name": "",
             "position": {
                 "x": 975.0,
-                "y": 1232.0
+                "y": 917.0
             },
             "node": {
                 "is_valid": true,
@@ -502,7 +417,7 @@
                 "data": {
                     "node_id": 45,
                     "resource_uuid": {
-                        "value": "5fe2c0a7741e0d44c59ba222a7f30aa1"
+                        "value": "5fe2d2f4abb26397eef54b6a2c7b66f4"
                     }
                 }
             }
@@ -511,7 +426,7 @@
             "name": "",
             "position": {
                 "x": 975.0,
-                "y": 1280.0
+                "y": 965.0
             },
             "node": {
                 "is_valid": true,
@@ -519,7 +434,7 @@
                 "data": {
                     "node_id": 46,
                     "resource_uuid": {
-                        "value": "5fe2c0a7741e0d45a17f0d6cc2ada117"
+                        "value": "5fe2d2f3abb2639389d81949149e78da"
                     }
                 }
             }
@@ -528,7 +443,7 @@
             "name": "",
             "position": {
                 "x": 975.0,
-                "y": 1328.0
+                "y": 1013.0
             },
             "node": {
                 "is_valid": true,
@@ -536,7 +451,7 @@
                 "data": {
                     "node_id": 47,
                     "resource_uuid": {
-                        "value": "5fe2d210abb2638528298a2404fd5da7"
+                        "value": "5fe2d700f06c209664d5f52f74cbf3cb"
                     }
                 }
             }
@@ -669,16 +584,6 @@
             ]
         },
         {
-            "key": 27,
-            "data": [
-                {
-                    "source": 29,
-                    "source_pin": 12000,
-                    "destination_pin": 1
-                }
-            ]
-        },
-        {
             "key": 11,
             "data": [
                 {
@@ -695,41 +600,6 @@
                     "source": 1,
                     "source_pin": 12000,
                     "destination_pin": 1
-                }
-            ]
-        },
-        {
-            "key": 29,
-            "data": [
-                {
-                    "source": 9,
-                    "source_pin": 1,
-                    "destination_pin": -1775358419
-                },
-                {
-                    "source": 9,
-                    "source_pin": 2,
-                    "destination_pin": 1941987014
-                },
-                {
-                    "source": 9,
-                    "source_pin": 3,
-                    "destination_pin": 1745697932
-                },
-                {
-                    "source": 30,
-                    "source_pin": 1,
-                    "destination_pin": 1530753153
-                },
-                {
-                    "source": 31,
-                    "source_pin": 1,
-                    "destination_pin": -880639002
-                },
-                {
-                    "source": 32,
-                    "source_pin": 1,
-                    "destination_pin": -1818423387
                 }
             ]
         },

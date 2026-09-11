@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::graphic_script",
+        "data": {
+            "uuid": "6aa425e3a8d3e2d4c676e136673a7136",
+            "name": "female_large_script",
+            "descriptor_file": "data/script/female_large_script.json"
+        }
+    }
+}

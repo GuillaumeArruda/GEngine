@@ -19,6 +19,7 @@
 #include "grender/resources/program.h"
 #include "grender/utils.h"
 #include "grender/systems/debug_render_system.h"
+#include "grender/nodes/render_mesh_node.h"
 
 namespace grender
 {
@@ -99,6 +100,21 @@ namespace grender
         return m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::final_color);
     }
 
+    glm::mat4x4 render_system::get_transform() const
+    {
+        return m_transform;
+    }
+
+    glm::mat4x4 render_system::get_mvp() const
+    {
+        return m_mvp;
+    }
+
+    glm::mat3x3 render_system::get_normal_matrix() const
+    {
+        return m_normal_matrix;
+    }
+
     void render_system::render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry)
     {
         OPTICK_EVENT();
@@ -106,22 +122,18 @@ namespace grender
         auto graphic_comp_view = registry.get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
         for (auto& [entity, transform, graphic_comp, extent] : graphic_comp_view)
         {
-            glm::mat4 const mvp = projection * view_matrix * static_cast<glm::mat4>(transform->m_transform);
-            glm::mat3 const normal_matrix = glm::transpose(glm::inverse(glm::mat3(transform->m_transform)));
-            for (auto& mesh_info : graphic_comp->m_meshes)
+            if (graphic_comp->m_script.is_loaded())
             {
-                if (mesh_info.m_active && mesh_info.m_mesh.is_loaded() && mesh_info.m_program.is_loaded())
-                {
-                    mesh_info.m_program->activate();
-                    mesh_info.m_uniform_state.set_uniform("mvp", mvp);
-                    mesh_info.m_uniform_state.set_uniform("normal_matrix", normal_matrix);
-                    mesh_info.m_uniform_state.set_uniform("world_matrix", transform->m_transform);
-                    mesh_info.m_uniform_state.apply();
-                    mesh_info.m_mesh->draw();
-                }
+                OPTICK_EVENT("Graphic Script Update");
+                OPTICK_TAG("Script Name", graphic_comp->m_script->get_name().c_str());
+                m_transform = static_cast<glm::mat4>(transform->m_transform);
+                m_mvp = projection * view_matrix * m_transform;
+                m_normal_matrix = glm::transpose(glm::inverse(glm::mat3(m_transform)));
+
+                graphic_comp->m_script_context.execute();
             }
         }
-    }
+    } 
 
     void render_system::render_lights(glm::mat4 const& camera_world_matrix, gcore::entity_registry& registry)
     {
@@ -183,7 +195,7 @@ namespace grender
     void render_system::setup_lightning_pass()
     {
         m_frame_buffer.bind_for_light();
-        //gl_exec(glStencilFunc, GL_NOTEQUAL, 0, 0xFF);
+        gl_exec(glStencilFunc, GL_NOTEQUAL, 0, 0xFF);
         gl_exec(glDisable, GL_DEPTH_TEST);
         gl_exec(glEnable, GL_BLEND);
         gl_exec(glBlendEquation, GL_FUNC_ADD);
@@ -202,21 +214,24 @@ namespace grender
     void render_system::on_mesh_entity_added(std::tuple<gcore::entity, gcore::transform_component*, graphic_component*, gcore::extent_component*>& added_entity)
     {
         auto& [entity, transform, graphic_comp, extent] = added_entity;
-        for (auto& mesh_info : graphic_comp->m_meshes)
+
+        if (graphic_comp->m_script.is_loaded())
         {
-            if (mesh_info.m_mesh.is_loaded() && mesh_info.m_program.is_loaded())
+            for (gcore::node const* node : graphic_comp->m_script->get_nodes())
             {
-                mesh_info.m_uniform_state.reconcile(mesh_info.m_program->get_default_state());
-                if (extent)
+                if (grender::render_mesh_node const* render_mesh_node = dynamic_cast<grender::render_mesh_node const*>(node))
                 {
-                    extent->m_extent = extent->m_extent.merge(mesh_info.m_mesh->get_extent());
+                    if (gcore::resource_handle<grender::mesh_resource> const mesh = render_mesh_node->get_mesh();
+                        mesh.is_loaded())
+                    {
+                        extent->m_extent = extent->m_extent.merge(mesh->get_extent());
+                    }
                 }
             }
-            else
-            {
-                mesh_info.m_active = false;
-            }
 
+            graphic_comp->m_script_context = graphic_comp->m_script->create_context();
+            graphic_comp->m_script_context.set_in_context(static_cast<render_system const*>(this));
+            graphic_comp->m_script_context.prepare();
         }
     }
 

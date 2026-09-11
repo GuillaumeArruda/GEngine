@@ -15,6 +15,7 @@
 
 #include "grender/nodes/configure_program_node.h"
 #include "grender/nodes/render_mesh_node.h"
+#include "grender/nodes/get_render_matrices_node.h"
 
 namespace grender
 {
@@ -41,6 +42,8 @@ namespace grender
 
         factory.register_type<gcore::get_resource_node<mesh_resource>>("gcore::get_resource_node<grender::mesh_resource>", "Get Resource (Mesh)");
         factory.register_type<gcore::get_resource_node<texture>>("gcore::get_resource_node<grender::texture>", "Get Resource (Texture)");
+
+        factory.register_type<grender::get_render_matrices_node>("grender::get_render_matrices_node", "Get Render Matrices");
 
         factory.register_conversion<gcore::resource_handle<grender::texture>, gcore::resource_handle<gcore::resource>>("gcore::conversion_node<gcore::resource_handle<grender::texture>, gcore::resource_handle<gcore::resource>>");
         factory.register_conversion<gcore::resource_handle<gcore::resource>, gcore::resource_handle<grender::texture>>("gcore::conversion_node<gcore::resource_handle<gcore::resource>, gcore::resource_handle<grender::texture>>");

@@ -372,6 +372,12 @@
     <ClInclude Include="src\gtool\windows\frame_view_window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\grender\resources\graphic_script.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\nodes\get_render_matrices_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -618,6 +624,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gtool\windows\frame_view_window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\resources\graphic_script.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\nodes\get_render_matrices_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

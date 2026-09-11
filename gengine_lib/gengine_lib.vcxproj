@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\grender\nodes\get_render_matrices_node.h" />
+    <ClInclude Include="src\grender\resources\graphic_script.h" />
     <ClInclude Include="src\gcore\component.h" />
     <ClInclude Include="src\gcore\components\extent_component.h" />
     <ClInclude Include="src\gcore\components\flying_controller_component.h" />
@@ -140,6 +142,8 @@
     <ClInclude Include="src\gcore\world.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\grender\nodes\get_render_matrices_node.cpp" />
+    <ClCompile Include="src\grender\resources\graphic_script.cpp" />
     <ClCompile Include="src\gcore\components\extent_component.cpp" />
     <ClCompile Include="src\gcore\components\flying_controller_component.cpp" />
     <ClCompile Include="src\gcore\components\input_component.cpp" />

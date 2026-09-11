@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::graphic_script",
+        "data": {
+            "uuid": "6aa30a67d4ca5774d829cad8d5691aae",
+            "name": "terrain_script",
+            "descriptor_file": "data/script/terrain_script.json"
+        }
+    }
+}

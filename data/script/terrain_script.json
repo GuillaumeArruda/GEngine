@@ -1,0 +1,125 @@
+{
+    "nodes": [
+        {
+            "name": "",
+            "position": {
+                "x": 1342.0,
+                "y": 1206.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_mesh_node",
+                "data": {
+                    "node_id": 1,
+                    "mesh": {
+                        "value": "5ff320d718c5fb565ad58318467ac0b9"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1041.0,
+                "y": 1213.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 3,
+                    "program": {
+                        "value": "5fe4cd07fc5629c4e0d2b3fa26385501"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 625.0,
+                "y": 1263.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::get_render_matrices_node",
+                "data": {
+                    "node_id": 4
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 639.0,
+                "y": 1168.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_resource_node<grender::texture>",
+                "data": {
+                    "node_id": 7,
+                    "resource_uuid": {
+                        "value": "5ff35cd06c345a56ccabd704812fac61"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 758.0,
+                "y": 1216.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 10,
+                    "value": {
+                        "type_name": "Float",
+                        "number_of_elements": 1,
+                        "value": 20.0
+                    }
+                }
+            }
+        }
+    ],
+    "connections": [
+        {
+            "key": 1,
+            "data": [
+                {
+                    "source": 3,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 3,
+            "data": [
+                {
+                    "source": 4,
+                    "source_pin": 1,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 4,
+                    "source_pin": 3,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 7,
+                    "source_pin": 1,
+                    "destination_pin": -1584626041
+                },
+                {
+                    "source": 10,
+                    "source_pin": 1,
+                    "destination_pin": 1647060358
+                }
+            ]
+        }
+    ]
+}
