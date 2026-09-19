@@ -2,6 +2,7 @@
 
 #include "gtool/window.h"
 #include "gtool/common_widgets.h"
+#include "gtool/utils.h"
 
 #include "gcore/resource.h"
 #include "gcore/resource_handle.h"
@@ -44,12 +45,7 @@ namespace gtool
             type,
             uuid
         };
-        struct resource_info
-        {
-            gtl::uuid m_uuid;
-            std::string m_name;
-            std::string m_resource_type;
-        };
+
         std::vector<resource_info> m_resources_info;
         column_id m_filter_by = column_id::name;
         ImGuiTextFilter m_filter;

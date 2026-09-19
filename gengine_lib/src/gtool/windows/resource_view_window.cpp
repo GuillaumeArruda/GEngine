@@ -118,20 +118,7 @@ namespace gtool
             m_resources_info.clear();
             if (m_resources_info.size() == 0)
             {
-                auto& uuid_to_files = library.get_uuid_to_resource_files();
-                for (auto& uuid_to_file : uuid_to_files)
-                {
-                    auto& res_info = m_resources_info.emplace_back();
-                    res_info.m_uuid = uuid_to_file.first;
-
-                    gserializer::json_read_serializer json_read(uuid_to_file.second.string().c_str());
-                    json_read.open_scope("resource");
-                    json_read.process("type_name", res_info.m_resource_type);
-                    json_read.open_scope("data");
-                    json_read.process("name", res_info.m_name);
-                    json_read.close_scope("data");
-                    json_read.close_scope("resource");
-                }
+                m_resources_info = gtool::get_resource_infos(library);
             }
 
             m_filter.Draw(); ImGui::SameLine();

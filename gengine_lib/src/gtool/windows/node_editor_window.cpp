@@ -13,11 +13,14 @@
 #include "gcore/script/nodes/constant_node.h"
 #include "gcore/script/node_factory.h"
 #include "gcore/world.h"
+#include "gcore/resource_library.h"
 
 #include "grender/serializers/imgui_serializer.h"
 
 namespace gtool
 {
+    static std::array script_types = { "gcore::script", "grender::graphic_script" };
+
     struct node_pin_id
     {
         node_pin_id(std::uint64_t id = 0) : m_id(id) {}
@@ -40,12 +43,27 @@ namespace gtool
         ax::NodeEditor::DestroyEditor(m_context);
     }
 
-    void node_editor_window::open_file(gcore::resource_library& library)
+    void node_editor_window::open_script(gcore::resource_library& library)
     {
         ax::NodeEditor::DestroyEditor(m_context);
         m_context = ax::NodeEditor::CreateEditor();
 
         ax::NodeEditor::SetCurrentEditor(m_context);
+
+        auto& uuid_to_files = library.get_uuid_to_resource_files();
+        auto it = uuid_to_files.find(m_selected_script);
+        if (it == uuid_to_files.end())
+        {
+            return;
+        }
+
+        gserializer::json_read_serializer json_read(it->second.string().c_str());
+        json_read.open_scope("resource");
+        json_read.open_scope("data");
+        json_read.process("descriptor_file", m_opened_file);
+        json_read.close_scope("data");
+        json_read.close_scope("resource");
+
         gserializer::json_read_serializer serializer(m_opened_file.c_str());
         serializer.set_in_context(std::ref(library));
         m_descriptor = gcore::script_descriptor();
@@ -63,6 +81,9 @@ namespace gtool
 
     void node_editor_window::save_file()
     {
+        if (m_opened_file.size() == 0)
+            return;
+
         ax::NodeEditor::SetCurrentEditor(m_context);
         for (gcore::script_descriptor::node_descriptor& node_desc : m_descriptor.m_nodes)
         {
@@ -75,6 +96,25 @@ namespace gtool
         gserializer::json_write_serializer serializer;
         m_descriptor.process(serializer);
         serializer.write_to_file(m_opened_file.c_str());
+    }
+
+    void node_editor_window::create_script()
+    {
+        if (m_new_script_name.size() == 0)
+            return;
+
+        if (std::unique_ptr<gcore::resource> resource = gcore::resource::factory().create(script_types[m_create_script_type_index]))
+        {
+            gcore::script* script = dynamic_cast<gcore::script*>(resource.get());
+
+            std::string path = std::string("data/script/") + m_new_script_name + ".json";
+            m_opened_file = path;
+            script->set_name(m_new_script_name);
+            script->set_descriptor_path(path);
+            gserializer::json_write_serializer write_json;
+            write_json.process("resource", resource, gcore::resource::factory());
+            write_json.write_to_file((std::string("data/script/") + resource->get_uuid().to_string() + ".json").c_str());
+        }
     }
 
     void node_editor_window::update(gcore::world& world, window_manager&)
@@ -95,13 +135,17 @@ namespace gtool
             {
                 if (ImGui::BeginMenu("File"))
                 {
-                    if (ImGui::MenuItem("Open File"))
+                    if (ImGui::MenuItem("Open Script"))
                     {
-                        menu_action = "Open File Pop Up";
+                        menu_action = "Open Script Pop Up";
                     }
                     if (ImGui::MenuItem("Save File"))
                     {
-                        menu_action = "Save File Pop Up";
+                        menu_action = "Save Script Pop Up";
+                    }
+                    if (ImGui::MenuItem("Create Script"))
+                    {
+                        menu_action = "Create Script Pop Up";
                     }
                     ImGui::EndMenu();
                 }
@@ -113,12 +157,43 @@ namespace gtool
                 ImGui::OpenPopup(menu_action);
             }
 
-            if (ImGui::BeginPopup("Open File Pop Up"))
+            if (ImGui::BeginPopup("Open Script Pop Up"))
             {
-                ImGui::InputText("File", &m_opened_file);
+                gcore::resource_library* library = world.get_resource_library();
+                
+                if (m_script_infos.size() == 0)
+                {
+                    m_script_infos = gtool::get_resource_infos(*library);
+                    m_script_infos.erase(
+                        std::remove_if(m_script_infos.begin(), m_script_infos.end(), 
+                             [&](auto& script_info)
+                             {
+                                return std::none_of(script_types.begin(), script_types.end(), 
+                                    [&](const char* script_type) 
+                                {
+                                    return script_info.m_resource_type.contains(script_type);
+                                });
+                             }),
+                        m_script_infos.end());
+                }
+
+                if (ImGui::BeginCombo("Script", m_selected_script.to_string().data(), 0))
+                {
+                    for (auto& script_info : m_script_infos)
+                    {
+                        bool selected = m_selected_script == script_info.m_uuid;
+                        if (ImGui::Selectable(script_info.m_name.data(), &selected))
+                        {
+                            m_selected_script = script_info.m_uuid;
+                            if (selected) ImGui::SetItemDefaultFocus();
+                        }
+                    }
+                    ImGui::EndCombo();
+                }
+
                 if (ImGui::Button("Open"))
                 {
-                    open_file(*world.get_resource_library());
+                    open_script(*world.get_resource_library());
                     ImGui::CloseCurrentPopup();
                 }
                 ImGui::EndPopup();
@@ -126,7 +201,6 @@ namespace gtool
 
             if (ImGui::BeginPopup("Save File Pop Up"))
             {
-                ImGui::InputText("File", &m_opened_file);
                 if (ImGui::Button("Save"))
                 {
                     save_file();
@@ -135,6 +209,30 @@ namespace gtool
                 ImGui::EndPopup();
             }
 
+            if (ImGui::BeginPopup("Create Script Pop Up"))
+            {
+                ImGui::InputText("Name", &m_new_script_name);
+                if (ImGui::BeginCombo("Type", script_types[m_create_script_type_index]))
+                {
+                    for (std::size_t index = 0; index < script_types.size(); ++index)
+                    {
+                        bool selectable = index == m_create_script_type_index;
+                        if (ImGui::Selectable(script_types[index], selectable))
+                        {
+                            m_create_script_type_index = index;
+                        }
+                    }
+                    ImGui::EndCombo();
+                }
+
+                if (ImGui::Button("Create"))
+                {
+                    create_script();
+                    save_file();
+                    ImGui::CloseCurrentPopup(); 
+                }
+                ImGui::EndPopup();
+            }
 
             ne::SetCurrentEditor(m_context);
             

@@ -13,7 +13,7 @@ namespace gserializer
     struct serializer;
 }
 
-#define GCORE_ENABLE_HEAVY_SCRIPT_PROFILE() 1
+#define GCORE_ENABLE_HEAVY_SCRIPT_PROFILE() 0
 
 namespace gcore
 {
@@ -73,6 +73,8 @@ namespace gcore
 
         script_context create_context() const;
         gtl::span<std::uint32_t const> get_root_node_indexes() const { return m_root_node_indexes; }
+
+        void set_descriptor_path(std::filesystem::path new_path) { m_descriptor_path = std::move(new_path); };
 
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
     private:

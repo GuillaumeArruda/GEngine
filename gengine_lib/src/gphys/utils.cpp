@@ -2,6 +2,7 @@
 #include "gphys/utils.h"
 
 #include <glm/gtc/type_ptr.hpp>
+#include "utils.h"
 
 namespace gphys
 {
@@ -45,4 +46,3 @@ namespace gphys
     }
 
 }
-

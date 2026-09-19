@@ -5,6 +5,7 @@
 #include "ax_NodeEditor/imgui_node_editor.h"
 
 #include "gcore/script/script.h"
+#include "gtool/utils.h"
 
 namespace gcore
 {
@@ -37,8 +38,9 @@ namespace gtool
         virtual bool& get_should_display() { return m_display; }
 
     private:
-        void open_file(gcore::resource_library& library);
+        void open_script(gcore::resource_library& library);
         void save_file();
+        void create_script();
         void display_node(gcore::script_descriptor::node_descriptor& node_desc);
         void create_new_elements();
         void delete_elements();
@@ -48,9 +50,13 @@ namespace gtool
         node_viewer_widget m_node_viewer;
         create_node_widget m_create_node_widget;
 
+        std::vector<resource_info> m_script_infos;
         std::string m_opened_file;
+        gtl::uuid m_selected_script;
         ax::NodeEditor::EditorContext* m_context;
         gcore::script_descriptor m_descriptor;
+        std::string m_new_script_name;
+        std::size_t m_create_script_type_index = 0;
         bool m_display = false;
     };
 }

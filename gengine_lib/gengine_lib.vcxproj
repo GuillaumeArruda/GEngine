@@ -98,6 +98,7 @@
     <ClInclude Include="src\gtl\utility.h" />
     <ClInclude Include="src\gtool\common_widgets.h" />
     <ClInclude Include="src\gtool\importer.h" />
+    <ClInclude Include="src\gtool\utils.h" />
     <ClInclude Include="src\gtool\windows\console_window.h" />
     <ClInclude Include="src\gtool\windows\entity_view_window.h" />
     <ClInclude Include="src\gcore\system_registry.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="src\gtl\scope_timer.cpp" />
     <ClCompile Include="src\gtool\common_widgets.cpp" />
     <ClCompile Include="src\gtool\importer.cpp" />
+    <ClCompile Include="src\gtool\utils.cpp" />
     <ClCompile Include="src\gtool\windows\console_window.cpp" />
     <ClCompile Include="src\gtool\windows\entity_view_window.cpp" />
     <ClCompile Include="src\gcore\system_registry.cpp" />

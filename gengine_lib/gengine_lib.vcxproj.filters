@@ -381,6 +381,9 @@
     <ClInclude Include="src\grender\render_script_registration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gtool\utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -633,6 +636,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\grender\render_script_registration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gtool\utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
