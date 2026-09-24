@@ -68,6 +68,8 @@ namespace grender
         
         auto skybox_view = world.get_entity_registry().get_view<grender::skybox_component>();
         m_skybox_comp_added_id = skybox_view.add_on_added_callback([&](auto& added_entity) { this->on_skybox_entity_added(added_entity); });
+
+        m_resource_library = world.get_resource_library();
     }
 
     void render_system::disconnect_from_world(gcore::world& world)
@@ -80,6 +82,8 @@ namespace grender
 
         auto skybox_view = world.get_entity_registry().get_view<grender::skybox_component>();
         skybox_view.remove_on_added_callback(m_skybox_comp_added_id);
+
+        m_resource_library = nullptr;
     }
 
     void render_system::set_target_size(std::size_t width, std::size_t height)
@@ -118,6 +122,7 @@ namespace grender
                     projection,
                     view_matrix
                 };
+
                 graphic_comp->m_script_context.set_in_context(input_data);
                 graphic_comp->m_script_context.execute();
             }
@@ -219,6 +224,7 @@ namespace grender
             }
 
             graphic_comp->m_script_context = graphic_comp->m_script->create_context();
+            graphic_comp->m_script_context.set_in_context(m_resource_library);
             graphic_comp->m_script_context.prepare();
         }
     }

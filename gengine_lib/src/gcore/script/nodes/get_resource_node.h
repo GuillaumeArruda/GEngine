@@ -2,6 +2,7 @@
 
 #include "gcore/script/node.h"
 #include "gcore/script/script_context.h"
+#include "gcore/resource_library.h"
 
 namespace gcore
 {
@@ -10,19 +11,23 @@ namespace gcore
     {
         GCORE_DECLARE_NODE_TYPE(get_resource_node);
 
-        bool is_const() const override { return true; }
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
 
         using out_pin = output_pin_descriptor<resource_handle<ResourceType>, 0, 1, false>;
+        using in_pin = input_pin_descriptor<gtl::uuid, 1, 2, true>;
 
         void execute(node_context& context) const override
         {
-            context.write_values<out_pin>(m_handle);
-        }
-
-        void process(gserializer::serializer& serializer)
-        {
-            node::process(serializer);
-            serializer.process("resource_uuid", m_handle);
+            if (gcore::resource_library* library = context.get_in_context<gcore::resource_library>())
+            {
+                gtl::span<const gtl::uuid> inputs = context.read<in_pin>();
+                gtl::span<gcore::resource_handle<ResourceType>> outputs = context.create_array<out_pin>(inputs.size());
+                for (std::size_t i = 0; i < inputs.size(); ++i)
+                {
+                    outputs[i] = library->template get_resource<ResourceType>(inputs[i]);
+                }
+            }
         }
 
         node::pin_descriptors get_pin_descriptors() const override
@@ -30,10 +35,11 @@ namespace gcore
             static pin_descriptor const outputs[] = {
                 out_pin::get("resource"),
             };
-            return {gtl::span<pin_descriptor const>{}, outputs};
-        }
+            static pin_descriptor const inputs[] = {
+                in_pin::get("uuid")
+            };
 
-    private:
-        resource_handle<ResourceType> m_handle;
+            return { inputs, outputs};
+        }
     };
 }

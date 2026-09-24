@@ -44,13 +44,10 @@ namespace grender
         void on_light_entity_added(std::tuple<gcore::entity, gcore::transform_component*, light_component*>& added_entity);
         void on_skybox_entity_added(std::tuple<gcore::entity, skybox_component*>& added_entity);
 
+        gcore::resource_library* m_resource_library = nullptr;
         frame_buffer m_frame_buffer = frame_buffer(0ull, 0ull);
         gtl::callback_id m_graphic_comp_added_id = 0;
         gtl::callback_id m_light_comp_added_id = 0;
         gtl::callback_id m_skybox_comp_added_id = 0;
-
-        glm::mat4x4 m_mvp;
-        glm::mat4x4 m_transform;
-        glm::mat3x3 m_normal_matrix;
     };
 }
