@@ -6,6 +6,7 @@
 
 #include "gcore/script/script.h"
 #include "gtool/utils.h"
+#include "gtl/callbacks.h"
 
 namespace gcore
 {
@@ -57,6 +58,8 @@ namespace gtool
         gcore::script_descriptor m_descriptor;
         std::string m_new_script_name;
         std::size_t m_create_script_type_index = 0;
+        gtl::callback_id m_on_resource_reloaded_id = 0;
         bool m_display = false;
+        bool m_need_to_reload_script = false;
     };
 }

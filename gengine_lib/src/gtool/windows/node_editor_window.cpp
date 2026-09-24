@@ -45,6 +45,14 @@ namespace gtool
 
     void node_editor_window::open_script(gcore::resource_library& library)
     {
+        if (m_on_resource_reloaded_id == 0)
+        {
+            m_on_resource_reloaded_id = library.on_resource_reloaded.add_callback([&](gtl::uuid const& reloaded_resource) {
+                if (reloaded_resource == m_selected_script)
+                    m_need_to_reload_script = true;
+            });
+        }
+
         ax::NodeEditor::DestroyEditor(m_context);
         m_context = ax::NodeEditor::CreateEditor();
 
@@ -122,6 +130,12 @@ namespace gtool
         namespace ne = ax::NodeEditor;
         if (m_display)
         {
+            if (m_need_to_reload_script)
+            {
+                open_script(*world.get_resource_library());
+                m_need_to_reload_script = false;
+            }
+
             ImGuiWindowFlags const window_flags = ImGuiWindowFlags_MenuBar;
             if (!ImGui::Begin(get_name(), &m_display, window_flags))
             {
@@ -141,7 +155,7 @@ namespace gtool
                     }
                     if (ImGui::MenuItem("Save File"))
                     {
-                        menu_action = "Save Script Pop Up";
+                        menu_action = "Save File Pop Up";
                     }
                     if (ImGui::MenuItem("Create Script"))
                     {
@@ -201,11 +215,8 @@ namespace gtool
 
             if (ImGui::BeginPopup("Save File Pop Up"))
             {
-                if (ImGui::Button("Save"))
-                {
-                    save_file();
-                    ImGui::CloseCurrentPopup();
-                }
+                save_file();
+                ImGui::CloseCurrentPopup();
                 ImGui::EndPopup();
             }
 
@@ -216,10 +227,11 @@ namespace gtool
                 {
                     for (std::size_t index = 0; index < script_types.size(); ++index)
                     {
-                        bool selectable = index == m_create_script_type_index;
-                        if (ImGui::Selectable(script_types[index], selectable))
+                        bool selected = index == m_create_script_type_index;
+                        if (ImGui::Selectable(script_types[index], selected))
                         {
                             m_create_script_type_index = index;
+                            if (selected) ImGui::SetItemDefaultFocus();
                         }
                     }
                     ImGui::EndCombo();
