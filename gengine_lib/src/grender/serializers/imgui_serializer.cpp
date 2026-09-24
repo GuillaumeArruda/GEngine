@@ -12,7 +12,7 @@ namespace grender
 {
     imgui_serializer::imgui_serializer(const char* node_name)
     {
-        m_should_display_stack.push_back(ImGui::TreeNode(node_name));
+        m_should_display_stack.push_back(ImGui::TreeNodeEx(node_name, ImGuiTreeNodeFlags_DefaultOpen));
         if (should_display())
         {
             ImGui::PushItemWidth(280);
@@ -111,7 +111,7 @@ namespace grender
     {
         if (should_display())
         {
-            m_should_display_stack.push_back(ImGui::TreeNode(name));
+            m_should_display_stack.push_back(ImGui::TreeNodeEx(name, ImGuiTreeNodeFlags_DefaultOpen));
         }
         else
         {
@@ -132,7 +132,7 @@ namespace grender
     {
         if (should_display())
         {
-            m_should_display_stack.push_back(ImGui::TreeNode(name));
+            m_should_display_stack.push_back(ImGui::TreeNodeEx(name, ImGuiTreeNodeFlags_DefaultOpen));
         }
         else
         {
