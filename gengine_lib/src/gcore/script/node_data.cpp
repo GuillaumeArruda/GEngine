@@ -110,7 +110,7 @@ namespace gcore
             number_of_elements = m_pointer_info.m_number_of_elements;
         }
         serializer.process("number_of_elements", number_of_elements);
-
+        number_of_elements = std::max(number_of_elements, static_cast<std::size_t>(1));
 
         if (new_node_type->get_id() != m_type_id)
         {

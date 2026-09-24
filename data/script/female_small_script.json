@@ -4,7 +4,7 @@
             "name": "",
             "position": {
                 "x": 1377.0,
-                "y": 96.0
+                "y": 95.0
             },
             "node": {
                 "is_valid": true,
@@ -13,57 +13,6 @@
                     "node_id": 1,
                     "program": {
                         "value": "5fdb7534af7c1b239419bb136a2b00e7"
-                    }
-                }
-            }
-        },
-        {
-            "name": "Normal",
-            "position": {
-                "x": 991.0,
-                "y": 143.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 2,
-                    "resource_uuid": {
-                        "value": "5fe2c0a9741e0d4b307c09fafb716e6a"
-                    }
-                }
-            }
-        },
-        {
-            "name": "Albedo",
-            "position": {
-                "x": 991.0,
-                "y": 79.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 3,
-                    "resource_uuid": {
-                        "value": "5fe2c0a9741e0d4af143fdc9dc907fd5"
-                    }
-                }
-            }
-        },
-        {
-            "name": "Specular",
-            "position": {
-                "x": 991.0,
-                "y": 207.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 4,
-                    "resource_uuid": {
-                        "value": "5fe2c132741e0d532011d4306dd7bca4"
                     }
                 }
             }
@@ -134,57 +83,6 @@
             }
         },
         {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 336.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 15,
-                    "resource_uuid": {
-                        "value": "5fe2c0a8741e0d491f6c675e1e06fba3"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 384.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 16,
-                    "resource_uuid": {
-                        "value": "5fe2c0f1741e0d4f21555d4e641cd1a3"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 288.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 17,
-                    "resource_uuid": {
-                        "value": "5fe2c0a8741e0d4871fecb86c4749f0c"
-                    }
-                }
-            }
-        },
-        {
             "name": "Head",
             "position": {
                 "x": 1633.0,
@@ -236,57 +134,6 @@
             }
         },
         {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 528.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 24,
-                    "resource_uuid": {
-                        "value": "5fe2c110741e0d514e284424eb259ea4"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 464.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 25,
-                    "resource_uuid": {
-                        "value": "5fe2c0a8741e0d46d2c3f0515a1d1270"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 592.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 26,
-                    "resource_uuid": {
-                        "value": "5fe2c0a8741e0d47ac12b6fdb59312ec"
-                    }
-                }
-            }
-        },
-        {
             "name": "Cornea",
             "position": {
                 "x": 1633.0,
@@ -316,57 +163,6 @@
                     "node_id": 29,
                     "program": {
                         "value": "5fdb7534af7c1b239419bb136a2b00e7"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 720.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 30,
-                    "resource_uuid": {
-                        "value": "5fe2c0a9741e0d4c85434c337f4c9dca"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 768.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 31,
-                    "resource_uuid": {
-                        "value": "5fe2c0a9741e0d4e79cc6d7044b340ba"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 816.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 32,
-                    "resource_uuid": {
-                        "value": "5fe2c12a741e0d52603ffa83f3d56b74"
                     }
                 }
             }
@@ -406,57 +202,6 @@
             }
         },
         {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 976.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 36,
-                    "resource_uuid": {
-                        "value": "5fe2c0a9741e0d4c85434c337f4c9dca"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 1024.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 37,
-                    "resource_uuid": {
-                        "value": "5fe2c0a9741e0d4df8c6c22818073392"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 1072.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 41,
-                    "resource_uuid": {
-                        "value": "5fe2c105741e0d507f9ab2902442802b"
-                    }
-                }
-            }
-        },
-        {
             "name": "Hair",
             "position": {
                 "x": 1633.0,
@@ -486,57 +231,6 @@
                     "node_id": 44,
                     "program": {
                         "value": "5fdb7534af7c1b239419bb136a2b00e7"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 1232.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 45,
-                    "resource_uuid": {
-                        "value": "5fe2c0a7741e0d44c59ba222a7f30aa1"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 1280.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 46,
-                    "resource_uuid": {
-                        "value": "5fe2c0a7741e0d45a17f0d6cc2ada117"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 975.0,
-                "y": 1328.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 47,
-                    "resource_uuid": {
-                        "value": "5fe2d210abb2638528298a2404fd5da7"
                     }
                 }
             }
@@ -610,6 +304,348 @@
                     "node_id": 60
                 }
             }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1110.0,
+                "y": 96.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 61,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a9741e0d4af143fdc9dc907fd5"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1110.0,
+                "y": 144.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 62,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a9741e0d4b307c09fafb716e6a"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1110.0,
+                "y": 192.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 63,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c132741e0d532011d4306dd7bca4"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1110.0,
+                "y": 288.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 64,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a8741e0d4871fecb86c4749f0c"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1110.0,
+                "y": 336.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 65,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a8741e0d4871fecb86c4749f0c"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1110.0,
+                "y": 384.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 66,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0f1741e0d4f21555d4e641cd1a3"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1110.0,
+                "y": 480.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 67,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a8741e0d46d2c3f0515a1d1270"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1110.0,
+                "y": 576.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 68,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c110741e0d514e284424eb259ea4"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1110.0,
+                "y": 528.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 69,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a8741e0d47ac12b6fdb59312ec"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1094.0,
+                "y": 720.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 70,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a9741e0d4c85434c337f4c9dca"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1094.0,
+                "y": 768.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 71,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a9741e0d4e79cc6d7044b340ba"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1094.0,
+                "y": 816.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 72,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c12a741e0d52603ffa83f3d56b74"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1094.0,
+                "y": 976.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 73,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a9741e0d4c85434c337f4c9dca"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1094.0,
+                "y": 1024.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 74,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a9741e0d4df8c6c22818073392"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1094.0,
+                "y": 1232.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 75,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a7741e0d44c59ba222a7f30aa1"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1094.0,
+                "y": 1072.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 76,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c105741e0d507f9ab2902442802b"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1094.0,
+                "y": 1280.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 77,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a7741e0d45a17f0d6cc2ada117"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1094.0,
+                "y": 1328.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 78,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2d210abb2638528298a2404fd5da7"
+                    }
+                }
+            }
         }
     ],
     "connections": [
@@ -617,21 +653,6 @@
             "key": 1,
             "data": [
                 {
-                    "source": 2,
-                    "source_pin": 1,
-                    "destination_pin": -880639002
-                },
-                {
-                    "source": 4,
-                    "source_pin": 1,
-                    "destination_pin": -1818423387
-                },
-                {
-                    "source": 3,
-                    "source_pin": 1,
-                    "destination_pin": 1530753153
-                },
-                {
                     "source": 54,
                     "source_pin": 100,
                     "destination_pin": -1775358419
@@ -645,6 +666,21 @@
                     "source": 60,
                     "source_pin": 100,
                     "destination_pin": 1941987014
+                },
+                {
+                    "source": 61,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 62,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 63,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
                 }
             ]
         },
@@ -652,21 +688,6 @@
             "key": 21,
             "data": [
                 {
-                    "source": 24,
-                    "source_pin": 1,
-                    "destination_pin": -1818423387
-                },
-                {
-                    "source": 25,
-                    "source_pin": 1,
-                    "destination_pin": 1530753153
-                },
-                {
-                    "source": 26,
-                    "source_pin": 1,
-                    "destination_pin": -880639002
-                },
-                {
                     "source": 54,
                     "source_pin": 100,
                     "destination_pin": -1775358419
@@ -680,6 +701,21 @@
                     "source": 60,
                     "source_pin": 100,
                     "destination_pin": 1941987014
+                },
+                {
+                    "source": 67,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 68,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
+                },
+                {
+                    "source": 69,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
                 }
             ]
         },
@@ -687,21 +723,6 @@
             "key": 13,
             "data": [
                 {
-                    "source": 15,
-                    "source_pin": 1,
-                    "destination_pin": -880639002
-                },
-                {
-                    "source": 16,
-                    "source_pin": 1,
-                    "destination_pin": -1818423387
-                },
-                {
-                    "source": 17,
-                    "source_pin": 1,
-                    "destination_pin": 1530753153
-                },
-                {
                     "source": 54,
                     "source_pin": 100,
                     "destination_pin": -1775358419
@@ -715,6 +736,21 @@
                     "source": 60,
                     "source_pin": 100,
                     "destination_pin": 1941987014
+                },
+                {
+                    "source": 64,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 65,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 66,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
                 }
             ]
         },
@@ -772,21 +808,6 @@
             "key": 29,
             "data": [
                 {
-                    "source": 30,
-                    "source_pin": 1,
-                    "destination_pin": 1530753153
-                },
-                {
-                    "source": 31,
-                    "source_pin": 1,
-                    "destination_pin": -880639002
-                },
-                {
-                    "source": 32,
-                    "source_pin": 1,
-                    "destination_pin": -1818423387
-                },
-                {
                     "source": 54,
                     "source_pin": 100,
                     "destination_pin": -1775358419
@@ -800,6 +821,21 @@
                     "source": 60,
                     "source_pin": 100,
                     "destination_pin": 1941987014
+                },
+                {
+                    "source": 70,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 71,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 72,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
                 }
             ]
         },
@@ -817,21 +853,6 @@
             "key": 35,
             "data": [
                 {
-                    "source": 37,
-                    "source_pin": 1,
-                    "destination_pin": -880639002
-                },
-                {
-                    "source": 36,
-                    "source_pin": 1,
-                    "destination_pin": 1530753153
-                },
-                {
-                    "source": 41,
-                    "source_pin": 1,
-                    "destination_pin": -1818423387
-                },
-                {
                     "source": 54,
                     "source_pin": 100,
                     "destination_pin": -1775358419
@@ -845,6 +866,21 @@
                     "source": 60,
                     "source_pin": 100,
                     "destination_pin": 1941987014
+                },
+                {
+                    "source": 73,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 74,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 76,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
                 }
             ]
         },
@@ -862,21 +898,6 @@
             "key": 44,
             "data": [
                 {
-                    "source": 45,
-                    "source_pin": 1,
-                    "destination_pin": 1530753153
-                },
-                {
-                    "source": 46,
-                    "source_pin": 1,
-                    "destination_pin": -880639002
-                },
-                {
-                    "source": 47,
-                    "source_pin": 1,
-                    "destination_pin": -1818423387
-                },
-                {
                     "source": 54,
                     "source_pin": 100,
                     "destination_pin": -1775358419
@@ -890,6 +911,21 @@
                     "source": 60,
                     "source_pin": 100,
                     "destination_pin": 1941987014
+                },
+                {
+                    "source": 75,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 77,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 78,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
                 }
             ]
         },

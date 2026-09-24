@@ -51,25 +51,8 @@
         {
             "name": "",
             "position": {
-                "x": 580.0,
-                "y": 403.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::get_resource_node<grender::texture>",
-                "data": {
-                    "node_id": 7,
-                    "resource_uuid": {
-                        "value": "5ff35cd06c345a56ccabd704812fac61"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 699.0,
-                "y": 451.0
+                "x": 790.0,
+                "y": 448.0
             },
             "node": {
                 "is_valid": true,
@@ -109,6 +92,25 @@
                 "type_name": "gcore::multiply_node<glm::mat4>",
                 "data": {
                     "node_id": 17
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 785.0,
+                "y": 397.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 18,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5ff35cd06c345a56ccabd704812fac61"
+                    }
                 }
             }
         }
@@ -158,11 +160,6 @@
             "key": 3,
             "data": [
                 {
-                    "source": 7,
-                    "source_pin": 1,
-                    "destination_pin": -1584626041
-                },
-                {
                     "source": 10,
                     "source_pin": 1,
                     "destination_pin": 1647060358
@@ -176,6 +173,11 @@
                     "source": 4,
                     "source_pin": 1,
                     "destination_pin": 1745697932
+                },
+                {
+                    "source": 18,
+                    "source_pin": 1,
+                    "destination_pin": -1584626041
                 }
             ]
         }
