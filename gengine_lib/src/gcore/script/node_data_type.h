@@ -19,6 +19,7 @@ namespace gcore
             void* (*m_copy_array)(void const*, std::size_t);
             bool (*m_can_fit_in_buffer)(std::size_t, std::size_t);
             void (*m_process)(gserializer::serializer&, void* buffer, std::size_t number_of_element);
+            void (*m_move_over_elements)(void* source, void* destination, std::size_t number_of_element);
         };
 
         using id_type = std::uint16_t;
@@ -109,12 +110,26 @@ namespace gcore
             }
             else
             {
+                serializer.open_array("values", number_of_element);
                 for (std::size_t i = 0; i < number_of_element; ++i)
                 {
                     serializer.open_array_element("value");
                     process(serializer, *(value + i));
                     serializer.close_array_element("value");
                 }
+                serializer.close_array("values");
+            }
+        }
+
+        // Assumes source et destination are bigger then number_of_elements
+        template<class Type>
+        void move_over_elements(void* source, void* destination, std::size_t number_of_elements)
+        {
+            Type const* source_typed = static_cast<Type const*>(source);
+            Type* destination_typed = static_cast<Type*>(destination);
+            for (std::size_t i = 0; i < number_of_elements; ++i)
+            {
+                *(destination_typed + i) = std::move(*(source_typed + i));
             }
         }
     }
@@ -132,6 +147,7 @@ namespace gcore
             &node_data_vtable::copy_array<Type>,
             &node_data_vtable::can_fit_in_buffer<Type>,
             &node_data_vtable::process<Type>,
+            &node_data_vtable::move_over_elements<Type>,
         };
     }
 
@@ -161,6 +177,8 @@ namespace gcore
         }
 
         node_data_type const* get_by_name(std::string_view name) const;
+
+        gtl::span<node_data_type const> get_node_data_types() const { return m_node_data_types; }
 
     private:
         template<class Type>
