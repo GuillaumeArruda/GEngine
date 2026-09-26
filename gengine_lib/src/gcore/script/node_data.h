@@ -50,7 +50,7 @@ namespace gcore
         gtl::span<Type> create_array(std::size_t number_of_element)
         {
             auto const new_type_id = node_data_type_registry::get_type_id<Type>();
-            if (new_type_id != m_type_id || number_of_element != get_number_of_elements())
+            if (new_type_id == m_type_id && number_of_element == get_number_of_elements())
             {
                 return read<Type>();
             }
