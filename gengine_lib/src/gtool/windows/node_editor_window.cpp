@@ -84,6 +84,11 @@ namespace gtool
             ax::NodeEditor::SetNodePosition(node_desc.m_node->get_node_id(), ImVec2(node_desc.m_position.x, node_desc.m_position.y));
         }
         m_descriptor.m_node_id_generator++;
+
+        for (gcore::script_descriptor::node_descriptor& node_desc : m_descriptor.m_nodes)
+        {
+            node_desc.m_node->pre_create(m_descriptor);
+        }
         ax::NodeEditor::SetCurrentEditor(nullptr);
     }
 
@@ -287,6 +292,7 @@ namespace gtool
             ne::SetCurrentEditor(nullptr);
 
             m_node_viewer.update(m_descriptor, *world.get_resource_library());
+            m_variables_widget.update(m_descriptor, *world.get_resource_library());
 
             ImGui::End();
         }
@@ -439,6 +445,7 @@ namespace gtool
         node_descriptor.m_node = std::move(new_node);
         node_descriptor.m_node->set_node_id(m_descriptor.m_node_id_generator++);
         gcore::node_id_t const new_node_id = node_descriptor.m_node->get_node_id();
+        node_descriptor.m_node->pre_create(m_descriptor);
         m_descriptor.m_nodes.push_back(std::move(node_descriptor));
 
         gcore::node::pin_descriptors const pin_descriptors = m_descriptor.m_nodes.back().m_node->get_pin_descriptors();
@@ -459,6 +466,7 @@ namespace gtool
             constant_descriptor.m_node->set_node_id(m_descriptor.m_node_id_generator++);
             gcore::node_id_t const node_id = constant_descriptor.m_node->get_node_id();
             static_cast<gcore::constant_node*>(constant_descriptor.m_node.get())->get_node_data().set_type_id(input.m_type_id);
+            constant_descriptor.m_node->pre_create(m_descriptor);
             m_descriptor.m_nodes.push_back(std::move(constant_descriptor));
 
             gcore::node* node = nullptr;
@@ -480,6 +488,7 @@ namespace gtool
                 ImGui::PushID(m_node_id);
                 grender::imgui_serializer serializer("Node Data");
                 serializer.set_in_context(std::ref(library));
+                serializer.set_in_context(std::ref(script_descriptor));
                 it->process(serializer);
                 ImGui::PopID();
             }
@@ -522,5 +531,16 @@ namespace gtool
         }
         ne::Resume();
         return new_node;
+    }
+
+    void script_variables_widget::update(gcore::script_descriptor& script_descriptor, gcore::resource_library& library)
+    {
+        if (ImGui::Begin("Variables Editor"))
+        {
+            grender::imgui_serializer serializer("Variables");
+            serializer.set_in_context(std::ref(library));
+            serializer.process("Variables", script_descriptor.m_variables, "Variable");
+        }
+        ImGui::End();
     }
 }

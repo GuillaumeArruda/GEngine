@@ -17,14 +17,13 @@
 #include "gcore/script/nodes/random_nodes.h"
 #include "gcore/script/nodes/get_resource_node.h"
 #include "gcore/script/nodes/matrix_nodes.h"
+#include "gcore/script/nodes/variable_nodes.h"
 
 #include "gserializer/gmath_serialization.h"
 
 #include "gtl/uuid.h"
 
 #include "gmath/units.h"
-
-
 
 namespace gcore
 {
@@ -81,6 +80,8 @@ namespace gcore
         GCORE_REGISTER_SELECT_NODE(gcore::resource_handle<resource>, "Resource");
 
         factory.register_type<gcore::constant_node>("gcore::constant_node", "Constant");
+        factory.register_type<gcore::get_variable_node>("gcore::get_variable_node", "Get Variable");
+        factory.register_type<gcore::set_variable_node>("gcore::set_variable_node", "Set Variable");
         factory.register_type<gcore::and_node>("gcore::and_node", "And");
         factory.register_type<gcore::or_node>("gcore::or_node", "Or");
         factory.register_type<gcore::not_node>("gcore::not_node", "Not");

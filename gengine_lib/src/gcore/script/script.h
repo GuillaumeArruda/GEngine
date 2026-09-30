@@ -7,13 +7,14 @@
 #include "gcore/resource.h"
 
 #include "gcore/script/node.h"
+#include "gcore/script/node_data.h"
 
 namespace gserializer
 {
     struct serializer;
 }
 
-#define GCORE_ENABLE_HEAVY_SCRIPT_PROFILE() 0
+#define GCORE_ENABLE_HEAVY_SCRIPT_PROFILE() 1
 
 namespace gcore
 {
@@ -39,6 +40,14 @@ namespace gcore
             void process(gserializer::serializer& serializer);
         };
 
+        struct variable
+        {
+            node_data m_data;
+            gtl::uuid m_id = gtl::uuid::generate();
+            std::string m_name;
+            void process(gserializer::serializer& serializer);
+        };
+
         pin_descriptor const* get_pin_descriptor(gcore::node_id_t node_id, int pin_id) const;
         pin_descriptor* get_pin_descriptor(gcore::node_id_t node_id, int pin_id);
         node_descriptor const* get_node_descriptor(gcore::node_id_t node_id) const;
@@ -50,6 +59,7 @@ namespace gcore
 
         std::vector<node_descriptor> m_nodes;
         std::unordered_map<node_id_t, std::vector<connection>> m_connections;
+        std::vector<variable> m_variables;
         gcore::node_id_t m_node_id_generator = 1; 
         void process(gserializer::serializer& serializer);
     };
@@ -58,6 +68,12 @@ namespace gcore
     struct script : resource
     {
         ~script();
+
+        struct variable
+        {
+            gtl::uuid m_id;
+            std::ptrdiff_t m_offset;
+        };
 
         using super = resource;
         bool do_load_async() override;
@@ -73,6 +89,7 @@ namespace gcore
 
         script_context create_context() const;
         gtl::span<std::uint32_t const> get_root_node_indexes() const { return m_root_node_indexes; }
+        gtl::span<variable const> get_variables() const { return m_variables; }
 
         void set_descriptor_path(std::filesystem::path new_path) { m_descriptor_path = std::move(new_path); };
 
@@ -84,6 +101,7 @@ namespace gcore
         std::unique_ptr<char[]> m_node_buffer;
         std::vector<node*> m_nodes;
         std::vector<std::uint32_t> m_root_node_indexes;
+        std::vector<variable> m_variables;
         std::unique_ptr<script_context> m_default_script_context;
         std::size_t m_number_of_bytes_for_context = 0;
     };

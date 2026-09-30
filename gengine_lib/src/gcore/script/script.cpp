@@ -117,8 +117,8 @@ namespace gcore
     {
         serializer.process("nodes", m_nodes, "node");
         serializer.process("connections", m_connections, "node_connection", "connection");
+        serializer.process("variables", m_variables, "variable");
     }
-
 
     void script_descriptor::node_descriptor::process(gserializer::serializer& serializer)
     {
@@ -132,6 +132,13 @@ namespace gcore
         serializer.process("source", m_source_id);
         serializer.process("source_pin", m_source_pin_id);
         serializer.process("destination_pin", m_destination_pin_id);
+    }
+
+    void script_descriptor::variable::process(gserializer::serializer& serializer)
+    {
+        serializer.process("id", m_id);
+        serializer.process("name", m_name);
+        serializer.process("data", m_data);
     }
 
     script::~script() = default;
@@ -159,6 +166,11 @@ namespace gcore
         }
         m_library->get_dependency_tracker().add_dependencies(get_uuid(), gatherer.m_uuids, gatherer.m_files);
         ensure_all_dependant_resources_loaded(resources);
+
+        for (auto& node : descriptor.m_nodes)
+        {
+            node.m_node->pre_create(descriptor);
+        }
 
         std::size_t node_memory_to_allocate = 0;
         std::size_t number_of_input_to_allocate = 0;
@@ -233,11 +245,20 @@ namespace gcore
 
         // Create input output structure of the default context
         {
-            m_number_of_bytes_for_context = number_of_input_to_allocate * sizeof(in_pin_data) + number_of_output_to_allocate * sizeof(node_data);
+            const std::size_t number_of_bytes_for_variables = descriptor.m_variables.size() * sizeof(node_data);
+            m_number_of_bytes_for_context = number_of_bytes_for_variables + number_of_input_to_allocate * sizeof(in_pin_data) + number_of_output_to_allocate * sizeof(node_data);
             m_default_script_context = std::make_unique<script_context>();
             m_default_script_context->m_script = this;
             m_default_script_context->m_memory_buffer = std::make_unique<char[]>(m_number_of_bytes_for_context);
-            char* current_location = m_default_script_context->m_memory_buffer.get();
+            char* const start_location = m_default_script_context->m_memory_buffer.get();
+            char* current_location = start_location;
+            for (auto const& desc_variable : descriptor.m_variables)
+            {
+                m_variables.emplace_back( desc_variable.m_id, static_cast<std::ptrdiff_t>(current_location - start_location));
+                new(current_location) node_data(desc_variable.m_data);
+                current_location += sizeof(node_data);
+            }
+
             for (auto const& node : m_nodes)
             {
                 node::pin_descriptors const pins = node->get_pin_descriptors();

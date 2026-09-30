@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\gcore\script\nodes\variable_nodes.h" />
     <ClInclude Include="src\gcore\script\nodes\matrix_nodes.h" />
     <ClInclude Include="src\grender\nodes\get_input_frame_data_node.h" />
     <ClInclude Include="src\grender\render_script_registration.h" />
@@ -144,6 +145,7 @@
     <ClInclude Include="src\gcore\world.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gcore\script\nodes\variable_nodes.cpp" />
     <ClCompile Include="src\grender\nodes\get_input_frame_data_node.cpp" />
     <ClCompile Include="src\grender\render_script_registration.cpp" />
     <ClCompile Include="src\grender\resources\graphic_script.cpp" />

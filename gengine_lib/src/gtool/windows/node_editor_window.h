@@ -29,6 +29,11 @@ namespace gtool
         ImGuiTextFilter m_filter;
     };
 
+    struct script_variables_widget
+    {
+        void update(gcore::script_descriptor& script_descriptor, gcore::resource_library& library);
+    };
+   
     struct node_editor_window : window
     {
         node_editor_window();
@@ -50,6 +55,7 @@ namespace gtool
 
         node_viewer_widget m_node_viewer;
         create_node_widget m_create_node_widget;
+        script_variables_widget m_variables_widget;
 
         std::vector<resource_info> m_script_infos;
         std::string m_opened_file;

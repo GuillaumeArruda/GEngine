@@ -309,25 +309,6 @@
             "name": "",
             "position": {
                 "x": 1110.0,
-                "y": 96.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::constant_node",
-                "data": {
-                    "node_id": 61,
-                    "value": {
-                        "type_name": "Texture",
-                        "number_of_elements": 1,
-                        "value": "5fe2c0a9741e0d4af143fdc9dc907fd5"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 1110.0,
                 "y": 144.0
             },
             "node": {
@@ -646,6 +627,215 @@
                     }
                 }
             }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1082.0,
+                "y": 96.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 82,
+                    "variable_id": "6ab735fb4dd1da6abec4c023119b926e"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 587.0,
+                "y": 203.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::root_execution_node",
+                "data": {
+                    "node_id": 83,
+                    "connected_inputs": 3
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 311.0,
+                "y": 224.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::set_variable_node",
+                "data": {
+                    "node_id": 84,
+                    "variable_id": "6ab735fb4dd1da6abec4c023119b926e"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 50.0,
+                "y": 222.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::select_node<gcore::resource_handle<grender::texture>>",
+                "data": {
+                    "node_id": 86,
+                    "type_inputs_guaranteed_same_size": true
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -138.0,
+                "y": 270.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 88,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c132741e0d532011d4306dd7bca4"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -138.0,
+                "y": 320.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 89,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "5fe2c0a9741e0d4b307c09fafb716e6a"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -239.0,
+                "y": 159.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::less_node<int>",
+                "data": {
+                    "node_id": 93
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -474.0,
+                "y": 176.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 95,
+                    "value": {
+                        "type_name": "Integer",
+                        "number_of_elements": 1,
+                        "value": 1000
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 305.0,
+                "y": 176.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::set_variable_node",
+                "data": {
+                    "node_id": 96,
+                    "variable_id": "6abd326af082a9a29b432348052eb171"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -179.0,
+                "y": 48.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 98,
+                    "variable_id": "6abd326af082a9a29b432348052eb171"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 81.0,
+                "y": 47.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::add_node<int>",
+                "data": {
+                    "node_id": 99
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -151.0,
+                "y": 96.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 101,
+                    "value": {
+                        "type_name": "Integer",
+                        "number_of_elements": 1,
+                        "value": 1
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -502.0,
+                "y": 118.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 102,
+                    "variable_id": "6abd326af082a9a29b432348052eb171"
+                }
+            }
         }
     ],
     "connections": [
@@ -668,11 +858,6 @@
                     "destination_pin": 1941987014
                 },
                 {
-                    "source": 61,
-                    "source_pin": 1,
-                    "destination_pin": 1530753153
-                },
-                {
                     "source": 62,
                     "source_pin": 1,
                     "destination_pin": -880639002
@@ -681,6 +866,11 @@
                     "source": 63,
                     "source_pin": 1,
                     "destination_pin": -1818423387
+                },
+                {
+                    "source": 82,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
                 }
             ]
         },
@@ -795,6 +985,26 @@
             ]
         },
         {
+            "key": 86,
+            "data": [
+                {
+                    "source": 88,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 89,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 93,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
             "key": 22,
             "data": [
                 {
@@ -840,12 +1050,42 @@
             ]
         },
         {
+            "key": 93,
+            "data": [
+                {
+                    "source": 95,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 102,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
             "key": 33,
             "data": [
                 {
                     "source": 35,
                     "source_pin": 12000,
                     "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 99,
+            "data": [
+                {
+                    "source": 101,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 98,
+                    "source_pin": 1,
+                    "destination_pin": 0
                 }
             ]
         },
@@ -988,6 +1228,61 @@
                     "destination_pin": 0
                 }
             ]
+        },
+        {
+            "key": 84,
+            "data": [
+                {
+                    "source": 86,
+                    "source_pin": 100,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 83,
+            "data": [
+                {
+                    "source": 84,
+                    "source_pin": 2,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 96,
+                    "source_pin": 2,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 96,
+            "data": [
+                {
+                    "source": 99,
+                    "source_pin": 100,
+                    "destination_pin": 1
+                }
+            ]
+        }
+    ],
+    "variables": [
+        {
+            "id": "6ab735fb4dd1da6abec4c023119b926e",
+            "name": "Clothes_Albedo",
+            "data": {
+                "type_name": "Texture",
+                "number_of_elements": 1,
+                "value": "5fe2c0a9741e0d4af143fdc9dc907fd5"
+            }
+        },
+        {
+            "id": "6abd326af082a9a29b432348052eb171",
+            "name": "Frame Counter",
+            "data": {
+                "type_name": "Integer",
+                "number_of_elements": 1,
+                "value": 0
+            }
         }
     ]
 }

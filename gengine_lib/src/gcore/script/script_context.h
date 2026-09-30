@@ -1,7 +1,7 @@
 #pragma once
 
-#include "gtl/span.h"
 #include "gtl/any_map.h"
+#include "gtl/span.h"
 
 #include "gcore/script/node_data.h"
 
@@ -83,17 +83,14 @@ namespace gcore
         template<class Type>
         gtl::span<Type const> read(std::size_t index) const
         {
-            in_pin_data const& data = m_input_data[index];
-            if (data.m_is_optional && data.m_diff_to_node_data == 0)
-                return {};
-
-            if (!data.m_has_been_written || !data.m_is_constant)
+            if (node_data const* input_data = get_input_node_data(index))
             {
-                evaluate_input(data.m_node_index);
-                data.m_has_been_written = true;
+                return input_data->read<Type const>();
             }
-            return m_input_data[index].get_node_data().read<Type const>();
+            return {};
         }
+
+        node_data const* get_input_node_data(std::size_t index) const;
 
         template<class PinDescriptor>
         gtl::span<typename PinDescriptor::type> create_array(std::size_t number_of_elements) const
@@ -120,6 +117,8 @@ namespace gcore
         template<class ContextElement>
         ContextElement* get_in_context();
 
+        node_data* get_variable(gtl::uuid const& id);
+
         friend script;
         friend script_context;
     private:
@@ -137,6 +136,7 @@ namespace gcore
         script_context() = default;
         script_context(script_context const& copy);
         script_context(script_context&& move) noexcept;
+        ~script_context();
 
         script_context& operator=(script_context const& copy);
         script_context& operator=(script_context&& move);
@@ -160,7 +160,12 @@ namespace gcore
             return m_context.get<ContextElement>();
         }
 
+        node_data* get_variable(gtl::uuid const& id);
+
     private:
+        void destroy_variables();
+        void copy_variables(script_context const& copy, char*& location);
+
         script* m_script = nullptr;
         std::unique_ptr<char[]> m_memory_buffer;
         std::vector<node_context> m_node_contexts;

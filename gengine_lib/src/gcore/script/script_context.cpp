@@ -65,6 +65,25 @@ namespace gcore
         return *this;
     }
 
+    node_data const* node_context::get_input_node_data(std::size_t index) const
+    {
+        in_pin_data const& data = m_input_data[index];
+        if (data.m_is_optional && data.m_diff_to_node_data == 0)
+            return nullptr;
+
+        if (!data.m_has_been_written || !data.m_is_constant)
+        {
+            evaluate_input(data.m_node_index);
+            data.m_has_been_written = true;
+        }
+        return &m_input_data[index].get_node_data();
+    }
+
+    node_data* node_context::get_variable(gtl::uuid const& id)
+    {
+        return m_script_context->get_variable(id);
+    }
+
     void node_context::clear()
     {
         for (node_data& data : m_output_data)
@@ -85,6 +104,8 @@ namespace gcore
         
     {
         char* location = m_memory_buffer.get();
+        copy_variables(copy, location);
+        
         m_node_contexts.reserve(copy.m_node_contexts.size());
         for (node_context const& context : copy.m_node_contexts)
         {
@@ -102,6 +123,11 @@ namespace gcore
             context.set_context(this);
     }
 
+    script_context::~script_context()
+    {
+        destroy_variables();
+    }
+
     script_context& script_context::operator=(script_context const& copy)
     {
         if (this == &copy)
@@ -109,10 +135,12 @@ namespace gcore
 
         m_node_contexts.clear();
         m_memory_buffer.reset();
+        destroy_variables();
 
         m_script = copy.m_script;
         m_memory_buffer = std::make_unique<char[]>(m_script->get_necessary_memory_for_context());
         char* location = m_memory_buffer.get();
+        copy_variables(copy, location);
         m_node_contexts.reserve(copy.m_node_contexts.size());
         for (node_context const& context : copy.m_node_contexts)
         {
@@ -127,6 +155,8 @@ namespace gcore
     {
         if (this == &move)
             return *this;
+
+        destroy_variables();
 
         m_node_contexts = std::move(move.m_node_contexts);
         m_memory_buffer = std::move(move.m_memory_buffer);
@@ -173,6 +203,38 @@ namespace gcore
             m_script->get_node(i)->prepare(m_node_contexts[i]);
         }
         m_has_been_prepared = true;
+    }
+
+    node_data* script_context::get_variable(gtl::uuid const& id)
+    {
+        gtl::span<script::variable const> vars = m_script->get_variables();
+        if (auto it = std::find_if(vars.begin(), vars.end(), [&](auto& var) { return var.m_id == id; });
+            it != vars.end())
+        {
+            return reinterpret_cast<node_data*>(m_memory_buffer.get() + it->m_offset);
+        }
+        return nullptr;
+    }
+
+    void script_context::destroy_variables()
+    {
+        if (m_memory_buffer)
+        {
+            char* const start_location = m_memory_buffer.get();
+            for (auto const& var : m_script->get_variables())
+            {
+                reinterpret_cast<node_data*>(start_location + var.m_offset)->~node_data();
+            }
+        }
+    }
+    void script_context::copy_variables(script_context const& copy, char*& location)
+    {
+        for (auto const& var : m_script->get_variables())
+        {
+            char* var_location = copy.m_memory_buffer.get() + var.m_offset;
+            new(location) node_data(*reinterpret_cast<const node_data*>(var_location));
+            location += sizeof(node_data);
+        }
     }
 }
 

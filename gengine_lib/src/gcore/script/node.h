@@ -27,10 +27,11 @@ namespace gcore
 {
     struct node_context;
     struct pin_descriptor;
-    struct alignas(16) node
+    struct alignas(16) node 
     {
         virtual ~node() = default;
 
+        virtual void pre_create(struct script_descriptor&) {}; // Called on node owned by the script descriptor before they are cloned to their final location in the script
         virtual void prepare(node_context&) const {};
         virtual void execute(node_context& context) const = 0;
 
