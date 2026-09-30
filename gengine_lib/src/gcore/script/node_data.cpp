@@ -178,6 +178,11 @@ namespace gcore
         {
             type_name = registry.get_node_data_type(m_type_id).get_name();
         }
+
+        if (!serializer.should_display())
+        {
+            return;
+        }
         
         if (ImGui::BeginCombo("Type", type_name.c_str()))
         {
@@ -222,7 +227,7 @@ namespace gcore
 
         ImGui::SameLine();
 
-        if (ImGui::Button("Remove Element"))
+        if (ImGui::Button("Remove Element") && number_of_elements != 0)
         {
             node_data new_data;
             new_data.m_type_id = m_type_id;
