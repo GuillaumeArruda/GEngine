@@ -18,6 +18,7 @@ namespace gcore
     node_context::node_context(script_context& context, node_context const& copy, char*& memory_location)
         : m_script_context(&context)
     {       
+        m_node_memory = copy.m_node_memory;
         char* const input_beginning = memory_location;
         for (in_pin_data const& input: copy.m_input_data)
         {
@@ -44,6 +45,7 @@ namespace gcore
         : m_script_context(std::move(move.m_script_context))
         , m_output_data(std::move(move.m_output_data))
         , m_input_data(std::move(move.m_input_data))
+        , m_node_memory(std::move(move.m_node_memory))
     {
         move.m_output_data = gtl::span<node_data>();
         move.m_input_data = gtl::span<in_pin_data>();
@@ -58,6 +60,7 @@ namespace gcore
         m_script_context = std::move(move.m_script_context);
         m_output_data = std::move(move.m_output_data);
         m_input_data = std::move(move.m_input_data);
+        m_node_memory = std::move(move.m_node_memory);
 
 
         move.m_output_data = gtl::span<node_data>();

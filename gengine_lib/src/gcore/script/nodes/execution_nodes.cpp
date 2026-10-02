@@ -155,4 +155,30 @@ namespace gcore
         };
         return { inputs, outputs };
     }
+
+    void execute_once_node::prepare(node_context& context) const
+    {
+        context.m_node_memory = false;
+    }
+
+    void execute_once_node::execute(node_context& context) const
+    {
+        if (!std::any_cast<bool>(context.m_node_memory))
+        {
+            context.m_node_memory = true;
+            context.read<in_pin>();
+        }
+    }
+
+    node::pin_descriptors execute_once_node::get_pin_descriptors() const
+    {
+        static pin_descriptor const inputs[] = {
+            in_pin::get("execute"),
+        };
+        static pin_descriptor const outputs[] =
+        {
+            out_pin::get("execute")
+        };
+        return node::pin_descriptors{ inputs, outputs };
+    }
 }

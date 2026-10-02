@@ -119,6 +119,8 @@ namespace gcore
 
         node_data* get_variable(gtl::uuid const& id);
 
+        std::any m_node_memory;
+
         friend script;
         friend script_context;
     private:

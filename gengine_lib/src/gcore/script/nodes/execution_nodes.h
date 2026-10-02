@@ -65,4 +65,20 @@ namespace gcore
 
         node::pin_descriptors get_pin_descriptors() const override;
     };
+
+    struct execute_once_node : node 
+    {
+        GCORE_DECLARE_NODE_TYPE(execute_once_node);
+
+        using in_pin = input_pin_descriptor<execution_pin_data, 0, 1>;
+        using out_pin = output_pin_descriptor<execution_pin_data, 0, 2>;
+
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return false; }
+
+        void prepare(node_context& context) const override;
+        void execute(node_context& context) const override;
+
+        node::pin_descriptors get_pin_descriptors() const override;
+    };
 }

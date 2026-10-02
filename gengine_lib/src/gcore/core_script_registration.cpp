@@ -90,6 +90,7 @@ namespace gcore
         factory.register_type<root_execution_node>("gcore::root_execution_node", "Root Execute");
         factory.register_type<sequence_execution_node>("gcore::sequence_execution_node", "Execute Sequence");
         factory.register_type<select_execution_node>("gcore::select_execution_node", "Select Execution");
+        factory.register_type<execute_once_node>("gcore::execute_once_node", "Execute Once");
 
         factory.register_type<random_integer_range_node>("gcore::random_integer_range_node", "Random Integer In Range");
 
