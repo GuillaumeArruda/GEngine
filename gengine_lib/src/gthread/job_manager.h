@@ -70,7 +70,7 @@ namespace gthread
         void process_job(unsigned i);
         std::atomic<bool> m_stop_flag = false;
         unsigned m_index = 0;
-        std::vector<concurrent_queue<std::function<void()>>> m_job_queues;
+        std::vector<concurrent_queue<std::move_only_function<void()>>> m_job_queues;
         thread_group m_threads;
     };
 }

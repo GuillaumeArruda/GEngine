@@ -249,13 +249,11 @@ namespace gcore
         m_dependency_tracker.on_resource_loaded(*res_to_load);
 
         //small workaround to go around copy requirement of std::function and the inability to go from shared_ptr to unique_ptr
-        m_jobs.submit([res = std::shared_ptr<resource>(res_to_load.release(), [](resource*) {}), this]() mutable
+        m_jobs.submit([res = std::move(res_to_load), this]() mutable
             {
-                assert(res.use_count() == 1);
-                std::unique_ptr<resource> real_owner = std::unique_ptr<resource>(res.get());
-                real_owner->load_async();
+                res->load_async();
                 std::unique_lock lock(m_lock);
-                m_res_to_load_sync.push_back(std::move(real_owner));
+                m_res_to_load_sync.push_back(std::move(res));
             }
         );
     }

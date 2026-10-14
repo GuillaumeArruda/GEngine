@@ -23,7 +23,7 @@ namespace gthread
     {
         try
         {
-            std::function<void()> job;
+            std::move_only_function<void()> job;
             for (std::size_t i = 0; i < m_job_queues.size(); ++i)
                 if (m_job_queues[(i) % m_job_queues.size()].try_dequeue(job)) break;
 
@@ -49,7 +49,7 @@ namespace gthread
         {
             try
             {
-                std::function<void()> job;
+                std::move_only_function<void()> job;
                 for (std::size_t i = 0; i < m_job_queues.size(); ++i)
                     if (m_job_queues[(i + index) % m_job_queues.size()].try_dequeue(job)) break;
 
