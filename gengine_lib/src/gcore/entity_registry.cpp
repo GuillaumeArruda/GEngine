@@ -30,25 +30,34 @@ namespace gcore
 
     void entity_registry::remove_entity(entity entity)
     {
-        if (auto const it = m_entity_to_component.find(entity); 
-            it != m_entity_to_component.end())
+        if (m_use_command_list)
         {
-            for (std::unique_ptr<component>& component : it->second)
+            std::unique_lock lock(m_command_list_lock);
+            m_command_list.emplace_back([entity, this]() { remove_entity(entity); });
+        }
+        else
+        {
+            if (auto const it = m_entity_to_component.find(entity);
+                it != m_entity_to_component.end())
             {
-                remove_component_from_map(entity, component_id(typeid(*component.get())));
+                for (std::unique_ptr<component>& component : it->second)
+                {
+                    remove_component_from_map(entity, component_id(typeid(*component.get())));
+                }
+                std::vector<std::unique_ptr<component>> holder = std::move(it->second);
+                m_entity_to_component.erase(it);
+                warn_group_of_component_removal(entity);
             }
-            std::vector<std::unique_ptr<component>> holder = std::move(it->second);
-            m_entity_to_component.erase(it);
-            warn_group_of_component_removal(entity);
+
+            if (auto loading_it = m_loading_component_entity.find(entity);
+                loading_it != m_loading_component_entity.end())
+            {
+                m_loading_component_entity.erase(loading_it);
+            }
+
+            m_dependency_tracker.remove_entity(entity);
         }
 
-        if (auto loading_it = m_loading_component_entity.find(entity);
-            loading_it != m_loading_component_entity.end())
-        {
-            m_loading_component_entity.erase(loading_it);
-        }
-
-        m_dependency_tracker.remove_entity(entity);
     }
 
     void entity_registry::process(gserializer::serializer& serializer)
@@ -58,19 +67,27 @@ namespace gcore
 
     void entity_registry::remove_component(entity entity, component_id component_type)
     {
-        remove_component_from_map(entity, component_type);
-        std::unique_ptr<component> holder;
-        if (auto it = m_entity_to_component.find(entity);
-            it != m_entity_to_component.end())
+        if (m_use_command_list)
         {
-            auto component_it = std::find_if(it->second.begin(), it->second.end(), [&](std::unique_ptr<component> const& comp) { return component_id(typeid(*comp.get())) == component_type; });
-            if (component_it != it->second.end())
-            {
-                holder = std::move(*component_it);
-                it->second.erase(component_it);
-            }
+            std::unique_lock lock(m_command_list_lock);
+            m_command_list.emplace_back([this, entity, component_type]() { remove_component(entity, component_type); });
         }
-        warn_group_of_component_removal(entity);
+        else
+        {
+            remove_component_from_map(entity, component_type);
+            std::unique_ptr<component> holder;
+            if (auto it = m_entity_to_component.find(entity);
+                it != m_entity_to_component.end())
+            {
+                auto component_it = std::find_if(it->second.begin(), it->second.end(), [&](std::unique_ptr<component> const& comp) { return component_id(typeid(*comp.get())) == component_type; });
+                if (component_it != it->second.end())
+                {
+                    holder = std::move(*component_it);
+                    it->second.erase(component_it);
+                }
+            }
+            warn_group_of_component_removal(entity);
+        }
     }
 
     void entity_registry::add_loaded_component(entity entity, std::unique_ptr<component> component)
@@ -228,46 +245,72 @@ namespace gcore
                 }
                 return loading_info.second.size() == 0;
             });
+
+        for (auto& command : m_command_list)
+        {
+            command();
+        }
+        m_command_list.clear();
+    }
+
+    void entity_registry::use_command_list(bool use_command_list)
+    {
+        m_use_command_list = use_command_list;
     }
 
     void entity_registry::add_components(entity entity, gtl::span<std::unique_ptr<component>> components)
     {
-        bool has_added_component = false;
-        gcore::dependency_gatherer_serializer serializer;
-        for (auto& component : components)
+        if (m_use_command_list)
         {
-            if (component)
+            std::vector<std::unique_ptr<component>> owned_components;
+            owned_components.reserve(components.size());
+            for (auto& comp : components)
             {
-                serializer.m_uuids.clear();
-                serializer.m_files.clear();
-                component->process(serializer);
+                owned_components.emplace_back(std::move(comp));
+            }
 
-                std::vector<resource_handle<resource>> resources;
-                for (gtl::uuid const& res_uuid : serializer.m_uuids)
+            std::unique_lock lock(m_command_list_lock);
+            m_command_list.emplace_back([this, entity, comps = std::move(owned_components)] () mutable { add_components(entity, comps); });
+        }
+        else
+        {
+            bool has_added_component = false;
+            gcore::dependency_gatherer_serializer serializer;
+            for (auto& component : components)
+            {
+                if (component)
                 {
-                    if (resource_handle<resource> res = m_res_library->try_get_resource<resource>(res_uuid))
+                    serializer.m_uuids.clear();
+                    serializer.m_files.clear();
+                    component->process(serializer);
+
+                    std::vector<resource_handle<resource>> resources;
+                    for (gtl::uuid const& res_uuid : serializer.m_uuids)
                     {
-                        resources.push_back(std::move(res));
+                        if (resource_handle<resource> res = m_res_library->try_get_resource<resource>(res_uuid))
+                        {
+                            resources.push_back(std::move(res));
+                        }
+                    }
+
+                    m_dependency_tracker.add_dependencies(entity, component_id(typeid(*component.get())), resources);
+
+                    if (std::all_of(resources.begin(), resources.end(), [](resource_handle<resource> const& res) { return res.is_loaded(); }))
+                    {
+                        has_added_component = true;
+                        add_loaded_component(entity, std::move(component));
+                    }
+                    else
+                    {
+                        m_loading_component_entity[entity].push_back({ std::move(component), std::move(resources) });
                     }
                 }
-
-                m_dependency_tracker.add_dependencies(entity, component_id(typeid(*component.get())), resources);
-
-                if (std::all_of(resources.begin(), resources.end(), [](resource_handle<resource> const& res) { return res.is_loaded(); }))
-                {
-                    has_added_component = true;
-                    add_loaded_component(entity, std::move(component));
-                }
-                else
-                {
-                    m_loading_component_entity[entity].push_back({ std::move(component), std::move(resources) });
-                }
             }
-        }
 
-        if (has_added_component)
-        {
-            warn_group_of_component_addition(entity);
+            if (has_added_component)
+            {
+                warn_group_of_component_addition(entity);
+            }
         }
     }
 

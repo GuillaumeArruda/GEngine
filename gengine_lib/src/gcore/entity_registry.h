@@ -121,6 +121,8 @@ namespace gcore
 
         void clear();
         void update();
+
+        void use_command_list(bool use_command_list);
     private:
         bool has_components(entity entity, gtl::span<component_id const> component_types) const;
         
@@ -151,7 +153,6 @@ namespace gcore
             std::vector<component*> m_components;
         };
         
-
         struct loading_component_info
         {
             std::unique_ptr<component> m_component;
@@ -166,6 +167,9 @@ namespace gcore
         std::shared_ptr<resource_library> m_res_library;
         std::shared_mutex m_lock;
         gtl::callback_id m_resource_reloaded_id;
+        std::mutex m_command_list_lock;
+        std::vector<std::move_only_function<void()>> m_command_list;
+        bool m_use_command_list = false;
     };
 
 

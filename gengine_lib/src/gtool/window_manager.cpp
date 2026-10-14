@@ -79,8 +79,6 @@ namespace gtool
 		m_windows.push_back(std::make_unique<node_editor_window>());
 		m_windows.push_back(std::make_unique<console_window>());
 		m_windows.push_back(std::make_unique<frame_view_window>());
-
-
     }
 
 	window_manager::~window_manager()
@@ -102,7 +100,9 @@ namespace gtool
 			{
 				OPTICK_EVENT("World Update");
 				world.get_time().new_frame();
+				world.get_entity_registry().use_command_list(true);
 				world.m_update_tasks.run_tasks(m_jobs);
+				world.get_entity_registry().use_command_list(false);
 				grender::render_system* render = world.get_system_registry().get_system<grender::render_system>();
 				render->update(world);
 				world.get_resource_library()->update();
