@@ -7,7 +7,7 @@
 
 namespace gthread
 {
-    task::id gthread::task_group::add_task(std::function<void()> function)
+    task::id gthread::task_group::add_task(std::move_only_function<void()> function)
     {
         task::id newId = m_id_generator;
         m_task.emplace_back(m_id_generator++, std::move(function));

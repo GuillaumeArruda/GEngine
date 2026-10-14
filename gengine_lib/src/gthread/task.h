@@ -6,7 +6,7 @@ namespace gthread
     struct task
     {
         using id = std::uint64_t;
-        task(id task_id, std::function<void()> task_function) : m_id(task_id), m_task(std::move(task_function)) {}
+        task(id task_id, std::move_only_function<void()> task_function) : m_id(task_id), m_task(std::move(task_function)) {}
         ~task() = default;
         task(const task&) = delete;
         task(task&&) = default;
@@ -19,7 +19,7 @@ namespace gthread
         bool operator==(id task_id) const noexcept { return m_id == task_id; }
 
     private:
-        std::function<void()> m_task;
+        std::move_only_function<void()> m_task;
         id m_id;
     };
 }

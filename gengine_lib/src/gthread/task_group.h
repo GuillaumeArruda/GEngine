@@ -8,7 +8,7 @@ namespace gthread
     struct latch;
     struct task_group
     {
-        task::id add_task(std::function<void()> function);
+        task::id add_task(std::move_only_function<void()> function);
         void add_parent(task::id child, task::id parent);
        
         void run_tasks(job_manager& job_manager);
