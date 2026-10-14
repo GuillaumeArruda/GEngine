@@ -248,7 +248,6 @@ namespace gcore
         res_to_load->set_library(this);
         m_dependency_tracker.on_resource_loaded(*res_to_load);
 
-        //small workaround to go around copy requirement of std::function and the inability to go from shared_ptr to unique_ptr
         m_jobs.submit([res = std::move(res_to_load), this]() mutable
             {
                 res->load_async();
