@@ -125,6 +125,11 @@ namespace gtool
                     world.get_entity_registry().add_components(entity, components);
                 }
             }
+            ImGui::SameLine();
+            if (ImGui::Button("Unload"))
+            {
+                world.get_entity_registry().clear();
+            }
             ImGui::PopID();
         }
     }
