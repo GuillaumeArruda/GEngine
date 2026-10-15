@@ -18,9 +18,9 @@ namespace gtool
             res_info.m_uuid = uuid_to_file.first;
 
             gserializer::json_read_serializer json_read(uuid_to_file.second.string().c_str());
-            json_read.open_scope("resource", typeid(std::unique_ptr<gcore::resource>));
+            json_read.open_scope("resource", typeid(std::unique_ptr<gcore::resource>), nullptr);
             json_read.process("type_name", res_info.m_resource_type);
-            json_read.open_scope("data", typeid(gcore::resource));
+            json_read.open_scope("data", typeid(gcore::resource), nullptr);
             json_read.process("name", res_info.m_name);
             json_read.close_scope("data");
             json_read.close_scope("resource");

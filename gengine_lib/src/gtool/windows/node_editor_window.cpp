@@ -66,8 +66,8 @@ namespace gtool
         }
 
         gserializer::json_read_serializer json_read(it->second.string().c_str());
-        json_read.open_scope("resource", typeid(std::unique_ptr<gcore::resource>));
-        json_read.open_scope("data", typeid(gcore::resource));
+        json_read.open_scope("resource", typeid(std::unique_ptr<gcore::resource>), nullptr);
+        json_read.open_scope("data", typeid(gcore::resource), nullptr);
         json_read.process("descriptor_file", m_opened_file);
         json_read.close_scope("data");
         json_read.close_scope("resource");

@@ -6,7 +6,7 @@
 
 namespace gtool
 {
-    struct imgui_serializer;
+    void display_node_data(struct imgui_serializer&, void*);
 }
 
 namespace gcore
@@ -94,7 +94,8 @@ namespace gcore
 
         void process(gserializer::serializer& serializer);
     private:
-        void imgui_display(struct gtool::imgui_serializer&);
+        friend void gtool::display_node_data(imgui_serializer&, void*);
+        
         std::size_t get_number_of_elements() const;
         void set_type(node_data_type const* new_node_data_type, std::size_t number_of_elements);
 

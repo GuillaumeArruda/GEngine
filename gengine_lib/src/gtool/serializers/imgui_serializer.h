@@ -31,7 +31,7 @@ namespace gtool
         std::vector<std::size_t> m_array_element_stack;
         bool enum_as_string() const override { return true; }
 
-        void open_scope(const char* name, std::type_index type_index) override;
+        void open_scope(const char* name, std::type_index type_index, void*) override;
         void close_scope(const char* name) override;
 
         void open_array(const char* name, std::size_t& element_count) override;

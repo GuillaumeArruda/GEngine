@@ -7,6 +7,7 @@
 #include "gtl/uuid.h"
 
 #include "gcore/resource_library.h"
+#include "gtool/imgui_serializer_override_libraby.h"
 
 namespace gtool
 {
@@ -107,11 +108,20 @@ namespace gtool
         }
     }
 
-    void imgui_serializer::open_scope(const char* name, std::type_index)
+    void imgui_serializer::open_scope(const char* name, std::type_index type, void* address)
     {
         if (should_display())
         {
-            m_should_display_stack.push_back(ImGui::TreeNodeEx(name, ImGuiTreeNodeFlags_DefaultOpen));
+            if (imgui_serializer_override* over = imgui_serializer_override_library::get().get_override(type);
+                over)
+            {
+                (*over)(*this, address);
+                m_should_display_stack.push_back(false);
+            }
+            else
+            {
+                m_should_display_stack.push_back(ImGui::TreeNodeEx(name, ImGuiTreeNodeFlags_DefaultOpen));
+            }
         }
         else
         {

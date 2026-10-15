@@ -387,6 +387,15 @@
     <ClInclude Include="src\gcore\script\nodes\variable_nodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gtool\imgui_serializer_override_libraby.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gtool\imgui_overrides\core_script_imgui_overrides.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gtool\register_imgui_overrides.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -645,6 +654,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gcore\script\nodes\variable_nodes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gtool\imgui_serializer_override_library.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gtool\imgui_overrides\core_script_imgui_overrides.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gtool\register_imgui_overrides.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

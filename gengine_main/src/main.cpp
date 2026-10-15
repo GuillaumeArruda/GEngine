@@ -23,6 +23,8 @@
 
 #include "optick\optick.h"
 
+#include "gtool/register_imgui_overrides.h"
+
 int main()
 {
     {
@@ -34,6 +36,7 @@ int main()
         grender::register_node_data_type();
         grender::register_node_type();
         gphys::register_node_data_type();
+        gtool::register_imgui_overrides();
 
         gtool::window_manager tool_window_manager;
         std::shared_ptr<gcore::resource_library> lib = std::make_shared<gcore::resource_library>(tool_window_manager.get_window());

@@ -25,7 +25,7 @@ namespace gserializer
         void process(const char* name, gtl::uuid& value) override;
         void process(const char* name, std::filesystem::path& value) override;
         
-        void open_scope(const char*, std::type_index) override {};
+        void open_scope(const char*, std::type_index, void*) override {};
         void close_scope(const char*) override {};
         void open_array(const char* name, std::size_t& element_count) override;
         void close_array(const char* name) override;
@@ -56,7 +56,7 @@ namespace gserializer
         void process(const char* name, gtl::uuid& value) override;
         void process(const char* name, std::filesystem::path& value) override;
 
-        void open_scope(const char*, std::type_index) override {};
+        void open_scope(const char*, std::type_index, void*) override {};
         void close_scope(const char*) override {};
         void open_array(const char* name, std::size_t& element_count) override;
         void close_array(const char*) override {}

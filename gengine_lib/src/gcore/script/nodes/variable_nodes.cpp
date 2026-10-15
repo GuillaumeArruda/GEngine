@@ -20,45 +20,7 @@ namespace gcore
     void variable_node::process(gserializer::serializer& serializer)
     {
         super::process(serializer);
-        if (gtool::imgui_serializer* imgui = dynamic_cast<gtool::imgui_serializer*>(&serializer))
-        {
-            if (auto* descriptor = serializer.get_in_context< std::reference_wrapper<script_descriptor>>())
-            {
-                std::string current_var_name;
-                if (auto it = std::find_if(descriptor->get().m_variables.begin(), descriptor->get().m_variables.end(), [&](auto const& var) { return m_variable_id == var.m_id; });
-                    it != descriptor->get().m_variables.end())
-                {
-                    current_var_name = std::format("{0} - {1}", it->m_name, it->m_id.to_string());
-                }
-                else
-                {
-                    m_variable_id = gtl::uuid();
-                    m_type_id = 0;
-                }
-
-                if (ImGui::BeginCombo("Variable", current_var_name.c_str()))
-                {
-                    for (auto const& variable : descriptor->get().m_variables)
-                    {
-                        std::string const var_name = std::format("{0} - {1}", variable.m_name, variable.m_id.to_string());
-                        bool is_selected = m_variable_id == variable.m_id;
-                        if (ImGui::Selectable(var_name.c_str(), &is_selected))
-                        {
-                            m_variable_id = variable.m_id;
-                            m_type_id = variable.m_data.get_type_id();
-                        }
-
-                        if (is_selected)
-                            ImGui::SetItemDefaultFocus();
-                    }
-                    ImGui::EndCombo();
-                }
-            }
-        }
-        else
-        {
-            serializer.process("variable_id", m_variable_id);
-        }
+        serializer.process("variable_id", m_variable_id);
     }
 
     void get_variable_node::execute(node_context& context) const

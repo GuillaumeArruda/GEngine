@@ -98,7 +98,10 @@
     <ClInclude Include="src\gtl\scope_timer.h" />
     <ClInclude Include="src\gtl\utility.h" />
     <ClInclude Include="src\gtool\common_widgets.h" />
+    <ClInclude Include="src\gtool\imgui_overrides\core_script_imgui_overrides.h" />
+    <ClInclude Include="src\gtool\imgui_serializer_override_libraby.h" />
     <ClInclude Include="src\gtool\importer.h" />
+    <ClInclude Include="src\gtool\register_imgui_overrides.h" />
     <ClInclude Include="src\gtool\utils.h" />
     <ClInclude Include="src\gtool\windows\console_window.h" />
     <ClInclude Include="src\gtool\windows\entity_view_window.h" />
@@ -207,7 +210,10 @@
     <ClCompile Include="src\gserializer\serializers\binary_file_serializer.cpp" />
     <ClCompile Include="src\gtl\scope_timer.cpp" />
     <ClCompile Include="src\gtool\common_widgets.cpp" />
+    <ClCompile Include="src\gtool\imgui_overrides\core_script_imgui_overrides.cpp" />
+    <ClCompile Include="src\gtool\imgui_serializer_override_library.cpp" />
     <ClCompile Include="src\gtool\importer.cpp" />
+    <ClCompile Include="src\gtool\register_imgui_overrides.cpp" />
     <ClCompile Include="src\gtool\utils.cpp" />
     <ClCompile Include="src\gtool\windows\console_window.cpp" />
     <ClCompile Include="src\gtool\windows\entity_view_window.cpp" />

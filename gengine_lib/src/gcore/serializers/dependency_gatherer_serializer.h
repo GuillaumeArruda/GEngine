@@ -35,7 +35,7 @@ namespace gcore
             std::size_t m_size = 0;
         };
         std::vector<array_information> m_array_size_stack;
-        void open_scope(const char*, std::type_index) override {};
+        void open_scope(const char*, std::type_index, void*) override {};
         void close_scope(const char*) override {};
         bool enum_as_string() const override { return false; };
 

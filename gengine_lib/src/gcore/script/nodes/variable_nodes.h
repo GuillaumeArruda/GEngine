@@ -4,6 +4,11 @@
 #include "gcore/script/script_context.h"
 #include "gcore/script/execution_defines.h"
 
+namespace gtool
+{
+    void display_variable_node(struct imgui_serializer&, void*);
+}
+
 namespace gcore
 {
     struct variable_node : node
@@ -15,6 +20,8 @@ namespace gcore
         void pre_create(script_descriptor& descriptor) override;
         void process(gserializer::serializer& serializer) override;
     protected:
+        friend void gtool::display_variable_node(struct imgui_serializer&, void*);
+
         gtl::uuid m_variable_id;
         mutable pin_descriptor m_pin_descriptor;
         node_data_type::id_type m_type_id = 0;

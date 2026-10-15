@@ -3,8 +3,6 @@
 #include <stdafx.h>
 
 #include "gcore/script/node_data.h"
-#include "gtool/serializers/imgui_serializer.h"
-#include "imgui/imgui.h"
 
 namespace gcore
 {
@@ -88,12 +86,6 @@ namespace gcore
 
     void node_data::process(gserializer::serializer& serializer)
     {
-        if (gtool::imgui_serializer* imgui_serializer = dynamic_cast<gtool::imgui_serializer*>(&serializer))
-        {
-            imgui_display(*imgui_serializer);
-            return;
-        }
-
         std::string type_name;
         if (m_type_id != node_data_type::invalid_id)
         {
@@ -168,73 +160,6 @@ namespace gcore
             m_pointer_info.m_number_of_elements = copy.m_pointer_info.m_number_of_elements;
         }
         return *this;
-    }
-
-    void node_data::imgui_display(gtool::imgui_serializer& serializer)
-    {
-        auto& registry = node_data_type_registry::get();
-        std::string type_name;
-        if (m_type_id != node_data_type::invalid_id)
-        {
-            type_name = registry.get_node_data_type(m_type_id).get_name();
-        }
-
-        if (!serializer.should_display())
-        {
-            return;
-        }
-        
-        if (ImGui::BeginCombo("Type", type_name.c_str()))
-        {
-            for (auto const& node_data_type : registry.get_node_data_types())
-            {
-                bool is_selected = type_name == node_data_type.get_name();
-                if (ImGui::Selectable(node_data_type.get_name().c_str(), &is_selected))
-                    type_name = node_data_type.get_name();
-
-                if (is_selected)
-                    ImGui::SetItemDefaultFocus();
-            }
-            ImGui::EndCombo();
-        }
-
-        node_data_type const* new_node_type = registry.get_by_name(type_name);
-        if (!new_node_type)
-        {
-            clear();
-            return;
-        }
-        set_type(new_node_type, get_number_of_elements());
-
-        if (m_is_inline)
-        {
-            new_node_type->m_vtable.m_process(serializer, m_inline_info.m_buffer, 1);
-        }
-        else
-        {
-            new_node_type->m_vtable.m_process(serializer, m_pointer_info.m_pointer_to_data, m_pointer_info.m_number_of_elements);
-        }
-
-        size_t number_of_elements = get_number_of_elements();
-        if (ImGui::Button("Create Element"))
-        {
-            node_data new_data;
-            new_data.m_type_id = m_type_id;
-            void* array = new_data.create_array_internal(number_of_elements + 1);
-            new_node_type->m_vtable.m_move_over_elements(m_is_inline ? m_inline_info.m_buffer : m_pointer_info.m_pointer_to_data, array, number_of_elements);
-            (*this) = std::move(new_data);
-        }
-
-        ImGui::SameLine();
-
-        if (ImGui::Button("Remove Element") && number_of_elements != 0)
-        {
-            node_data new_data;
-            new_data.m_type_id = m_type_id;
-            void* array = new_data.create_array_internal(number_of_elements - 1);
-            new_node_type->m_vtable.m_move_over_elements(m_is_inline ? m_inline_info.m_buffer : m_pointer_info.m_pointer_to_data, array, number_of_elements - 1);
-            (*this) = std::move(new_data);
-        }
     }
 
     std::size_t node_data::get_number_of_elements() const
