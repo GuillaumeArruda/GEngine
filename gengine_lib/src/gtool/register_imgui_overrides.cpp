@@ -12,5 +12,6 @@ namespace gtool
         library.add_override<gcore::node_data>(&gtool::display_node_data);
         library.add_override<gcore::get_variable_node>(&gtool::display_variable_node);
         library.add_override<gcore::set_variable_node>(&gtool::display_variable_node);
+        library.add_override<gcore::script_descriptor::node_descriptor>(&gtool::display_node_descriptor);
     }
 }

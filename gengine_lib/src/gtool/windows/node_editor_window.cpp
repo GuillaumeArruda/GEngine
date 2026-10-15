@@ -489,7 +489,7 @@ namespace gtool
                 gtool::imgui_serializer serializer("Node Data");
                 serializer.set_in_context(std::ref(library));
                 serializer.set_in_context(std::ref(script_descriptor));
-                it->process(serializer);
+                serializer.process("Node", *it);
                 ImGui::PopID();
             }
         }

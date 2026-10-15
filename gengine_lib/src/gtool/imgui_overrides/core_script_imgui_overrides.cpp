@@ -114,4 +114,14 @@ namespace gtool
             }
         }
     }
+
+    void display_node_descriptor(imgui_serializer& serializer, void* address)
+    {
+        gcore::script_descriptor::node_descriptor& data = *static_cast<gcore::script_descriptor::node_descriptor*>(address);
+        serializer.process("name", data.m_name);
+        if (data.m_node)
+        {
+            serializer.process("data", *data.m_node);
+        }
+    }
 }
