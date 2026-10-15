@@ -15,7 +15,7 @@
 #include "gcore/world.h"
 #include "gcore/resource_library.h"
 
-#include "grender/serializers/imgui_serializer.h"
+#include "gtool/serializers/imgui_serializer.h"
 
 namespace gtool
 {
@@ -66,8 +66,8 @@ namespace gtool
         }
 
         gserializer::json_read_serializer json_read(it->second.string().c_str());
-        json_read.open_scope("resource");
-        json_read.open_scope("data");
+        json_read.open_scope("resource", typeid(std::unique_ptr<gcore::resource>));
+        json_read.open_scope("data", typeid(gcore::resource));
         json_read.process("descriptor_file", m_opened_file);
         json_read.close_scope("data");
         json_read.close_scope("resource");
@@ -486,7 +486,7 @@ namespace gtool
             if (it != script_descriptor.m_nodes.end())
             {
                 ImGui::PushID(m_node_id);
-                grender::imgui_serializer serializer("Node Data");
+                gtool::imgui_serializer serializer("Node Data");
                 serializer.set_in_context(std::ref(library));
                 serializer.set_in_context(std::ref(script_descriptor));
                 it->process(serializer);
@@ -537,7 +537,7 @@ namespace gtool
     {
         if (ImGui::Begin("Variables Editor"))
         {
-            grender::imgui_serializer serializer("Variables");
+            gtool::imgui_serializer serializer("Variables");
             serializer.set_in_context(std::ref(library));
             serializer.process("Variables", script_descriptor.m_variables, "Variable");
         }

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "grender/serializers/imgui_serializer.h"
+#include "gtool/serializers/imgui_serializer.h"
 
 #include <imgui/imgui.h>
 #include "imgui/imgui_stdlib.h"
@@ -8,7 +8,7 @@
 
 #include "gcore/resource_library.h"
 
-namespace grender
+namespace gtool
 {
     imgui_serializer::imgui_serializer(const char* node_name)
     {
@@ -107,7 +107,7 @@ namespace grender
         }
     }
 
-    void imgui_serializer::open_scope(const char* name)
+    void imgui_serializer::open_scope(const char* name, std::type_index)
     {
         if (should_display())
         {

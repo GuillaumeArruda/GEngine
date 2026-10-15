@@ -14,7 +14,7 @@ namespace gserializer
     struct serializer;
 }
 
-#define GCORE_ENABLE_HEAVY_SCRIPT_PROFILE() 1
+#define GCORE_ENABLE_HEAVY_SCRIPT_PROFILE() 0
 
 namespace gcore
 {

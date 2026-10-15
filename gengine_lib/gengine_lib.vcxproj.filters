@@ -129,7 +129,7 @@
     <ClInclude Include="src\grender\resources\program.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\grender\serializers\imgui_serializer.h">
+    <ClInclude Include="src\gtool\serializers\imgui_serializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\gcore\components\transform_component.h">
@@ -434,7 +434,7 @@
     <ClCompile Include="src\grender\resources\program.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\grender\serializers\imgui_serializer.cpp">
+    <ClCompile Include="src\gtool\serializers\imgui_serializer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gcore\components\transform_component.cpp">

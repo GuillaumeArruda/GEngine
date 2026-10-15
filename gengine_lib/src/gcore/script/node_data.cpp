@@ -3,7 +3,7 @@
 #include <stdafx.h>
 
 #include "gcore/script/node_data.h"
-#include "grender/serializers/imgui_serializer.h"
+#include "gtool/serializers/imgui_serializer.h"
 #include "imgui/imgui.h"
 
 namespace gcore
@@ -88,7 +88,7 @@ namespace gcore
 
     void node_data::process(gserializer::serializer& serializer)
     {
-        if (grender::imgui_serializer* imgui_serializer = dynamic_cast<grender::imgui_serializer*>(&serializer))
+        if (gtool::imgui_serializer* imgui_serializer = dynamic_cast<gtool::imgui_serializer*>(&serializer))
         {
             imgui_display(*imgui_serializer);
             return;
@@ -170,7 +170,7 @@ namespace gcore
         return *this;
     }
 
-    void node_data::imgui_display(grender::imgui_serializer& serializer)
+    void node_data::imgui_display(gtool::imgui_serializer& serializer)
     {
         auto& registry = node_data_type_registry::get();
         std::string type_name;

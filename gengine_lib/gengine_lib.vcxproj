@@ -116,7 +116,7 @@
     <ClInclude Include="src\grender\components\graphic_component.h" />
     <ClInclude Include="src\grender\resources\mesh_resource.h" />
     <ClInclude Include="src\grender\resources\program.h" />
-    <ClInclude Include="src\grender\serializers\imgui_serializer.h" />
+    <ClInclude Include="src\gtool\serializers\imgui_serializer.h" />
     <ClInclude Include="src\grender\systems\render_system.h" />
     <ClInclude Include="src\grender\utils.h" />
     <ClInclude Include="src\gserializer\enum.h" />
@@ -215,7 +215,7 @@
     <ClCompile Include="src\grender\components\graphic_component.cpp" />
     <ClCompile Include="src\grender\resources\mesh_resource.cpp" />
     <ClCompile Include="src\grender\resources\program.cpp" />
-    <ClCompile Include="src\grender\serializers\imgui_serializer.cpp" />
+    <ClCompile Include="src\gtool\serializers\imgui_serializer.cpp" />
     <ClCompile Include="src\grender\systems\render_system.cpp" />
     <ClCompile Include="src\gserializer\gmath_serialization.cpp" />
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp" />

@@ -41,7 +41,7 @@ namespace gserializer
     {
         struct scope
         {
-            scope(const char* name, serializer& serializer) : m_name(name), m_serializer(serializer) { serializer.open_scope(m_name); };
+            scope(const char* name, std::type_index type_index, serializer& serializer) : m_name(name), m_serializer(serializer) { serializer.open_scope(m_name, type_index); };
             ~scope() { m_serializer.close_scope(m_name); }
             const char* m_name;
             serializer& m_serializer;
@@ -80,7 +80,7 @@ namespace gserializer
             }
             else
             {
-                scope s(name, *this);
+                scope s(name, typeid(TypeToSerialize), *this);
                 process(*this, value, std::forward<ExtraType>(extras)...);
             }
         }
@@ -124,7 +124,7 @@ namespace gserializer
             return m_context.get<ContextElement>();
         }
 
-        virtual void open_scope(const char* name) = 0;
+        virtual void open_scope(const char* name, std::type_index scope_type) = 0;
         virtual void close_scope(const char* name) = 0;
         virtual bool enum_as_string() const = 0;
 

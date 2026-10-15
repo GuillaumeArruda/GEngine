@@ -19,7 +19,7 @@
 #include "gcore/world.h"
 #include "gcore/resource_library.h"
 
-#include "grender/serializers/imgui_serializer.h"
+#include "gtool/serializers/imgui_serializer.h"
 #include "grender/components/camera_component.h"
 #include "grender/systems/render_system.h"
 
@@ -55,7 +55,7 @@ namespace gtool
             m_create_component_combo.draw("Create Component Type");
 
             {
-                grender::imgui_serializer serializer("Current Components");
+                gtool::imgui_serializer serializer("Current Components");
                 serializer.set_in_context(std::ref(*world.get_resource_library()));
                 serializer.process("Components", m_components, "Component", gcore::component::factory());
             }
@@ -184,7 +184,7 @@ namespace gtool
             {
                 m_component_combo_box.draw("Component Type");
 
-                grender::imgui_serializer serializer("Current Components");
+                gtool::imgui_serializer serializer("Current Components");
                 serializer.set_in_context(std::ref(*world.get_resource_library()));
                 gtl::span<std::unique_ptr<gcore::component>> components = world.get_entity_registry().see_components(entity);
                 serializer.process("Components", components, "Component", gcore::component::factory());

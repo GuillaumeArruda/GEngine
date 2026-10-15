@@ -79,7 +79,7 @@ rapidjson::Value& gserializer::json_write_serializer::stack_top()
     return m_stack.back().get();
 }
 
-void gserializer::json_write_serializer::open_scope(const char* name)
+void gserializer::json_write_serializer::open_scope(const char* name, std::type_index)
 {
     create_and_add_stack_value(name, rapidjson::kObjectType);
 }
@@ -260,7 +260,7 @@ rapidjson::Value& gserializer::json_read_serializer::stack_top()
     return m_stack.back().get();
 }
 
-void gserializer::json_read_serializer::open_scope(const char* name)
+void gserializer::json_read_serializer::open_scope(const char* name, std::type_index)
 {
     create_and_add_stack_value(name, rapidjson::kObjectType);
 }

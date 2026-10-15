@@ -4,7 +4,7 @@
 
 #include <GL/glew.h>
 
-#define GLCHECKERROR 1
+#define GLCHECKERROR 0
 namespace grender
 {
 #if GLCHECKERROR

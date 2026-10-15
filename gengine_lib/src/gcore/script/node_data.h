@@ -4,7 +4,7 @@
 
 #include "gcore/script/node_data_type.h"
 
-namespace grender
+namespace gtool
 {
     struct imgui_serializer;
 }
@@ -24,7 +24,6 @@ namespace gcore
         template<class Type>
         gtl::span<Type const> read() const
         {
-            assert(m_type_id == node_data_type_registry::get_type_id<Type>());
             if (m_type_id == node_data_type_registry::get_type_id<Type>())
             {
                 if (m_is_inline)
@@ -95,7 +94,7 @@ namespace gcore
 
         void process(gserializer::serializer& serializer);
     private:
-        void imgui_display(struct grender::imgui_serializer&);
+        void imgui_display(struct gtool::imgui_serializer&);
         std::size_t get_number_of_elements() const;
         void set_type(node_data_type const* new_node_data_type, std::size_t number_of_elements);
 

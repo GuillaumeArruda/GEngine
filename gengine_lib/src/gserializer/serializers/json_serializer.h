@@ -25,7 +25,7 @@ namespace gserializer
 
         void write_to_file(const char* file);
 
-        void open_scope(const char* name) override;
+        void open_scope(const char* name, std::type_index) override;
         void close_scope(const char* name) override;
         bool enum_as_string() const override { return true; }
 
@@ -59,7 +59,7 @@ namespace gserializer
         void process(const char* name, std::filesystem::path& value) override;
 
 
-        void open_scope(const char* name) override;
+        void open_scope(const char* name, std::type_index) override;
         void close_scope(const char* name) override;
         bool enum_as_string() const override { return true; }
 

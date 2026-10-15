@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "gcore/script/nodes/variable_nodes.h"
-#include "grender/serializers/imgui_serializer.h"
+#include "gtool/serializers/imgui_serializer.h"
 
 #include <imgui/imgui.h>
 
@@ -20,7 +20,7 @@ namespace gcore
     void variable_node::process(gserializer::serializer& serializer)
     {
         super::process(serializer);
-        if (grender::imgui_serializer* imgui = dynamic_cast<grender::imgui_serializer*>(&serializer))
+        if (gtool::imgui_serializer* imgui = dynamic_cast<gtool::imgui_serializer*>(&serializer))
         {
             if (auto* descriptor = serializer.get_in_context< std::reference_wrapper<script_descriptor>>())
             {

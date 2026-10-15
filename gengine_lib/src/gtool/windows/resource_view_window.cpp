@@ -14,7 +14,7 @@
 #include "gcore/world.h"
 #include "gcore/resource_library.h"
 
-#include "grender/serializers/imgui_serializer.h"
+#include "gtool/serializers/imgui_serializer.h"
 
 #include "gtool/importer.h"
 
@@ -75,7 +75,7 @@ namespace gtool
                 if (m_resource = library.get_resource<gcore::resource>(uid))
                 {
                     std::unique_ptr<gcore::resource> s(m_resource.get());
-                    grender::imgui_serializer serializer("Resource");
+                    gtool::imgui_serializer serializer("Resource");
                     serializer.process("Resource", s, gcore::resource::factory());
                     if (ImGui::Button("Save"))
                     {
