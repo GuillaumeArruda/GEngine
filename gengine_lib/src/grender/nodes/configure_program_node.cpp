@@ -62,26 +62,36 @@ namespace grender
 
     void configure_program_node::set_state_at_index(gcore::node_context& context, program_uniform_state& state, std::size_t index) const
     {
+        if (state.get_uniform_number() <= index)
+        {
+            return;
+        }
+
+        auto read_or_get_default_value = [&]<class T>() {
+            gtl::span<T const> value = context.read<T>(index);
+            return value.size() > 0 ? value[0] : T(0);
+        };
+
         switch (state.get_type_at_index(index))
         {
-        case uniform_variant::type::glbool:         state.set_uniform(static_cast<GLint>(index), context.read<bool>(index)[0]); break;
-        case uniform_variant::type::glint:          state.set_uniform(static_cast<GLint>(index), context.read<int>(index)[0]); break;
-        case uniform_variant::type::glfloat:        state.set_uniform(static_cast<GLint>(index), context.read<float>(index)[0]); break;
-        case uniform_variant::type::bvec2:          state.set_uniform(static_cast<GLint>(index), context.read<glm::bvec2>(index)[0]); break;
-        case uniform_variant::type::bvec3:          state.set_uniform(static_cast<GLint>(index), context.read<glm::bvec3>(index)[0]); break;
-        case uniform_variant::type::bvec4:          state.set_uniform(static_cast<GLint>(index), context.read<glm::bvec4>(index)[0]); break;
-        case uniform_variant::type::ivec2:          state.set_uniform(static_cast<GLint>(index), context.read<glm::ivec2>(index)[0]); break;
-        case uniform_variant::type::ivec3:          state.set_uniform(static_cast<GLint>(index), context.read<glm::ivec3>(index)[0]); break;
-        case uniform_variant::type::ivec4:          state.set_uniform(static_cast<GLint>(index), context.read<glm::ivec4>(index)[0]); break;
-        case uniform_variant::type::vec2:           state.set_uniform(static_cast<GLint>(index), context.read<glm::vec2>(index)[0]); break;
-        case uniform_variant::type::vec3:           state.set_uniform(static_cast<GLint>(index), context.read<glm::vec3>(index)[0]); break;
-        case uniform_variant::type::vec4:           state.set_uniform(static_cast<GLint>(index), context.read<glm::vec4>(index)[0]); break;
-        case uniform_variant::type::mat33:          state.set_uniform(static_cast<GLint>(index), context.read<glm::mat3>(index)[0]); break;
-        case uniform_variant::type::mat44:          state.set_uniform(static_cast<GLint>(index), context.read<glm::mat4>(index)[0]); break;
-        case uniform_variant::type::sampler_1d:     state.set_uniform(static_cast<GLint>(index), uniform_variant(context.read<gcore::resource_handle<texture>>(index)[0], uniform_variant::type::sampler_1d)); break;
-        case uniform_variant::type::sampler_2d:     state.set_uniform(static_cast<GLint>(index), uniform_variant(context.read<gcore::resource_handle<texture>>(index)[0], uniform_variant::type::sampler_2d)); break;
-        case uniform_variant::type::sampler_3d:     state.set_uniform(static_cast<GLint>(index), uniform_variant(context.read<gcore::resource_handle<texture>>(index)[0], uniform_variant::type::sampler_3d)); break;
-        case uniform_variant::type::sampler_cube:   state.set_uniform(static_cast<GLint>(index), uniform_variant(context.read<gcore::resource_handle<texture>>(index)[0], uniform_variant::type::sampler_cube)); break;
+        case uniform_variant::type::glbool:         state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<bool>()); break;
+        case uniform_variant::type::glint:          state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<int>()); break;
+        case uniform_variant::type::glfloat:        state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<float>()); break;
+        case uniform_variant::type::bvec2:          state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::bvec2>()); break;
+        case uniform_variant::type::bvec3:          state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::bvec3>()); break;
+        case uniform_variant::type::bvec4:          state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::bvec4>()); break;
+        case uniform_variant::type::ivec2:          state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::ivec2>()); break;
+        case uniform_variant::type::ivec3:          state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::ivec3>()); break;
+        case uniform_variant::type::ivec4:          state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::ivec4>()); break;
+        case uniform_variant::type::vec2:           state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::vec2>()); break;
+        case uniform_variant::type::vec3:           state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::vec3>()); break;
+        case uniform_variant::type::vec4:           state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::vec4>()); break;
+        case uniform_variant::type::mat33:          state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::mat3>()); break;
+        case uniform_variant::type::mat44:          state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::mat4>()); break;
+        case uniform_variant::type::sampler_1d:     state.set_uniform(static_cast<GLint>(index), uniform_variant(read_or_get_default_value.operator()<gcore::resource_handle<texture>>(), uniform_variant::type::sampler_1d)); break;
+        case uniform_variant::type::sampler_2d:     state.set_uniform(static_cast<GLint>(index), uniform_variant(read_or_get_default_value.operator()<gcore::resource_handle<texture>>(), uniform_variant::type::sampler_2d)); break;
+        case uniform_variant::type::sampler_3d:     state.set_uniform(static_cast<GLint>(index), uniform_variant(read_or_get_default_value.operator()<gcore::resource_handle<texture>>(), uniform_variant::type::sampler_3d)); break;
+        case uniform_variant::type::sampler_cube:   state.set_uniform(static_cast<GLint>(index), uniform_variant(read_or_get_default_value.operator()<gcore::resource_handle<texture>>(), uniform_variant::type::sampler_cube)); break;
         default:
             assert(false); // Unsupported data type
         }

@@ -297,7 +297,13 @@ namespace gcore
 
                 for (script_descriptor::connection const& connection : input_node_connections)
                 {
-                    int const in_pin_index = std::find(input_pin_descriptors.begin(), input_pin_descriptors.end(), connection.m_destination_pin_id)->m_index;
+                    auto input_pin_it = std::find(input_pin_descriptors.begin(), input_pin_descriptors.end(), connection.m_destination_pin_id);
+                    if (input_pin_it == input_pin_descriptors.end())
+                    {
+                        continue;
+                    }
+
+                    int const in_pin_index = input_pin_it->m_index;
                     in_pin_data& input_data = input_context.m_input_data[in_pin_index];
 
                     int const output_index = node_id_to_node_index.find(connection.m_source_id)->second;
