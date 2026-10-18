@@ -22,6 +22,7 @@
 #include "gtool/serializers/imgui_serializer.h"
 #include "grender/components/camera_component.h"
 #include "grender/systems/render_system.h"
+#include "grender/systems/debug_render_system.h"
 
 #include "gserializer/serializers/binary_file_serializer.h"
 
@@ -174,12 +175,37 @@ namespace gtool
             }
         }
 
+        gcore::entity const entity = gtl::uuid::from_string(m_uuid);
+        if (auto debug_render = world.get_system_registry().get_system<grender::debug_render_system>())
+        {
+            auto [transform_comp, extent_comp] = world.get_entity_registry().get_components<gcore::transform_component, gcore::extent_component>(entity);
+            if (transform_comp && extent_comp)
+            {
+                gmath::transform<gcore::world_space, gcore::model_space> const t(transform_comp->m_transform);
+                gmath::axis_aligned_box<gcore::world_space> const extent = t * extent_comp->m_extent;
+                glm::vec4 const min = static_cast<glm::vec4>(extent.min());
+                glm::vec4 const max = static_cast<glm::vec4>(extent.max());
+
+                debug_render->draw_line(min, glm::vec3(min[0], min[1], max[2]));
+                debug_render->draw_line(min, glm::vec3(min[0], max[1], min[2]));
+                debug_render->draw_line(min, glm::vec3(max[0], min[1], min[2]));
+                debug_render->draw_line(max, glm::vec3(max[0], max[1], min[2]));
+                debug_render->draw_line(max, glm::vec3(max[0], min[1], max[2]));
+                debug_render->draw_line(max, glm::vec3(min[0], max[1], max[2]));
+                debug_render->draw_line(glm::vec3(min[0], min[1], max[2]), glm::vec3(max[0], min[1], max[2]));
+                debug_render->draw_line(glm::vec3(min[0], min[1], max[2]), glm::vec3(min[0], max[1], max[2]));
+                debug_render->draw_line(glm::vec3(min[0], max[1], min[2]), glm::vec3(min[0], max[1], max[2]));
+                debug_render->draw_line(glm::vec3(max[0], max[1], min[2]), glm::vec3(min[0], max[1], min[2]));
+                debug_render->draw_line(glm::vec3(max[0], min[1], min[2]), glm::vec3(max[0], max[1], min[2]));
+                debug_render->draw_line(glm::vec3(max[0], min[1], min[2]), glm::vec3(max[0], min[1], max[2]));
+            }
+        }
+
         if (ImGui::CollapsingHeader("Selected Entity"))
         {
             ImGui::PushID("Selected Entity");
             ImGui::InputText("UUID", &m_uuid);
             
-            gcore::entity const entity = gtl::uuid::from_string(m_uuid);
             if (world.get_entity_registry().has_any_component(entity))
             {
                 m_component_combo_box.draw("Component Type");

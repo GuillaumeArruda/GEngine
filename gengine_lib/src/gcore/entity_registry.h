@@ -94,7 +94,7 @@ namespace gcore
             else
             {
                 return std::tuple<typename details::component_type_info<ComponentType>::component_type*...>{ 
-                    gtl::cast<typename details::component_type_info<ComponentType>::component_type*>(get_component(entity, details::component_type_info<ComponentType>::type_id)... )};
+                    gtl::cast<typename details::component_type_info<ComponentType>::component_type*>(get_component(entity, details::component_type_info<ComponentType>::type_id))... };
             }
         }
 
