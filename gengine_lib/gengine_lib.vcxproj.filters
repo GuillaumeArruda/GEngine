@@ -396,6 +396,9 @@
     <ClInclude Include="src\gtool\register_imgui_overrides.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gcore\script\script_runner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -663,6 +666,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gtool\register_imgui_overrides.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gcore\script\script_runner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

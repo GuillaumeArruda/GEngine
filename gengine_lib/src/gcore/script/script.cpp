@@ -139,6 +139,8 @@ namespace gcore
         serializer.process("id", m_id);
         serializer.process("name", m_name);
         serializer.process("data", m_data);
+        serializer.process("is_input", m_is_input);
+        serializer.process("is_constant", m_is_constant);
     }
 
     script::~script() = default;
@@ -147,11 +149,11 @@ namespace gcore
     {
         gserializer::json_read_serializer serializer(m_descriptor_path.string().c_str());
         serializer.set_in_context(std::ref(*m_library));
-        script_descriptor descriptor;
-        descriptor.process(serializer);
+        m_descriptor = script_descriptor();
+        m_descriptor.process(serializer);
 
         dependency_gatherer_serializer gatherer(true);
-        descriptor.process(gatherer);
+        m_descriptor.process(gatherer);
 
         std::vector<resource_handle<resource>> resources;
         for (gtl::uuid const& uuid : gatherer.m_uuids)
@@ -167,9 +169,9 @@ namespace gcore
         m_library->get_dependency_tracker().add_dependencies(get_uuid(), gatherer.m_uuids, gatherer.m_files);
         ensure_all_dependant_resources_loaded(resources);
 
-        for (auto& node : descriptor.m_nodes)
+        for (auto& node : m_descriptor.m_nodes)
         {
-            node.m_node->pre_create(descriptor);
+            node.m_node->pre_create(m_descriptor);
         }
 
         std::size_t node_memory_to_allocate = 0;
@@ -179,17 +181,17 @@ namespace gcore
 
         gcore::node_id_t id_generator = 0;
         std::unordered_map<node_id_t, int> node_id_to_node_index;
-        for (std::size_t i = 0; i < descriptor.m_nodes.size(); ++i)
+        for (std::size_t i = 0; i < m_descriptor.m_nodes.size(); ++i)
         {
-            id_generator = std::max(id_generator, descriptor.m_nodes[i].m_node->get_node_id());
-            auto success = node_id_to_node_index.insert(std::pair(descriptor.m_nodes[i].m_node->get_node_id(), static_cast<int>(i)));
+            id_generator = std::max(id_generator, m_descriptor.m_nodes[i].m_node->get_node_id());
+            auto success = node_id_to_node_index.insert(std::pair(m_descriptor.m_nodes[i].m_node->get_node_id(), static_cast<int>(i)));
             assert(success.second);
         }
 
         id_generator++; // All node id are guaranteed to be smaller than this
 
         //Compute how much memory is necessary to allocate for the graph and context
-        for (auto const& node : descriptor.m_nodes)
+        for (auto const& node : m_descriptor.m_nodes)
         {
             node_memory_to_allocate += node.m_node->byte_size();
 
@@ -199,7 +201,7 @@ namespace gcore
             number_of_output_to_allocate += pins[gtl::to_underlying(pin_type::output)].size();
             
             //Make sure all inputs are connected to a node, if not create a constant node and add a connection
-            std::vector<script_descriptor::connection>& node_connections = descriptor.m_connections[node.m_node->get_node_id()];
+            std::vector<script_descriptor::connection>& node_connections = m_descriptor.m_connections[node.m_node->get_node_id()];
             for (gcore::pin_descriptor const& input_descriptor : pins[gtl::to_underlying(pin_type::input)])
             {
                 auto const it = std::find_if(node_connections.begin(), node_connections.end(), [&](script_descriptor::connection const& connection) { return connection.m_destination_pin_id == input_descriptor.m_id; });
@@ -209,7 +211,7 @@ namespace gcore
                     std::unique_ptr<constant_node>& constant = new_constant_node.back();
                     constant->set_node_id(id_generator++);
                     constant->get_node_data().set_type_id(input_descriptor.m_type_id);
-                    auto success = node_id_to_node_index.insert(std::pair(constant->get_node_id(), static_cast<int>(descriptor.m_nodes.size() + new_constant_node.size()) - 1));
+                    auto success = node_id_to_node_index.insert(std::pair(constant->get_node_id(), static_cast<int>(m_descriptor.m_nodes.size() + new_constant_node.size()) - 1));
                     node_memory_to_allocate += constant->byte_size();
                     assert(success.second);
 
@@ -226,8 +228,8 @@ namespace gcore
         {
             m_node_buffer = std::make_unique<char[]>(node_memory_to_allocate);
             char* current_location = m_node_buffer.get();
-            m_nodes.reserve(descriptor.m_nodes.size());
-            for (auto const& node : descriptor.m_nodes)
+            m_nodes.reserve(m_descriptor.m_nodes.size());
+            for (auto const& node : m_descriptor.m_nodes)
             {
                 m_nodes.push_back(node.m_node->clone(static_cast<void*>(current_location)));
                 current_location += node.m_node->byte_size();
@@ -245,14 +247,14 @@ namespace gcore
 
         // Create input output structure of the default context
         {
-            const std::size_t number_of_bytes_for_variables = descriptor.m_variables.size() * sizeof(node_data);
+            const std::size_t number_of_bytes_for_variables = m_descriptor.m_variables.size() * sizeof(node_data);
             m_number_of_bytes_for_context = number_of_bytes_for_variables + number_of_input_to_allocate * sizeof(in_pin_data) + number_of_output_to_allocate * sizeof(node_data);
             m_default_script_context = std::make_unique<script_context>();
             m_default_script_context->m_script = this;
             m_default_script_context->m_memory_buffer = std::make_unique<char[]>(m_number_of_bytes_for_context);
             char* const start_location = m_default_script_context->m_memory_buffer.get();
             char* current_location = start_location;
-            for (auto const& desc_variable : descriptor.m_variables)
+            for (auto const& desc_variable : m_descriptor.m_variables)
             {
                 m_variables.emplace_back( desc_variable.m_id, static_cast<std::ptrdiff_t>(current_location - start_location));
                 new(current_location) node_data(desc_variable.m_data);
@@ -288,8 +290,8 @@ namespace gcore
                 node const& input_node = *m_nodes[i];
                 gtl::span<pin_descriptor const> input_pin_descriptors = input_node.get_pin_descriptors()[gtl::to_underlying(pin_type::input)];
                 node_context& input_context = m_default_script_context->m_node_contexts[i];
-                auto const it = descriptor.m_connections.find(input_node.get_node_id());
-                if (it == descriptor.m_connections.end())
+                auto const it = m_descriptor.m_connections.find(input_node.get_node_id());
+                if (it == m_descriptor.m_connections.end())
                 {
                     continue;
                 }

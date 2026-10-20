@@ -45,6 +45,8 @@ namespace gcore
             node_data m_data;
             gtl::uuid m_id = gtl::uuid::generate();
             std::string m_name;
+            bool m_is_constant = false;
+            bool m_is_input = false;
             void process(gserializer::serializer& serializer);
         };
 
@@ -67,6 +69,8 @@ namespace gcore
 
     struct script : resource
     {
+        using context = script_context;
+
         ~script();
 
         struct variable
@@ -92,6 +96,7 @@ namespace gcore
         gtl::span<variable const> get_variables() const { return m_variables; }
 
         void set_descriptor_path(std::filesystem::path new_path) { m_descriptor_path = std::move(new_path); };
+        script_descriptor const& get_descriptor() const { return m_descriptor; }
 
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
     private:
@@ -103,6 +108,7 @@ namespace gcore
         std::vector<std::uint32_t> m_root_node_indexes;
         std::vector<variable> m_variables;
         std::unique_ptr<script_context> m_default_script_context;
+        script_descriptor m_descriptor;
         std::size_t m_number_of_bytes_for_context = 0;
     };
 }

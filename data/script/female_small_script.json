@@ -631,19 +631,15 @@
         {
             "name": "",
             "position": {
-                "x": 1110.0,
+                "x": 1082.0,
                 "y": 96.0
             },
             "node": {
                 "is_valid": true,
-                "type_name": "gcore::constant_node",
+                "type_name": "gcore::get_variable_node",
                 "data": {
-                    "node_id": 103,
-                    "value": {
-                        "type_name": "Texture",
-                        "number_of_elements": 1,
-                        "value": "5fe2c0a9741e0d4af143fdc9dc907fd5"
-                    }
+                    "node_id": 104,
+                    "variable_id": "6ab735fb4dd1da6abec4c023119b926e"
                 }
             }
         }
@@ -678,44 +674,14 @@
                     "destination_pin": -1818423387
                 },
                 {
-                    "source": 103,
+                    "source": 104,
+                    "source_pin": 1,
+                    "destination_pin": 1716930793
+                },
+                {
+                    "source": 104,
                     "source_pin": 1,
                     "destination_pin": 1530753153
-                }
-            ]
-        },
-        {
-            "key": 21,
-            "data": [
-                {
-                    "source": 54,
-                    "source_pin": 100,
-                    "destination_pin": -1775358419
-                },
-                {
-                    "source": 9,
-                    "source_pin": 1,
-                    "destination_pin": 1745697932
-                },
-                {
-                    "source": 60,
-                    "source_pin": 100,
-                    "destination_pin": 1941987014
-                },
-                {
-                    "source": 67,
-                    "source_pin": 1,
-                    "destination_pin": 1530753153
-                },
-                {
-                    "source": 68,
-                    "source_pin": 1,
-                    "destination_pin": -1818423387
-                },
-                {
-                    "source": 69,
-                    "source_pin": 1,
-                    "destination_pin": -880639002
                 }
             ]
         },
@@ -755,12 +721,37 @@
             ]
         },
         {
-            "key": 18,
+            "key": 21,
             "data": [
                 {
-                    "source": 21,
-                    "source_pin": 12000,
-                    "destination_pin": 1
+                    "source": 54,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 9,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 60,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
+                },
+                {
+                    "source": 67,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 68,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
+                },
+                {
+                    "source": 69,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
                 }
             ]
         },
@@ -775,10 +766,10 @@
             ]
         },
         {
-            "key": 27,
+            "key": 18,
             "data": [
                 {
-                    "source": 29,
+                    "source": 21,
                     "source_pin": 12000,
                     "destination_pin": 1
                 }
@@ -789,6 +780,16 @@
             "data": [
                 {
                     "source": 13,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 27,
+            "data": [
+                {
+                    "source": 29,
                     "source_pin": 12000,
                     "destination_pin": 1
                 }
@@ -998,7 +999,9 @@
                 "type_name": "Texture",
                 "number_of_elements": 1,
                 "value": "5fe2c0a9741e0d4af143fdc9dc907fd5"
-            }
+            },
+            "is_input": true,
+            "is_constant": true
         },
         {
             "id": "6abd326af082a9a29b432348052eb171",
@@ -1007,7 +1010,9 @@
                 "type_name": "Integer",
                 "number_of_elements": 1,
                 "value": 0
-            }
+            },
+            "is_input": false,
+            "is_constant": false
         }
     ]
 }

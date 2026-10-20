@@ -111,10 +111,10 @@ namespace grender
         auto graphic_comp_view = registry.get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
         for (auto& [entity, transform, graphic_comp, extent] : graphic_comp_view)
         {
-            if (graphic_comp->m_script.is_loaded())
+            if (graphic_comp->m_script.is_ready())
             {
                 OPTICK_EVENT("Graphic Script Update");
-                OPTICK_TAG("Script Name", graphic_comp->m_script->get_name().c_str());
+                OPTICK_TAG("Script Name", graphic_comp->m_script.get_script()->get_name().c_str());
 
                 graphic_script_frame_input_data const input_data
                 {
@@ -123,8 +123,8 @@ namespace grender
                     view_matrix
                 };
 
-                graphic_comp->m_script_context.set_in_context(input_data);
-                graphic_comp->m_script_context.execute();
+                graphic_comp->m_script.set_in_context(input_data);
+                graphic_comp->m_script.execute();
             }
         }
     } 
@@ -211,7 +211,7 @@ namespace grender
 
         if (graphic_comp->m_script.is_loaded())
         {
-            for (gcore::node const* node : graphic_comp->m_script->get_nodes())
+            for (gcore::node const* node : graphic_comp->m_script.get_script()->get_nodes())
             {
                 if (grender::render_mesh_node const* render_mesh_node = dynamic_cast<grender::render_mesh_node const*>(node))
                 {
@@ -223,9 +223,8 @@ namespace grender
                 }
             }
 
-            graphic_comp->m_script_context = graphic_comp->m_script->create_context();
-            graphic_comp->m_script_context.set_in_context(m_resource_library);
-            graphic_comp->m_script_context.prepare();
+            graphic_comp->m_script.prepare(m_resource_library);
+
         }
     }
 
