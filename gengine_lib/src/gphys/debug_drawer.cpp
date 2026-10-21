@@ -5,7 +5,7 @@
 
 #include "grender/systems/debug_render_system.h"
 
-#include "gphys/utils.h"
+#include "gphys/phys_utils.h"
 
 namespace gphys
 {

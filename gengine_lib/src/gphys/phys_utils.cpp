@@ -1,8 +1,7 @@
 #include "stdafx.h"
-#include "gphys/utils.h"
+#include "gphys/phys_utils.h"
 
 #include <glm/gtc/type_ptr.hpp>
-#include "utils.h"
 
 namespace gphys
 {

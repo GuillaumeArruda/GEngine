@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "gtool/utils.h"
+#include "gtool/tool_utils.h"
 
 #include "gcore/resource_library.h"
 

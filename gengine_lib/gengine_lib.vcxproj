@@ -78,7 +78,7 @@
     <ClInclude Include="src\gphys\motion_state.h" />
     <ClInclude Include="src\gphys\resources\sphere_shape.h" />
     <ClInclude Include="src\gphys\systems\physic_systems.h" />
-    <ClInclude Include="src\gphys\utils.h" />
+    <ClInclude Include="src\gphys\phys_utils.h" />
     <ClInclude Include="src\grender\components\camera_component.h" />
     <ClInclude Include="src\grender\components\light_component.h" />
     <ClInclude Include="src\grender\components\skybox_component.h" />
@@ -103,7 +103,7 @@
     <ClInclude Include="src\gtool\imgui_serializer_override_libraby.h" />
     <ClInclude Include="src\gtool\importer.h" />
     <ClInclude Include="src\gtool\register_imgui_overrides.h" />
-    <ClInclude Include="src\gtool\utils.h" />
+    <ClInclude Include="src\gtool\tool_utils.h" />
     <ClInclude Include="src\gtool\windows\console_window.h" />
     <ClInclude Include="src\gtool\windows\entity_view_window.h" />
     <ClInclude Include="src\gcore\system_registry.h" />
@@ -193,7 +193,7 @@
     <ClCompile Include="src\gphys\motion_state.cpp" />
     <ClCompile Include="src\gphys\resources\sphere_shape.cpp" />
     <ClCompile Include="src\gphys\systems\physic_systems.cpp" />
-    <ClCompile Include="src\gphys\utils.cpp" />
+    <ClCompile Include="src\gphys\phys_utils.cpp" />
     <ClCompile Include="src\grender\components\camera_component.cpp" />
     <ClCompile Include="src\grender\components\light_component.cpp" />
     <ClCompile Include="src\grender\components\skybox_component.cpp" />
@@ -214,7 +214,7 @@
     <ClCompile Include="src\gtool\imgui_serializer_override_library.cpp" />
     <ClCompile Include="src\gtool\importer.cpp" />
     <ClCompile Include="src\gtool\register_imgui_overrides.cpp" />
-    <ClCompile Include="src\gtool\utils.cpp" />
+    <ClCompile Include="src\gtool\tool_utils.cpp" />
     <ClCompile Include="src\gtool\windows\console_window.cpp" />
     <ClCompile Include="src\gtool\windows\entity_view_window.cpp" />
     <ClCompile Include="src\gcore\system_registry.cpp" />

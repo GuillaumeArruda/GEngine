@@ -4,7 +4,7 @@
 
 #include "gcore/components/transform_component.h"
 
-#include "gphys/utils.h"
+#include "gphys/phys_utils.h"
 
 namespace gphys
 {

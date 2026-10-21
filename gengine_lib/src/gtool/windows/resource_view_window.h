@@ -2,7 +2,7 @@
 
 #include "gtool/window.h"
 #include "gtool/common_widgets.h"
-#include "gtool/utils.h"
+#include "gtool/tool_utils.h"
 
 #include "gcore/resource.h"
 #include "gcore/resource_handle.h"

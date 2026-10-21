@@ -225,7 +225,7 @@
     <ClInclude Include="src\gphys\resources\mesh_shape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\gphys\utils.h">
+    <ClInclude Include="src\gphys\phys_utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\gphys\debug_drawer.h">
@@ -375,7 +375,7 @@
     <ClInclude Include="src\grender\render_script_registration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\gtool\utils.h">
+    <ClInclude Include="src\gtool\tool_utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\gcore\script\nodes\variable_nodes.h">
@@ -533,7 +533,7 @@
     <ClCompile Include="src\gphys\resources\mesh_shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gphys\utils.cpp">
+    <ClCompile Include="src\gphys\phys_utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gphys\debug_drawer.cpp">
@@ -644,7 +644,7 @@
     <ClCompile Include="src\grender\render_script_registration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gtool\utils.cpp">
+    <ClCompile Include="src\gtool\tool_utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gcore\script\nodes\variable_nodes.cpp">

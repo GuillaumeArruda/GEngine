@@ -1,9 +1,7 @@
 #pragma once
 
-
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
-
 
 #include <bullet/LinearMath/btQuaternion.h>
 #include <bullet/LinearMath/btVector3.h>
