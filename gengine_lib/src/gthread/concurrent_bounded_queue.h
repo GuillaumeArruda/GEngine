@@ -3,8 +3,7 @@
 #include <deque>
 #include <optional>
 #include <mutex>
-
-#include "gthread/semaphore.h"
+#include <semaphore>
 
 namespace gthread
 {
@@ -50,8 +49,8 @@ namespace gthread
             return std::move(*tmp);
         }
 
-        counting_semaphore<QueueDepth> m_produced{ 0 };
-        counting_semaphore<QueueDepth> m_spaces{ QueueDepth };
+        std::counting_semaphore<QueueDepth> m_produced{ 0 };
+        std::counting_semaphore<QueueDepth> m_spaces{ QueueDepth };
         std::mutex m_item_lock;
         std::deque<T> m_elements;
     };
