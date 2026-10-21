@@ -72,12 +72,11 @@ namespace gtool
 
             if (ImGui::Button("Remove Component"))
             {
-                m_components.erase(
-                    std::remove_if(m_components.begin(), m_components.end(),
-                        [&](auto& comp)
+                std::erase_if(m_components, 
+                    [&](auto& comp)
                 {
                     return !comp || gcore::component::factory().get_type_name(*comp) == m_create_component_combo.get_current_type();
-                }), m_components.end());
+                });
             }
             ImGui::SameLine();
 

@@ -117,7 +117,7 @@ namespace grender
     {
         OPTICK_EVENT();
         auto graphic_comp_view = registry.get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
-        std::latch latch(static_cast<int>(graphic_comp_view.size()));
+        std::latch latch(graphic_comp_view.size());
         for (auto& [entity, transform, graphic_comp, extent] : graphic_comp_view)
         {
             jobs.submit([=, &latch]() {

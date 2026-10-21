@@ -113,7 +113,7 @@ namespace gtool
 
     void node_editor_window::create_script()
     {
-        if (m_new_script_name.size() == 0)
+        if (m_new_script_name.empty())
             return;
 
         if (std::unique_ptr<gcore::resource> resource = gcore::resource::factory().create(script_types[m_create_script_type_index]))
@@ -127,6 +127,8 @@ namespace gtool
             gserializer::json_write_serializer write_json;
             write_json.process("resource", resource, gcore::resource::factory());
             write_json.write_to_file((std::string("data/script/") + resource->get_uuid().to_string() + ".json").c_str());
+            if (!m_script_infos.empty())
+                m_script_infos.push_back(gtool::resource_info{resource->get_uuid(), resource->get_name(), script_types[m_create_script_type_index] });
         }
     }
 
@@ -183,17 +185,15 @@ namespace gtool
                 if (m_script_infos.size() == 0)
                 {
                     m_script_infos = gtool::get_resource_infos(*library);
-                    m_script_infos.erase(
-                        std::remove_if(m_script_infos.begin(), m_script_infos.end(), 
-                             [&](auto& script_info)
-                             {
-                                return std::none_of(script_types.begin(), script_types.end(), 
-                                    [&](const char* script_type) 
-                                {
-                                    return script_info.m_resource_type.contains(script_type);
-                                });
-                             }),
-                        m_script_infos.end());
+                    std::erase_if(m_script_infos,
+                        [&](auto& script_info)
+                    {
+                        return std::none_of(script_types.begin(), script_types.end(),
+                            [&](const char* script_type)
+                            {
+                                return script_info.m_resource_type.contains(script_type);
+                            });
+                    });
                 }
 
                 if (ImGui::BeginCombo("Script", m_selected_script.to_string().data(), 0))
