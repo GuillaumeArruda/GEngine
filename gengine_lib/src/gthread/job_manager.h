@@ -7,7 +7,6 @@
 
 #include "gthread/concurrent_queue.h"
 #include "gthread/thread_group.h"
-#include "gthread/latch.h"
 
 namespace gthread
 {

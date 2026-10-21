@@ -69,9 +69,6 @@
     <ClInclude Include="src\gthread\job_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\gthread\latch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\gthread\semaphore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -408,9 +405,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gthread\job_manager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gthread\latch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gthread\task_group.cpp">

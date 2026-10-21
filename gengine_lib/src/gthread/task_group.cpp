@@ -1,6 +1,6 @@
 #include "stdafx.h"
+#include <latch>
 #include "gthread/task_group.h"
-#include "gthread/latch.h"
 #include "gthread/job_manager.h"
 
 #include <algorithm>
@@ -20,7 +20,7 @@ namespace gthread
         m_task_infos[parent].m_children.push_back(child);
     }
 
-    void task_group::launch_task(job_manager& job_manager, task& task_to_run, task_map_info& infos, std::mutex& task_info_lock, gthread::latch& latch)
+    void task_group::launch_task(job_manager& job_manager, task& task_to_run, task_map_info& infos, std::mutex& task_info_lock, std::latch& latch)
     {
         job_manager.submit([&]
             {
@@ -44,7 +44,7 @@ namespace gthread
     {
         std::mutex task_info_lock;
         task_map_info task_info(m_task_infos);
-        gthread::latch latch(static_cast<int>(m_task.size()));
+        std::latch latch(static_cast<int>(m_task.size()));
         
         {
             std::scoped_lock lock{ task_info_lock };
@@ -58,7 +58,7 @@ namespace gthread
         }
         if (job_manager.is_currently_on_job_thread())
         {
-            while (!latch.is_ready())
+            while (!latch.try_wait())
             {
                 job_manager.try_run_job();
             }

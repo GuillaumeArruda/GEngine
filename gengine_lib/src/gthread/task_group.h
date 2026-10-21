@@ -2,6 +2,11 @@
 
 #include "gthread/task.h"
 
+namespace std
+{
+    class latch;
+}
+
 namespace gthread
 {
     struct job_manager;
@@ -23,7 +28,7 @@ namespace gthread
 
         using task_map_info = std::unordered_map<task::id, task_info>;
 
-        void launch_task(job_manager& job_manager, task& task_to_run, task_map_info& infos, std::mutex& task_info_lock, gthread::latch& latch);
+        void launch_task(job_manager& job_manager, task& task_to_run, task_map_info& infos, std::mutex& task_info_lock, std::latch& latch);
 
         task_map_info m_task_infos;
         std::vector<task> m_task;
