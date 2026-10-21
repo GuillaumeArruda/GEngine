@@ -113,6 +113,25 @@
                     }
                 }
             }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1014.0,
+                "y": 336.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 19,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
         }
     ],
     "connections": [
@@ -138,6 +157,16 @@
                     "source": 3,
                     "source_pin": 12000,
                     "destination_pin": 1
+                },
+                {
+                    "source": 19,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 4,
+                    "source_pin": 1,
+                    "destination_pin": 3
                 }
             ]
         },
@@ -181,5 +210,6 @@
                 }
             ]
         }
-    ]
+    ],
+    "variables": []
 }

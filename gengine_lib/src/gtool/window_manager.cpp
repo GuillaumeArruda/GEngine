@@ -104,7 +104,7 @@ namespace gtool
 				world.m_update_tasks.run_tasks(m_jobs);
 				world.get_entity_registry().use_command_list(false);
 				grender::render_system* render = world.get_system_registry().get_system<grender::render_system>();
-				render->update(world);
+				render->update(world, m_jobs);
 				world.get_resource_library()->update();
 				world.get_entity_registry().update();
 			}

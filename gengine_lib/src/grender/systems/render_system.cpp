@@ -10,6 +10,7 @@
 #include "gcore/world.h"
 #include "gcore/console.h"
 
+#include "gthread/job_manager.h"
 
 #include "grender/components/camera_component.h"
 #include "grender/components/graphic_component.h"
@@ -24,7 +25,7 @@
 namespace grender
 {
     GCORE_REGISTER_CONSOLE_VALUE("render.enable", bool, enable_render, true);
-    void render_system::update(gcore::world& world)
+    void render_system::update(gcore::world& world, gthread::job_manager& jobs)
     {
         if (!enable_render)
             return;
@@ -44,7 +45,7 @@ namespace grender
                 glm::mat4 const projection = glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), aspect_ratio, camera->m_near_z, camera->m_far_z);
                 glm::mat4 const view_matrix = glm::inverse(camera_transform->m_transform);
 
-                render_meshes(projection, view_matrix, registry);
+                render_meshes(projection, view_matrix, registry, jobs);
                 render_lights(camera_transform->m_transform, registry);
                 render_skybox(projection, view_matrix, registry);
 
@@ -104,29 +105,50 @@ namespace grender
         return m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::final_color);
     }
 
-    void render_system::render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry)
+    void render_system::add_mesh_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh)
+    {
+        std::unique_lock lock(m_mesh_draw_request_lock);
+        m_mesh_draw_requests.emplace_back(transform, &program, std::move(mesh));
+    }
+
+    void render_system::render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gthread::job_manager& jobs)
     {
         OPTICK_EVENT();
         setup_geometry_pass();
         auto graphic_comp_view = registry.get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
+        gthread::latch latch(static_cast<int>(graphic_comp_view.size()));
         for (auto& [entity, transform, graphic_comp, extent] : graphic_comp_view)
         {
-            if (graphic_comp->m_script.is_ready())
-            {
-                OPTICK_EVENT("Graphic Script Update");
-                OPTICK_TAG("Script Name", graphic_comp->m_script.get_script()->get_name().c_str());
-
-                graphic_script_frame_input_data const input_data
+            jobs.submit([=, &latch]() {
+                if (graphic_comp->m_script.is_ready())
                 {
-                    transform->m_transform,
-                    projection,
-                    view_matrix
-                };
+                    OPTICK_EVENT("Graphic Script Update");
+                    OPTICK_TAG("Script Name", graphic_comp->m_script.get_script()->get_name().c_str());
 
-                graphic_comp->m_script.set_in_context(input_data);
-                graphic_comp->m_script.execute();
-            }
+                    graphic_script_frame_input_data const input_data
+                    {
+                        transform->m_transform,
+                        projection,
+                        view_matrix
+                    };
+
+                    graphic_comp->m_script.set_in_context(input_data);
+                    graphic_comp->m_script.execute();
+                }
+                latch.count_down();
+            });
         }
+        latch.wait();
+
+        OPTICK_EVENT("Draw meshes");
+        std::unique_lock lock(m_mesh_draw_request_lock);
+        for (auto& mesh_draw : m_mesh_draw_requests)
+        {
+            mesh_draw.program_data->m_program->activate();
+            mesh_draw.program_data->m_state.apply();
+            mesh_draw.m_mesh->draw();
+        }
+        m_mesh_draw_requests.clear();
     } 
 
     void render_system::render_lights(glm::mat4 const& camera_world_matrix, gcore::entity_registry& registry)
@@ -223,6 +245,7 @@ namespace grender
                 }
             }
 
+            graphic_comp->m_script.set_in_context(std::reference_wrapper(*this));
             graphic_comp->m_script.prepare(m_resource_library);
 
         }

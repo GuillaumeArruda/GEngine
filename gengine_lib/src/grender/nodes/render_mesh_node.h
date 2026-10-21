@@ -15,7 +15,9 @@ namespace grender
         bool is_pure() const override { return false; }
         bool is_root() const override { return true; }
 
-        using in_program_pin = gcore::input_pin_descriptor<program_pin_data, 0, 1>;
+        using in_enable_pin = gcore::input_pin_descriptor<bool, 0, 2>;
+        using in_transform_pin = gcore::input_pin_descriptor<glm::mat4, 1, 3>;
+        using in_program_pin = gcore::input_pin_descriptor<program_pin_data, 2, 1>;
 
         void execute(gcore::node_context& context) const override;
 

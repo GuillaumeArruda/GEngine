@@ -290,6 +290,7 @@ namespace gcore
             m_group.m_on_removed.remove_callback(id);
         }
 
+        std::size_t size() const { return m_group.m_entities_components.size(); }
 
     private:
         group_type& m_group;

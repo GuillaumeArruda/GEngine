@@ -20,8 +20,8 @@
         {
             "name": "",
             "position": {
-                "x": 239.0,
-                "y": 624.0
+                "x": 111.0,
+                "y": 638.0
             },
             "node": {
                 "is_valid": true,
@@ -120,7 +120,7 @@
             "name": "Skin",
             "position": {
                 "x": 1633.0,
-                "y": 79.0
+                "y": 31.0
             },
             "node": {
                 "is_valid": true,
@@ -642,6 +642,25 @@
                     "variable_id": "6ab735fb4dd1da6abec4c023119b926e"
                 }
             }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1399.0,
+                "y": -20.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 105,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
         }
     ],
     "connections": [
@@ -762,6 +781,16 @@
                     "source": 1,
                     "source_pin": 12000,
                     "destination_pin": 1
+                },
+                {
+                    "source": 105,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 9,
+                    "source_pin": 1,
+                    "destination_pin": 3
                 }
             ]
         },
@@ -772,6 +801,16 @@
                     "source": 21,
                     "source_pin": 12000,
                     "destination_pin": 1
+                },
+                {
+                    "source": 105,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 9,
+                    "source_pin": 1,
+                    "destination_pin": 3
                 }
             ]
         },
@@ -782,6 +821,16 @@
                     "source": 13,
                     "source_pin": 12000,
                     "destination_pin": 1
+                },
+                {
+                    "source": 105,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 9,
+                    "source_pin": 1,
+                    "destination_pin": 3
                 }
             ]
         },
@@ -792,6 +841,16 @@
                     "source": 29,
                     "source_pin": 12000,
                     "destination_pin": 1
+                },
+                {
+                    "source": 105,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 9,
+                    "source_pin": 1,
+                    "destination_pin": 3
                 }
             ]
         },
@@ -802,6 +861,16 @@
                     "source": 1,
                     "source_pin": 12000,
                     "destination_pin": 1
+                },
+                {
+                    "source": 105,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 9,
+                    "source_pin": 1,
+                    "destination_pin": 3
                 }
             ]
         },
@@ -847,6 +916,16 @@
                     "source": 35,
                     "source_pin": 12000,
                     "destination_pin": 1
+                },
+                {
+                    "source": 105,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 9,
+                    "source_pin": 1,
+                    "destination_pin": 3
                 }
             ]
         },
@@ -892,6 +971,16 @@
                     "source": 44,
                     "source_pin": 12000,
                     "destination_pin": 1
+                },
+                {
+                    "source": 105,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 9,
+                    "source_pin": 1,
+                    "destination_pin": 3
                 }
             ]
         },
