@@ -22,7 +22,7 @@ namespace grender
             count
         };
 
-        frame_buffer(GLsizei width, GLsizei height);
+        frame_buffer(gcore::resource_library* library, GLsizei width, GLsizei height);
         ~frame_buffer();
 
         frame_buffer(frame_buffer&& move) noexcept;
@@ -31,7 +31,7 @@ namespace grender
         frame_buffer(frame_buffer const&) = delete;
         frame_buffer& operator=(frame_buffer const&) = delete;
 
-        GLuint get_render_target_id(render_target_type type) const { return m_render_targets[gtl::to_underlying(type)].get_id(); }
+        gcore::resource_handle<runtime_texture> get_render_target(render_target_type type) const { return m_render_targets[gtl::to_underlying(type)].get_texture(); }
 
         void bind_for_geometry() const;
         void bind_for_light() const;

@@ -177,9 +177,6 @@
     <ClInclude Include="src\grender\frame_buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\grender\components\light_component.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\gtool\window_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -393,6 +390,15 @@
     <ClInclude Include="src\gcore\script\script_runner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\grender\nodes\render_light_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\resources\runtime_texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\nodes\get_render_targets_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -486,9 +492,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\grender\frame_buffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\grender\components\light_component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gtool\window_manager.cpp">
@@ -660,6 +663,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gcore\script\script_runner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\nodes\render_light_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\resources\runtime_texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\nodes\get_render_targets_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

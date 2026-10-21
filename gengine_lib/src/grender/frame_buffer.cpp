@@ -6,21 +6,21 @@
 
 namespace grender
 {
-    frame_buffer::frame_buffer(GLsizei width, GLsizei height)
+    frame_buffer::frame_buffer(gcore::resource_library* library, GLsizei width, GLsizei height)
         : m_width(width)
         , m_height(height)
     {
-        if (m_width != 0 && m_height != 0)
+        if (m_width != 0 && m_height != 0 && library)
         {
             gl_exec(glGenFramebuffers, 1, &m_fbo);
             gl_exec(glBindFramebuffer, GL_DRAW_FRAMEBUFFER, m_fbo);
 
-            m_render_targets[gtl::to_underlying(render_target_type::diffuse)] = render_target(GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT0, GL_LINEAR, width, height);                     // DiffuseColor
-            m_render_targets[gtl::to_underlying(render_target_type::position)] = render_target(GL_RGB32F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT1, GL_LINEAR, width, height);                             // Position
-            m_render_targets[gtl::to_underlying(render_target_type::normal)] = render_target(GL_RGB32F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT2, GL_LINEAR, width, height);                             // Normal
-            m_render_targets[gtl::to_underlying(render_target_type::specular)] = render_target(GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT3, GL_LINEAR, width, height);                     // SpecularColor
-            m_render_targets[gtl::to_underlying(render_target_type::final_color)] = render_target(GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT4, GL_LINEAR, width, height);                     // FinalColor
-            m_render_targets[gtl::to_underlying(render_target_type::depth)] = render_target(GL_DEPTH32F_STENCIL8, GL_DEPTH_STENCIL, GL_FLOAT_32_UNSIGNED_INT_24_8_REV, GL_DEPTH_STENCIL_ATTACHMENT, GL_NEAREST, width, height); //Depth
+            m_render_targets[gtl::to_underlying(render_target_type::diffuse)] = render_target(*library, GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT0, GL_LINEAR, width, height);                     // DiffuseColor
+            m_render_targets[gtl::to_underlying(render_target_type::position)] = render_target(*library, GL_RGB32F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT1, GL_LINEAR, width, height);                             // Position
+            m_render_targets[gtl::to_underlying(render_target_type::normal)] = render_target(*library, GL_RGB32F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT2, GL_LINEAR, width, height);                             // Normal
+            m_render_targets[gtl::to_underlying(render_target_type::specular)] = render_target(*library, GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT3, GL_LINEAR, width, height);                     // SpecularColor
+            m_render_targets[gtl::to_underlying(render_target_type::final_color)] = render_target(*library, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT4, GL_LINEAR, width, height);                     // FinalColor
+            m_render_targets[gtl::to_underlying(render_target_type::depth)] = render_target(*library, GL_DEPTH32F_STENCIL8, GL_DEPTH_STENCIL, GL_FLOAT_32_UNSIGNED_INT_24_8_REV, GL_DEPTH_STENCIL_ATTACHMENT, GL_NEAREST, width, height); //Depth
 
             const GLenum DrawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
             glDrawBuffers(4, DrawBuffers);

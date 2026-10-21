@@ -1,0 +1,243 @@
+{
+    "nodes": [
+        {
+            "name": "",
+            "position": {
+                "x": -1775.0,
+                "y": -306.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_light_node",
+                "data": {
+                    "node_id": 1,
+                    "mesh": {
+                        "value": "5fe2c4daa56d8657dbac512cfa03d0f7"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2106.0,
+                "y": -368.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 2,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2095.0,
+                "y": -152.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 5,
+                    "program": {
+                        "value": "5ff9f44df747be531c92103401f7dccd"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2427.0,
+                "y": -304.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::get_input_frame_data_node",
+                "data": {
+                    "node_id": 6
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2358.0,
+                "y": -48.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 7,
+                    "variable_id": "6ad900a2ea632b7a68a7a094ab22e7f6"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2358.0,
+                "y": -96.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 8,
+                    "variable_id": "6ad900c7ea632b7b5d0f77f3524d042"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2358.0,
+                "y": -144.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 9,
+                    "variable_id": "6ad90137ea632b7cf4ccce520ad01af7"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2735.0,
+                "y": -48.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::get_render_target_node",
+                "data": {
+                    "node_id": 11
+                }
+            }
+        }
+    ],
+    "connections": [
+        {
+            "key": 1,
+            "data": [
+                {
+                    "source": 2,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 5,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 6,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                }
+            ]
+        },
+        {
+            "key": 5,
+            "data": [
+                {
+                    "source": 6,
+                    "source_pin": 2,
+                    "destination_pin": -1172172285
+                },
+                {
+                    "source": 7,
+                    "source_pin": 1,
+                    "destination_pin": 1648114724
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 1045090739
+                },
+                {
+                    "source": 9,
+                    "source_pin": 1,
+                    "destination_pin": -722158738
+                },
+                {
+                    "source": 11,
+                    "source_pin": 1,
+                    "destination_pin": 2071194548
+                },
+                {
+                    "source": 11,
+                    "source_pin": 2,
+                    "destination_pin": 509310826
+                },
+                {
+                    "source": 11,
+                    "source_pin": 3,
+                    "destination_pin": -1295886801
+                },
+                {
+                    "source": 11,
+                    "source_pin": 4,
+                    "destination_pin": -354559380
+                },
+                {
+                    "source": 11,
+                    "source_pin": 5,
+                    "destination_pin": -142683675
+                }
+            ]
+        }
+    ],
+    "variables": [
+        {
+            "id": "6ad900a2ea632b7a68a7a094ab22e7f6",
+            "name": "Color",
+            "data": {
+                "type_name": "Vec3",
+                "number_of_elements": 1,
+                "x": 0.10000000149011612,
+                "y": 0.10000000149011612,
+                "z": 0.10000000149011612
+            },
+            "is_input": true,
+            "is_constant": true
+        },
+        {
+            "id": "6ad900c7ea632b7b5d0f77f3524d042",
+            "name": "Direction",
+            "data": {
+                "type_name": "Vec3",
+                "number_of_elements": 1,
+                "x": 1.0,
+                "y": 5.0,
+                "z": -2.0
+            },
+            "is_input": true,
+            "is_constant": true
+        },
+        {
+            "id": "6ad90137ea632b7cf4ccce520ad01af7",
+            "name": "Ambient Light",
+            "data": {
+                "type_name": "Vec3",
+                "number_of_elements": 1,
+                "x": 0.10000000149011612,
+                "y": 0.10000000149011612,
+                "z": 0.10000000149011612
+            },
+            "is_input": true,
+            "is_constant": true
+        }
+    ]
+}

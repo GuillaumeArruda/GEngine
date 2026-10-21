@@ -2,7 +2,7 @@
 
 uniform mat4 camera_world_matrix;
 uniform vec3 light_color;
-uniform vec2 screen_size;
+uniform ivec2 screen_size;
 uniform float light_intensity;
 uniform vec3 ambient_light;
 uniform vec3 direction;

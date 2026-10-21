@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::graphic_script",
+        "data": {
+            "uuid": "6ad9003eea632a9431174eba676335e",
+            "name": "directional_light_script",
+            "descriptor_file": "data/script/directional_light.json"
+        }
+    }
+}

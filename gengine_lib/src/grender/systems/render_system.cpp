@@ -15,7 +15,6 @@
 
 #include "grender/components/camera_component.h"
 #include "grender/components/graphic_component.h"
-#include "grender/components/light_component.h"
 #include "grender/components/skybox_component.h"
 #include "grender/resources/mesh_resource.h"
 #include "grender/resources/program.h"
@@ -46,8 +45,9 @@ namespace grender
                 glm::mat4 const projection = glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), aspect_ratio, camera->m_near_z, camera->m_far_z);
                 glm::mat4 const view_matrix = glm::inverse(camera_transform->m_transform);
 
-                render_meshes(projection, view_matrix, registry, jobs);
-                render_lights(camera_transform->m_transform, registry);
+                run_graph_scripts(projection, view_matrix, registry, jobs);
+                render_meshes();
+                render_lights();
                 render_skybox(projection, view_matrix, registry);
 
                 if (debug_render_system* debug = world.get_system_registry().get_system<debug_render_system>())
@@ -65,9 +65,6 @@ namespace grender
         auto graphic_comp_view = world.get_entity_registry().get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
         m_graphic_comp_added_id = graphic_comp_view.add_on_added_callback([&](auto& added_entity) { this->on_mesh_entity_added(added_entity); });
         
-        auto light_view = world.get_entity_registry().get_view<gcore::transform_component, light_component>();
-        m_light_comp_added_id = light_view.add_on_added_callback([&](auto& added_entity) { this->on_light_entity_added(added_entity); });
-        
         auto skybox_view = world.get_entity_registry().get_view<grender::skybox_component>();
         m_skybox_comp_added_id = skybox_view.add_on_added_callback([&](auto& added_entity) { this->on_skybox_entity_added(added_entity); });
 
@@ -79,9 +76,6 @@ namespace grender
         auto graphic_comp_view = world.get_entity_registry().get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
         graphic_comp_view.remove_on_added_callback(m_graphic_comp_added_id);
 
-        auto light_view = world.get_entity_registry().get_view<gcore::transform_component, light_component>();
-        light_view.remove_on_added_callback(m_light_comp_added_id);
-
         auto skybox_view = world.get_entity_registry().get_view<grender::skybox_component>();
         skybox_view.remove_on_added_callback(m_skybox_comp_added_id);
 
@@ -92,7 +86,7 @@ namespace grender
     {
         if (m_frame_buffer.get_size() != glm::ivec2(width, height))
         {
-            m_frame_buffer = frame_buffer(static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+            m_frame_buffer = frame_buffer(m_resource_library, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
         }
     }
 
@@ -103,19 +97,25 @@ namespace grender
 
     GLuint render_system::get_target_id() const
     {
-        return m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::final_color);
+        auto target = m_frame_buffer.get_render_target(frame_buffer::render_target_type::final_color);
+        return target.is_loaded() ? target->get_id() : 0;
     }
 
     void render_system::add_mesh_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh)
     {
-        std::unique_lock lock(m_mesh_draw_request_lock);
+        std::unique_lock lock(m_mesh_draw_requests_lock);
         m_mesh_draw_requests.emplace_back(transform, &program, std::move(mesh));
     }
 
-    void render_system::render_meshes(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gthread::job_manager& jobs)
+    void render_system::add_light_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh)
+    {
+        std::unique_lock lock(m_light_draw_requests_lock);
+        m_light_draw_requests.emplace_back(transform, &program, std::move(mesh));
+    }
+
+    void render_system::run_graph_scripts(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gthread::job_manager& jobs)
     {
         OPTICK_EVENT();
-        setup_geometry_pass();
         auto graphic_comp_view = registry.get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
         std::latch latch(static_cast<int>(graphic_comp_view.size()));
         for (auto& [entity, transform, graphic_comp, extent] : graphic_comp_view)
@@ -140,9 +140,13 @@ namespace grender
             });
         }
         latch.wait();
+    }
 
-        OPTICK_EVENT("Draw meshes");
-        std::unique_lock lock(m_mesh_draw_request_lock);
+    void render_system::render_meshes()
+    {
+        OPTICK_EVENT();
+        setup_geometry_pass();
+        std::unique_lock lock(m_mesh_draw_requests_lock);
         for (auto& mesh_draw : m_mesh_draw_requests)
         {
             mesh_draw.program_data->m_program->activate();
@@ -152,33 +156,19 @@ namespace grender
         m_mesh_draw_requests.clear();
     } 
 
-    void render_system::render_lights(glm::mat4 const& camera_world_matrix, gcore::entity_registry& registry)
+    void render_system::render_lights()
     {
         OPTICK_EVENT();
         setup_lightning_pass();
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
-        auto light_view = registry.get_view<gcore::transform_component, light_component>();
-        for (auto& [entity, transform, light] : light_view)
+        std::unique_lock lock(m_light_draw_requests_lock);
+        for (auto& light_draw : m_light_draw_requests)
         {
-            if (light->m_mesh.is_loaded())
-            {
-                if (light->m_main_program.is_loaded())
-                {
-                    light->m_main_state.reconcile(light->m_main_program->get_default_state());
-                    setup_lightning_pass();
-                    light->m_main_program->activate();
-                    light->m_main_state.set_uniform("world_matrix", transform->m_transform);
-                    light->m_main_state.set_uniform("screen_size", glm::vec2(get_target_size()));
-                    light->m_main_state.set_uniform("camera_world_matrix", camera_world_matrix);
-                    light->m_main_state.set_uniform("diffuse_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::diffuse), uniform_variant::type::sampler_2d });
-                    light->m_main_state.set_uniform("position_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::position), uniform_variant::type::sampler_2d });
-                    light->m_main_state.set_uniform("normal_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::normal), uniform_variant::type::sampler_2d });
-                    light->m_main_state.set_uniform("specular_tex", { m_frame_buffer.get_render_target_id(frame_buffer::render_target_type::specular), uniform_variant::type::sampler_2d });
-                    light->m_main_state.apply();
-                    light->m_mesh->draw();
-                }
-            }
+            light_draw.program_data->m_program->activate();
+            light_draw.program_data->m_state.apply();
+            light_draw.m_mesh->draw();
         }
+        m_light_draw_requests.clear();
         gl_exec(glDisable, GL_BLEND);
     }
 
@@ -249,15 +239,6 @@ namespace grender
             graphic_comp->m_script.set_in_context(std::reference_wrapper(*this));
             graphic_comp->m_script.prepare(m_resource_library);
 
-        }
-    }
-
-    void render_system::on_light_entity_added(std::tuple<gcore::entity, gcore::transform_component*, light_component*>& added_entity)
-    {
-        auto& [entity, transform, light] = added_entity;
-        if (light->m_mesh.is_loaded() && light->m_main_program.is_loaded())
-        {
-            light->m_main_state.reconcile(light->m_main_program->get_default_state());
         }
     }
 

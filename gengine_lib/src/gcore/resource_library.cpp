@@ -114,6 +114,19 @@ namespace gcore
         return resource_handle<resource>(it->second.lock());
     }
 
+    resource_handle<resource> resource_library::add_runtime_resource(std::unique_ptr<gcore::resource> res)
+    {
+        if (!res)
+            return resource_handle<resource>();
+
+        std::shared_ptr<resource_proxy> proxy = std::make_shared<resource_proxy>(res.get(), this);
+        std::unique_lock lock(m_lock);
+        auto const& [it, inserted] = m_proxy_map.insert(std::pair(res->get_uuid(), std::weak_ptr<resource_proxy>(proxy)));
+        assert(inserted);
+        load_resource(std::move(res));
+        return proxy;
+    }
+
     std::filesystem::path resource_library::get_filepath(gtl::uuid const& uuid) const
     {
         if (auto const it = m_uuid_to_resource_file.find(uuid);

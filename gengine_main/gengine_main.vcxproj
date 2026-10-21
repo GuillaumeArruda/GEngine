@@ -163,17 +163,8 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ax_NodeEditor\ax_NodeEditor.vcxproj">
-      <Project>{05fa3646-f9ea-4f0f-9bbd-c2ed90355eef}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\gengine_lib\gengine_lib.vcxproj">
       <Project>{d9809e80-3125-4dfd-8420-689bb1c8488d}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\imgui\imgui.vcxproj">
-      <Project>{701cea89-ecd9-42cf-8337-5a9f72dc6897}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\optick\optick.vcxproj">
-      <Project>{0d68149d-afac-4ce5-9833-5726e2bc696b}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

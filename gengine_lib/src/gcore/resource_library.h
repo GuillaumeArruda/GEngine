@@ -48,6 +48,8 @@ namespace gcore
             return resource_handle<ResourceType>(try_get_resource(uuid));
         }
 
+        resource_handle<resource> add_runtime_resource(std::unique_ptr<resource> resource);
+
         std::filesystem::path get_filepath(gtl::uuid const& uuid) const;
 
         void scan_directory(const char* folder);

@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::graphic_script",
+        "data": {
+            "uuid": "6ad91e22561022876044630a9cd35426",
+            "name": "point_light_script",
+            "descriptor_file": "data/script/point_light_script.json"
+        }
+    }
+}

@@ -1,0 +1,301 @@
+{
+    "nodes": [
+        {
+            "name": "",
+            "position": {
+                "x": -2159.0,
+                "y": -880.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_light_node",
+                "data": {
+                    "node_id": 4,
+                    "mesh": {
+                        "value": "5fe2c4daa56d8657dbac512cfa03d0f7"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2385.0,
+                "y": -874.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 5,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2936.0,
+                "y": -880.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::get_input_frame_data_node",
+                "data": {
+                    "node_id": 8
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2447.0,
+                "y": -704.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 9,
+                    "program": {
+                        "value": "5fdead650a266908491eddb9f59d9b1f"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2895.0,
+                "y": -628.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::get_render_target_node",
+                "data": {
+                    "node_id": 10
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2790.0,
+                "y": -688.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 11,
+                    "variable_id": "6ad91f2cbc39e7a3161e9a1b02e5097e"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2790.0,
+                "y": -512.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 12,
+                    "variable_id": "6ad91f3ebc39e7a4641853b9669dc6ef"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2790.0,
+                "y": -464.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 13,
+                    "variable_id": "6ad91f6ebc39e7a597d20964efae7ee0"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2790.0,
+                "y": -736.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 14,
+                    "variable_id": "6ad91f92bc39e7a690e5a110444e3316"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2607.0,
+                "y": -768.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::inverse_matrix_node<glm::mat4>",
+                "data": {
+                    "node_id": 15
+                }
+            }
+        }
+    ],
+    "connections": [
+        {
+            "key": 4,
+            "data": [
+                {
+                    "source": 5,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                },
+                {
+                    "source": 9,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 9,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 10,
+                    "source_pin": 5,
+                    "destination_pin": -142683675
+                },
+                {
+                    "source": 10,
+                    "source_pin": 4,
+                    "destination_pin": -354559380
+                },
+                {
+                    "source": 10,
+                    "source_pin": 3,
+                    "destination_pin": -1295886801
+                },
+                {
+                    "source": 10,
+                    "source_pin": 1,
+                    "destination_pin": 2071194548
+                },
+                {
+                    "source": 10,
+                    "source_pin": 2,
+                    "destination_pin": 509310826
+                },
+                {
+                    "source": 11,
+                    "source_pin": 1,
+                    "destination_pin": -1543496278
+                },
+                {
+                    "source": 12,
+                    "source_pin": 1,
+                    "destination_pin": -161027356
+                },
+                {
+                    "source": 13,
+                    "source_pin": 1,
+                    "destination_pin": 1648114724
+                },
+                {
+                    "source": 14,
+                    "source_pin": 1,
+                    "destination_pin": -722158738
+                },
+                {
+                    "source": 15,
+                    "source_pin": 100,
+                    "destination_pin": -1172172285
+                }
+            ]
+        },
+        {
+            "key": 15,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 2,
+                    "destination_pin": 0
+                }
+            ]
+        }
+    ],
+    "variables": [
+        {
+            "id": "6ad91f2cbc39e7a3161e9a1b02e5097e",
+            "name": "Inner Radius",
+            "data": {
+                "type_name": "Float",
+                "number_of_elements": 1,
+                "value": 15.0
+            },
+            "is_input": true,
+            "is_constant": true
+        },
+        {
+            "id": "6ad91f3ebc39e7a4641853b9669dc6ef",
+            "name": "Outer Radius",
+            "data": {
+                "type_name": "Float",
+                "number_of_elements": 0,
+                "values": []
+            },
+            "is_input": true,
+            "is_constant": true
+        },
+        {
+            "id": "6ad91f6ebc39e7a597d20964efae7ee0",
+            "name": "Light Color",
+            "data": {
+                "type_name": "Vec3",
+                "number_of_elements": 1,
+                "x": 0.5,
+                "y": 0.5,
+                "z": 0.5
+            },
+            "is_input": true,
+            "is_constant": true
+        },
+        {
+            "id": "6ad91f92bc39e7a690e5a110444e3316",
+            "name": "Ambient Light",
+            "data": {
+                "type_name": "Vec3",
+                "number_of_elements": 1,
+                "x": 0.10000000149011612,
+                "y": 0.10000000149011612,
+                "z": 0.10000000149011612
+            },
+            "is_input": true,
+            "is_constant": true
+        }
+    ]
+}

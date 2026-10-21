@@ -23,6 +23,8 @@
     <ClInclude Include="src\gcore\script\nodes\matrix_nodes.h" />
     <ClInclude Include="src\gcore\script\script_runner.h" />
     <ClInclude Include="src\grender\nodes\get_input_frame_data_node.h" />
+    <ClInclude Include="src\grender\nodes\get_render_targets_node.h" />
+    <ClInclude Include="src\grender\nodes\render_light_node.h" />
     <ClInclude Include="src\grender\render_script_registration.h" />
     <ClInclude Include="src\grender\resources\graphic_script.h" />
     <ClInclude Include="src\gcore\component.h" />
@@ -80,13 +82,13 @@
     <ClInclude Include="src\gphys\systems\physic_systems.h" />
     <ClInclude Include="src\gphys\phys_utils.h" />
     <ClInclude Include="src\grender\components\camera_component.h" />
-    <ClInclude Include="src\grender\components\light_component.h" />
     <ClInclude Include="src\grender\components\skybox_component.h" />
     <ClInclude Include="src\grender\dds_image_data.h" />
     <ClInclude Include="src\grender\frame_buffer.h" />
     <ClInclude Include="src\grender\nodes\configure_program_node.h" />
     <ClInclude Include="src\grender\nodes\render_mesh_node.h" />
     <ClInclude Include="src\grender\render_target.h" />
+    <ClInclude Include="src\grender\resources\runtime_texture.h" />
     <ClInclude Include="src\grender\resources\texture_2d.h" />
     <ClInclude Include="src\grender\resources\cube_map_texture.h" />
     <ClInclude Include="src\grender\resources\texture.h" />
@@ -150,6 +152,8 @@
     <ClCompile Include="src\gcore\script\nodes\variable_nodes.cpp" />
     <ClCompile Include="src\gcore\script\script_runner.cpp" />
     <ClCompile Include="src\grender\nodes\get_input_frame_data_node.cpp" />
+    <ClCompile Include="src\grender\nodes\get_render_targets_node.cpp" />
+    <ClCompile Include="src\grender\nodes\render_light_node.cpp" />
     <ClCompile Include="src\grender\render_script_registration.cpp" />
     <ClCompile Include="src\grender\resources\graphic_script.cpp" />
     <ClCompile Include="src\gcore\components\extent_component.cpp" />
@@ -195,7 +199,6 @@
     <ClCompile Include="src\gphys\systems\physic_systems.cpp" />
     <ClCompile Include="src\gphys\phys_utils.cpp" />
     <ClCompile Include="src\grender\components\camera_component.cpp" />
-    <ClCompile Include="src\grender\components\light_component.cpp" />
     <ClCompile Include="src\grender\components\skybox_component.cpp" />
     <ClCompile Include="src\grender\dds_image_data.cpp" />
     <ClCompile Include="src\grender\frame_buffer.cpp" />
@@ -203,6 +206,7 @@
     <ClCompile Include="src\grender\nodes\render_mesh_node.cpp" />
     <ClCompile Include="src\grender\render_target.cpp" />
     <ClCompile Include="src\grender\resources\cube_map_texture.cpp" />
+    <ClCompile Include="src\grender\resources\runtime_texture.cpp" />
     <ClCompile Include="src\grender\resources\texture.cpp" />
     <ClCompile Include="src\grender\resources\texture_2d.cpp" />
     <ClCompile Include="src\grender\systems\debug_render_system.cpp" />
