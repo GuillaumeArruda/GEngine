@@ -88,7 +88,7 @@ namespace gcore
 
         resource_dependency_tracker m_dependency_tracker;
 
-        gthread::job_manager m_jobs{ 1u };
+        gthread::job_manager m_jobs{ "Loading Thread", 1u };
         GLFWwindow* m_loading_context = nullptr;
     };
 }

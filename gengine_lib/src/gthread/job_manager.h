@@ -12,7 +12,7 @@ namespace gthread
 {
     struct job_manager
     {
-        job_manager(unsigned int number_of_thread);
+        job_manager(const char* name, unsigned int number_of_thread);
         ~job_manager();
 
         job_manager(job_manager const&) = delete;
