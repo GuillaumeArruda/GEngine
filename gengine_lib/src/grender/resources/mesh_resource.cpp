@@ -93,6 +93,7 @@ namespace grender
             m_number_of_element = static_cast<GLuint>(number_of_vertices);
         }
 
+        gl_exec(glFinish);
         return true;
     }
     

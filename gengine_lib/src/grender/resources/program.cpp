@@ -221,6 +221,8 @@ namespace grender
         program_uniform_state new_state;
         new_state.bind(m_program_id);
         m_default_state.reconcile(new_state);
+
+        gl_exec(glFinish);
         return true;
     }
 
