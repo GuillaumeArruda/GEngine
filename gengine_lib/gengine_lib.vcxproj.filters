@@ -195,9 +195,6 @@
     <ClInclude Include="src\grender\resources\cube_map_texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\grender\components\skybox_component.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\gcore\resource_handle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -399,6 +396,9 @@
     <ClInclude Include="src\grender\nodes\get_render_targets_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\grender\nodes\render_skybox_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -507,9 +507,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\grender\resources\cube_map_texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\grender\components\skybox_component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gcore\resource_handle.cpp">
@@ -675,6 +672,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\grender\utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\nodes\render_skybox_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

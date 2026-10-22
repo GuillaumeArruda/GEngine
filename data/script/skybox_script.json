@@ -1,0 +1,242 @@
+{
+    "nodes": [
+        {
+            "name": "",
+            "position": {
+                "x": -1935.0,
+                "y": -2512.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_skybox_node",
+                "data": {
+                    "node_id": 1,
+                    "mesh": {
+                        "value": "5fe2c49fa56d86561c320f07584f97a5"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2151.0,
+                "y": -2550.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 2,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3041.0,
+                "y": -2498.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::get_input_frame_data_node",
+                "data": {
+                    "node_id": 5
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2159.0,
+                "y": -2464.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 6,
+                    "program": {
+                        "value": "5fe00b31591f9dda4afdd5bcb7f9783d"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2377.0,
+                "y": -2528.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 7,
+                    "variable_id": "6ada59cbd8b464c7d22c0ab6a5568544"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2562.0,
+                "y": -2465.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::multiply_node<glm::mat4>",
+                "data": {
+                    "node_id": 8
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2370.0,
+                "y": -2465.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::multiply_node<glm::mat4>",
+                "data": {
+                    "node_id": 11
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2808.0,
+                "y": -2384.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::conversion_node<glm::mat4, glm::mat3>",
+                "data": {
+                    "node_id": 12
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2648.0,
+                "y": -2384.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::conversion_node<glm::mat3, glm::mat4>",
+                "data": {
+                    "node_id": 14
+                }
+            }
+        }
+    ],
+    "connections": [
+        {
+            "key": 1,
+            "data": [
+                {
+                    "source": 2,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 6,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 5,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                }
+            ]
+        },
+        {
+            "key": 14,
+            "data": [
+                {
+                    "source": 12,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 6,
+            "data": [
+                {
+                    "source": 7,
+                    "source_pin": 1,
+                    "destination_pin": 1853537676
+                },
+                {
+                    "source": 11,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                }
+            ]
+        },
+        {
+            "key": 8,
+            "data": [
+                {
+                    "source": 5,
+                    "source_pin": 3,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 14,
+                    "source_pin": 100,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 11,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 5,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 12,
+            "data": [
+                {
+                    "source": 5,
+                    "source_pin": 2,
+                    "destination_pin": 0
+                }
+            ]
+        }
+    ],
+    "variables": [
+        {
+            "id": "6ada59cbd8b464c7d22c0ab6a5568544",
+            "name": "Skybox Texture",
+            "data": {
+                "type_name": "Texture",
+                "number_of_elements": 1,
+                "value": "5fe005a72a64142ae2d0f70244e634ce"
+            },
+            "is_input": true,
+            "is_constant": true
+        }
+    ]
+}

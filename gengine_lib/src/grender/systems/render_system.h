@@ -39,6 +39,7 @@ namespace grender
 
         void add_mesh_draw_request(glm::mat4 const& transform, struct program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
         void add_light_draw_request(glm::mat4 const& transform, struct program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
+        void add_skybox_draw_request(glm::mat4 const& transform, struct program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
    
         gcore::resource_handle<texture> get_render_target(frame_buffer::render_target_type render_type) const { return m_frame_buffer.get_render_target(render_type); }
  
@@ -53,14 +54,14 @@ namespace grender
         void run_graph_scripts(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gthread::job_manager& jobs);
         void render_meshes();
         void render_lights();
-        void render_skybox(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry);
-        
+        void render_skybox();
+        static void execute_draw_requests(std::mutex& lock, std::vector<draw_request>& draw_requests);
+
         void setup_geometry_pass();
         void setup_lightning_pass();
         void setup_skybox_pass();
         
-        void on_mesh_entity_added(std::tuple<gcore::entity, gcore::transform_component*, graphic_component*, gcore::extent_component*>& added_entity);
-        void on_skybox_entity_added(std::tuple<gcore::entity, skybox_component*>& added_entity);
+        void on_graph_comp_added(std::tuple<gcore::entity, graphic_component*, gcore::transform_component*, gcore::extent_component*>& added_entity);
 
         gcore::resource_library* m_resource_library = nullptr;
         frame_buffer m_frame_buffer = frame_buffer(nullptr, 0ull, 0ull);
@@ -68,7 +69,8 @@ namespace grender
         std::vector<draw_request> m_mesh_draw_requests;
         std::mutex m_light_draw_requests_lock;
         std::vector<draw_request> m_light_draw_requests;
+        std::mutex m_skybox_draw_requests_lock;
+        std::vector<draw_request> m_skybox_draw_requests;
         gtl::callback_id m_graphic_comp_added_id = 0;
-        gtl::callback_id m_skybox_comp_added_id = 0;
     };
 }

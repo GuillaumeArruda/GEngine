@@ -14,9 +14,10 @@
 #include "grender/resources/program.h"
 
 #include "grender/nodes/configure_program_node.h"
+#include "grender/nodes/render_skybox_node.h"
+#include "grender/nodes/render_light_node.h"
 #include "grender/nodes/render_mesh_node.h"
 #include "grender/nodes/get_input_frame_data_node.h"
-#include "grender/nodes/render_light_node.h"
 #include "grender/nodes/get_render_targets_node.h"
 
 namespace grender
@@ -42,6 +43,7 @@ namespace grender
         factory.register_type<grender::configure_program_node>("grender::configure_program_node", "Configure Render Program");
         factory.register_type<grender::render_mesh_node>("grender::render_mesh_node", "Render Mesh");
         factory.register_type<grender::render_light_node>("grender::render_light_node", "Render Light");
+        factory.register_type<grender::render_skybox_node>("grender::render_skybox_node", "Render Skybox");
         factory.register_type<grender::get_render_targets_node>("grender::get_render_target_node", "Get Render Target");
 
         factory.register_type<gcore::get_resource_node<mesh_resource>>("gcore::get_resource_node<grender::mesh_resource>", "Get Resource (Mesh)");

@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::graphic_script",
+        "data": {
+            "uuid": "6ada5991d8b464c69b4254bc52a3daf9",
+            "name": "skybox_script",
+            "descriptor_file": "data/script/skybox_script.json"
+        }
+    }
+}

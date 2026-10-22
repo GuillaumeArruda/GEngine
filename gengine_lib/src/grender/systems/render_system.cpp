@@ -15,7 +15,6 @@
 
 #include "grender/components/camera_component.h"
 #include "grender/components/graphic_component.h"
-#include "grender/components/skybox_component.h"
 #include "grender/resources/mesh_resource.h"
 #include "grender/resources/program.h"
 #include "grender/utils.h"
@@ -48,7 +47,7 @@ namespace grender
                 run_graph_scripts(projection, view_matrix, registry, jobs);
                 render_meshes();
                 render_lights();
-                render_skybox(projection, view_matrix, registry);
+                render_skybox();
 
                 if (debug_render_system* debug = world.get_system_registry().get_system<debug_render_system>())
                 {
@@ -62,22 +61,16 @@ namespace grender
 
     void render_system::connect_to_world(gcore::world& world)
     {
-        auto graphic_comp_view = world.get_entity_registry().get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
-        m_graphic_comp_added_id = graphic_comp_view.add_on_added_callback([&](auto& added_entity) { this->on_mesh_entity_added(added_entity); });
+        auto graphic_comp_view = world.get_entity_registry().get_view<graphic_component, gcore::optional_comp<gcore::transform_component>, gcore::optional_comp<gcore::extent_component>>();
+        m_graphic_comp_added_id = graphic_comp_view.add_on_added_callback([&](auto& added_entity) { this->on_graph_comp_added(added_entity); });
         
-        auto skybox_view = world.get_entity_registry().get_view<grender::skybox_component>();
-        m_skybox_comp_added_id = skybox_view.add_on_added_callback([&](auto& added_entity) { this->on_skybox_entity_added(added_entity); });
-
         m_resource_library = world.get_resource_library();
     }
 
     void render_system::disconnect_from_world(gcore::world& world)
     {
-        auto graphic_comp_view = world.get_entity_registry().get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
+        auto graphic_comp_view = world.get_entity_registry().get_view<graphic_component, gcore::optional_comp<gcore::transform_component>, gcore::optional_comp<gcore::extent_component>>();
         graphic_comp_view.remove_on_added_callback(m_graphic_comp_added_id);
-
-        auto skybox_view = world.get_entity_registry().get_view<grender::skybox_component>();
-        skybox_view.remove_on_added_callback(m_skybox_comp_added_id);
 
         m_resource_library = nullptr;
     }
@@ -113,12 +106,18 @@ namespace grender
         m_light_draw_requests.emplace_back(transform, &program, std::move(mesh));
     }
 
+    void render_system::add_skybox_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh)
+    {
+        std::unique_lock lock(m_skybox_draw_requests_lock);
+        m_skybox_draw_requests.emplace_back(transform, &program, std::move(mesh));
+    }
+
     void render_system::run_graph_scripts(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gthread::job_manager& jobs)
     {
         OPTICK_EVENT();
-        auto graphic_comp_view = registry.get_view<gcore::transform_component, graphic_component, gcore::optional_comp<gcore::extent_component>>();
+        auto graphic_comp_view = registry.get_view<graphic_component, gcore::optional_comp<gcore::transform_component>, gcore::optional_comp<gcore::extent_component>>();
         std::latch latch(graphic_comp_view.size());
-        for (auto& [entity, transform, graphic_comp, extent] : graphic_comp_view)
+        for (auto& [entity, graphic_comp, transform, extent] : graphic_comp_view)
         {
             jobs.submit([=, &latch]() {
                 if (graphic_comp->m_script.is_ready())
@@ -128,7 +127,7 @@ namespace grender
 
                     graphic_script_frame_input_data const input_data
                     {
-                        transform->m_transform,
+                        transform ? transform->m_transform : glm::mat4(1.0f),
                         projection,
                         view_matrix
                     };
@@ -146,14 +145,7 @@ namespace grender
     {
         OPTICK_EVENT();
         setup_geometry_pass();
-        std::unique_lock lock(m_mesh_draw_requests_lock);
-        for (auto& mesh_draw : m_mesh_draw_requests)
-        {
-            mesh_draw.program_data->m_program->activate();
-            mesh_draw.program_data->m_state.apply();
-            mesh_draw.m_mesh->draw();
-        }
-        m_mesh_draw_requests.clear();
+        execute_draw_requests(m_mesh_draw_requests_lock, m_mesh_draw_requests);
     } 
 
     void render_system::render_lights()
@@ -161,32 +153,27 @@ namespace grender
         OPTICK_EVENT();
         setup_lightning_pass();
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
-        std::unique_lock lock(m_light_draw_requests_lock);
-        for (auto& light_draw : m_light_draw_requests)
-        {
-            light_draw.program_data->m_program->activate();
-            light_draw.program_data->m_state.apply();
-            light_draw.m_mesh->draw();
-        }
-        m_light_draw_requests.clear();
+        execute_draw_requests(m_light_draw_requests_lock, m_light_draw_requests);
         gl_exec(glDisable, GL_BLEND);
     }
 
-    void render_system::render_skybox(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry)
+    void render_system::render_skybox()
     {
         OPTICK_EVENT();
         setup_skybox_pass();
-        auto view = registry.get_view<grender::skybox_component>();
-        for (auto& [entity, skybox] : view)
+        execute_draw_requests(m_skybox_draw_requests_lock, m_skybox_draw_requests);
+    }
+
+    void render_system::execute_draw_requests(std::mutex& lock, std::vector<draw_request>& draw_requests)
+    {
+        std::unique_lock ulock(lock);
+        for (auto& draw_request : draw_requests)
         {
-            if (skybox->m_program.is_loaded() && skybox->m_mesh.is_loaded())
-            {
-                skybox->m_program->activate();
-                skybox->m_program_state.set_uniform("mvp", projection * glm::mat4(glm::mat3(view_matrix)));
-                skybox->m_program_state.apply();
-                skybox->m_mesh->draw();
-            }
+            draw_request.program_data->m_program->activate();
+            draw_request.program_data->m_state.apply();
+            draw_request.m_mesh->draw();
         }
+        draw_requests.clear();
     }
 
     void render_system::setup_geometry_pass()
@@ -218,9 +205,9 @@ namespace grender
         m_frame_buffer.bind_for_skybox();
     }
 
-    void render_system::on_mesh_entity_added(std::tuple<gcore::entity, gcore::transform_component*, graphic_component*, gcore::extent_component*>& added_entity)
+    void render_system::on_graph_comp_added(std::tuple<gcore::entity,graphic_component*, gcore::transform_component*, gcore::extent_component*>& added_entity)
     {
-        auto& [entity, transform, graphic_comp, extent] = added_entity;
+        auto& [entity, graphic_comp, transform, extent] = added_entity;
 
         if (graphic_comp->m_script.is_loaded())
         {
@@ -239,15 +226,6 @@ namespace grender
             graphic_comp->m_script.set_in_context(std::reference_wrapper(*this));
             graphic_comp->m_script.prepare(m_resource_library);
 
-        }
-    }
-
-    void render_system::on_skybox_entity_added(std::tuple<gcore::entity, skybox_component*>& added_entity)
-    {
-        auto& [entity, skybox] = added_entity;
-        if (skybox->m_program.is_loaded())
-        {
-            skybox->m_program_state.reconcile(skybox->m_program->get_default_state());
         }
     }
 }
