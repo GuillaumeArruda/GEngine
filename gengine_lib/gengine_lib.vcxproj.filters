@@ -674,6 +674,9 @@
     <ClCompile Include="src\grender\nodes\get_render_targets_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\grender\utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\gengine.natvis" />

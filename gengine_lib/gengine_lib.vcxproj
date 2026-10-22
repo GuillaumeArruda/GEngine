@@ -211,6 +211,7 @@
     <ClCompile Include="src\grender\resources\texture_2d.cpp" />
     <ClCompile Include="src\grender\systems\debug_render_system.cpp" />
     <ClCompile Include="src\grender\uniform_variant.cpp" />
+    <ClCompile Include="src\grender\utils.cpp" />
     <ClCompile Include="src\gserializer\serializers\binary_file_serializer.cpp" />
     <ClCompile Include="src\gtl\scope_timer.cpp" />
     <ClCompile Include="src\gtool\common_widgets.cpp" />
