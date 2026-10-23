@@ -85,7 +85,7 @@ namespace gcore
 
     void resource::ensure_all_dependant_resources_loaded(std::vector<resource_handle<resource>> const& resources)
     {
-        while (resources.size() > 0 && std::find_if(resources.begin(), resources.end(), [](resource_handle<resource> const& res) { return !res.is_loaded(); }) != resources.end())
+        while (!std::all_of(resources.begin(), resources.end(), [](resource_handle<resource> const& res) { return res.is_loaded(); }))
         {
             m_library->run_loading_job();
         }
