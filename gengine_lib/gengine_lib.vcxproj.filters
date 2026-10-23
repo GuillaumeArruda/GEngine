@@ -399,6 +399,9 @@
     <ClInclude Include="src\grender\nodes\render_skybox_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gthread\locked.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">

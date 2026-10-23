@@ -96,20 +96,17 @@ namespace grender
 
     void render_system::add_mesh_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh)
     {
-        std::unique_lock lock(m_mesh_draw_requests_lock);
-        m_mesh_draw_requests.emplace_back(transform, &program, std::move(mesh));
+        m_mesh_draw_requests.get()->emplace_back(transform, &program, std::move(mesh));
     }
 
     void render_system::add_light_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh)
     {
-        std::unique_lock lock(m_light_draw_requests_lock);
-        m_light_draw_requests.emplace_back(transform, &program, std::move(mesh));
+        m_light_draw_requests.get()->emplace_back(transform, &program, std::move(mesh));
     }
 
     void render_system::add_skybox_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh)
     {
-        std::unique_lock lock(m_skybox_draw_requests_lock);
-        m_skybox_draw_requests.emplace_back(transform, &program, std::move(mesh));
+        m_skybox_draw_requests.get()->emplace_back(transform, &program, std::move(mesh));
     }
 
     void render_system::run_graph_scripts(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gthread::job_manager& jobs)
@@ -145,7 +142,7 @@ namespace grender
     {
         OPTICK_EVENT();
         setup_geometry_pass();
-        execute_draw_requests(m_mesh_draw_requests_lock, m_mesh_draw_requests);
+        execute_draw_requests(m_mesh_draw_requests);
     } 
 
     void render_system::render_lights()
@@ -153,7 +150,7 @@ namespace grender
         OPTICK_EVENT();
         setup_lightning_pass();
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
-        execute_draw_requests(m_light_draw_requests_lock, m_light_draw_requests);
+        execute_draw_requests(m_light_draw_requests);
         gl_exec(glDisable, GL_BLEND);
     }
 
@@ -161,19 +158,19 @@ namespace grender
     {
         OPTICK_EVENT();
         setup_skybox_pass();
-        execute_draw_requests(m_skybox_draw_requests_lock, m_skybox_draw_requests);
+        execute_draw_requests(m_skybox_draw_requests);
     }
 
-    void render_system::execute_draw_requests(std::mutex& lock, std::vector<draw_request>& draw_requests)
+    void render_system::execute_draw_requests(gthread::locked<std::vector<draw_request>>& draw_requests)
     {
-        std::unique_lock ulock(lock);
-        for (auto& draw_request : draw_requests)
+        auto locked_draw_requests = draw_requests.get();
+        for (auto& draw_request : locked_draw_requests.m_data)
         {
             draw_request.program_data->m_program->activate();
             draw_request.program_data->m_state.apply();
             draw_request.m_mesh->draw();
         }
-        draw_requests.clear();
+        locked_draw_requests->clear();
     }
 
     void render_system::setup_geometry_pass()

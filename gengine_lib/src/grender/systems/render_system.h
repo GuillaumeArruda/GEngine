@@ -4,9 +4,10 @@
 
 #include "gcore/system.h"
 
-#include "grender/frame_buffer.h"
 #include "gcore/entity_registry.h"
+#include "grender/frame_buffer.h"
 #include "grender/resources/mesh_resource.h"
+#include "gthread/locked.h"
 
 namespace gthread
 {
@@ -55,7 +56,7 @@ namespace grender
         void render_meshes();
         void render_lights();
         void render_skybox();
-        static void execute_draw_requests(std::mutex& lock, std::vector<draw_request>& draw_requests);
+        static void execute_draw_requests(gthread::locked<std::vector<draw_request>>& draw_requests);
 
         void setup_geometry_pass();
         void setup_lightning_pass();
@@ -65,12 +66,9 @@ namespace grender
 
         gcore::resource_library* m_resource_library = nullptr;
         frame_buffer m_frame_buffer = frame_buffer(nullptr, 0ull, 0ull);
-        std::mutex m_mesh_draw_requests_lock;
-        std::vector<draw_request> m_mesh_draw_requests;
-        std::mutex m_light_draw_requests_lock;
-        std::vector<draw_request> m_light_draw_requests;
-        std::mutex m_skybox_draw_requests_lock;
-        std::vector<draw_request> m_skybox_draw_requests;
+        gthread::locked<std::vector<draw_request>> m_mesh_draw_requests;
+        gthread::locked<std::vector<draw_request>> m_light_draw_requests;
+        gthread::locked<std::vector<draw_request>> m_skybox_draw_requests;
         gtl::callback_id m_graphic_comp_added_id = 0;
     };
-}
+} 
