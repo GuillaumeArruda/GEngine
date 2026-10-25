@@ -200,6 +200,7 @@ namespace gcore
             m_file_changes.clear();
 
             std::vector<std::unique_ptr<resource>> resource_to_unload;
+            std::vector<gtl::uuid> reloaded_resources;
             {
                 std::unique_lock lock(m_lock);
                 for (auto& res_to_load : m_res_to_load_sync)
@@ -216,7 +217,7 @@ namespace gcore
                             {
                                 proxy->set_target(res_to_load.get());
                                 m_res_to_unload.push_back(std::move(it->second));
-                                on_resource_reloaded(res_to_load->get_uuid());
+                                reloaded_resources.push_back(res_to_load->get_uuid());
                             }
                             it->second = std::move(res_to_load);
                             continue;
@@ -228,6 +229,11 @@ namespace gcore
                 m_res_to_load_sync.clear();
 
                 resource_to_unload = std::move(m_res_to_unload); // Unloading resource can trigger the unloading of more resource. Move the data to the stack and unlock the lock to avoid deadlock and iterating over a modified vector.
+            }
+
+            for (gtl::uuid const& reloaded_resource : reloaded_resources)
+            {
+                on_resource_reloaded(reloaded_resource);
             }
 
             for (std::unique_ptr<resource>& res : resource_to_unload)
