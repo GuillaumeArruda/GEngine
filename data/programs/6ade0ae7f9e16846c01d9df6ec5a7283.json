@@ -1,0 +1,52 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::program",
+        "data": {
+            "uuid": "6ade0ae7f9e16846c01d9df6ec5a7283",
+            "name": "shadow_program",
+            "shaders": [
+                {
+                    "key": "shader::type::vertex",
+                    "data": "data\\programs\\vertex\\shadow_vertex.glsl"
+                },
+                {
+                    "key": "shader::type::fragment",
+                    "data": "data\\programs\\fragment\\empty_fragment.glsl"
+                }
+            ],
+            "default uniforms": {
+                "uniforms": [
+                    {
+                        "name": "mvp",
+                        "type": "uniform_variant::type::mat44",
+                        "[0]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[1]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[3]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[4]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

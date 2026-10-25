@@ -6,11 +6,13 @@ uniform ivec2 screen_size;
 uniform float light_intensity;
 uniform vec3 ambient_light;
 uniform vec3 direction;
+uniform mat4 light_matrix;
 
 uniform sampler2D diffuse_tex;
 uniform sampler2D position_tex;
 uniform sampler2D normal_tex;
 uniform sampler2D specular_tex;
+uniform sampler2D shadow_tex;
 
 in vec3 world_pos;
 
@@ -19,6 +21,28 @@ out vec4 color;
 vec2 CalculateUV()
 {
 	return gl_FragCoord.xy / screen_size;
+}
+
+float compute_shadow(vec3 world_pos)
+{
+    const vec4 light_space_pos = light_matrix * vec4(world_pos, 1.0);
+    vec3 projection_coordinate = light_space_pos.xyz / light_space_pos.w;
+    projection_coordinate = projection_coordinate * 0.5 + 0.5;
+    float closest_depth = texture(shadow_tex, projection_coordinate.xy).r;
+    float current_depth = projection_coordinate.z;
+    float bias = 0.001;
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(shadow_tex, 0);
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(shadow_tex, projection_coordinate.xy + vec2(x, y) * texelSize).r; 
+            shadow += current_depth - bias > pcfDepth ? 1.0 : 0.0;        
+        }    
+    }
+    shadow /= 9.0;
+    return shadow;
 }
 
 void main()
@@ -41,5 +65,6 @@ void main()
 	const vec3 diffuse_color = lambertian * diffuse;
 	const vec3 specular_color =  specular * specular_intensity;
 	const vec3 ambient = diffuse * ambient_light;
-	color = vec4((diffuse_color + specular_color) * light_color + ambient, 1.0);
+    const float shadow = compute_shadow(position);
+	color = vec4((diffuse_color + specular_color) * (1.0 - shadow) * light_color + ambient, 1.0);
 }

@@ -30,6 +30,13 @@ namespace grender
 
     struct render_system : gcore::system
     {
+        struct draw_request
+        {
+            glm::mat4 m_transform;
+            struct program_pin_data const* program_data = nullptr;
+            gcore::resource_handle<mesh_resource> m_mesh;
+        };
+
         void connect_to_world(gcore::world& world) override;
         void disconnect_from_world(gcore::world& world) override;
         void update(gcore::world& world, gthread::job_manager& jobs);
@@ -41,17 +48,26 @@ namespace grender
         void add_mesh_draw_request(glm::mat4 const& transform, struct program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
         void add_light_draw_request(glm::mat4 const& transform, struct program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
         void add_skybox_draw_request(glm::mat4 const& transform, struct program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
-   
-        gcore::resource_handle<texture> get_render_target(frame_buffer::render_target_type render_type) const { return m_frame_buffer.get_render_target(render_type); }
- 
-    private:
-        struct draw_request
+    
+        template<class Functor>
+        void add_pre_light_work(Functor&& functor)
         {
-            glm::mat4 m_transform;
-            struct program_pin_data const* program_data = nullptr;
-            gcore::resource_handle<mesh_resource> m_mesh;
-        };
+            m_pre_light_works.get()->emplace_back(std::forward<Functor>(functor));
+        }
 
+        template<class Functor>
+        void for_each_mesh_draw_request(Functor&& functor)
+        {
+            auto locked_draw_request = m_mesh_draw_requests.get();
+            for (draw_request const& request : locked_draw_request.m_data)
+            {
+                functor(request);
+            }
+        }
+
+        gcore::resource_handle<texture> get_render_target(frame_buffer::render_target_type render_type) const { return m_frame_buffer.get_render_target(render_type); }
+    
+    private:
         void run_graph_scripts(glm::mat4 const& projection, glm::mat4 const& view_matrix, gcore::entity_registry& registry, gthread::job_manager& jobs);
         void render_meshes();
         void render_lights();
@@ -67,6 +83,7 @@ namespace grender
         gcore::resource_library* m_resource_library = nullptr;
         frame_buffer m_frame_buffer = frame_buffer(nullptr, 0ull, 0ull);
         gthread::locked<std::vector<draw_request>> m_mesh_draw_requests;
+        gthread::locked<std::vector<std::move_only_function<void(render_system&)>>> m_pre_light_works;
         gthread::locked<std::vector<draw_request>> m_light_draw_requests;
         gthread::locked<std::vector<draw_request>> m_skybox_draw_requests;
         gtl::callback_id m_graphic_comp_added_id = 0;

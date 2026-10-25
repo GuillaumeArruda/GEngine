@@ -54,6 +54,10 @@ namespace grender
                     debug->draw_primitives(projection, view_matrix);
                 }
             }
+            m_mesh_draw_requests.get()->clear();
+            m_pre_light_works.get()->clear();
+            m_light_draw_requests.get()->clear();
+            m_skybox_draw_requests.get()->clear();
         }
 
         m_frame_buffer.unbind();
@@ -148,10 +152,17 @@ namespace grender
     void render_system::render_lights()
     {
         OPTICK_EVENT();
+        {
+            OPTICK_EVENT("Pre Light Work")
+            auto locked_pre_light_work = m_pre_light_works.get();
+            for (auto& work : locked_pre_light_work.m_data)
+            {
+                work(*this);
+            }
+        }
+
         setup_lightning_pass();
-        gl_exec(glClear, GL_COLOR_BUFFER_BIT);
         execute_draw_requests(m_light_draw_requests);
-        gl_exec(glDisable, GL_BLEND);
     }
 
     void render_system::render_skybox()
@@ -170,7 +181,6 @@ namespace grender
             draw_request.program_data->m_state.apply();
             draw_request.m_mesh->draw();
         }
-        locked_draw_requests->clear();
     }
 
     void render_system::setup_geometry_pass()
@@ -186,6 +196,8 @@ namespace grender
     void render_system::setup_lightning_pass()
     {
         m_frame_buffer.bind_for_light();
+        glm::ivec2 const size = get_target_size();
+        gl_exec(glViewport, 0, 0, size[0], size[1]);
         gl_exec(glStencilFunc, GL_NOTEQUAL, 0, 0xFF);
         gl_exec(glDisable, GL_DEPTH_TEST);
         gl_exec(glEnable, GL_BLEND);
@@ -193,9 +205,11 @@ namespace grender
         gl_exec(glBlendFunc, GL_ONE, GL_ONE);
         gl_exec(glEnable, GL_CULL_FACE);
         gl_exec(glCullFace, GL_BACK);
+        gl_exec(glClear, GL_COLOR_BUFFER_BIT);
     }
     void render_system::setup_skybox_pass()
     {
+        gl_exec(glDisable, GL_BLEND);
         gl_exec(glEnable, GL_DEPTH_TEST);
         gl_exec(glDepthFunc, GL_LEQUAL);
         gl_exec(glDisable, GL_CULL_FACE);
@@ -220,6 +234,7 @@ namespace grender
                 }
             }
 
+            graphic_comp->m_script.set_in_context(std::reference_wrapper(*m_resource_library));
             graphic_comp->m_script.set_in_context(std::reference_wrapper(*this));
             graphic_comp->m_script.prepare(m_resource_library);
 

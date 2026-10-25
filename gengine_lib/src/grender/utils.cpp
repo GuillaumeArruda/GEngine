@@ -29,10 +29,27 @@ namespace grender
             case GL_OUT_OF_MEMORY:
                 std::cerr << "OpenGLError: Out of memory.\n";
                 break;
+            case GL_INVALID_FRAMEBUFFER_OPERATION:
+                std::cerr << "OpenGLError: Invalid framebuffer operation.\n";
+                break;
             default:
                 std::cerr << "OpenGLError: Unknow error: " << error << "\n";
                 break;
             }
         }
+    }
+
+    glm::vec3 generate_valid_up(glm::vec3 forward_vector)
+    {
+        glm::vec3 const normalized_forward = glm::normalize(forward_vector);
+        glm::vec3 const world_up = glm::vec3(0.f, 1.f, 0.f);
+        glm::vec3 const fallback_up = glm::vec3(0.f, 0.f, 1.f);
+        if (glm::abs(glm::dot(normalized_forward, world_up)) > 0.99f)
+        {
+            glm::vec3 const right_vector = glm::cross(normalized_forward, glm::vec3(0.f, 0.f, 1.f));
+            return glm::normalize(glm::cross(right_vector, normalized_forward));
+        }
+        glm::vec3 const right_vector = glm::normalize(glm::cross(world_up, normalized_forward));
+        return glm::normalize(glm::cross(normalized_forward, right_vector));
     }
 }

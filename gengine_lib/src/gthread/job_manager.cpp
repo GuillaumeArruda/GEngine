@@ -10,7 +10,7 @@ namespace gthread
 {
     job_manager::job_manager(const char* name, unsigned int number_of_thread) 
         : m_job_queues(number_of_thread)
-        ,  m_threads(number_of_thread, [&](unsigned index) { OPTICK_THREAD(fmt::format("{}: {}", name, index).c_str()); process_job(index); }) 
+        ,  m_threads(number_of_thread, [=](unsigned index) { OPTICK_THREAD(fmt::format("{}: {}", name, index).c_str()); process_job(index); }) 
     {}
 
     job_manager::~job_manager()

@@ -28,4 +28,6 @@ namespace grender
 #else
     #define gl_exec(Function, ...) Function(__VA_ARGS__);
 #endif
+
+    glm::vec3 generate_valid_up(glm::vec3 forward_vector);
 }

@@ -35,5 +35,5 @@ void main()
 	diffuse_target = vec3(0.5);
 	position_target = f_world_pos;
 	normal_target = compute_normal(f_uv);
-	specular_target = vec4(10);
+	specular_target = vec4(0.5);
 }

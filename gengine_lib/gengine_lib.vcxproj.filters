@@ -402,6 +402,12 @@
     <ClInclude Include="src\gthread\locked.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\grender\nodes\render_shadow_nodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\grender\resources\frame_buffer_resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -678,6 +684,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\grender\nodes\render_skybox_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\nodes\render_shadow_nodes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\resources\frame_buffer_resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

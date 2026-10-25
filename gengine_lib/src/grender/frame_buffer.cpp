@@ -83,11 +83,13 @@ namespace grender
 
     void frame_buffer::bind_for_light() const
     {
+        gl_exec(glBindFramebuffer, GL_DRAW_FRAMEBUFFER, m_fbo);
         gl_exec(glDrawBuffer, GL_COLOR_ATTACHMENT4);
     }
 
     void frame_buffer::bind_for_skybox() const
     {
+        gl_exec(glBindFramebuffer, GL_DRAW_FRAMEBUFFER, m_fbo);
         glDrawBuffer(GL_COLOR_ATTACHMENT4);
     }
 }

@@ -47,7 +47,9 @@ namespace grender
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::mat43)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::mat44)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_1d)
+        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_1d_array)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_2d)
+        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_2d_array)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_3d)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_cube)
     GSERIALIZER_END_ENUM_HANDLER(uniform_variant::type)
@@ -131,7 +133,9 @@ namespace grender
         case type::mat43:       gl_exec(glUniformMatrix4x3fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat43)); break;
         case type::mat44:       gl_exec(glUniformMatrix4fv,     location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat44)); break;
         case type::sampler_1d:
+        case type::sampler_1d_array:
         case type::sampler_2d:
+        case type::sampler_2d_array:
         case type::sampler_3d:
         case type::sampler_cube:
         {
@@ -204,7 +208,9 @@ namespace grender
         case type::mat43:       process(serializer, m_mat43);   break;
         case type::mat44:       process(serializer, m_mat44);   break;
         case type::sampler_1d:
+        case type::sampler_1d_array:
         case type::sampler_2d:
+        case type::sampler_2d_array:
         case type::sampler_3d:
         case type::sampler_cube:
             process(serializer, m_texture_info.m_texture); break;
@@ -245,7 +251,9 @@ namespace grender
         case type::mat43:       new((void*)&m_mat43)   glm::mat4x3(); break;
         case type::mat44:       new((void*)&m_mat44)   glm::mat4x4(); break;
         case type::sampler_1d:
+        case type::sampler_1d_array:
         case type::sampler_2d:
+        case type::sampler_2d_array:
         case type::sampler_3d:
         case type::sampler_cube: new((void*)&m_texture_info) texture_info(); break;
         case type::invalid:     break;
@@ -257,7 +265,9 @@ namespace grender
         switch (m_type)
         {
         case type::sampler_1d:
+        case type::sampler_1d_array:
         case type::sampler_2d:
+        case type::sampler_2d_array:
         case type::sampler_3d:
         case type::sampler_cube: 
             m_texture_info.~texture_info();
@@ -299,7 +309,9 @@ namespace grender
         case type::mat43:       new((void*)&m_mat43)   glm::mat4x3(std::move(move.m_mat43)); break;
         case type::mat44:       new((void*)&m_mat44)   glm::mat4x4(std::move(move.m_mat44)); break;
         case type::sampler_1d:
+        case type::sampler_1d_array:
         case type::sampler_2d:
+        case type::sampler_2d_array:
         case type::sampler_3d:
         case type::sampler_cube:
             new((void*)&m_texture_info) texture_info(std::move(move.m_texture_info)); break;
@@ -341,7 +353,9 @@ namespace grender
         case type::mat43:       new((void*)&m_mat43)   glm::mat4x3(copy.m_mat43); break;
         case type::mat44:       new((void*)&m_mat44)   glm::mat4x4(copy.m_mat44); break;
         case type::sampler_1d:
+        case type::sampler_1d_array:
         case type::sampler_2d:
+        case type::sampler_2d_array:
         case type::sampler_3d:
         case type::sampler_cube:
             new((void*)&m_texture_info) texture_info(copy.m_texture_info); break;
@@ -353,7 +367,9 @@ namespace grender
         switch (m_type)
         {
         case uniform_variant::type::sampler_1d: return GL_TEXTURE_1D;
+        case uniform_variant::type::sampler_1d_array: return GL_TEXTURE_1D_ARRAY;
         case uniform_variant::type::sampler_2d: return GL_TEXTURE_2D;
+        case uniform_variant::type::sampler_2d_array: return GL_TEXTURE_2D_ARRAY;
         case uniform_variant::type::sampler_3d: return GL_TEXTURE_3D;
         case uniform_variant::type::sampler_cube: return GL_TEXTURE_CUBE_MAP;
         }
@@ -394,7 +410,9 @@ namespace grender
         case GL_FLOAT_MAT4x3:               return uniform_variant::type::mat43;
         case GL_FLOAT_MAT4:                 return uniform_variant::type::mat44;
         case GL_SAMPLER_1D:                 return uniform_variant::type::sampler_1d;
+        case GL_SAMPLER_1D_ARRAY:           return uniform_variant::type::sampler_1d_array;
         case GL_SAMPLER_2D:                 return uniform_variant::type::sampler_2d;
+        case GL_SAMPLER_2D_ARRAY:           return uniform_variant::type::sampler_2d_array;
         case GL_SAMPLER_3D:                 return uniform_variant::type::sampler_3d;
         case GL_SAMPLER_CUBE:               return uniform_variant::type::sampler_cube;
         default:                            return uniform_variant::type::invalid;

@@ -25,8 +25,10 @@
     <ClInclude Include="src\grender\nodes\get_input_frame_data_node.h" />
     <ClInclude Include="src\grender\nodes\get_render_targets_node.h" />
     <ClInclude Include="src\grender\nodes\render_light_node.h" />
+    <ClInclude Include="src\grender\nodes\render_shadow_nodes.h" />
     <ClInclude Include="src\grender\nodes\render_skybox_node.h" />
     <ClInclude Include="src\grender\render_script_registration.h" />
+    <ClInclude Include="src\grender\resources\frame_buffer_resource.h" />
     <ClInclude Include="src\grender\resources\graphic_script.h" />
     <ClInclude Include="src\gcore\component.h" />
     <ClInclude Include="src\gcore\components\extent_component.h" />
@@ -155,8 +157,10 @@
     <ClCompile Include="src\grender\nodes\get_input_frame_data_node.cpp" />
     <ClCompile Include="src\grender\nodes\get_render_targets_node.cpp" />
     <ClCompile Include="src\grender\nodes\render_light_node.cpp" />
+    <ClCompile Include="src\grender\nodes\render_shadow_nodes.cpp" />
     <ClCompile Include="src\grender\nodes\render_skybox_node.cpp" />
     <ClCompile Include="src\grender\render_script_registration.cpp" />
+    <ClCompile Include="src\grender\resources\frame_buffer_resource.cpp" />
     <ClCompile Include="src\grender\resources\graphic_script.cpp" />
     <ClCompile Include="src\gcore\components\extent_component.cpp" />
     <ClCompile Include="src\gcore\components\flying_controller_component.cpp" />
