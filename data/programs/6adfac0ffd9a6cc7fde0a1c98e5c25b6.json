@@ -1,0 +1,31 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::program",
+        "data": {
+            "uuid": "6adfac0ffd9a6cc7fde0a1c98e5c25b6",
+            "name": "shadow_terrain_program",
+            "shaders": [
+                {
+                    "key": "shader::type::fragment",
+                    "data": "data\\programs\\fragment\\empty_fragment.glsl"
+                },
+                {
+                    "key": "shader::type::vertex",
+                    "data": "data\\programs\\vertex\\terrain_vertex.glsl"
+				},
+				{
+					"key": "shader::type::tesselation_control",
+					"data": "data\\programs\\tesselation_control\\terrain_tesselation_control.glsl"
+				},
+				{
+					"key": "shader::type::tesselation_evaluation",
+					"data": "data\\programs\\tesselation_evaluation\\terrain_tesselation_evaluation.glsl"
+				}
+            ],
+            "default uniforms": {
+                "uniforms": []
+            }
+        }
+    }
+}

@@ -62,32 +62,31 @@ namespace grender
                     }
                 );
             }
-
-            auto programs = context.read<in_program_pin>();
             auto camera_matrixs = context.read<in_camera_matrix_pin>();
             auto camera_projections = context.read<in_camera_matrix_projection_pin>();
             auto light_directions = context.read<in_light_direction_pin>();
-            if (programs.empty() || camera_matrixs.empty() || camera_projections.empty() || light_directions.empty())
+            if (camera_matrixs.empty() || camera_projections.empty() || light_directions.empty())
                 return;
 
             std::array<glm::vec4, 8> const corners = get_camera_frustrum_corners(camera_projections[0], camera_matrixs[0]);
             glm::mat4 const light_matrix = create_light_matrix(light_directions[0], corners);
 
             render_sys->get().add_pre_light_work(
-                [memory = memory, program = programs[0], light_matrix](render_system& render_sys) mutable
+                [memory = memory, light_matrix](render_system& render_sys) mutable
                 {
                     OPTICK_EVENT("Render directional shadow");
                     gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, memory.m_framebuffer->get_fbo());
                     gl_exec(glViewport, 0, 0, shadow_map_size, shadow_map_size);
                     gl_exec(glClear, GL_DEPTH_BUFFER_BIT);
                     gl_exec(glCullFace, GL_FRONT);
-                    program.m_program->activate();
                     render_sys.for_each_mesh_draw_request(
-                        [&program, &light_matrix](render_system::draw_request const& request) mutable
+                        [&light_matrix](render_system::mesh_draw_request const& request) mutable
                         {
                             glm::mat4 const mvp = light_matrix * request.m_transform;
-                            program.m_state.set_uniform("mvp", mvp);
-                            program.m_state.apply();
+                            request.m_shadow_program->m_program->activate();
+                            program_uniform_state state = request.m_shadow_program->m_state;
+                            state.set_uniform("mvp", mvp);
+                            state.apply();
                             request.m_mesh->draw();
                         }
                     );
@@ -104,7 +103,6 @@ namespace grender
     gcore::node::pin_descriptors render_directional_shadow_node::get_pin_descriptors() const
     {
         static gcore::pin_descriptor const inputs[] = {
-            in_program_pin::get("program"),
             in_light_direction_pin::get("light direction"),
             in_camera_matrix_pin::get("camera matrix"),
             in_camera_matrix_projection_pin::get("camera projection"),
@@ -208,22 +206,20 @@ namespace grender
                 );
             }
 
-            auto programs = context.read<in_program_pin>();
             auto matrixes = context.read<in_light_matrix_pin>();
             auto radii = context.read<in_radius_pin>();
-            if (programs.empty() || matrixes.empty() || radii.empty())
+            if (matrixes.empty() || radii.empty())
                 return;
 
             render_sys->get().add_pre_light_work(
-                [memory, program = programs[0], light_pos = glm::vec3(matrixes[0][3]), radius = radii[0]](render_system& render_sys) mutable
+                [memory,light_pos = glm::vec3(matrixes[0][3]), radius = radii[0]](render_system& render_sys) mutable
             {
                 OPTICK_EVENT("Render point light shadow");
                 gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, memory.m_framebuffer->get_fbo());
                 gl_exec(glViewport, 0, 0, shadow_map_size, shadow_map_size);
                 gl_exec(glClear, GL_DEPTH_BUFFER_BIT);
                 gl_exec(glCullFace, GL_FRONT);
-                program.m_program->activate();
-
+                
                 constexpr std::array directions = {
                     glm::vec3(1.f, 0.f, 0.f),
                     glm::vec3(-1.f, 0.f, 0.f),
@@ -250,11 +246,13 @@ namespace grender
                     gl_exec(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, memory.m_texture->get_id(), 0);
                     gl_exec(glClear, GL_DEPTH_BUFFER_BIT);
                     render_sys.for_each_mesh_draw_request(
-                        [&program, &light_matrix](render_system::draw_request const& request) mutable
+                        [&light_matrix](render_system::mesh_draw_request const& request) mutable
                         {
                             glm::mat4 const mvp = light_matrix * request.m_transform;
-                            program.m_state.set_uniform("mvp", mvp);
-                            program.m_state.apply();
+                            request.m_shadow_program->m_program->activate();
+                            program_uniform_state state = request.m_shadow_program->m_state;
+                            state.set_uniform("mvp", mvp);
+                            state.apply();
                             request.m_mesh->draw();
                         }
                     );
@@ -272,7 +270,6 @@ namespace grender
     gcore::node::pin_descriptors render_point_light_shadow_node::get_pin_descriptors() const
     {
         static gcore::pin_descriptor const inputs[] = {
-            in_program_pin::get("program"),
             in_light_matrix_pin::get("light matrix"),
             in_radius_pin::get("radius"),
         };

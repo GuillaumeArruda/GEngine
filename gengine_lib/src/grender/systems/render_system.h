@@ -25,16 +25,20 @@ namespace gcore
 namespace grender
 {
     struct graphic_component;
-    struct light_component;
-    struct skybox_component;
+    struct program_pin_data;
 
     struct render_system : gcore::system
     {
         struct draw_request
         {
             glm::mat4 m_transform;
-            struct program_pin_data const* program_data = nullptr;
+            program_pin_data const* m_program_data = nullptr;
             gcore::resource_handle<mesh_resource> m_mesh;
+        };
+
+        struct mesh_draw_request : draw_request
+        {
+            program_pin_data const* m_shadow_program = nullptr;
         };
 
         void connect_to_world(gcore::world& world) override;
@@ -45,9 +49,9 @@ namespace grender
         glm::ivec2 get_target_size() const;
         GLuint get_target_id() const;
 
-        void add_mesh_draw_request(glm::mat4 const& transform, struct program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
-        void add_light_draw_request(glm::mat4 const& transform, struct program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
-        void add_skybox_draw_request(glm::mat4 const& transform, struct program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
+        void add_mesh_draw_request(glm::mat4 const& transform, program_pin_data const& program, program_pin_data const& shadow_program, gcore::resource_handle<mesh_resource> mesh);
+        void add_light_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
+        void add_skybox_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
     
         template<class Functor>
         void add_pre_light_work(Functor&& functor)
@@ -59,7 +63,7 @@ namespace grender
         void for_each_mesh_draw_request(Functor&& functor)
         {
             auto locked_draw_request = m_mesh_draw_requests.get();
-            for (draw_request const& request : locked_draw_request.m_data)
+            for (mesh_draw_request const& request : locked_draw_request.m_data)
             {
                 functor(request);
             }
@@ -82,7 +86,7 @@ namespace grender
 
         gcore::resource_library* m_resource_library = nullptr;
         frame_buffer m_frame_buffer = frame_buffer(nullptr, 0ull, 0ull);
-        gthread::locked<std::vector<draw_request>> m_mesh_draw_requests;
+        gthread::locked<std::vector<mesh_draw_request>> m_mesh_draw_requests;
         gthread::locked<std::vector<std::move_only_function<void(render_system&)>>> m_pre_light_works;
         gthread::locked<std::vector<draw_request>> m_light_draw_requests;
         gthread::locked<std::vector<draw_request>> m_skybox_draw_requests;

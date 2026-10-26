@@ -24,6 +24,7 @@
 namespace grender
 {
     GCORE_REGISTER_CONSOLE_VALUE("render.enable", bool, enable_render, true);
+
     void render_system::update(gcore::world& world, gthread::job_manager& jobs)
     {
         if (!enable_render)
@@ -98,9 +99,9 @@ namespace grender
         return target.is_loaded() ? target->get_id() : 0;
     }
 
-    void render_system::add_mesh_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh)
+    void render_system::add_mesh_draw_request(glm::mat4 const& transform, program_pin_data const& program, program_pin_data const& shadow_program,  gcore::resource_handle<mesh_resource> mesh)
     {
-        m_mesh_draw_requests.get()->emplace_back(transform, &program, std::move(mesh));
+        m_mesh_draw_requests.get()->push_back(mesh_draw_request{ transform, &program, std::move(mesh), &shadow_program });
     }
 
     void render_system::add_light_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh)
@@ -146,7 +147,13 @@ namespace grender
     {
         OPTICK_EVENT();
         setup_geometry_pass();
-        execute_draw_requests(m_mesh_draw_requests);
+        auto locked_draw_requests = m_mesh_draw_requests.get();
+        for (auto& draw_request : locked_draw_requests.m_data)
+        {
+            draw_request.m_program_data->m_program->activate();
+            draw_request.m_program_data->m_state.apply();
+            draw_request.m_mesh->draw();
+        }
     } 
 
     void render_system::render_lights()
@@ -177,8 +184,8 @@ namespace grender
         auto locked_draw_requests = draw_requests.get();
         for (auto& draw_request : locked_draw_requests.m_data)
         {
-            draw_request.program_data->m_program->activate();
-            draw_request.program_data->m_state.apply();
+            draw_request.m_program_data->m_program->activate();
+            draw_request.m_program_data->m_state.apply();
             draw_request.m_mesh->draw();
         }
     }
@@ -237,7 +244,6 @@ namespace grender
             graphic_comp->m_script.set_in_context(std::reference_wrapper(*m_resource_library));
             graphic_comp->m_script.set_in_context(std::reference_wrapper(*this));
             graphic_comp->m_script.prepare(m_resource_library);
-
         }
     }
 }

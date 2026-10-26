@@ -13,10 +13,9 @@ namespace grender
     {
         GCORE_DECLARE_NODE_TYPE(render_directional_shadow_node);
 
-        using in_program_pin = gcore::input_pin_descriptor<program_pin_data, 0, 1>;
-        using in_light_direction_pin = gcore::input_pin_descriptor<glm::vec3, 1, 2>;
-        using in_camera_matrix_pin = gcore::input_pin_descriptor<glm::mat4, 2, 3>;
-        using in_camera_matrix_projection_pin = gcore::input_pin_descriptor<glm::mat4, 3, 4>;
+        using in_light_direction_pin = gcore::input_pin_descriptor<glm::vec3, 0, 2>;
+        using in_camera_matrix_pin = gcore::input_pin_descriptor<glm::mat4, 1, 3>;
+        using in_camera_matrix_projection_pin = gcore::input_pin_descriptor<glm::mat4, 2, 4>;
 
         using out_texture_pin = gcore::output_pin_descriptor<gcore::resource_handle<texture>, 0, 100>;
         using out_light_matrix_pin = gcore::output_pin_descriptor<glm::mat4, 1, 101>;
@@ -42,10 +41,8 @@ namespace grender
     struct render_point_light_shadow_node : gcore::node
     {
         GCORE_DECLARE_NODE_TYPE(render_point_light_shadow_node);
-
-        using in_program_pin = gcore::input_pin_descriptor<program_pin_data, 0, 1>;
-        using in_light_matrix_pin = gcore::input_pin_descriptor<glm::mat4, 1, 2>;
-        using in_radius_pin = gcore::input_pin_descriptor<float, 2, 3>;
+        using in_light_matrix_pin = gcore::input_pin_descriptor<glm::mat4, 0, 2>;
+        using in_radius_pin = gcore::input_pin_descriptor<float, 1, 3>;
 
         using out_texture_pin = gcore::output_pin_descriptor<gcore::resource_handle<texture>, 0, 100>;
 

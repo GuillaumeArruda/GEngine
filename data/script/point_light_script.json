@@ -158,31 +158,14 @@
         {
             "name": "",
             "position": {
-                "x": -2731.0,
-                "y": -368.0
+                "x": -2747.0,
+                "y": -353.0
             },
             "node": {
                 "is_valid": true,
                 "type_name": "grender::render_point_light_shadow_node",
                 "data": {
                     "node_id": 19
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": -3070.0,
-                "y": -381.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "grender::configure_program_node",
-                "data": {
-                    "node_id": 23,
-                    "program": {
-                        "value": "6ade0ae7f9e16846c01d9df6ec5a7283"
-                    }
                 }
             }
         },
@@ -307,14 +290,14 @@
                     "destination_pin": 1
                 },
                 {
-                    "source": 24,
-                    "source_pin": 1,
-                    "destination_pin": 3
-                },
-                {
                     "source": 8,
                     "source_pin": 1,
                     "destination_pin": 2
+                },
+                {
+                    "source": 24,
+                    "source_pin": 1,
+                    "destination_pin": 3
                 }
             ]
         }

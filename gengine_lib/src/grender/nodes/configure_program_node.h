@@ -13,7 +13,7 @@ namespace grender
         using out_pin = gcore::output_pin_descriptor<program_pin_data, 0, 12000>;
 
         bool is_const() const override { return false; }
-        bool is_pure() const override { return false; }
+        bool is_pure() const override { return true; }
 
         void execute(gcore::node_context& context) const override;
 

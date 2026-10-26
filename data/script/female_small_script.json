@@ -661,6 +661,23 @@
                     }
                 }
             }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1336.0,
+                "y": -288.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 107,
+                    "program": {
+                        "value": "6ade0ae7f9e16846c01d9df6ec5a7283"
+                    }
+                }
+            }
         }
     ],
     "connections": [
@@ -791,6 +808,11 @@
                     "source": 9,
                     "source_pin": 1,
                     "destination_pin": 3
+                },
+                {
+                    "source": 107,
+                    "source_pin": 12000,
+                    "destination_pin": 4
                 }
             ]
         },
@@ -811,6 +833,11 @@
                     "source": 9,
                     "source_pin": 1,
                     "destination_pin": 3
+                },
+                {
+                    "source": 107,
+                    "source_pin": 12000,
+                    "destination_pin": 4
                 }
             ]
         },
@@ -831,6 +858,11 @@
                     "source": 9,
                     "source_pin": 1,
                     "destination_pin": 3
+                },
+                {
+                    "source": 107,
+                    "source_pin": 12000,
+                    "destination_pin": 4
                 }
             ]
         },
@@ -851,6 +883,11 @@
                     "source": 9,
                     "source_pin": 1,
                     "destination_pin": 3
+                },
+                {
+                    "source": 107,
+                    "source_pin": 12000,
+                    "destination_pin": 4
                 }
             ]
         },
@@ -871,6 +908,11 @@
                     "source": 9,
                     "source_pin": 1,
                     "destination_pin": 3
+                },
+                {
+                    "source": 107,
+                    "source_pin": 12000,
+                    "destination_pin": 4
                 }
             ]
         },
@@ -926,6 +968,11 @@
                     "source": 9,
                     "source_pin": 1,
                     "destination_pin": 3
+                },
+                {
+                    "source": 107,
+                    "source_pin": 12000,
+                    "destination_pin": 4
                 }
             ]
         },
@@ -981,6 +1028,11 @@
                     "source": 9,
                     "source_pin": 1,
                     "destination_pin": 3
+                },
+                {
+                    "source": 107,
+                    "source_pin": 12000,
+                    "destination_pin": 4
                 }
             ]
         },

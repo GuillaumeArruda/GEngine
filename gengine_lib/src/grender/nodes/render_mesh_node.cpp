@@ -22,13 +22,14 @@ namespace grender
             return;
 
         gtl::span<program_pin_data const> programs = context.read<in_program_pin>();
+        gtl::span<program_pin_data const> shadow_programs = context.read<in_shadow_program_pin>();
         for (std::size_t index = 0; index < programs.size(); ++index)
         {
             program_pin_data const& program = programs[index];
             if (!program.m_program.is_loaded() || !enabled[index < enabled.size() ? index : 0uz])
                 continue;
 
-            render_sys->get().add_mesh_draw_request(transform[index < transform.size() ? index : 0uz], program, m_mesh);
+            render_sys->get().add_mesh_draw_request(transform[index < transform.size() ? index : 0uz], program, shadow_programs[index < shadow_programs.size() ? index : 0uz], m_mesh);
         }
     }
 
@@ -44,6 +45,7 @@ namespace grender
             in_enable_pin::get("enable"),
             in_transform_pin::get("transform"),
             in_program_pin::get("program"), 
+            in_shadow_program_pin::get("shadow_program"),
         };
         return { inputs, {} };
     }
