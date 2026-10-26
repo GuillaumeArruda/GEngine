@@ -72,7 +72,8 @@ namespace grender
             return value.size() > 0 ? value[0] : T(0);
         };
 
-        switch (state.get_type_at_index(index))
+        uniform_variant::type const type = state.get_type_at_index(index);
+        switch (type)
         {
         case uniform_variant::type::glbool:         state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<bool>()); break;
         case uniform_variant::type::glint:          state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<int>()); break;
@@ -88,10 +89,15 @@ namespace grender
         case uniform_variant::type::vec4:           state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::vec4>()); break;
         case uniform_variant::type::mat33:          state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::mat3>()); break;
         case uniform_variant::type::mat44:          state.set_uniform(static_cast<GLint>(index), read_or_get_default_value.operator()<glm::mat4>()); break;
-        case uniform_variant::type::sampler_1d:     state.set_uniform(static_cast<GLint>(index), uniform_variant(read_or_get_default_value.operator()<gcore::resource_handle<texture>>(), uniform_variant::type::sampler_1d)); break;
-        case uniform_variant::type::sampler_2d:     state.set_uniform(static_cast<GLint>(index), uniform_variant(read_or_get_default_value.operator()<gcore::resource_handle<texture>>(), uniform_variant::type::sampler_2d)); break;
-        case uniform_variant::type::sampler_3d:     state.set_uniform(static_cast<GLint>(index), uniform_variant(read_or_get_default_value.operator()<gcore::resource_handle<texture>>(), uniform_variant::type::sampler_3d)); break;
-        case uniform_variant::type::sampler_cube:   state.set_uniform(static_cast<GLint>(index), uniform_variant(read_or_get_default_value.operator()<gcore::resource_handle<texture>>(), uniform_variant::type::sampler_cube)); break;
+        case uniform_variant::type::sampler_1d:
+        case uniform_variant::type::sampler_1d_shadow:
+        case uniform_variant::type::sampler_2d:
+        case uniform_variant::type::sampler_2d_array:
+        case uniform_variant::type::sampler_2d_shadow:
+        case uniform_variant::type::sampler_3d:
+        case uniform_variant::type::sampler_cube:   
+        case uniform_variant::type::sampler_cube_shadow:
+            state.set_uniform(static_cast<GLint>(index), uniform_variant(read_or_get_default_value.operator() < gcore::resource_handle<texture> > (), type)); break;
         default:
             assert(false); // Unsupported data type
         }
@@ -117,9 +123,14 @@ namespace grender
         case uniform_variant::type::mat33:       return registry.get_type_id<glm::mat3>();
         case uniform_variant::type::mat44:       return registry.get_type_id<glm::mat4>();
         case uniform_variant::type::sampler_1d:
+        case uniform_variant::type::sampler_1d_array:
+        case uniform_variant::type::sampler_1d_shadow:
         case uniform_variant::type::sampler_2d:
+        case uniform_variant::type::sampler_2d_array:
+        case uniform_variant::type::sampler_2d_shadow:
         case uniform_variant::type::sampler_3d:
         case uniform_variant::type::sampler_cube:
+        case uniform_variant::type::sampler_cube_shadow:
             return registry.get_type_id<gcore::resource_handle<texture>>();
         default:
             assert(false); // Unsupported data type

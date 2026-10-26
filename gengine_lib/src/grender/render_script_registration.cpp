@@ -47,6 +47,7 @@ namespace grender
         factory.register_type<grender::render_skybox_node>("grender::render_skybox_node", "Render Skybox");
         factory.register_type<grender::get_render_targets_node>("grender::get_render_target_node", "Get Render Target");
         factory.register_type<grender::render_directional_shadow_node>("grender::render_directional_shadow_node", "Render Directional Shadow");
+        factory.register_type<grender::render_point_light_shadow_node>("grender::render_point_light_shadow_node", "Render Point Light Shadow");
 
         factory.register_type<gcore::get_resource_node<mesh_resource>>("gcore::get_resource_node<grender::mesh_resource>", "Get Resource (Mesh)");
         factory.register_type<gcore::get_resource_node<texture>>("gcore::get_resource_node<grender::texture>", "Get Resource (Texture)");

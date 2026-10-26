@@ -39,8 +39,8 @@
         {
             "name": "",
             "position": {
-                "x": -2936.0,
-                "y": -880.0
+                "x": -3240.0,
+                "y": -866.0
             },
             "node": {
                 "is_valid": true,
@@ -154,6 +154,52 @@
                     "node_id": 15
                 }
             }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2731.0,
+                "y": -368.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_point_light_shadow_node",
+                "data": {
+                    "node_id": 19
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3070.0,
+                "y": -381.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 23,
+                    "program": {
+                        "value": "6ade0ae7f9e16846c01d9df6ec5a7283"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3014.0,
+                "y": -272.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 24,
+                    "variable_id": "6ad91f3ebc39e7a4641853b9669dc6ef"
+                }
+            }
         }
     ],
     "connections": [
@@ -234,6 +280,11 @@
                     "source": 15,
                     "source_pin": 100,
                     "destination_pin": -1172172285
+                },
+                {
+                    "source": 19,
+                    "source_pin": 100,
+                    "destination_pin": 1315276102
                 }
             ]
         },
@@ -244,6 +295,26 @@
                     "source": 8,
                     "source_pin": 2,
                     "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 19,
+            "data": [
+                {
+                    "source": 23,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 24,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 2
                 }
             ]
         }

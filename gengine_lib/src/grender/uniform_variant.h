@@ -55,10 +55,13 @@ namespace grender
             mat44,
             sampler_1d,
             sampler_1d_array,
+            sampler_1d_shadow,
             sampler_2d,
+            sampler_2d_shadow,
             sampler_2d_array,
             sampler_3d,
             sampler_cube,
+            sampler_cube_shadow,
             invalid,
         };
 

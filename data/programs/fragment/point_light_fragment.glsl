@@ -13,6 +13,7 @@ uniform sampler2D diffuse_tex;
 uniform sampler2D position_tex;
 uniform sampler2D normal_tex;
 uniform sampler2D specular_tex;
+uniform samplerCubeShadow shadow_tex;
 
 in vec3 world_pos;
 
@@ -21,6 +22,17 @@ out vec4 color;
 vec2 CalculateUV()
 {
 	return gl_FragCoord.xy / screen_size;
+}
+
+float compute_shadow(vec3 position)
+{
+    vec3 light_direction = position - world_matrix[3].xyz;
+    const float minZ = 0.1;
+    const float max_axis_dist = max(max(abs(light_direction.x), abs(light_direction.y)), abs(light_direction.z));
+    float current_depth = ((outer_radius + minZ) / (outer_radius - minZ)) - ((2.0 * outer_radius * minZ) / (outer_radius - minZ)) / max_axis_dist;
+    current_depth = current_depth * 0.5 + 0.5;
+    const float bias = 0.0001;
+    return texture(shadow_tex, vec4(light_direction, current_depth - bias)).r;
 }
 
 void main()
@@ -46,5 +58,6 @@ void main()
 	const vec3 diffuse_color = lambertian * diffuse;
 	const vec3 specular_color =  specular * specular_intensity;
 	const vec3 ambient = diffuse * ambient_light;
-	color = vec4((diffuse_color + specular_color) * light_color * light_intensity + ambient, 1.0);
+    const float shadow = compute_shadow(position);
+	color = vec4((diffuse_color + specular_color) * shadow * light_color * light_intensity + ambient, 1.0);
 }
