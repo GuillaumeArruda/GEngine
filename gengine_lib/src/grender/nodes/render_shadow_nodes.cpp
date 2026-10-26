@@ -43,11 +43,13 @@ namespace grender
                         gl_exec(glGenTextures, 1, &texture_id);
                         gl_exec(glBindTexture, GL_TEXTURE_2D, texture_id);
                         gl_exec(glTexImage2D, GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadow_map_size, shadow_map_size, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
                         gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
                         gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-                        constexpr float bordercolor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+                        constexpr float bordercolor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
                         gl_exec(glTexParameterfv, GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, bordercolor);
                         memory.m_texture->set_id(texture_id);
 
@@ -244,7 +246,6 @@ namespace grender
                     glm::mat4 const light_view_matrix = glm::lookAt(light_pos, light_pos + directions[i], up_vectors[i]);
                     glm::mat4 const light_matrix = light_projection * light_view_matrix;
                     gl_exec(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, memory.m_texture->get_id(), 0);
-                    gl_exec(glClear, GL_DEPTH_BUFFER_BIT);
                     render_sys.for_each_mesh_draw_request(
                         [&light_matrix](render_system::mesh_draw_request const& request) mutable
                         {

@@ -143,23 +143,6 @@
         {
             "name": "",
             "position": {
-                "x": -2891.0,
-                "y": 112.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "grender::configure_program_node",
-                "data": {
-                    "node_id": 17,
-                    "program": {
-                        "value": "6ade0ae7f9e16846c01d9df6ec5a7283"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
                 "x": -2870.0,
                 "y": 160.0
             },
