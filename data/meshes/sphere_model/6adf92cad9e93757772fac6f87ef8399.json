@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "6adf92cad9e93757772fac6f87ef8399",
+            "name": "sphere_model",
+            "bin_file_path": "data\\meshes\\sphere_model\\sphere_model_Icosphere.001.meshbin",
+            "primitive_type": "mesh_resource::primitive_type::triangle"
+        }
+    }
+}
