@@ -25,6 +25,7 @@ namespace grender
         void process(gserializer::serializer& serializer) override;
 
         node::pin_descriptors get_pin_descriptors() const override;
+        gcore::node_data get_default_value(int pin_id) const override;
 
         gcore::resource_handle<mesh_resource> get_mesh() const { return m_mesh; }
 

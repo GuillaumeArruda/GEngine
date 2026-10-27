@@ -6,6 +6,7 @@
 #include "gtl/span.h"
 
 #include "gcore/script/node_data_type.h"
+#include "gcore/script/node_data.h"
 #include "gcore/script/script_defines.h"
 
 #include "gtl/uuid.h"
@@ -45,6 +46,7 @@ namespace gcore
         using pin_descriptors = std::array<gtl::span<pin_descriptor const>, gtl::to_underlying(pin_type::count)>;
 
         virtual pin_descriptors get_pin_descriptors() const = 0;
+        virtual node_data get_default_value(int) const { return node_data(); }
 
         virtual void process(gserializer::serializer& serializer);
 

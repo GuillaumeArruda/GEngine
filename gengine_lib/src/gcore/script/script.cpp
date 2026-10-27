@@ -210,7 +210,17 @@ namespace gcore
                     new_constant_node.push_back(std::make_unique<constant_node>());
                     std::unique_ptr<constant_node>& constant = new_constant_node.back();
                     constant->set_node_id(id_generator++);
-                    constant->get_node_data().set_type_id(input_descriptor.m_type_id);
+                    
+                    node_data default_value = node.m_node->get_default_value(input_descriptor.m_id);
+                    if (default_value.get_type_id() == input_descriptor.m_type_id)
+                    {
+                        constant->get_node_data() = std::move(default_value);
+                    }
+                    else
+                    {
+                        constant->get_node_data().set_type_id(input_descriptor.m_type_id);
+                    }
+                    constant->pre_create(m_descriptor);
                     auto success = node_id_to_node_index.insert(std::pair(constant->get_node_id(), static_cast<int>(m_descriptor.m_nodes.size() + new_constant_node.size()) - 1));
                     node_memory_to_allocate += constant->byte_size();
                     assert(success.second);

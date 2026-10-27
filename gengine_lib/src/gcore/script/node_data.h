@@ -17,6 +17,11 @@ namespace gcore
         ~node_data() { clear(); }
         node_data(node_data&& move);
         node_data(node_data const& copy);
+        template<class Type>
+        explicit node_data(Type const& type) 
+        {
+            write_values<Type>(type);
+        }
 
         node_data& operator=(node_data&& move);
         node_data& operator=(node_data const& copy);

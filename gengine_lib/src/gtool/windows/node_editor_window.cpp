@@ -462,13 +462,24 @@ namespace gtool
                 continue;
            
             gcore::script_descriptor::node_descriptor constant_descriptor;
-            constant_descriptor.m_node = std::make_unique<gcore::constant_node>();
-            constant_descriptor.m_node->set_node_id(m_descriptor.m_node_id_generator++);
-            gcore::node_id_t const node_id = constant_descriptor.m_node->get_node_id();
-            static_cast<gcore::constant_node*>(constant_descriptor.m_node.get())->get_node_data().set_type_id(input.m_type_id);
-            constant_descriptor.m_node->pre_create(m_descriptor);
-            m_descriptor.m_nodes.push_back(std::move(constant_descriptor));
+            auto constant_node = std::make_unique<gcore::constant_node>();
+            constant_node->set_node_id(m_descriptor.m_node_id_generator++);
+            gcore::node_id_t const node_id = constant_node->get_node_id();
 
+            gcore::node_data default_value = m_descriptor.m_nodes.back().m_node->get_default_value(input.m_id);
+            if (default_value.get_type_id() == input.m_type_id)
+            {
+                constant_node->get_node_data() = std::move(default_value);
+            }
+            else
+            {
+                constant_node->get_node_data().set_type_id(input.m_type_id);
+            }
+
+            constant_node->pre_create(m_descriptor);
+
+            constant_descriptor.m_node = std::move(constant_node);
+            m_descriptor.m_nodes.push_back(std::move(constant_descriptor));
             gcore::node* node = nullptr;
             m_descriptor.add_connection(node_id, gcore::constant_node::output_id, new_node_id, input.m_id, node);
             ne::SetNodePosition(node_id, constant_position);

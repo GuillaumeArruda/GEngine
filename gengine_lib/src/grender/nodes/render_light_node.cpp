@@ -53,4 +53,13 @@ namespace grender
         };
         return { inputs, {} };
     }
+
+    gcore::node_data render_light_node::get_default_value(int pin_id) const
+    {
+        if (pin_id == in_enable_pin::id)
+        {
+            return gcore::node_data(true);
+        }
+        return gcore::node::get_default_value(pin_id);
+    }
 }
