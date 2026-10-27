@@ -308,7 +308,13 @@ namespace gcore
                     int const in_pin_index = input_pin_it->m_index;
                     in_pin_data& input_data = input_context.m_input_data[in_pin_index];
 
-                    int const output_index = node_id_to_node_index.find(connection.m_source_id)->second;
+                    auto node_index_it = node_id_to_node_index.find(connection.m_source_id);
+                    if (node_index_it == node_id_to_node_index.end())
+                    {
+                        continue;
+                    }
+
+                    int const output_index = node_index_it->second;
                     node const& output_node = *m_nodes[output_index];
                     node_context const& output_context = m_default_script_context->m_node_contexts[output_index];
                     gtl::span<pin_descriptor const> output_pin_descriptors = output_node.get_pin_descriptors()[gtl::to_underlying(pin_type::output)];

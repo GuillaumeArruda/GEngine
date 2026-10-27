@@ -57,4 +57,33 @@ namespace gcore
             return { input_descriptors,  output_descriptors };
         }
     };
+
+    struct make_mat4_node : node_helper_3_in_1_out<make_mat4_node, glm::vec3, glm::vec3, glm::vec3, glm::mat4>
+    {
+        GCORE_DECLARE_NODE_TYPE(make_mat4_node);
+        using super = node_helper_3_in_1_out<make_mat4_node, glm::vec3, glm::vec3, glm::vec3, glm::mat4>;
+
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
+
+        void execute_on_element(node_context&, glm::vec3 const& translation, glm::vec3 const& rotation, glm::vec3 const& scale, glm::mat4& out) const;
+        node::pin_descriptors get_pin_descriptors() const override;
+    };
+
+    struct break_mat4_node : node
+    {
+        GCORE_DECLARE_NODE_TYPE(break_mat4_node);
+
+        using in_matrix_pin = input_pin_descriptor<glm::mat4, 0, 1>;
+        
+        using out_translation_pin = output_pin_descriptor<glm::vec3, 0, 100>;
+        using out_rotation_pin = output_pin_descriptor<glm::vec3, 1, 101>;
+        using out_scale_pin = output_pin_descriptor<glm::vec3, 2, 102>;
+
+        bool is_const() const override { return false; }
+        bool is_pure() const override { return true; }
+
+        void execute(node_context& context) const override;
+        node::pin_descriptors get_pin_descriptors() const override;
+    };
 }

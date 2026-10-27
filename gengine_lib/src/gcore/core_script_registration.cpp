@@ -18,6 +18,7 @@
 #include "gcore/script/nodes/get_resource_node.h"
 #include "gcore/script/nodes/matrix_nodes.h"
 #include "gcore/script/nodes/variable_nodes.h"
+#include "gcore/script/nodes/vector_nodes.h"
 
 #include "gserializer/gmath_serialization.h"
 
@@ -103,6 +104,12 @@ namespace gcore
         factory.register_type<inverse_matrix_node<glm::mat3>>("gcore::inverse_matrix_node<glm::mat3>", "Inverse Mat3");
         factory.register_type<transpose_matrix_node<glm::mat3>>("gcore::transpose_matrix_node<glm::mat3>", "Transpose Mat3");
         factory.register_type<multiply_node<glm::mat3>>("gcore::multiply_node<glm::mat3>", "Multiply (Mat3)");
+        factory.register_type<make_mat4_node>("gcore::make_mat4_node", "Make Mat4");
+        factory.register_type<break_mat4_node>("gcore::break_mat4_node", "Break Mat4");
+        factory.register_type<make_vec3_node>("gcore::make_vec3_node", "Make Vec3");
+        factory.register_type<break_vec3_node>("gcore::break_vec3_node", "Break Vec3");
+        factory.register_type<make_vec4_node>("gcore::make_vec4_node", "Make Vec4");
+        factory.register_type<break_vec4_node>("gcore::break_vec4_node", "Break Vec4");
 
         factory.register_conversion<int, float>("gcore::conversion_node<int, float>");
         factory.register_conversion<float, int>("gcore::conversion_node<float, int>"); 
