@@ -8,7 +8,7 @@
             "shaders": [
                 {
                     "key": "shader::type::vertex",
-                    "data": "data\\programs\\vertex\\fullscreen_quad.glsl"
+                    "data": "data\\programs\\vertex\\simple_vertex.glsl"
                 },
 				{
 					"key" : "shader::type::fragment",

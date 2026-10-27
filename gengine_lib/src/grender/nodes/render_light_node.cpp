@@ -22,6 +22,10 @@ namespace grender
         if (transform.empty())
             return;
 
+        gtl::span<bool const> cullback = context.read<in_cull_back_pin>();
+        if (cullback.empty())
+            return;
+
         gtl::span<program_pin_data const> programs = context.read<in_program_pin>();
         for (std::size_t index = 0; index < programs.size(); ++index)
         {
@@ -29,7 +33,7 @@ namespace grender
             if (!program.m_program.is_loaded() || !enabled[index < enabled.size() ? index : 0uz])
                 continue;
 
-            render_sys->get().add_light_draw_request(transform[index < transform.size() ? index : 0uz], program, m_mesh);
+            render_sys->get().add_light_draw_request(transform[index < transform.size() ? index : 0uz], program, m_mesh, cullback[index < cullback.size() ? index : 0uz]);
         }
     }
 
@@ -45,6 +49,7 @@ namespace grender
             in_enable_pin::get("enable"),
             in_transform_pin::get("transform"),
             in_program_pin::get("program"),
+            in_cull_back_pin::get("cull back"),
         };
         return { inputs, {} };
     }

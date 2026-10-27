@@ -104,9 +104,9 @@ namespace grender
         m_mesh_draw_requests.get()->push_back(mesh_draw_request{ transform, &program, std::move(mesh), &shadow_program });
     }
 
-    void render_system::add_light_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh)
+    void render_system::add_light_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh, bool cull_back_face)
     {
-        m_light_draw_requests.get()->emplace_back(transform, &program, std::move(mesh));
+        m_light_draw_requests.get()->push_back(light_draw_request{ transform, &program, std::move(mesh), cull_back_face });
     }
 
     void render_system::add_skybox_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh)
@@ -169,19 +169,22 @@ namespace grender
         }
 
         setup_lightning_pass();
-        execute_draw_requests(m_light_draw_requests);
+
+        auto locked_draw_requests = m_light_draw_requests.get();
+        for (auto& draw_request : locked_draw_requests.m_data)
+        {
+            gl_exec(glCullFace, draw_request.m_cull_back ? GL_BACK : GL_FRONT);
+            draw_request.m_program_data->m_program->activate();
+            draw_request.m_program_data->m_state.apply();
+            draw_request.m_mesh->draw();
+        }
     }
 
     void render_system::render_skybox()
     {
         OPTICK_EVENT();
         setup_skybox_pass();
-        execute_draw_requests(m_skybox_draw_requests);
-    }
-
-    void render_system::execute_draw_requests(gthread::locked<std::vector<draw_request>>& draw_requests)
-    {
-        auto locked_draw_requests = draw_requests.get();
+        auto locked_draw_requests = m_skybox_draw_requests.get();
         for (auto& draw_request : locked_draw_requests.m_data)
         {
             draw_request.m_program_data->m_program->activate();
@@ -211,7 +214,6 @@ namespace grender
         gl_exec(glBlendEquation, GL_FUNC_ADD);
         gl_exec(glBlendFunc, GL_ONE, GL_ONE);
         gl_exec(glEnable, GL_CULL_FACE);
-        gl_exec(glCullFace, GL_BACK);
         gl_exec(glClear, GL_COLOR_BUFFER_BIT);
     }
     void render_system::setup_skybox_pass()

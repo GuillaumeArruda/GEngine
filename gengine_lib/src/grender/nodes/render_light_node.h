@@ -19,6 +19,7 @@ namespace grender
         using in_enable_pin = gcore::input_pin_descriptor<bool, 0, 2>;
         using in_transform_pin = gcore::input_pin_descriptor<glm::mat4, 1, 3>;
         using in_program_pin = gcore::input_pin_descriptor<program_pin_data, 2, 1>;
+        using in_cull_back_pin = gcore::input_pin_descriptor<bool, 3, 4>;
 
         void execute(gcore::node_context& context) const override;
 

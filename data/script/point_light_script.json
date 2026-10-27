@@ -12,7 +12,7 @@
                 "data": {
                     "node_id": 4,
                     "mesh": {
-                        "value": "5fe2c4daa56d8657dbac512cfa03d0f7"
+                        "value": "6adf92cad9e93757772fac6f87ef8399"
                     }
                 }
             }
@@ -20,8 +20,8 @@
         {
             "name": "",
             "position": {
-                "x": -2385.0,
-                "y": -874.0
+                "x": -2362.0,
+                "y": -896.0
             },
             "node": {
                 "is_valid": true,
@@ -39,8 +39,8 @@
         {
             "name": "",
             "position": {
-                "x": -3240.0,
-                "y": -866.0
+                "x": -3569.0,
+                "y": -898.0
             },
             "node": {
                 "is_valid": true,
@@ -70,8 +70,8 @@
         {
             "name": "",
             "position": {
-                "x": -2895.0,
-                "y": -628.0
+                "x": -2902.0,
+                "y": -640.0
             },
             "node": {
                 "is_valid": true,
@@ -100,7 +100,7 @@
             "name": "",
             "position": {
                 "x": -2790.0,
-                "y": -512.0
+                "y": -528.0
             },
             "node": {
                 "is_valid": true,
@@ -115,7 +115,7 @@
             "name": "",
             "position": {
                 "x": -2790.0,
-                "y": -464.0
+                "y": -480.0
             },
             "node": {
                 "is_valid": true,
@@ -144,8 +144,8 @@
         {
             "name": "",
             "position": {
-                "x": -2607.0,
-                "y": -768.0
+                "x": -2943.0,
+                "y": -720.0
             },
             "node": {
                 "is_valid": true,
@@ -183,9 +183,156 @@
                     "variable_id": "6ad91f3ebc39e7a4641853b9669dc6ef"
                 }
             }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2828.0,
+                "y": -1042.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::make_mat4_node",
+                "data": {
+                    "node_id": 25
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3068.0,
+                "y": -1040.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::break_mat4_node",
+                "data": {
+                    "node_id": 28
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2610.0,
+                "y": -928.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::multiply_node<glm::mat4>",
+                "data": {
+                    "node_id": 32
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2998.0,
+                "y": -962.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::make_vec3_node",
+                "data": {
+                    "node_id": 34
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3414.0,
+                "y": -1104.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 38,
+                    "variable_id": "6ad91f3ebc39e7a4641853b9669dc6ef"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2186.0,
+                "y": -592.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 42,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3039.0,
+                "y": -816.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::multiply_node<glm::mat4>",
+                "data": {
+                    "node_id": 43
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3218.0,
+                "y": -1089.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::multiply_node<float>",
+                "data": {
+                    "node_id": 44
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3386.0,
+                "y": -1056.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 46,
+                    "value": {
+                        "type_name": "Float",
+                        "number_of_elements": 1,
+                        "value": 1.0099999904632568
+                    }
+                }
+            }
         }
     ],
     "connections": [
+        {
+            "key": 28,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                }
+            ]
+        },
         {
             "key": 4,
             "data": [
@@ -203,6 +350,31 @@
                     "source": 9,
                     "source_pin": 12000,
                     "destination_pin": 1
+                },
+                {
+                    "source": 42,
+                    "source_pin": 1,
+                    "destination_pin": 4
+                }
+            ]
+        },
+        {
+            "key": 25,
+            "data": [
+                {
+                    "source": 28,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 28,
+                    "source_pin": 101,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 34,
+                    "source_pin": 100,
+                    "destination_pin": 2
                 }
             ]
         },
@@ -268,6 +440,11 @@
                     "source": 19,
                     "source_pin": 100,
                     "destination_pin": 1315276102
+                },
+                {
+                    "source": 32,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
                 }
             ]
         },
@@ -298,6 +475,71 @@
                     "source": 24,
                     "source_pin": 1,
                     "destination_pin": 3
+                }
+            ]
+        },
+        {
+            "key": 32,
+            "data": [
+                {
+                    "source": 25,
+                    "source_pin": 100,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 43,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 34,
+            "data": [
+                {
+                    "source": 44,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 44,
+                    "source_pin": 100,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 44,
+                    "source_pin": 100,
+                    "destination_pin": 2
+                }
+            ]
+        },
+        {
+            "key": 43,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 3,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 8,
+                    "source_pin": 2,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 44,
+            "data": [
+                {
+                    "source": 46,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 38,
+                    "source_pin": 1,
+                    "destination_pin": 0
                 }
             ]
         }

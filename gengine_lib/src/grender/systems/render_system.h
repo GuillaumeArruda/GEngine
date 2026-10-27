@@ -41,6 +41,11 @@ namespace grender
             program_pin_data const* m_shadow_program = nullptr;
         };
 
+        struct light_draw_request : draw_request
+        {
+            bool m_cull_back = false;
+        };
+
         void connect_to_world(gcore::world& world) override;
         void disconnect_from_world(gcore::world& world) override;
         void update(gcore::world& world, gthread::job_manager& jobs);
@@ -50,7 +55,7 @@ namespace grender
         GLuint get_target_id() const;
 
         void add_mesh_draw_request(glm::mat4 const& transform, program_pin_data const& program, program_pin_data const& shadow_program, gcore::resource_handle<mesh_resource> mesh);
-        void add_light_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
+        void add_light_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh, bool cull_back_face);
         void add_skybox_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
     
         template<class Functor>
@@ -76,7 +81,6 @@ namespace grender
         void render_meshes();
         void render_lights();
         void render_skybox();
-        static void execute_draw_requests(gthread::locked<std::vector<draw_request>>& draw_requests);
 
         void setup_geometry_pass();
         void setup_lightning_pass();
@@ -88,7 +92,7 @@ namespace grender
         frame_buffer m_frame_buffer = frame_buffer(nullptr, 0ull, 0ull);
         gthread::locked<std::vector<mesh_draw_request>> m_mesh_draw_requests;
         gthread::locked<std::vector<std::move_only_function<void(render_system&)>>> m_pre_light_works;
-        gthread::locked<std::vector<draw_request>> m_light_draw_requests;
+        gthread::locked<std::vector<light_draw_request>> m_light_draw_requests;
         gthread::locked<std::vector<draw_request>> m_skybox_draw_requests;
         gtl::callback_id m_graphic_comp_added_id = 0;
     };
