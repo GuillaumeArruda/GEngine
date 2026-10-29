@@ -1,0 +1,23 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::program",
+        "data": {
+            "uuid": "6ae21754418d9ece2d41036d2fc054c0",
+            "name": "spot_light_program",
+            "shaders": [
+                {
+                    "key": "shader::type::vertex",
+                    "data": "data\\programs\\vertex\\fullscreen_quad.glsl"
+                },
+                {
+                    "key": "shader::type::fragment",
+                    "data": "data\\programs\\fragment\\spot_light_fragment.glsl"
+                }
+            ],
+            "default uniforms": {
+                "uniforms": []
+            }
+        }
+    }
+}

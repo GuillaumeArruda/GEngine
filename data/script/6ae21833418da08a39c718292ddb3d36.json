@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::graphic_script",
+        "data": {
+            "uuid": "6ae21833418da08a39c718292ddb3d36",
+            "name": "spot_light_script",
+            "descriptor_file": "data/script/spot_light_script.json"
+        }
+    }
+}
