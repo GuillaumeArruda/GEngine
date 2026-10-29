@@ -10,6 +10,7 @@ uniform float inner_distance;
 uniform float outer_distance;
 
 uniform mat4 light_world_matrix;
+uniform mat4 light_matrix;
 
 uniform sampler2D diffuse_tex;
 uniform sampler2D position_tex;
@@ -24,6 +25,15 @@ out vec4 color;
 vec2 CalculateUV()
 {
 	return gl_FragCoord.xy / screen_size;
+}
+
+float compute_shadow(vec3 world_position)
+{
+    const vec4 light_space_pos = light_matrix * vec4(world_position, 1.0);
+    vec3 projection_coordinate = light_space_pos.xyz / light_space_pos.w;
+    projection_coordinate = projection_coordinate * 0.5 + 0.5;
+    const float bias = 0.001; 
+    return texture(shadow_tex, vec3(projection_coordinate.xy, projection_coordinate.z - bias));
 }
 
 void main()
@@ -59,6 +69,6 @@ void main()
 	const vec3 diffuse_color = lambertian * diffuse;
 	const vec3 specular_color =  specular * specular_intensity;
 	const vec3 ambient = diffuse * ambient_light * final_factor;
-  
-	color = vec4((diffuse_color + specular_color) * light_color * final_factor + ambient, 1.0);
+    const float shadow = compute_shadow(position);
+	color = vec4((diffuse_color + specular_color) * light_color * final_factor * shadow + ambient, 1.0);
 }

@@ -15,7 +15,7 @@
 
 namespace grender
 {
-    void render_directional_shadow_node::prepare(gcore::node_context& context) const
+    void render_shadow_node_base::prepare(gcore::node_context& context) const
     {
         if (auto* res_lib = context.get_in_context<std::reference_wrapper<gcore::resource_library>>())
         {
@@ -154,18 +154,6 @@ namespace grender
         glm::mat4 const light_projection_matrix = glm::ortho(min_extent.x, max_extent.x, min_extent.y, max_extent.y, 0.f, max_extent.z - min_extent.z);
         return light_projection_matrix * light_view_matrix;
     }
-
-    void render_point_light_shadow_node::prepare(gcore::node_context& context) const
-    {
-        if (auto* res_lib = context.get_in_context<std::reference_wrapper<gcore::resource_library>>())
-        {
-            auto texture = std::make_unique<runtime_texture>();
-            auto fbo = std::make_unique<frame_buffer_resource>();
-            auto tex_handle = res_lib->get().add_runtime_resource(std::move(texture));
-            auto fbo_handle = res_lib->get().add_runtime_resource(std::move(fbo));
-            context.m_node_memory = state{ tex_handle, fbo_handle };
-        }
-    }
     
     void render_point_light_shadow_node::execute(gcore::node_context& context) const
     {
@@ -277,6 +265,100 @@ namespace grender
 
         static gcore::pin_descriptor const outputs[] = {
             out_texture_pin::get("shadow texture"),
+        };
+        return node::pin_descriptors{ inputs, outputs };
+    }
+
+    void render_spot_light_shadow_node::execute(gcore::node_context& context) const
+    {
+        constexpr int shadow_map_size = 1024;
+        if (auto* render_sys = context.get_in_context<std::reference_wrapper<render_system>>())
+        {
+            auto& memory = std::any_cast<state&>(context.m_node_memory);
+            if (memory.m_texture->get_id() == 0 && memory.m_framebuffer->get_fbo() == 0)
+            {
+                render_sys->get().add_pre_light_work(
+                    [memory = memory](render_system&) mutable
+                    {
+                        OPTICK_EVENT("Create spot light shadow resources");
+                        GLuint texture_id = 0;
+                        gl_exec(glGenTextures, 1, &texture_id);
+                        gl_exec(glBindTexture, GL_TEXTURE_2D, texture_id);
+                        gl_exec(glTexImage2D, GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadow_map_size, shadow_map_size, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+                        constexpr float bordercolor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+                        gl_exec(glTexParameterfv, GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, bordercolor);
+                        memory.m_texture->set_id(texture_id);
+
+                        GLuint fbo_id = 0;
+                        gl_exec(glGenFramebuffers, 1, &fbo_id);
+                        gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, fbo_id);
+                        gl_exec(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture_id, 0);
+                        gl_exec(glDrawBuffer, GL_NONE);
+                        gl_exec(glReadBuffer, GL_NONE);
+                        gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, 0);
+                        memory.m_framebuffer->set_fbo(fbo_id);
+                    }
+                );
+            }
+
+            auto matrixes = context.read<in_light_matrix_pin>();
+            auto angles = context.read<in_angle_pin>();
+            auto distances = context.read<in_distance_pin>();
+            if (matrixes.empty() || angles.empty() || distances.empty())
+                return;
+
+            glm::mat4 const view_matrix = glm::inverse(matrixes[0]);
+            glm::mat4 const light_projection = glm::perspective(glm::radians(angles[0]), 1.f, 0.1f, distances[0]);
+            glm::mat4 const light_matrix = light_projection * view_matrix;
+
+            render_sys->get().add_pre_light_work(
+                [memory, light_matrix](render_system& render_sys) mutable
+            {
+                OPTICK_EVENT("Render spot light shadow");
+                gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, memory.m_framebuffer->get_fbo());
+                gl_exec(glViewport, 0, 0, shadow_map_size, shadow_map_size);
+                gl_exec(glClear, GL_DEPTH_BUFFER_BIT);
+                gl_exec(glCullFace, GL_FRONT);
+
+                render_sys.for_each_mesh_draw_request(
+                    [&light_matrix](render_system::mesh_draw_request const& request) mutable
+                    {
+                        glm::mat4 const mvp = light_matrix * request.m_transform;
+                        request.m_shadow_program->m_program->activate();
+                        program_uniform_state state = request.m_shadow_program->m_state;
+                        state.set_uniform("mvp", mvp);
+                        state.apply();
+                        request.m_mesh->draw();
+                    }
+                );
+
+                gl_exec(glCullFace, GL_BACK);
+                gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, 0);
+            }
+            );
+
+            context.write_values<out_matrix_pin>(light_matrix);
+            context.write_values<out_texture_pin>(gcore::resource_handle<texture>(memory.m_texture));
+        }
+    }
+
+    gcore::node::pin_descriptors render_spot_light_shadow_node::get_pin_descriptors() const
+    {
+        static gcore::pin_descriptor const inputs[] = {
+            in_light_matrix_pin::get("light world matrix"),
+            in_angle_pin::get("angle"),
+            in_distance_pin::get("distance"),
+        };
+
+        static gcore::pin_descriptor const outputs[] = {
+            out_texture_pin::get("shadow texture"),
+            out_matrix_pin::get("light matrix"),
         };
         return node::pin_descriptors{ inputs, outputs };
     }

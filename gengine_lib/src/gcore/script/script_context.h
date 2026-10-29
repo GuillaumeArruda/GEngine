@@ -21,7 +21,7 @@ namespace gcore
         bool operator==(int id) const { return m_id == id; }
     };
 
-    template<class DataType, int Index, int Id, bool IsOptional = false>
+    template<class DataType, int Index, int Id = Index, bool IsOptional = false>
     struct input_pin_descriptor
     {
         using type = DataType;
@@ -35,7 +35,7 @@ namespace gcore
         }
     };
 
-    template<class DataType, int Index, int Id, bool IsOptional = false>
+    template<class DataType, int Index, int Id = Index + 100, bool IsOptional = false>
     struct output_pin_descriptor
     {
         using type = DataType;

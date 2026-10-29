@@ -2,13 +2,139 @@
     "entity_registry": {
         "Entities": [
             {
-                "key": "6adfae1bfc3333717017e6c686c1bb53",
+                "key": "5fdcdc293778c57ba8b054a558d30c3",
                 "data": [
+                    {
+                        "is_valid": true,
+                        "type_name": "gcore::transform_component",
+                        "data": {
+                            "transform": {
+                                "[0]": {
+                                    "x": 0.9998112320899963,
+                                    "y": 0.0,
+                                    "z": 0.019428785890340805,
+                                    "w": 0.0
+                                },
+                                "[1]": {
+                                    "x": 0.0035235390532761812,
+                                    "y": 0.9834173917770386,
+                                    "z": -0.1813223659992218,
+                                    "w": 0.0
+                                },
+                                "[3]": {
+                                    "x": -0.019106607884168625,
+                                    "y": 0.18135660886764526,
+                                    "z": 0.983231782913208,
+                                    "w": 0.0
+                                },
+                                "[4]": {
+                                    "x": 0.18105632066726685,
+                                    "y": 9.392565727233887,
+                                    "z": 1.107155680656433,
+                                    "w": 1.0
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "grender::camera_component",
+                        "data": {
+                            "fov": {
+                                "m_value": 70.0
+                            },
+                            "near_z": 0.20000000298023224,
+                            "far_z": 100.0,
+                            "active": true
+                        }
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "gcore::input_component",
+                        "data": {}
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "gcore::flying_controller_component",
+                        "data": {
+                            "speed": 0.5,
+                            "boost_factor": 5.0,
+                            "rotation_speed": {
+                                "m_value": 5000.0
+                            },
+                            "up": "keyboard_key::x",
+                            "down": "keyboard_key::z",
+                            "forward": "keyboard_key::w",
+                            "backward": "keyboard_key::s",
+                            "left": "keyboard_key::a",
+                            "right": "keyboard_key::d",
+                            "boost_key": "keyboard_key::left_shift"
+                        }
+                    },
                     {
                         "is_valid": true,
                         "type_name": "gcore::name_component",
                         "data": {
-                            "name": "Directional Light"
+                            "name": "Camera"
+                        }
+                    }
+                ]
+            },
+            {
+                "key": "5fdbbf5013a67f832717ef280d00ca5b",
+                "data": [
+                    {
+                        "is_valid": true,
+                        "type_name": "gcore::transform_component",
+                        "data": {
+                            "transform": {
+                                "[0]": {
+                                    "x": -0.03195059299468994,
+                                    "y": -0.9991527199745178,
+                                    "z": -0.02594253420829773,
+                                    "w": 0.0
+                                },
+                                "[1]": {
+                                    "x": 0.630253255367279,
+                                    "y": 0.0000045299530029296875,
+                                    "z": -0.7763895988464355,
+                                    "w": 0.0
+                                },
+                                "[3]": {
+                                    "x": 0.7757319211959839,
+                                    "y": -0.041156500577926636,
+                                    "z": 0.629719078540802,
+                                    "w": 0.0
+                                },
+                                "[4]": {
+                                    "x": -9.81495475769043,
+                                    "y": 5.676466941833496,
+                                    "z": 5.905252933502197,
+                                    "w": 1.0
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "gcore::extent_component",
+                        "data": {}
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "gcore::name_component",
+                        "data": {
+                            "name": "Large woman"
+                        }
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "gphys::physic_component",
+                        "data": {
+                            "phys_shape": {
+                                "value": "5fe3a4c2f0aa3b4fc377ef6e4c34a769"
+                            },
+                            "mass": 1.0
                         }
                     },
                     {
@@ -17,30 +143,9 @@
                         "data": {
                             "script": {
                                 "script": {
-                                    "value": "6ad9003eea632a9431174eba676335e"
+                                    "value": "6aa425e3a8d3e2d4c676e136673a7136"
                                 },
-                                "inputs": [
-                                    {
-                                        "variable_id": "6ad900a2ea632b7a68a7a094ab22e7f6",
-                                        "value": {
-                                            "type_name": "Vec3",
-                                            "number_of_elements": 1,
-                                            "x": 0.25,
-                                            "y": 0.25,
-                                            "z": 0.30000001192092896
-                                        }
-                                    },
-                                    {
-                                        "variable_id": "6ad900c7ea632b7b5d0f77f3524d042",
-                                        "value": {
-                                            "type_name": "Vec3",
-                                            "number_of_elements": 1,
-                                            "x": 1.0,
-                                            "y": 1.0,
-                                            "z": 0.0
-                                        }
-                                    }
-                                ]
+                                "inputs": []
                             }
                         }
                     }
@@ -108,60 +213,13 @@
                 ]
             },
             {
-                "key": "5fdbbf5013a67f832717ef280d00ca5b",
+                "key": "6adfae1bfc3333717017e6c686c1bb53",
                 "data": [
-                    {
-                        "is_valid": true,
-                        "type_name": "gcore::transform_component",
-                        "data": {
-                            "transform": {
-                                "[0]": {
-                                    "x": -0.0337601900100708,
-                                    "y": -0.9990478754043579,
-                                    "z": -0.027633994817733765,
-                                    "w": 0.0
-                                },
-                                "[1]": {
-                                    "x": 0.6330960988998413,
-                                    "y": 0.00001728534698486328,
-                                    "z": -0.7740732431411743,
-                                    "w": 0.0
-                                },
-                                "[3]": {
-                                    "x": 0.77333664894104,
-                                    "y": -0.043627768754959106,
-                                    "z": 0.63249272108078,
-                                    "w": 0.0
-                                },
-                                "[4]": {
-                                    "x": -9.820576667785645,
-                                    "y": 5.676453113555908,
-                                    "z": 5.901631832122803,
-                                    "w": 1.0
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "is_valid": true,
-                        "type_name": "gcore::extent_component",
-                        "data": {}
-                    },
                     {
                         "is_valid": true,
                         "type_name": "gcore::name_component",
                         "data": {
-                            "name": "Large woman"
-                        }
-                    },
-                    {
-                        "is_valid": true,
-                        "type_name": "gphys::physic_component",
-                        "data": {
-                            "phys_shape": {
-                                "value": "5fe3a4c2f0aa3b4fc377ef6e4c34a769"
-                            },
-                            "mass": 1.0
+                            "name": "Directional Light"
                         }
                     },
                     {
@@ -170,100 +228,30 @@
                         "data": {
                             "script": {
                                 "script": {
-                                    "value": "6aa425e3a8d3e2d4c676e136673a7136"
+                                    "value": "6ad9003eea632a9431174eba676335e"
                                 },
-                                "inputs": []
-                            }
-                        }
-                    }
-                ]
-            },
-            {
-                "key": "5fdcdc293778c57ba8b054a558d30c3",
-                "data": [
-                    {
-                        "is_valid": true,
-                        "type_name": "gcore::transform_component",
-                        "data": {
-                            "transform": {
-                                "[0]": {
-                                    "x": 0.996359646320343,
-                                    "y": -1.862645149230957e-9,
-                                    "z": 0.0852494165301323,
-                                    "w": 0.0
-                                },
-                                "[1]": {
-                                    "x": 0.03989803045988083,
-                                    "y": 0.8837203979492188,
-                                    "z": -0.4663115441799164,
-                                    "w": 0.0
-                                },
-                                "[3]": {
-                                    "x": -0.07533664256334305,
-                                    "y": 0.46801528334617615,
-                                    "z": 0.8805032968521118,
-                                    "w": 0.0
-                                },
-                                "[4]": {
-                                    "x": -0.8836318850517273,
-                                    "y": 15.5882568359375,
-                                    "z": 8.333874702453613,
-                                    "w": 1.0
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "is_valid": true,
-                        "type_name": "grender::camera_component",
-                        "data": {
-                            "fov": {
-                                "m_value": 70.0
-                            },
-                            "near_z": 0.20000000298023224,
-                            "far_z": 100.0,
-                            "active": true
-                        }
-                    },
-                    {
-                        "is_valid": true,
-                        "type_name": "gcore::input_component",
-                        "data": {}
-                    },
-                    {
-                        "is_valid": true,
-                        "type_name": "gcore::flying_controller_component",
-                        "data": {
-                            "speed": 0.5,
-                            "boost_factor": 5.0,
-                            "rotation_speed": {
-                                "m_value": 5000.0
-                            },
-                            "up": "keyboard_key::x",
-                            "down": "keyboard_key::z",
-                            "forward": "keyboard_key::w",
-                            "backward": "keyboard_key::s",
-                            "left": "keyboard_key::a",
-                            "right": "keyboard_key::d",
-                            "boost_key": "keyboard_key::left_shift"
-                        }
-                    },
-                    {
-                        "is_valid": true,
-                        "type_name": "gcore::name_component",
-                        "data": {
-                            "name": "Camera"
-                        }
-                    },
-                    {
-                        "is_valid": true,
-                        "type_name": "grender::graphic_component",
-                        "data": {
-                            "script": {
-                                "script": {
-                                    "value": "6ae21833418da08a39c718292ddb3d36"
-                                },
-                                "inputs": []
+                                "inputs": [
+                                    {
+                                        "variable_id": "6ad900a2ea632b7a68a7a094ab22e7f6",
+                                        "value": {
+                                            "type_name": "Vec3",
+                                            "number_of_elements": 1,
+                                            "x": 0.25,
+                                            "y": 0.25,
+                                            "z": 0.30000001192092896
+                                        }
+                                    },
+                                    {
+                                        "variable_id": "6ad900c7ea632b7b5d0f77f3524d042",
+                                        "value": {
+                                            "type_name": "Vec3",
+                                            "number_of_elements": 1,
+                                            "x": 1.0,
+                                            "y": 1.0,
+                                            "z": 0.0
+                                        }
+                                    }
+                                ]
                             }
                         }
                     }
@@ -278,27 +266,27 @@
                         "data": {
                             "transform": {
                                 "[0]": {
-                                    "x": -0.01701951026916504,
-                                    "y": -0.9504207968711853,
-                                    "z": -0.31050068140029907,
+                                    "x": -0.016802310943603516,
+                                    "y": -0.9504294991493225,
+                                    "z": -0.3104855418205261,
                                     "w": 0.0
                                 },
                                 "[1]": {
-                                    "x": 0.9985029101371765,
-                                    "y": -0.00001049041748046875,
-                                    "z": -0.054698824882507324,
+                                    "x": 0.9985406994819641,
+                                    "y": -0.000011324882507324219,
+                                    "z": -0.05400259792804718,
                                     "w": 0.0
                                 },
                                 "[3]": {
-                                    "x": 0.05198363959789276,
-                                    "y": -0.3109667897224426,
-                                    "z": 0.9489980936050415,
+                                    "x": 0.051322147250175476,
+                                    "y": -0.31093984842300415,
+                                    "z": 0.9490429162979126,
                                     "w": 0.0
                                 },
                                 "[4]": {
-                                    "x": 0.7120673060417175,
-                                    "y": 8.264718055725098,
-                                    "z": 0.1345645934343338,
+                                    "x": 0.712121307849884,
+                                    "y": 8.264719009399414,
+                                    "z": 0.13406257331371307,
                                     "w": 1.0
                                 }
                             }
@@ -529,6 +517,83 @@
                                             "x": 0.5,
                                             "y": 0.4000000059604645,
                                             "z": 0.30000001192092896
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "key": "6ae2c2d24020e4ea7ec6909093930987",
+                "data": [
+                    {
+                        "is_valid": true,
+                        "type_name": "gcore::name_component",
+                        "data": {
+                            "name": "Spot Light"
+                        }
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "gcore::transform_component",
+                        "data": {
+                            "transform": {
+                                "[0]": {
+                                    "x": 0.41999998688697815,
+                                    "y": 0.0,
+                                    "z": 0.9079999923706055,
+                                    "w": 0.0
+                                },
+                                "[1]": {
+                                    "x": 0.6700000166893005,
+                                    "y": 0.675000011920929,
+                                    "z": -0.3100000023841858,
+                                    "w": 0.0
+                                },
+                                "[3]": {
+                                    "x": -0.6119999885559082,
+                                    "y": 0.7369999885559082,
+                                    "z": 0.28299999237060547,
+                                    "w": 0.0
+                                },
+                                "[4]": {
+                                    "x": -1.8930000066757202,
+                                    "y": 11.503999710083008,
+                                    "z": -1.0329999923706055,
+                                    "w": 1.0
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "is_valid": true,
+                        "type_name": "grender::graphic_component",
+                        "data": {
+                            "script": {
+                                "script": {
+                                    "value": "6ae21833418da08a39c718292ddb3d36"
+                                },
+                                "inputs": [
+                                    {
+                                        "variable_id": "6ae218b4418da08bbdc3007e052e028",
+                                        "value": {
+                                            "type_name": "Vec3",
+                                            "number_of_elements": 1,
+                                            "x": 0.10000000149011612,
+                                            "y": 0.10000000149011612,
+                                            "z": 0.10000000149011612
+                                        }
+                                    },
+                                    {
+                                        "variable_id": "6ae218db418da08c6cb4a26873b01b4",
+                                        "value": {
+                                            "type_name": "Vec3",
+                                            "number_of_elements": 1,
+                                            "x": 0.10000000149011612,
+                                            "y": 0.30000001192092896,
+                                            "z": 0.10000000149011612
                                         }
                                     }
                                 ]

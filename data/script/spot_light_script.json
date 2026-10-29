@@ -58,8 +58,8 @@
         {
             "name": "",
             "position": {
-                "x": -4017.0,
-                "y": -930.0
+                "x": -4257.0,
+                "y": -914.0
             },
             "node": {
                 "is_valid": true,
@@ -89,8 +89,8 @@
         {
             "name": "",
             "position": {
-                "x": -3650.0,
-                "y": -816.0
+                "x": -3890.0,
+                "y": -800.0
             },
             "node": {
                 "is_valid": true,
@@ -103,8 +103,8 @@
         {
             "name": "",
             "position": {
-                "x": -4006.0,
-                "y": -721.0
+                "x": -4246.0,
+                "y": -705.0
             },
             "node": {
                 "is_valid": true,
@@ -117,8 +117,8 @@
         {
             "name": "",
             "position": {
-                "x": -3654.0,
-                "y": -864.0
+                "x": -3910.0,
+                "y": -848.0
             },
             "node": {
                 "is_valid": true,
@@ -132,8 +132,8 @@
         {
             "name": "",
             "position": {
-                "x": -3670.0,
-                "y": -768.0
+                "x": -3910.0,
+                "y": -752.0
             },
             "node": {
                 "is_valid": true,
@@ -147,8 +147,8 @@
         {
             "name": "",
             "position": {
-                "x": -3670.0,
-                "y": -720.0
+                "x": -3910.0,
+                "y": -704.0
             },
             "node": {
                 "is_valid": true,
@@ -162,8 +162,8 @@
         {
             "name": "",
             "position": {
-                "x": -3670.0,
-                "y": -672.0
+                "x": -3910.0,
+                "y": -656.0
             },
             "node": {
                 "is_valid": true,
@@ -177,8 +177,8 @@
         {
             "name": "",
             "position": {
-                "x": -3670.0,
-                "y": -624.0
+                "x": -3910.0,
+                "y": -608.0
             },
             "node": {
                 "is_valid": true,
@@ -192,8 +192,8 @@
         {
             "name": "",
             "position": {
-                "x": -3670.0,
-                "y": -576.0
+                "x": -3910.0,
+                "y": -560.0
             },
             "node": {
                 "is_valid": true,
@@ -201,6 +201,20 @@
                 "data": {
                     "node_id": 16,
                     "variable_id": "6ae2a1008159a584232ae28c66a48de5"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3675.0,
+                "y": -528.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_spot_light_shadow_node",
+                "data": {
+                    "node_id": 17
                 }
             }
         }
@@ -228,6 +242,26 @@
                     "source": 6,
                     "source_pin": 1,
                     "destination_pin": 3
+                }
+            ]
+        },
+        {
+            "key": 17,
+            "data": [
+                {
+                    "source": 6,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 13,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                },
+                {
+                    "source": 16,
+                    "source_pin": 1,
+                    "destination_pin": 4
                 }
             ]
         },
@@ -308,6 +342,16 @@
                     "source": 16,
                     "source_pin": 1,
                     "destination_pin": -1946053740
+                },
+                {
+                    "source": 17,
+                    "source_pin": 100,
+                    "destination_pin": 1315276102
+                },
+                {
+                    "source": 17,
+                    "source_pin": 101,
+                    "destination_pin": 501388726
                 }
             ]
         }
