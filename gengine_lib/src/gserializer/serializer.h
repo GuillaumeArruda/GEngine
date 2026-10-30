@@ -105,7 +105,7 @@ namespace gserializer
             }
             else
             {
-                std::underlying_type_t<EnumToSerialize> int_value = static_cast<std::underlying_type_t<EnumToSerialize>>(value);
+                std::int64_t int_value = static_cast<std::underlying_type_t<EnumToSerialize>>(value);
                 process(name, int_value);
                 if (is_writing_to_object())
                     value = static_cast<EnumToSerialize>(int_value);

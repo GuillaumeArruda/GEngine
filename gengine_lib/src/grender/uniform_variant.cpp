@@ -57,15 +57,37 @@ namespace grender
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_cube_shadow)
     GSERIALIZER_END_ENUM_HANDLER(uniform_variant::type)
 
-    uniform_variant::uniform_variant(type type)
-        : m_type(type)
+    uniform_variant::uniform_variant(type type, GLint max_size)
+        : m_max_size(std::max(static_cast<std::uint32_t>(max_size), 1u))
+        , m_type(type)
     {
-        default_construct();
+        get_vtable(m_type).m_construct(*this);
     }
+
+    uniform_variant::uniform_variant(gtl::span<gcore::resource_handle<texture> const> values, type type)
+        : m_type(type)
+        , m_max_size(static_cast<std::uint32_t>(values.size()))
+    {
+        vtable const table = get_vtable(m_type);
+        table.m_construct(*this);
+        table.m_copy_array(*this, values.data(), values.size());
+    }
+
     uniform_variant::uniform_variant(uniform_variant const& copy_value) noexcept
         : m_type(copy_value.m_type)
+        , m_max_size(copy_value.m_max_size)
     {
-        copy(copy_value);
+        vtable const table = get_vtable(m_type);
+        table.m_construct(*this);
+        if (copy_value.get_max_size() == 1)
+        {
+            table.m_copy_array(*this, copy_value.get_buffer(), 1);
+        }
+        else
+        {
+            pointer_info const info = copy_value.get_ptr_info();
+            table.m_copy_array(*this, info.m_ptr, info.m_size);
+        }
     }
 
     uniform_variant& uniform_variant::operator=(uniform_variant const& copy_value) noexcept
@@ -73,15 +95,29 @@ namespace grender
         if (this == &copy_value)
             return *this;
 
+        get_vtable(m_type).m_destroy(*this);
+
         m_type = copy_value.m_type;
-        copy(copy_value);
+        m_max_size = copy_value.m_max_size;
+        vtable const table = get_vtable(m_type);
+        table.m_construct(*this);
+        if (copy_value.get_max_size() == 1)
+        {
+            table.m_copy_array(*this, copy_value.get_buffer(), 1);
+        }
+        else
+        {
+            pointer_info const info = copy_value.get_ptr_info();
+            table.m_copy_array(*this, info.m_ptr, info.m_size);
+        }
         return *this;
     }
 
     uniform_variant::uniform_variant(uniform_variant&& move_value) noexcept
-        : m_type(move_value.m_type)
+        : m_max_size(move_value.m_max_size),
+        m_type(move_value.m_type)
     {
-        move(std::move(move_value));
+        get_vtable(m_type).m_move(std::move(move_value), *this);
         move_value.m_type = type::invalid;
     }
 
@@ -90,129 +126,212 @@ namespace grender
         if (this == &move_value)
             return *this;
 
-        destroy();
+        get_vtable(m_type).m_destroy(*this);
         m_type = move_value.m_type;
-        move(std::move(move_value));
+        m_max_size = move_value.m_max_size;
+        get_vtable(m_type).m_move(std::move(move_value), *this);
         move_value.m_type = type::invalid;
         return *this;
     }
 
     uniform_variant::~uniform_variant()
     {
-        destroy();
-    }
-
-    void uniform_variant::apply(GLint location) const
-    {
-        switch (m_type)
-        {
-        case type::glbool:      gl_exec(glUniform1i, location, m_bool); break;
-        case type::glint:       gl_exec(glUniform1i, location, m_int); break;
-        case type::gluint:      gl_exec(glUniform1ui, location, m_uint); break;
-        case type::glfloat:     gl_exec(glUniform1f, location, m_float); break;
-        case type::gldouble:    gl_exec(glUniform1d, location, m_double); break;
-        case type::bvec2:       gl_exec(glUniform2i, location, static_cast<GLint>(m_bvec2[0]), static_cast<GLint>(m_bvec2[1])); break;
-        case type::bvec3:       gl_exec(glUniform3i, location, static_cast<GLint>(m_bvec3[0]), static_cast<GLint>(m_bvec3[1]), static_cast<GLint>(m_bvec3[2])); break;
-        case type::bvec4:       gl_exec(glUniform4i, location, static_cast<GLint>(m_bvec4[0]), static_cast<GLint>(m_bvec4[1]), static_cast<GLint>(m_bvec4[2]), static_cast<GLint>(m_bvec4[3])); break;
-        case type::ivec2:       gl_exec(glUniform2iv, location, 1, glm::value_ptr(m_ivec2)); break;
-        case type::ivec3:       gl_exec(glUniform3iv, location, 1, glm::value_ptr(m_ivec3)); break;
-        case type::ivec4:       gl_exec(glUniform4iv, location, 1, glm::value_ptr(m_ivec4)); break;
-        case type::uvec2:       gl_exec(glUniform2uiv, location, 1, glm::value_ptr(m_uvec2)); break;
-        case type::uvec3:       gl_exec(glUniform3uiv, location, 1, glm::value_ptr(m_uvec3)); break;
-        case type::uvec4:       gl_exec(glUniform4uiv, location, 1, glm::value_ptr(m_uvec4)); break;
-        case type::vec2:        gl_exec(glUniform2fv, location, 1, glm::value_ptr(m_vec2)); break;
-        case type::vec3:        gl_exec(glUniform3fv, location, 1, glm::value_ptr(m_vec3)); break;
-        case type::vec4:        gl_exec(glUniform4fv, location, 1, glm::value_ptr(m_vec4)); break;
-        case type::dvec2:       gl_exec(glUniform2dv, location, 1, glm::value_ptr(m_dvec2)); break;
-        case type::dvec3:       gl_exec(glUniform3dv, location, 1, glm::value_ptr(m_dvec3)); break;
-        case type::dvec4:       gl_exec(glUniform4dv, location, 1, glm::value_ptr(m_dvec4)); break;
-        case type::mat22:       gl_exec(glUniformMatrix2fv,     location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat22)); break;
-        case type::mat23:       gl_exec(glUniformMatrix2x3fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat23)); break;
-        case type::mat24:       gl_exec(glUniformMatrix2x4fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat24)); break;
-        case type::mat32:       gl_exec(glUniformMatrix3x2fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat32)); break;
-        case type::mat33:       gl_exec(glUniformMatrix3fv,     location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat33)); break;
-        case type::mat34:       gl_exec(glUniformMatrix3x4fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat34)); break;
-        case type::mat42:       gl_exec(glUniformMatrix4x2fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat42)); break;
-        case type::mat43:       gl_exec(glUniformMatrix4x3fv,   location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat43)); break;
-        case type::mat44:       gl_exec(glUniformMatrix4fv,     location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(m_mat44)); break;
-        case type::sampler_1d:
-        case type::sampler_1d_array:
-        case type::sampler_1d_shadow:
-        case type::sampler_2d:
-        case type::sampler_2d_array:
-        case type::sampler_2d_shadow:
-        case type::sampler_3d:
-        case type::sampler_cube:
-        case type::sampler_cube_shadow:
-        {
-            if (m_texture_info.m_texture_id == 0)
-            {
-                if (m_texture_info.m_texture.is_loaded())
-                {
-                    gl_exec(glActiveTexture, GL_TEXTURE0 + location);
-                    gl_exec(glBindTexture, get_gl_texture_type(), m_texture_info.m_texture->get_id());
-                    gl_exec(glUniform1i, location, location);
-                }
-                else
-                {
-                    gl_exec(glActiveTexture, GL_TEXTURE0 + location);
-                    gl_exec(glBindTexture, get_gl_texture_type(), 0);
-                    gl_exec(glUniform1i, location, location);
-                }
-            }
-            else
-            {
-                gl_exec(glActiveTexture, GL_TEXTURE0 + location);
-                gl_exec(glBindTexture, get_gl_texture_type(), m_texture_info.m_texture_id);
-                gl_exec(glUniform1i, location, location);
-            }
-            break;
-        }
-        case type::invalid:     break;
-        }
+        get_vtable(m_type).m_destroy(*this);
     }
 
     void uniform_variant::process(gserializer::serializer& serializer)
     {
         using gserializer::process;
         type const old_type = m_type;
+        std::uint32_t const old_max_size = m_max_size;
         serializer.process("type", m_type);
-        if (old_type != m_type)
+        serializer.process("max_size", m_max_size);
+        
+        vtable const table = get_vtable(m_type);
+        if (old_type != m_type || m_max_size != old_max_size)
         {
-            destroy();
-            default_construct();
+            vtable const old_vtable = get_vtable(old_type);
+            old_vtable.m_destroy(*this);
+            table.m_construct(*this);
         }
+
+        table.m_process(serializer, *this);
+    }
+
+    template<class T>
+    struct get_array_type
+    {
+        using Type = T;
+    };
+
+    template<>
+    struct get_array_type<bool>
+    {
+        using Type = GLint;
+    };
+
+    template<>
+    struct get_array_type<glm::bvec2>
+    {
+        using Type = glm::ivec2;
+    };
+
+    template<>
+    struct get_array_type<glm::bvec3>
+    {
+        using Type = glm::ivec3;
+    };
+
+    template<>
+    struct get_array_type<glm::bvec4>
+    {
+        using Type = glm::ivec4;
+    };
+
+    template<class Type>
+    void construct_uniform_variant(uniform_variant& variant)
+    {
+        if (variant.get_max_size() == 1)
+        {
+            new(variant.get_buffer()) Type();
+        }
+        else
+        {
+            using array_type = get_array_type<Type>::Type;
+            auto* ptr_info = new(variant.get_buffer()) uniform_variant::pointer_info{ operator new(sizeof(array_type) * variant.get_max_size()), variant.get_max_size() };
+            for (std::size_t i = 0; i < variant.get_max_size(); ++i)
+            {
+                new(static_cast<array_type*>(ptr_info->m_ptr) + i) Type();
+            }
+            ptr_info->m_size = variant.get_max_size();
+        }
+    }
+
+    template<class Type>
+    void destroy_uniform_variant(uniform_variant& variant)
+    {
+        if (variant.get_max_size() == 1)
+        {
+            static_cast<Type*>(variant.get_buffer())->~Type();
+        }
+        else
+        {
+            using array_type = get_array_type<Type>::Type;
+            uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+            if (ptr_info.m_ptr != nullptr)
+            {
+                for (std::size_t i = 0; i < variant.get_max_size(); ++i)
+                {
+                    (static_cast<array_type*>(ptr_info.m_ptr) + i)->~array_type();
+                }
+                operator delete(ptr_info.m_ptr);
+            }
+            using info = uniform_variant::pointer_info;
+            static_cast<uniform_variant::pointer_info*>(variant.get_buffer())->~info();
+        }
+    }
+
+    template<class Type>
+    void copy_array_uniform_variant(uniform_variant& variant, void const* data, std::size_t size)
+    {
+        if (size >= 1)
+        {
+            if (variant.get_max_size() == 1)
+            {
+                *static_cast<Type*>(variant.get_buffer()) = *static_cast<Type const*>(data);
+            }
+            else
+            {
+                using array_type = get_array_type<Type>::Type;
+                uniform_variant::pointer_info& ptr_info = variant.get_ptr_info();
+                ptr_info.m_size = std::min(size, static_cast<std::size_t>(variant.get_max_size()));
+                for (std::size_t i = 0; i < ptr_info.m_size; ++i)
+                {
+                    *(static_cast<array_type*>(ptr_info.m_ptr) + i) = *(static_cast<Type const*>(data) + i);
+                }
+            }
+        }
+    }
+
+    template<class Type>
+    void move_uniform_variant(uniform_variant&& from, uniform_variant& to)
+    {
+        if (to.get_max_size() == 1)
+        {
+            new(to.get_buffer()) Type(std::move(*static_cast<Type*>(from.get_buffer())));
+        }
+        else
+        {
+            uniform_variant::pointer_info& from_info = from.get_ptr_info();
+            to.get_ptr_info() = from_info;
+            from_info.m_ptr = nullptr;
+            from_info.m_size = 0;
+        }
+    }
+
+    template<class Type>
+    void process_uniform_variant(gserializer::serializer& serializer, uniform_variant& variant)
+    {
+        if (variant.get_max_size() == 1)
+        {
+            process(serializer, *static_cast<Type*>(variant.get_buffer()));
+        }
+        else
+        {
+            using array_type = get_array_type<Type>::Type;
+            uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+            std::size_t max_size = variant.get_max_size();
+            serializer.open_array("values", max_size);
+            for (std::size_t i = 0; i < variant.get_max_size(); ++i)
+            {
+                serializer.open_array_element("value");
+                if constexpr (std::is_same_v<array_type, Type>)
+                {
+                    process(serializer, *(static_cast<array_type*>(ptr_info.m_ptr) + i));
+                }
+                else
+                {
+                    Type value = *(static_cast<array_type*>(ptr_info.m_ptr) + i);
+                    process(serializer, value);
+                    *(static_cast<array_type*>(ptr_info.m_ptr) + i) = value;
+                }
+                serializer.close_array_element("value");
+            }
+            serializer.close_array("values");
+
+        }
+    }
+
+    template<class Type>
+    void apply_uniform_variant(uniform_variant const&, GLint, GLint)
+    {
+        static_assert(std::is_same_v<void, Type>, "Function should only be instantiated with void. Other instantiation are found in uniform_variant.inline");
+    }
+
+    #include "grender/uniform_variant.inline"
+
+    template<class Type>
+    uniform_variant::vtable get_uniform_vtable()
+    {
+        return uniform_variant::vtable{
+            &construct_uniform_variant<Type>,
+            &destroy_uniform_variant<Type>,
+            &copy_array_uniform_variant<Type>,
+            &move_uniform_variant<Type>,
+            &process_uniform_variant<Type>,
+            &apply_uniform_variant<Type>,
+        };
+    }
+
+    void uniform_variant::apply(GLint location, GLint texture_unit) const
+    {
+        get_vtable(m_type).m_apply(*this, location, texture_unit);
+    }
+
+    bool uniform_variant::is_texture() const
+    {
         switch (m_type)
         {
-        case type::glbool:      process(serializer, m_bool);    break;
-        case type::glint:       process(serializer, m_int);     break;
-        case type::gluint:      process(serializer, m_uint);    break;
-        case type::glfloat:     process(serializer, m_float);   break;
-        case type::gldouble:    process(serializer, m_double);  break;
-        case type::bvec2:       process(serializer, m_bvec2);   break;
-        case type::bvec3:       process(serializer, m_bvec3);   break;
-        case type::bvec4:       process(serializer, m_bvec4);   break;
-        case type::ivec2:       process(serializer, m_ivec2);   break;
-        case type::ivec3:       process(serializer, m_ivec3);   break;
-        case type::ivec4:       process(serializer, m_ivec4);   break;
-        case type::uvec2:       process(serializer, m_uvec2);   break;
-        case type::uvec3:       process(serializer, m_uvec3);   break;
-        case type::uvec4:       process(serializer, m_uvec4);   break;
-        case type::vec2:        process(serializer, m_vec2);    break;
-        case type::vec3:        process(serializer, m_vec3);    break;
-        case type::vec4:        process(serializer, m_vec4);    break;
-        case type::dvec2:       process(serializer, m_dvec2);   break;
-        case type::dvec3:       process(serializer, m_dvec3);   break;
-        case type::dvec4:       process(serializer, m_dvec4);   break;
-        case type::mat22:       process(serializer, m_mat22);   break;
-        case type::mat23:       process(serializer, m_mat23);   break;
-        case type::mat24:       process(serializer, m_mat24);   break;
-        case type::mat32:       process(serializer, m_mat32);   break;
-        case type::mat33:       process(serializer, m_mat33);   break;
-        case type::mat34:       process(serializer, m_mat34);   break;
-        case type::mat42:       process(serializer, m_mat42);   break;
-        case type::mat43:       process(serializer, m_mat43);   break;
-        case type::mat44:       process(serializer, m_mat44);   break;
         case type::sampler_1d:
         case type::sampler_1d_array:
         case type::sampler_1d_shadow:
@@ -222,61 +341,44 @@ namespace grender
         case type::sampler_3d:
         case type::sampler_cube:
         case type::sampler_cube_shadow:
-            process(serializer, m_texture_info.m_texture); break;
+            return true;
         }
+        return false;
     }
 
-    void uniform_variant::default_construct()
+    uniform_variant::vtable uniform_variant::get_vtable(type type)
     {
-        switch (m_type)
+        switch (type)
         {
-        case type::glbool:      new((void*)&m_bool)    bool{}; break;
-        case type::glint:       new((void*)&m_int)     GLint{}; break;
-        case type::gluint:      new((void*)&m_uint)    GLuint{}; break;
-        case type::glfloat:     new((void*)&m_float)   float{}; break;
-        case type::gldouble:    new((void*)&m_double)  double{}; break;
-        case type::bvec2:       new((void*)&m_bvec2)   glm::bvec2(); break;
-        case type::bvec3:       new((void*)&m_bvec3)   glm::bvec3(); break;
-        case type::bvec4:       new((void*)&m_bvec4)   glm::bvec4(); break;
-        case type::ivec2:       new((void*)&m_ivec2)   glm::ivec2(); break;
-        case type::ivec3:       new((void*)&m_ivec3)   glm::ivec3(); break;
-        case type::ivec4:       new((void*)&m_ivec4)   glm::ivec4(); break;
-        case type::uvec2:       new((void*)&m_uvec2)   glm::uvec2(); break;
-        case type::uvec3:       new((void*)&m_uvec3)   glm::uvec3(); break;
-        case type::uvec4:       new((void*)&m_uvec4)   glm::uvec4(); break;
-        case type::vec2:        new((void*)&m_vec2)    glm::vec2(); break;
-        case type::vec3:        new((void*)&m_vec3)    glm::vec3(); break;
-        case type::vec4:        new((void*)&m_vec4)    glm::vec4(); break;
-        case type::dvec2:       new((void*)&m_dvec2)   glm::dvec2(); break;
-        case type::dvec3:       new((void*)&m_dvec3)   glm::dvec3(); break;
-        case type::dvec4:       new((void*)&m_dvec4)   glm::dvec4(); break;
-        case type::mat22:       new((void*)&m_mat22)   glm::mat2x2(); break;
-        case type::mat23:       new((void*)&m_mat23)   glm::mat2x3(); break;
-        case type::mat24:       new((void*)&m_mat24)   glm::mat2x4(); break;
-        case type::mat32:       new((void*)&m_mat32)   glm::mat3x2(); break;
-        case type::mat33:       new((void*)&m_mat33)   glm::mat3x3(); break;
-        case type::mat34:       new((void*)&m_mat34)   glm::mat3x4(); break;
-        case type::mat42:       new((void*)&m_mat42)   glm::mat4x2(); break;
-        case type::mat43:       new((void*)&m_mat43)   glm::mat4x3(); break;
-        case type::mat44:       new((void*)&m_mat44)   glm::mat4x4(); break;
-        case type::sampler_1d:
-        case type::sampler_1d_array:
-        case type::sampler_1d_shadow:
-        case type::sampler_2d:
-        case type::sampler_2d_array:
-        case type::sampler_2d_shadow:
-        case type::sampler_3d:
-        case type::sampler_cube: 
-        case type::sampler_cube_shadow:
-            new((void*)&m_texture_info) texture_info(); break;
-        case type::invalid:     break;
-        }
-    }
-
-    void uniform_variant::destroy()
-    {
-        switch (m_type)
-        {
+        case type::glbool:     return get_uniform_vtable<bool>();
+        case type::glint:      return get_uniform_vtable<GLint>();
+        case type::gluint:     return get_uniform_vtable<GLuint>();
+        case type::glfloat:    return get_uniform_vtable<float>();
+        case type::gldouble:   return get_uniform_vtable<double>();
+        case type::bvec2:      return get_uniform_vtable<glm::bvec2>();
+        case type::bvec3:      return get_uniform_vtable<glm::bvec3>();
+        case type::bvec4:      return get_uniform_vtable<glm::bvec4>();
+        case type::ivec2:      return get_uniform_vtable<glm::ivec2>();
+        case type::ivec3:      return get_uniform_vtable<glm::ivec3>();
+        case type::ivec4:      return get_uniform_vtable<glm::ivec4>();
+        case type::uvec2:      return get_uniform_vtable<glm::uvec2>();
+        case type::uvec3:      return get_uniform_vtable<glm::uvec3>();
+        case type::uvec4:      return get_uniform_vtable<glm::uvec4>();
+        case type::vec2:       return get_uniform_vtable<glm::vec2>();
+        case type::vec3:       return get_uniform_vtable<glm::vec3>();
+        case type::vec4:       return get_uniform_vtable<glm::vec4>();
+        case type::dvec2:      return get_uniform_vtable<glm::dvec2>();
+        case type::dvec3:      return get_uniform_vtable<glm::dvec3>();
+        case type::dvec4:      return get_uniform_vtable<glm::dvec4>();
+        case type::mat22:      return get_uniform_vtable<glm::mat2x2>();
+        case type::mat23:      return get_uniform_vtable<glm::mat2x3>();
+        case type::mat24:      return get_uniform_vtable<glm::mat2x4>();
+        case type::mat32:      return get_uniform_vtable<glm::mat3x2>();
+        case type::mat33:      return get_uniform_vtable<glm::mat3x3>();
+        case type::mat34:      return get_uniform_vtable<glm::mat3x4>();
+        case type::mat42:      return get_uniform_vtable<glm::mat4x2>();
+        case type::mat43:      return get_uniform_vtable<glm::mat4x3>();
+        case type::mat44:      return get_uniform_vtable<glm::mat4x4>();
         case type::sampler_1d:
         case type::sampler_1d_array:
         case type::sampler_1d_shadow:
@@ -286,107 +388,16 @@ namespace grender
         case type::sampler_3d:
         case type::sampler_cube:
         case type::sampler_cube_shadow:
-            m_texture_info.~texture_info();
-            break;
+            return get_uniform_vtable<gcore::resource_handle<texture>>();
+        case type::invalid:     
+            return get_uniform_vtable<void>();
         }
+        return get_uniform_vtable<void>();
     }
 
-    void uniform_variant::move(uniform_variant&& move)
+    GLint uniform_variant::get_gl_texture_type(type type)
     {
-        switch (m_type)
-        {
-        case type::glbool:      new((void*)&m_bool)    bool(std::move(move.m_bool)); break;
-        case type::glint:       new((void*)&m_int)     GLint(std::move(move.m_int)); break;
-        case type::gluint:      new((void*)&m_uint)    GLuint(std::move(move.m_uint)); break;
-        case type::glfloat:     new((void*)&m_float)   float(std::move(move.m_float)); break;
-        case type::gldouble:    new((void*)&m_double)  double(std::move(move.m_double)); break;
-        case type::bvec2:       new((void*)&m_bvec2)   glm::bvec2(std::move(move.m_bvec2)); break;
-        case type::bvec3:       new((void*)&m_bvec3)   glm::bvec3(std::move(move.m_bvec3)); break;
-        case type::bvec4:       new((void*)&m_bvec4)   glm::bvec4(std::move(move.m_bvec4)); break;
-        case type::ivec2:       new((void*)&m_ivec2)   glm::ivec2(std::move(move.m_ivec2)); break;
-        case type::ivec3:       new((void*)&m_ivec3)   glm::ivec3(std::move(move.m_ivec3)); break;
-        case type::ivec4:       new((void*)&m_ivec4)   glm::ivec4(std::move(move.m_ivec4)); break;
-        case type::uvec2:       new((void*)&m_uvec2)   glm::uvec2(std::move(move.m_uvec2)); break;
-        case type::uvec3:       new((void*)&m_uvec3)   glm::uvec3(std::move(move.m_uvec3)); break;
-        case type::uvec4:       new((void*)&m_uvec4)   glm::uvec4(std::move(move.m_uvec4)); break;
-        case type::vec2:        new((void*)&m_vec2)    glm::vec2(std::move(move.m_vec2)); break;
-        case type::vec3:        new((void*)&m_vec3)    glm::vec3(std::move(move.m_vec3)); break;
-        case type::vec4:        new((void*)&m_vec4)    glm::vec4(std::move(move.m_vec4)); break;
-        case type::dvec2:       new((void*)&m_dvec2)   glm::dvec2(std::move(move.m_dvec2)); break;
-        case type::dvec3:       new((void*)&m_dvec3)   glm::dvec3(std::move(move.m_dvec3)); break;
-        case type::dvec4:       new((void*)&m_dvec4)   glm::dvec4(std::move(move.m_dvec4)); break;
-        case type::mat23:       new((void*)&m_mat23)   glm::mat2x3(std::move(move.m_mat23)); break;
-        case type::mat22:       new((void*)&m_mat22)   glm::mat2x2(std::move(move.m_mat22)); break;
-        case type::mat24:       new((void*)&m_mat24)   glm::mat2x4(std::move(move.m_mat24)); break;
-        case type::mat32:       new((void*)&m_mat32)   glm::mat3x2(std::move(move.m_mat32)); break;
-        case type::mat33:       new((void*)&m_mat33)   glm::mat3x3(std::move(move.m_mat33)); break;
-        case type::mat34:       new((void*)&m_mat34)   glm::mat3x4(std::move(move.m_mat34)); break;
-        case type::mat42:       new((void*)&m_mat42)   glm::mat4x2(std::move(move.m_mat42)); break;
-        case type::mat43:       new((void*)&m_mat43)   glm::mat4x3(std::move(move.m_mat43)); break;
-        case type::mat44:       new((void*)&m_mat44)   glm::mat4x4(std::move(move.m_mat44)); break;
-        case type::sampler_1d:
-        case type::sampler_1d_array:
-        case type::sampler_1d_shadow:
-        case type::sampler_2d:
-        case type::sampler_2d_array:
-        case type::sampler_2d_shadow:
-        case type::sampler_3d:
-        case type::sampler_cube:
-        case type::sampler_cube_shadow:
-            new((void*)&m_texture_info) texture_info(std::move(move.m_texture_info)); break;
-        case type::invalid:     break;
-        }
-    }
-
-    void uniform_variant::copy(uniform_variant const& copy)
-    {
-        switch (m_type)
-        {
-        case type::glbool:      new((void*)&m_bool)    bool(copy.m_bool); break;
-        case type::glint:       new((void*)&m_int)     GLint(copy.m_int); break;
-        case type::gluint:      new((void*)&m_uint)    GLuint(copy.m_uint); break;
-        case type::glfloat:     new((void*)&m_float)   float(copy.m_float); break;
-        case type::gldouble:    new((void*)&m_double)  double(copy.m_double); break;
-        case type::bvec2:       new((void*)&m_bvec2)   glm::bvec2(copy.m_bvec2); break;
-        case type::bvec3:       new((void*)&m_bvec3)   glm::bvec3(copy.m_bvec3); break;
-        case type::bvec4:       new((void*)&m_bvec4)   glm::bvec4(copy.m_bvec4); break;
-        case type::ivec2:       new((void*)&m_ivec2)   glm::ivec2(copy.m_ivec2); break;
-        case type::ivec3:       new((void*)&m_ivec3)   glm::ivec3(copy.m_ivec3); break;
-        case type::ivec4:       new((void*)&m_ivec4)   glm::ivec4(copy.m_ivec4); break;
-        case type::uvec2:       new((void*)&m_uvec2)   glm::uvec2(copy.m_uvec2); break;
-        case type::uvec3:       new((void*)&m_uvec3)   glm::uvec3(copy.m_uvec3); break;
-        case type::uvec4:       new((void*)&m_uvec4)   glm::uvec4(copy.m_uvec4); break;
-        case type::vec2:        new((void*)&m_vec2)    glm::vec2(copy.m_vec2); break;
-        case type::vec3:        new((void*)&m_vec3)    glm::vec3(copy.m_vec3); break;
-        case type::vec4:        new((void*)&m_vec4)    glm::vec4(copy.m_vec4); break;
-        case type::dvec2:       new((void*)&m_dvec2)   glm::dvec2(copy.m_dvec2); break;
-        case type::dvec3:       new((void*)&m_dvec3)   glm::dvec3(copy.m_dvec3); break;
-        case type::dvec4:       new((void*)&m_dvec4)   glm::dvec4(copy.m_dvec4); break;
-        case type::mat22:       new((void*)&m_mat22)   glm::mat2x2(copy.m_mat22); break;
-        case type::mat23:       new((void*)&m_mat23)   glm::mat2x3(copy.m_mat23); break;
-        case type::mat24:       new((void*)&m_mat24)   glm::mat2x4(copy.m_mat24); break;
-        case type::mat32:       new((void*)&m_mat32)   glm::mat3x2(copy.m_mat32); break;
-        case type::mat33:       new((void*)&m_mat33)   glm::mat3x3(copy.m_mat33); break;
-        case type::mat34:       new((void*)&m_mat34)   glm::mat3x4(copy.m_mat34); break;
-        case type::mat42:       new((void*)&m_mat42)   glm::mat4x2(copy.m_mat42); break;
-        case type::mat43:       new((void*)&m_mat43)   glm::mat4x3(copy.m_mat43); break;
-        case type::mat44:       new((void*)&m_mat44)   glm::mat4x4(copy.m_mat44); break;
-        case type::sampler_1d:
-        case type::sampler_1d_array:
-        case type::sampler_1d_shadow:
-        case type::sampler_2d:
-        case type::sampler_2d_array:
-        case type::sampler_2d_shadow:
-        case type::sampler_3d:
-        case type::sampler_cube:
-        case type::sampler_cube_shadow:
-            new((void*)&m_texture_info) texture_info(copy.m_texture_info); break;
-        case type::invalid:     break;
-        }
-    }
-    GLint uniform_variant::get_gl_texture_type() const
-    {
-        switch (m_type)
+        switch (type)
         {
         case uniform_variant::type::sampler_1d: return GL_TEXTURE_1D;
         case uniform_variant::type::sampler_1d_array: return GL_TEXTURE_1D_ARRAY;
@@ -401,6 +412,7 @@ namespace grender
         assert(false);
         return GL_SAMPLER_1D;
     }
+
     uniform_variant::type get_type_from_gl_enum(GLenum enum_type)
     {
         switch (enum_type)

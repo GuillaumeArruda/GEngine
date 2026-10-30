@@ -87,7 +87,7 @@ namespace grender
                             glm::mat4 const mvp = light_matrix * request.m_transform;
                             request.m_shadow_program->m_program->activate();
                             program_uniform_state state = request.m_shadow_program->m_state;
-                            state.set_uniform("mvp", mvp);
+                            state.set_uniform("mvp", gtl::span(mvp));
                             state.apply();
                             request.m_mesh->draw();
                         }
@@ -240,7 +240,7 @@ namespace grender
                             glm::mat4 const mvp = light_matrix * request.m_transform;
                             request.m_shadow_program->m_program->activate();
                             program_uniform_state state = request.m_shadow_program->m_state;
-                            state.set_uniform("mvp", mvp);
+                            state.set_uniform("mvp", gtl::span(mvp));
                             state.apply();
                             request.m_mesh->draw();
                         }
@@ -332,7 +332,7 @@ namespace grender
                         glm::mat4 const mvp = light_matrix * request.m_transform;
                         request.m_shadow_program->m_program->activate();
                         program_uniform_state state = request.m_shadow_program->m_state;
-                        state.set_uniform("mvp", mvp);
+                        state.set_uniform("mvp", gtl::span(mvp));
                         state.apply();
                         request.m_mesh->draw();
                     }

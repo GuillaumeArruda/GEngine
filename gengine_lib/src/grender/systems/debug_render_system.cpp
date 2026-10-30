@@ -59,7 +59,8 @@ namespace grender
             gl_exec(glBufferData, GL_ARRAY_BUFFER, m_line_color.size() * sizeof(glm::vec3), m_line_color.data(), GL_STREAM_DRAW);
 
             m_program->activate();
-            m_program_state.set_uniform("mvp", projection * view);
+            glm::mat4 const mvp = projection * view;
+            m_program_state.set_uniform("mvp", gtl::span(mvp));
             m_program_state.apply();
             gl_exec(glDrawArrays, GL_LINES, 0, static_cast<GLsizei>(m_line_to_draw.size() * 2));
 

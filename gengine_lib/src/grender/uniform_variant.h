@@ -65,39 +65,71 @@ namespace grender
             invalid,
         };
 
-        uniform_variant() : m_type(type::invalid) {}
-        uniform_variant(type type);
-        uniform_variant(bool value) : m_bool(value), m_type(type::glbool) {}
-        uniform_variant(GLint value) : m_int(value), m_type(type::glint) {}
-        uniform_variant(GLuint value) : m_uint(value), m_type(type::gluint) {}
-        uniform_variant(float value) : m_float(value), m_type(type::glfloat) {}
-        uniform_variant(double value) : m_double(value), m_type(type::gldouble) {}
-        uniform_variant(glm::bvec2 value) : m_bvec2(value), m_type(type::bvec2) {}
-        uniform_variant(glm::bvec3 value) : m_bvec3(value), m_type(type::bvec3) {}
-        uniform_variant(glm::bvec4 value) : m_bvec4(value), m_type(type::bvec4) {}
-        uniform_variant(glm::ivec2 value) : m_ivec2(value), m_type(type::ivec2) {}
-        uniform_variant(glm::ivec3 value) : m_ivec3(value), m_type(type::ivec3) {}
-        uniform_variant(glm::ivec4 value) : m_ivec4(value), m_type(type::ivec4) {}
-        uniform_variant(glm::uvec2 value) : m_uvec2(value), m_type(type::uvec2) {}
-        uniform_variant(glm::uvec3 value) : m_uvec3(value), m_type(type::uvec3) {}
-        uniform_variant(glm::uvec4 value) : m_uvec4(value), m_type(type::uvec4) {}
-        uniform_variant(glm::vec2 value) : m_vec2(value), m_type(type::vec2) {}
-        uniform_variant(glm::vec3 value) : m_vec3(value), m_type(type::vec3) {}
-        uniform_variant(glm::vec4 value) : m_vec4(value), m_type(type::vec4) {}
-        uniform_variant(glm::dvec2 value) : m_dvec2(value), m_type(type::dvec2) {}
-        uniform_variant(glm::dvec3 value) : m_dvec3(value), m_type(type::dvec3) {}
-        uniform_variant(glm::dvec4 value) : m_dvec4(value), m_type(type::dvec4) {}
-        uniform_variant(glm::mat2x2 const& value) : m_mat22(value), m_type(type::mat22) {}
-        uniform_variant(glm::mat2x3 const& value) : m_mat23(value), m_type(type::mat23) {}
-        uniform_variant(glm::mat2x4 const& value) : m_mat24(value), m_type(type::mat24) {}
-        uniform_variant(glm::mat3x2 const& value) : m_mat32(value), m_type(type::mat32) {}
-        uniform_variant(glm::mat3x3 const& value) : m_mat33(value), m_type(type::mat33) {}
-        uniform_variant(glm::mat3x4 const& value) : m_mat34(value), m_type(type::mat34) {}
-        uniform_variant(glm::mat4x2 const& value) : m_mat42(value), m_type(type::mat42) {}
-        uniform_variant(glm::mat4x3 const& value) : m_mat43(value), m_type(type::mat43) {}
-        uniform_variant(glm::mat4x4 const& value) : m_mat44(value), m_type(type::mat44) {}
-        uniform_variant(gcore::resource_handle<texture> texture, type texture_type) : m_texture_info{ std::move(texture), 0u }, m_type(texture_type) {}
-        uniform_variant(GLuint texture_id, type texture_type) : m_texture_info{std::shared_ptr<gcore::resource_proxy>(), texture_id}, m_type(texture_type) {}
+        struct vtable
+        {
+            void (*m_construct)(uniform_variant&) = nullptr;
+            void (*m_destroy)(uniform_variant&) = nullptr;
+            void (*m_copy_array)(uniform_variant&, void const*, std::size_t) = nullptr;
+            void (*m_move)(uniform_variant&&, uniform_variant&) = nullptr;
+            void (*m_process)(gserializer::serializer&, uniform_variant&) = nullptr;
+            void (*m_apply)(uniform_variant const&, GLint, GLint) = nullptr;
+        };
+
+        struct pointer_info
+        {
+            void* m_ptr = nullptr;
+            std::size_t m_size = 0;
+        };
+
+        template<class Type>
+        static type get_type_enum_from_type()
+        {
+            if constexpr (std::is_same_v<Type, bool>) return type::glbool;
+            else if constexpr (std::is_same_v<Type, GLint>) return type::glint;
+            else if constexpr (std::is_same_v<Type, GLuint>) return type::gluint;
+            else if constexpr (std::is_same_v<Type, float>) return type::glfloat; 
+            else if constexpr (std::is_same_v<Type, double>) return type::gldouble;
+            else if constexpr (std::is_same_v<Type, glm::bvec2>) return type::bvec2;
+            else if constexpr (std::is_same_v<Type, glm::bvec3>) return type::bvec3;
+            else if constexpr (std::is_same_v<Type, glm::bvec4>) return type::bvec4;
+            else if constexpr (std::is_same_v<Type, glm::ivec2>) return type::ivec2;
+            else if constexpr (std::is_same_v<Type, glm::ivec3>) return type::ivec3;
+            else if constexpr (std::is_same_v<Type, glm::ivec4>) return type::ivec4;
+            else if constexpr (std::is_same_v<Type, glm::uvec2>) return type::uvec2;
+            else if constexpr (std::is_same_v<Type, glm::uvec3>) return type::uvec3;
+            else if constexpr (std::is_same_v<Type, glm::uvec4>) return type::uvec4;
+            else if constexpr (std::is_same_v<Type, glm::vec2>) return type::vec2;
+            else if constexpr (std::is_same_v<Type, glm::vec3>) return type::vec3;
+            else if constexpr (std::is_same_v<Type, glm::vec4>) return type::vec4;
+            else if constexpr (std::is_same_v<Type, glm::dvec2>) return type::dvec2;
+            else if constexpr (std::is_same_v<Type, glm::dvec3>) return type::dvec3;
+            else if constexpr (std::is_same_v<Type, glm::dvec4>) return type::dvec4;
+            else if constexpr (std::is_same_v<Type, glm::mat2>) return type::mat22;
+            else if constexpr (std::is_same_v<Type, glm::mat2x3>) return type::mat23;
+            else if constexpr (std::is_same_v<Type, glm::mat2x4>) return type::mat24;
+            else if constexpr (std::is_same_v<Type, glm::mat3x2>) return type::mat32;
+            else if constexpr (std::is_same_v<Type, glm::mat3>) return type::mat33;
+            else if constexpr (std::is_same_v<Type, glm::mat3x4>) return type::mat34;
+            else if constexpr (std::is_same_v<Type, glm::mat4x2>) return type::mat42;
+            else if constexpr (std::is_same_v<Type, glm::mat4x3>) return type::mat43;
+            else if constexpr (std::is_same_v<Type, glm::mat4>) return type::mat44;
+            else if constexpr (std::is_same_v<Type, gcore::resource_handle<texture>>) return type::sampler_2d;
+            else return type::invalid;
+        }
+
+        uniform_variant() : m_max_size(1), m_type(type::invalid) {}
+        uniform_variant(type type, GLint max_size);
+        uniform_variant(gtl::span<gcore::resource_handle<texture> const> values, type type);
+        template<class Type>
+        uniform_variant(gtl::span<Type const> values)
+            : m_max_size(static_cast<uint32_t>(std::max(values.size(), 1uz)))
+            , m_type(get_type_enum_from_type<Type>())
+        {
+            static_assert(!std::is_same_v<Type, gcore::resource_handle<texture>>, "Need to use the constructor that specify the texture type");
+            vtable const table = get_vtable(m_type);
+            table.m_construct(*this);
+            table.m_copy_array(*this, values.data(), values.size());
+        }
 
         uniform_variant(uniform_variant const& copy) noexcept;
         uniform_variant& operator=(uniform_variant const& copy) noexcept;
@@ -107,58 +139,33 @@ namespace grender
 
         ~uniform_variant();
 
+        template<class Type>
+        void set_values(gtl::span<Type const> values)
+        {
+            if (m_type == get_type_enum_from_type<Type>())
+            {
+                get_vtable(m_type).m_copy_array(*this, values.data(), values.size());
+            }
+        }
 
-        void apply(GLint location) const;
+        void apply(GLint location, GLint texture_unit) const;
         void process(gserializer::serializer& serializer);
         type get_type() const { return m_type; }
 
+        std::uint32_t get_max_size() const { return m_max_size; }
+        static GLint get_gl_texture_type(type type);
+        
+        pointer_info& get_ptr_info() { assert(m_max_size > 1); return *static_cast<pointer_info*>(get_buffer()); }
+        pointer_info const& get_ptr_info() const { assert(m_max_size > 1); return *static_cast<pointer_info const*>(get_buffer()); }
+        void* get_buffer() { return m_inline_buffer; }
+        void const* get_buffer() const { return m_inline_buffer; }
+        bool is_texture() const;
+
     private:
-        void default_construct();
-        void destroy();
-        void move(uniform_variant&& move);
-        void copy(uniform_variant const& copy);
+        static vtable get_vtable(type type);
 
-        GLint get_gl_texture_type() const;
-
-        struct texture_info
-        {
-            gcore::resource_handle<texture> m_texture;
-            GLuint m_texture_id = 0;
-        };
-
-        union
-        {
-            bool m_bool;
-            GLint m_int;
-            GLuint m_uint;
-            float m_float;
-            double m_double;
-            glm::bvec2 m_bvec2;
-            glm::bvec3 m_bvec3;
-            glm::bvec4 m_bvec4;
-            glm::ivec2 m_ivec2;
-            glm::ivec3 m_ivec3;
-            glm::ivec4 m_ivec4;
-            glm::uvec2 m_uvec2;
-            glm::uvec3 m_uvec3;
-            glm::uvec4 m_uvec4;
-            glm::vec2 m_vec2;
-            glm::vec3 m_vec3;
-            glm::vec4 m_vec4;
-            glm::dvec2 m_dvec2;
-            glm::dvec3 m_dvec3;
-            glm::dvec4 m_dvec4;
-            glm::mat2x2 m_mat22;
-            glm::mat2x3 m_mat23;
-            glm::mat2x4 m_mat24;
-            glm::mat3x2 m_mat32;
-            glm::mat3x3 m_mat33;
-            glm::mat3x4 m_mat34;
-            glm::mat4x2 m_mat42;
-            glm::mat4x3 m_mat43;
-            glm::mat4x4 m_mat44;
-            texture_info m_texture_info;
-        };
+        alignas(alignof(glm::mat4)) char m_inline_buffer[sizeof(glm::mat4)];
+        std::uint32_t m_max_size = 1;
         type m_type;
     };
 

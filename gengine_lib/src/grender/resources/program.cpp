@@ -87,9 +87,13 @@ namespace grender
 
     void program_uniform_state::apply() const 
     {
-        for (GLint i = 0; i < static_cast<GLint>(m_uniforms.size()); ++i)
+        GLint location = 0;
+        GLint texture_unit = 0;
+        for (auto const& uniform : m_uniforms)
         {
-            m_uniforms[i].m_uniform.apply(i);
+            uniform.m_uniform.apply(location, texture_unit);
+            location += uniform.m_uniform.get_max_size();
+            texture_unit += uniform.m_uniform.is_texture() ? uniform.m_uniform.get_max_size() : 0;
         }
     }
 
@@ -105,31 +109,26 @@ namespace grender
             GLchar buffer[buffer_size];
             GLsizei length;
             GLenum type;
-            GLint size;
-            gl_exec(glGetActiveUniform, program_id, i, buffer_size, &length, &size, &type, buffer);
+            GLint max_size;
+            gl_exec(glGetActiveUniform, program_id, i, buffer_size, &length, &max_size, &type, buffer);
             uniform& u = m_uniforms.emplace_back();
             u.m_name.reserve(length);
-            u.m_name = buffer;
-            u.m_uniform = uniform_variant(get_type_from_gl_enum(type));
+            u.m_name = std::string_view(buffer, length);
+            u.m_uniform = uniform_variant(get_type_from_gl_enum(type), max_size);
         }
     }
 
-    void program_uniform_state::set_uniform(GLint location, uniform_variant const& variant)
+    void program_uniform_state::set_uniform(GLint location, uniform_variant&& variant)
     {
-        if (location >= m_uniforms.size() )
+        if (location >= m_uniforms.size())
         {
             return;
         }
 
-        if (m_uniforms[location].m_uniform.get_type() == variant.get_type())
+        if (variant.get_type() == m_uniforms[location].m_uniform.get_type())
         {
-            m_uniforms[location].m_uniform = variant;
+            m_uniforms[location].m_uniform = std::move(variant);
         }
-    }
-
-    void program_uniform_state::set_uniform(std::string_view name, uniform_variant const& variant)
-    {
-        set_uniform(get_uniform_location(name), variant);
     }
 
     uniform_variant::type program_uniform_state::get_type_at_index(std::size_t index) const

@@ -220,6 +220,7 @@
     <ClCompile Include="src\grender\systems\debug_render_system.cpp" />
     <ClCompile Include="src\grender\uniform_variant.cpp" />
     <ClCompile Include="src\grender\utils.cpp" />
+    <ClCompile Include="src\gserializer\serializer.cpp" />
     <ClCompile Include="src\gserializer\serializers\binary_file_serializer.cpp" />
     <ClCompile Include="src\gtl\scope_timer.cpp" />
     <ClCompile Include="src\gtool\common_widgets.cpp" />
@@ -268,6 +269,9 @@
     <ProjectReference Include="..\optick\optick.vcxproj">
       <Project>{0d68149d-afac-4ce5-9833-5726e2bc696b}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\grender\uniform_variant.inline" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

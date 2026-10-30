@@ -74,4 +74,6 @@ namespace gtl
     span(Iterator, Iterator)->span<typename std::iterator_traits<Iterator>::value_type>;
     template<class Iterator>
     span(Iterator, std::size_t)->span<typename std::iterator_traits<Iterator>::value_type>;
+    template<class Type>
+    span(Type&) -> span<Type>;
 }

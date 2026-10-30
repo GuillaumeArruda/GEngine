@@ -1,0 +1,486 @@
+
+template<>
+void apply_uniform_variant<bool>(uniform_variant const& variant, GLint location, GLint)
+{
+    if (variant.get_max_size() == 1)
+    {
+        gl_exec(glUniform1i, location, *static_cast<bool const*>(variant.get_buffer()));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform1iv, location, static_cast<GLsizei>(static_cast<GLsizei>(ptr_info.m_size)), static_cast<GLint const*>(ptr_info.m_ptr));
+    }
+}
+
+template<>
+void apply_uniform_variant<GLint>(uniform_variant const& variant, GLint location, GLint)
+{
+    if (variant.get_max_size() == 1)
+    {
+        gl_exec(glUniform1i, location, *static_cast<GLint const*>(variant.get_buffer()));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform1iv, location, static_cast<GLsizei>(static_cast<GLsizei>(ptr_info.m_size)), static_cast<GLint const*>(ptr_info.m_ptr));
+    }
+}
+
+template<>
+void apply_uniform_variant<GLuint>(uniform_variant const& variant, GLint location, GLint)
+{
+    if (variant.get_max_size() == 1)
+    {
+        gl_exec(glUniform1ui, location, *static_cast<GLuint const*>(variant.get_buffer()));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform1uiv, location, static_cast<GLsizei>(static_cast<GLsizei>(ptr_info.m_size)), static_cast<GLuint const*>(ptr_info.m_ptr));
+    }
+}
+
+template<>
+void apply_uniform_variant<float>(uniform_variant const& variant, GLint location, GLint)
+{
+    if (variant.get_max_size() == 1)
+    {
+        gl_exec(glUniform1f, location, *static_cast<float const*>(variant.get_buffer()));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform1fv, location, static_cast<GLsizei>(static_cast<GLsizei>(ptr_info.m_size)), static_cast<float const*>(ptr_info.m_ptr));
+    }
+}
+
+template<>
+void apply_uniform_variant<double>(uniform_variant const& variant, GLint location, GLint)
+{
+    if (variant.get_max_size() == 1)
+    {
+        gl_exec(glUniform1d, location, *static_cast<double const*>(variant.get_buffer()));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform1dv, location, static_cast<GLsizei>(static_cast<GLsizei>(ptr_info.m_size)), static_cast<double const*>(ptr_info.m_ptr));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::bvec2>(uniform_variant const& variant, GLint location, GLint)
+{
+    if (variant.get_max_size() == 1)
+    {
+        glm::bvec2 const* ptr = static_cast<glm::bvec2 const*>(variant.get_buffer());
+        gl_exec(glUniform2i, location, static_cast<GLint>((*ptr)[0]), static_cast<GLint>((*ptr)[1]));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform2iv, location, static_cast<GLsizei>(static_cast<GLsizei>(ptr_info.m_size)), glm::value_ptr(*static_cast<glm::ivec2 const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::bvec3>(uniform_variant const& variant, GLint location, GLint)
+{
+    if (variant.get_max_size() == 1)
+    {
+        glm::bvec3 const* ptr = static_cast<glm::bvec3 const*>(variant.get_buffer());
+        gl_exec(glUniform3i, location, static_cast<GLint>((*ptr)[0]), static_cast<GLint>((*ptr)[1]), static_cast<GLint>((*ptr)[2]));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform3iv, location, static_cast<GLsizei>(static_cast<GLsizei>(ptr_info.m_size)), glm::value_ptr(*static_cast<glm::ivec2 const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::bvec4>(uniform_variant const& variant, GLint location, GLint)
+{
+    if (variant.get_max_size() == 1)
+    {
+        glm::bvec4 const* ptr = static_cast<glm::bvec4 const*>(variant.get_buffer());
+        gl_exec(glUniform4i, location, static_cast<GLint>((*ptr)[0]), static_cast<GLint>((*ptr)[1]), static_cast<GLint>((*ptr)[2]), static_cast<GLint>((*ptr)[3]));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform4iv, location, static_cast<GLsizei>(static_cast<GLsizei>(ptr_info.m_size)), glm::value_ptr(*static_cast<glm::ivec4 const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::ivec2>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::ivec2;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniform2iv, location, 1, glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform2iv, location, static_cast<GLsizei>(ptr_info.m_size), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::ivec3>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::ivec3;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniform3iv, location, 1, glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform3iv, location, static_cast<GLsizei>(ptr_info.m_size), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::ivec4>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::ivec4;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniform4iv, location, 1, glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform4iv, location, static_cast<GLsizei>(ptr_info.m_size), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::uvec2>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::uvec2;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniform2uiv, location, 1, glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform2uiv, location, static_cast<GLsizei>(ptr_info.m_size), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::uvec3>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::uvec3;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniform3uiv, location, 1, glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform3uiv, location, static_cast<GLsizei>(ptr_info.m_size), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::uvec4>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::uvec4;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniform4uiv, location, 1, glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform4uiv, location, static_cast<GLsizei>(ptr_info.m_size), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::vec2>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::vec2;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniform2fv, location, 1, glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform2fv, location, static_cast<GLsizei>(ptr_info.m_size), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::vec3>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::vec3;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniform3fv, location, 1, glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform3fv, location, static_cast<GLsizei>(ptr_info.m_size), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::vec4>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::vec4;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniform4fv, location, 1, glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform4fv, location, static_cast<GLsizei>(ptr_info.m_size), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::dvec2>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::dvec2;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniform2dv, location, 1, glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform2dv, location, static_cast<GLsizei>(ptr_info.m_size), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::dvec3>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::dvec3;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniform3dv, location, 1, glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform3dv, location, static_cast<GLsizei>(ptr_info.m_size), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::dvec4>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::dvec4;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniform4dv, location, 1, glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniform4dv, location, static_cast<GLsizei>(ptr_info.m_size), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::mat2x2>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::mat2x2;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniformMatrix2fv, location, 1, static_cast<GLboolean>(GL_FALSE),  glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniformMatrix2fv, location, static_cast<GLsizei>(ptr_info.m_size), static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::mat2x3>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::mat2x3;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniformMatrix2x3fv, location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniformMatrix2x3fv, location, static_cast<GLsizei>(ptr_info.m_size), static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::mat2x4>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::mat2x4;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniformMatrix2x4fv, location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniformMatrix2x4fv, location, static_cast<GLsizei>(ptr_info.m_size), static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::mat3x2>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::mat3x2;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniformMatrix3x2fv, location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniformMatrix3x2fv, location, static_cast<GLsizei>(ptr_info.m_size), static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::mat3x3>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::mat3x3;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniformMatrix3fv, location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniformMatrix3fv, location, static_cast<GLsizei>(ptr_info.m_size), static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::mat3x4>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::mat3x4;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniformMatrix3x4fv, location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniformMatrix3x4fv, location, static_cast<GLsizei>(ptr_info.m_size), static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::mat4x2>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::mat4x2;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniformMatrix4x2fv, location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniformMatrix4x2fv, location, static_cast<GLsizei>(ptr_info.m_size), static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::mat4x3>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::mat4x3;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniformMatrix4x3fv, location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniformMatrix4x3fv, location, static_cast<GLsizei>(ptr_info.m_size), static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<glm::mat4x4>(uniform_variant const& variant, GLint location, GLint)
+{
+    using type = glm::mat4x4;
+    if (variant.get_max_size() == 1)
+    {
+        auto* ptr = static_cast<type const*>(variant.get_buffer());
+        gl_exec(glUniformMatrix4fv, location, 1, static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*ptr));
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        gl_exec(glUniformMatrix4fv, location, static_cast<GLsizei>(ptr_info.m_size), static_cast<GLboolean>(GL_FALSE), glm::value_ptr(*static_cast<type const*>(ptr_info.m_ptr)));
+    }
+}
+
+template<>
+void apply_uniform_variant<gcore::resource_handle<texture>>(uniform_variant const& variant, GLint location, GLint texture_unit)
+{
+    if (variant.get_max_size() == 1)
+    {
+        auto* texture_info = static_cast<gcore::resource_handle<texture> const*>(variant.get_buffer());
+        gl_exec(glActiveTexture, GL_TEXTURE0 + texture_unit);
+        gl_exec(glBindTexture, uniform_variant::get_gl_texture_type(variant.get_type()), texture_info->is_loaded() ? (*texture_info)->get_id() : 0);
+        gl_exec(glUniform1i, location, texture_unit);
+    }
+    else
+    {
+        uniform_variant::pointer_info const ptr_info = variant.get_ptr_info();
+        for(int i = 0; i < ptr_info.m_size; ++i)
+        {
+            gl_exec(glActiveTexture, GL_TEXTURE0 + texture_unit + i);
+            auto* texture_info = static_cast<gcore::resource_handle<texture> const*>(ptr_info.m_ptr) + i;
+            gl_exec(glBindTexture, uniform_variant::get_gl_texture_type(variant.get_type()), texture_info->is_loaded() ? (*texture_info)->get_id() : 0);
+            gl_exec(glUniform1i, location + i, texture_unit + i);
+        }
+    }
+}
+
+template<>
+void construct_uniform_variant<void>(uniform_variant&) {}
+template<>
+void destroy_uniform_variant<void>(uniform_variant&) {}
+template<>
+void copy_array_uniform_variant<void>(uniform_variant&, void const*, std::size_t) {}
+template<>
+void move_uniform_variant<void>(uniform_variant&&, uniform_variant&) {}
+template<>
+void process_uniform_variant<void>(gserializer::serializer&, uniform_variant&) {}
+

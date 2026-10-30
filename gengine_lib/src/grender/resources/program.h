@@ -50,8 +50,25 @@ namespace grender
     {
         void apply() const;
         void bind(GLint program_id);
-        void set_uniform(GLint location, uniform_variant const& variant);
-        void set_uniform(std::string_view name, uniform_variant const& variant);
+
+        template<class Type>
+        void set_uniform(GLint location, gtl::span<Type const> values)
+        {
+            if (location >= m_uniforms.size())
+            {
+                return;
+            }
+
+            m_uniforms[location].m_uniform.set_values(values);
+        }
+
+        template<class Type>
+        void set_uniform(std::string_view name, gtl::span<Type const> values)
+        {
+            set_uniform(get_uniform_location(name), values);
+        }
+        void set_uniform(GLint location, uniform_variant&& variant);
+
         uniform_variant::type get_type_at_index(std::size_t index) const;
         std::string const& get_name_at_index(std::size_t index) const;
         void process(gserializer::serializer& serializer);

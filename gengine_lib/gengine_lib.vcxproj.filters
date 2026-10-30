@@ -701,8 +701,14 @@
     <ClCompile Include="src\gcore\script\nodes\vector_nodes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\gserializer\serializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\gengine.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\grender\uniform_variant.inline" />
   </ItemGroup>
 </Project>
