@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae5516dd412535de124e00ba1efee4e",
+            "name": "skybox_vertex_shader",
+            "type": "shader::type::vertex",
+            "path": "data\\programs\\vertex\\skybox_vertex.glsl"
+        }
+    }
+}

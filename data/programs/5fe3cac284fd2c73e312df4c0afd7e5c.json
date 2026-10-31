@@ -5,16 +5,14 @@
         "data": {
             "uuid": "5fe3cac284fd2c73e312df4c0afd7e5c",
             "name": "Primitive_program",
-            "shaders": [                
-				{
-                    "key": "shader::type::vertex",
-                    "data": "data\\programs\\vertex\\primitive_vertex.glsl"
+            "shaders": [
+                {
+                    "value": "6ae5506fd4125332a549ccc43e85f66c"
                 },
                 {
-                    "key": "shader::type::fragment",
-                    "data": "data\\programs\\fragment\\primitive_fragment.glsl"
+                    "value": "6ae5514bd41253551a0ab78bfd0beabc"
                 }
-			],
+            ],
             "default uniforms": {
                 "uniforms": []
             }

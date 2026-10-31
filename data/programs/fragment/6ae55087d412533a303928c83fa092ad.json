@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae55087d412533a303928c83fa092ad",
+            "name": "spot_light_fragment_shader",
+            "type": "shader::type::fragment",
+            "path": "data\\programs\\fragment\\spot_light_fragment.glsl"
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae5507cd412533674a70a911b6f24fa",
+            "name": "skybox_fragment_shader",
+            "type": "shader::type::fragment",
+            "path": "data\\programs\\fragment\\skybox_fragment.glsl"
+        }
+    }
+}

@@ -35,6 +35,7 @@ namespace gcore
         }
 
         bool is_loaded() const;
+        bool is_failed() const;
 
         void set_target(resource* target);
         resource* get_target() { return m_target; }
@@ -106,6 +107,7 @@ namespace gcore
         }
 
         bool is_loaded() const { return m_proxy && m_proxy->is_loaded(); }
+        bool is_failed() const { return m_proxy && m_proxy->is_failed(); }
 
         void reset() { m_proxy.reset(); }
 

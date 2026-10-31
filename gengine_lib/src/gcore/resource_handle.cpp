@@ -33,6 +33,7 @@ namespace gcore
     }
 
     bool resource_proxy::is_loaded() const { return m_target && m_target->is_loaded(); }
+    bool resource_proxy::is_failed() const { return m_target && m_target->get_state() == resource::loading_state::failed; }
 
     void resource_proxy::set_target(resource* target)
     {

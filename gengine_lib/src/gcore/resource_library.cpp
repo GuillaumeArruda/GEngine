@@ -92,8 +92,9 @@ namespace gcore
         if (auto handle = try_get_resource(uuid))
             return handle;
 
-        std::unique_lock lock(m_lock);
+        m_lock.lock();
         auto const& [it, inserted] = m_proxy_map.insert(std::pair(uuid, std::weak_ptr<resource_proxy>()));
+        m_lock.unlock();
         std::shared_ptr<resource_proxy> proxy;
         if (inserted)
         {
@@ -102,6 +103,7 @@ namespace gcore
             {
                 std::unique_ptr<resource> resource_to_load;
                 gserializer::json_read_serializer serializer(file_it->second.string().c_str());
+                serializer.set_in_context(std::reference_wrapper(*this));
                 serializer.process("resource", resource_to_load, resource::factory());
                 if (resource_to_load)
                 {

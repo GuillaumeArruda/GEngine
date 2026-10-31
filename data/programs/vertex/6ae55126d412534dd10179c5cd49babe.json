@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae55126d412534dd10179c5cd49babe",
+            "name": "default_vertex_shader",
+            "type": "shader::type::vertex",
+            "path": "data\\programs\\vertex\\default_vertex.glsl"
+        }
+    }
+}

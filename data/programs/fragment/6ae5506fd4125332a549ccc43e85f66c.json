@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae5506fd4125332a549ccc43e85f66c",
+            "name": "primitive_fragment_shader",
+            "type": "shader::type::fragment",
+            "path": "data\\programs\\fragment\\primitive_fragment.glsl"
+        }
+    }
+}

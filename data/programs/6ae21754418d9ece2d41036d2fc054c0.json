@@ -7,12 +7,10 @@
             "name": "spot_light_program",
             "shaders": [
                 {
-                    "key": "shader::type::vertex",
-                    "data": "data\\programs\\vertex\\fullscreen_quad.glsl"
+                    "value":"6ae55087d412533a303928c83fa092ad"
                 },
                 {
-                    "key": "shader::type::fragment",
-                    "data": "data\\programs\\fragment\\spot_light_fragment.glsl"
+                    "value":"6ae55133d412535169118d3e2ba2e9f"
                 }
             ],
             "default uniforms": {

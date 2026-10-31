@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae55064d412532ea92c62c8a3066d62",
+            "name": "point_light_fragment_shader",
+            "type": "shader::type::fragment",
+            "path": "data\\programs\\fragment\\point_light_fragment.glsl"
+        }
+    }
+}

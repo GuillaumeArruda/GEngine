@@ -7,12 +7,10 @@
             "name": "shadow_program",
             "shaders": [
                 {
-                    "key": "shader::type::vertex",
-                    "data": "data\\programs\\vertex\\simple_vertex.glsl"
+                    "value": "6ae5515cd4125359291aa9baedb9c1bf"
                 },
                 {
-                    "key": "shader::type::fragment",
-                    "data": "data\\programs\\fragment\\empty_fragment.glsl"
+                    "value": "6ae55058d412532a8a060790ae75935a"
                 }
             ],
             "default uniforms": {

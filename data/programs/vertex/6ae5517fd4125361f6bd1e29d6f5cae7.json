@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae5517fd4125361f6bd1e29d6f5cae7",
+            "name": "terrain_vertex_shader",
+            "type": "shader::type::vertex",
+            "path": "data\\programs\\vertex\\terrain_vertex.glsl"
+        }
+    }
+}

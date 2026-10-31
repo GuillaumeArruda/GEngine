@@ -76,6 +76,7 @@ namespace gtool
                 {
                     std::unique_ptr<gcore::resource> s(m_resource.get());
                     gtool::imgui_serializer serializer("Resource");
+                    serializer.set_in_context(std::reference_wrapper(library));
                     serializer.process("Resource", s, gcore::resource::factory());
                     if (ImGui::Button("Save"))
                     {

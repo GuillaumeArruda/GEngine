@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae55058d412532a8a060790ae75935a",
+            "name": "empty_fragment_shader",
+            "type": "shader::type::fragment",
+            "path": "data\\programs\\fragment\\empty_fragment.glsl"
+        }
+    }
+}

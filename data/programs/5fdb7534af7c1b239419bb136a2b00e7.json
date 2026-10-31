@@ -7,14 +7,112 @@
             "name": "default_program",
             "shaders": [
                 {
-                    "key": "shader::type::vertex",
-                    "data": "data\\programs\\vertex\\default_vertex.glsl"
+                    "value": "6ae55126d412534dd10179c5cd49babe"
                 },
                 {
-                    "key": "shader::type::fragment",
-                    "data": "data\\programs\\fragment\\default_fragment.glsl"
+                    "value": "6ae55026d412532251846e69bfa70f88"
                 }
-            ]
+            ],
+            "default uniforms": {
+                "uniforms": [
+                    {
+                        "name": "albedo_map",
+                        "type": "uniform_variant::type::sampler_2d",
+                        "max_size": 1,
+                        "value": "00"
+                    },
+                    {
+                        "name": "mvp",
+                        "type": "uniform_variant::type::mat44",
+                        "max_size": 1,
+                        "[0]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[1]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[3]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[4]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        }
+                    },
+                    {
+                        "name": "normal_map",
+                        "type": "uniform_variant::type::sampler_2d",
+                        "max_size": 1,
+                        "value": "00"
+                    },
+                    {
+                        "name": "normal_matrix",
+                        "type": "uniform_variant::type::mat33",
+                        "max_size": 1,
+                        "[0]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "[1]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "[3]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        }
+                    },
+                    {
+                        "name": "specular_map",
+                        "type": "uniform_variant::type::sampler_2d",
+                        "max_size": 1,
+                        "value": "00"
+                    },
+                    {
+                        "name": "world_matrix",
+                        "type": "uniform_variant::type::mat44",
+                        "max_size": 1,
+                        "[0]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[1]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[3]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[4]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        }
+                    }
+                ]
+            }
         }
     }
 }

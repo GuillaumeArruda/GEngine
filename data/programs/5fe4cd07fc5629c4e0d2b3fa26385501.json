@@ -5,24 +5,20 @@
         "data": {
             "uuid": "5fe4cd07fc5629c4e0d2b3fa26385501",
             "name": "terrain_program",
-            "shaders": [                
-				{
-                    "key": "shader::type::vertex",
-                    "data": "data\\programs\\vertex\\terrain_vertex.glsl"
-				},
-				{
-					"key": "shader::type::tesselation_control",
-					"data": "data\\programs\\tesselation_control\\terrain_tesselation_control.glsl"
-				},
-				{
-					"key": "shader::type::tesselation_evaluation",
-					"data": "data\\programs\\tesselation_evaluation\\terrain_tesselation_evaluation.glsl"
-				},
+            "shaders": [
                 {
-                    "key": "shader::type::fragment",
-                    "data": "data\\programs\\fragment\\terrain_fragment.glsl"
+                    "value": "6ae55096d412533e27ac9d9cb1077707"
+                },
+                {
+                    "value": "6ae550e4d41253459ff9b6594295f3ea"
+                },
+                {
+                    "value": "6ae55104d41253494611d89af30a3c1f"
+                },
+                {
+                    "value": "6ae5517fd4125361f6bd1e29d6f5cae7"
                 }
-			],
+            ],
             "default uniforms": {
                 "uniforms": []
             }

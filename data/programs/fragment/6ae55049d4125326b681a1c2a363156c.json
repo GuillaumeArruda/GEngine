@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae55049d4125326b681a1c2a363156c",
+            "name": "directional_light_fragment_shader",
+            "type": "shader::type::fragment",
+            "path": "data\\programs\\fragment\\directional_light_fragment.glsl"
+        }
+    }
+}

@@ -411,6 +411,9 @@
     <ClInclude Include="src\gcore\script\nodes\vector_nodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\grender\resources\shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gserializer\serializers\json_serializer.cpp">
@@ -702,6 +705,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gserializer\serializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\grender\resources\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

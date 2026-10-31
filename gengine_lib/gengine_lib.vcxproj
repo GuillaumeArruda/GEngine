@@ -92,6 +92,7 @@
     <ClInclude Include="src\grender\nodes\render_mesh_node.h" />
     <ClInclude Include="src\grender\render_target.h" />
     <ClInclude Include="src\grender\resources\runtime_texture.h" />
+    <ClInclude Include="src\grender\resources\shader.h" />
     <ClInclude Include="src\grender\resources\texture_2d.h" />
     <ClInclude Include="src\grender\resources\cube_map_texture.h" />
     <ClInclude Include="src\grender\resources\texture.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="src\grender\render_target.cpp" />
     <ClCompile Include="src\grender\resources\cube_map_texture.cpp" />
     <ClCompile Include="src\grender\resources\runtime_texture.cpp" />
+    <ClCompile Include="src\grender\resources\shader.cpp" />
     <ClCompile Include="src\grender\resources\texture.cpp" />
     <ClCompile Include="src\grender\resources\texture_2d.cpp" />
     <ClCompile Include="src\grender\systems\debug_render_system.cpp" />

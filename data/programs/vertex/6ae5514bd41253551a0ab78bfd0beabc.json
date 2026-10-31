@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae5514bd41253551a0ab78bfd0beabc",
+            "name": "primitive_vertex_shader",
+            "type": "shader::type::vertex",
+            "path": "data\\programs\\vertex\\primitive_vertex.glsl"
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae55096d412533e27ac9d9cb1077707",
+            "name": "terrain_fragment_shader",
+            "type": "shader::type::fragment",
+            "path": "data\\programs\\fragment\\terrain_fragment.glsl"
+        }
+    }
+}
