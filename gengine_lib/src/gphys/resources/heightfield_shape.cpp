@@ -21,8 +21,6 @@ GSERIALIZER_DEFINE_SUBCLASS_FACTORY_REGISTRATION(gphys::heightfield_shape)
 namespace gphys
 {
     heightfield_shape::~heightfield_shape() = default;
-    heightfield_shape::heightfield_shape(heightfield_shape&&) noexcept = default;
-    heightfield_shape& heightfield_shape::operator=(heightfield_shape&&) = default;
 
     void heightfield_shape::process(gserializer::serializer & serializer)
     {

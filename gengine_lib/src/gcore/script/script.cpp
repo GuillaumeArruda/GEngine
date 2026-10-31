@@ -147,28 +147,6 @@ namespace gcore
 
     bool script::do_load_async()
     {
-        gserializer::json_read_serializer serializer(m_descriptor_path.string().c_str());
-        serializer.set_in_context(std::ref(*m_library));
-        m_descriptor = script_descriptor();
-        m_descriptor.process(serializer);
-
-        dependency_gatherer_serializer gatherer(true);
-        m_descriptor.process(gatherer);
-
-        std::vector<resource_handle<resource>> resources;
-        for (gtl::uuid const& uuid : gatherer.m_uuids)
-        {
-            if (get_uuid() == uuid)
-                continue;
-
-            if (resource_handle<resource> res = m_library->try_get_resource<resource>(uuid))
-            {
-                resources.push_back(std::move(res));
-            }
-        }
-        m_library->get_dependency_tracker().add_dependencies(get_uuid(), gatherer.m_uuids, gatherer.m_files);
-        ensure_all_dependant_resources_loaded(resources);
-
         for (auto& node : m_descriptor.m_nodes)
         {
             node.m_node->pre_create(m_descriptor);
@@ -366,6 +344,32 @@ namespace gcore
     {
         super::process(serializer);
         serializer.process("descriptor_file", m_descriptor_path);
+    }
+
+    void script::create_loading_dependent_resources()
+    {
+        super::create_loading_dependent_resources();
+
+        gserializer::json_read_serializer serializer(m_descriptor_path.string().c_str());
+        serializer.set_in_context(std::ref(*m_library));
+        m_descriptor = script_descriptor();
+        m_descriptor.process(serializer);
+
+        dependency_gatherer_serializer gatherer(true);
+        m_descriptor.process(gatherer);
+
+        for (gtl::uuid const& uuid : gatherer.m_uuids)
+        {
+            if (get_uuid() == uuid)
+                continue;
+
+            if (resource_handle<resource> res = m_library->try_get_resource<resource>(uuid))
+            {
+                m_dependent_resources.push_back(std::move(res));
+            }
+        }
+        m_library->get_dependency_tracker().add_dependencies(get_uuid(), gatherer.m_uuids, gatherer.m_files);
+
     }
 
     bool script::are_all_input_const(int node_index) const

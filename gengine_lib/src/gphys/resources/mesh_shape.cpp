@@ -14,8 +14,6 @@ GSERIALIZER_DEFINE_SUBCLASS_FACTORY_REGISTRATION(gphys::mesh_shape);
 namespace gphys
 {
     mesh_shape::~mesh_shape() = default;
-    mesh_shape::mesh_shape(mesh_shape&&) noexcept = default;
-    mesh_shape& mesh_shape::operator=(mesh_shape&&) = default;
 
     void mesh_shape::process(gserializer::serializer& serializer)
     {

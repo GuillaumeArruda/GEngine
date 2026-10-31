@@ -74,7 +74,7 @@ namespace gcore
     resource_handle<resource> resource_library::try_get_resource(gtl::uuid const& uuid)
     {
         {
-            std::shared_lock lock(m_lock);
+            std::unique_lock lock(m_lock);
             if (auto const it = m_proxy_map.find(uuid);
                 it != m_proxy_map.end())
             {
@@ -89,12 +89,14 @@ namespace gcore
 
     resource_handle<resource> resource_library::get_resource(gtl::uuid const& uuid)
     {
+        if (!uuid.is_valid())
+            return resource_handle<resource>();
+
         if (auto handle = try_get_resource(uuid))
             return handle;
 
-        m_lock.lock();
+        std::unique_lock lock(m_lock);
         auto const& [it, inserted] = m_proxy_map.insert(std::pair(uuid, std::weak_ptr<resource_proxy>()));
-        m_lock.unlock();
         std::shared_ptr<resource_proxy> proxy;
         if (inserted)
         {
@@ -268,14 +270,35 @@ namespace gcore
     {
         res_to_load->set_library(this);
         m_dependency_tracker.on_resource_loaded(*res_to_load);
-
         m_jobs.submit([res = std::move(res_to_load), this]() mutable
             {
-                res->load_async();
-                std::unique_lock lock(m_lock);
-                m_res_to_load_sync.push_back(std::move(res));
+                load_resource_internal(std::move(res));
             }
         );
+    }
+
+    void resource_library::load_resource_internal(std::unique_ptr<resource> res_to_load)
+    {
+        if (res_to_load->get_state() == resource::loading_state::initial)
+        {
+            res_to_load->create_loading_dependent_resources();
+        }
+
+        gtl::span<resource_handle<resource> const> resources = res_to_load->get_loading_dependent_resources();
+        if (resources.empty() || std::all_of(resources.begin(), resources.end(), [](auto& res_handle) { return res_handle.is_loaded() || res_handle.is_failed(); }))
+        {
+            res_to_load->load_async();
+            std::unique_lock lock(m_lock);
+            m_res_to_load_sync.push_back(std::move(res_to_load));
+        }
+        else
+        {
+            m_jobs.submit([res = std::move(res_to_load), this]() mutable
+                {
+                    load_resource_internal(std::move(res));
+                }
+            );
+        }
     }
 
     void resource_library::reload_resource(gtl::uuid const& uuid)

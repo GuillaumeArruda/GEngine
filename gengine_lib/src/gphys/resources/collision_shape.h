@@ -11,9 +11,6 @@ namespace gphys
         collision_shape() = default;
         ~collision_shape();
 
-        collision_shape(collision_shape&&);
-        collision_shape& operator=(collision_shape&&);
-
         collision_shape(collision_shape const&) = delete;
         collision_shape& operator=(collision_shape const&) = delete;
 

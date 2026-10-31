@@ -70,12 +70,13 @@ namespace gcore
         friend struct resource_proxy;
         void request_unload(resource* res_to_unload);
         void load_resource(std::unique_ptr<resource> res_to_load);
+        void load_resource_internal(std::unique_ptr<resource> res_to_load);
         void reload_resource(gtl::uuid const& uuid);
 
         resource_handle<resource> get_resource(gtl::uuid const& uuid);
         resource_handle<resource> try_get_resource(gtl::uuid const& uuid);
         
-        std::shared_mutex m_lock;
+        std::recursive_mutex m_lock;
         std::unordered_map<gtl::uuid, std::filesystem::path> m_uuid_to_resource_file;
         std::unordered_map<gtl::uuid, std::unique_ptr<resource>> m_resource_map;
         std::unordered_map<gtl::uuid, std::weak_ptr<resource_proxy>> m_proxy_map;

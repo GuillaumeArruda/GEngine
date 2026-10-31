@@ -98,6 +98,8 @@ namespace gcore
         void set_descriptor_path(std::filesystem::path new_path) { m_descriptor_path = std::move(new_path); };
         script_descriptor const& get_descriptor() const { return m_descriptor; }
 
+        void create_loading_dependent_resources() override;
+
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
     private:
         bool are_all_input_const(int node_index) const;

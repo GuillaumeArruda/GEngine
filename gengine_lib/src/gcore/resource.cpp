@@ -15,7 +15,11 @@
 
 namespace gcore
 {
-    resource::~resource() 
+    resource::resource()
+    {
+    }
+
+    resource::~resource()
     { 
     }
     
@@ -29,21 +33,6 @@ namespace gcore
     { 
         OPTICK_EVENT();
         OPTICK_TAG("Res Name", m_name.c_str());
-        dependency_gatherer_serializer gatherer(true);
-        gatherer.set_in_context(std::ref(*m_library));
-        process(gatherer);
-        std::vector<resource_handle<resource>> resources;
-        for (gtl::uuid const& uuid : gatherer.m_uuids)
-        {
-            if (m_uuid == uuid)
-                continue;
-
-            if (resource_handle<resource> res = m_library->try_get_resource<resource>(uuid))
-            {
-                resources.push_back(std::move(res));
-            }
-        }
-        ensure_all_dependant_resources_loaded(resources);
 
         assert(m_loading_state == loading_state::pending_async);
         if (do_load_async())
@@ -83,12 +72,31 @@ namespace gcore
         m_loading_state = loading_state::unloaded;
     }
 
-    void resource::ensure_all_dependant_resources_loaded(std::vector<resource_handle<resource>> const& resources)
+    void resource::create_loading_dependent_resources()
     {
-        while (!std::all_of(resources.begin(), resources.end(), [](resource_handle<resource> const& res) { return res.is_loaded() || res.is_failed(); }))
+        OPTICK_EVENT();
+        OPTICK_TAG("Res Name", m_name.c_str());
+        assert(m_loading_state == loading_state::initial);
+        dependency_gatherer_serializer gatherer(true);
+        gatherer.set_in_context(std::ref(*m_library));
+        process(gatherer);
+        for (gtl::uuid const& uuid : gatherer.m_uuids)
         {
-            m_library->run_loading_job();
+            if (get_uuid() == uuid)
+                continue;
+
+            if (resource_handle<resource> res = m_library->try_get_resource<resource>(uuid))
+            {
+                m_dependent_resources.push_back(std::move(res));
+            }
         }
+        m_library->get_dependency_tracker().add_dependencies(get_uuid(), gatherer.m_uuids, gatherer.m_files);
+        m_loading_state = loading_state::pending_async;
+    }
+
+    gtl::span<gcore::resource_handle<resource>const> resource::get_loading_dependent_resources() const 
+    { 
+        return m_dependent_resources; 
     }
 }
 

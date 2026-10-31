@@ -18,13 +18,22 @@ namespace gcore
     {
         enum class loading_state
         {
+            initial,
+            pending_other_resources,
             pending_async,
             pending_sync,
             loaded,
             failed,
             unloaded
         };
+        resource();
+
+        resource(resource const&) = delete;
+        resource(resource&&) = delete;
         virtual ~resource();
+
+        resource& operator=(resource const&) = delete;
+        resource& operator=(resource&&) = delete;
 
         virtual void process(gserializer::serializer& serializer);
 
@@ -43,10 +52,12 @@ namespace gcore
         void set_name(std::string name) { m_name = std::move(name); }
         void set_library(resource_library* library) { m_library = library; }
 
-    protected:
-        void ensure_all_dependant_resources_loaded(std::vector<resource_handle<resource>> const& resources);
+        virtual void create_loading_dependent_resources();
+        gtl::span<gcore::resource_handle<resource> const> get_loading_dependent_resources() const;
 
+    protected:
         resource_library* m_library = nullptr;
+        std::vector<gcore::resource_handle<resource>> m_dependent_resources;
 
     private:
         virtual bool do_load_async() { return true; };
@@ -55,6 +66,6 @@ namespace gcore
 
         std::string m_name;
         gtl::uuid m_uuid = gtl::uuid::generate();
-        loading_state m_loading_state = loading_state::pending_async;
+        loading_state m_loading_state = loading_state::initial;
     };
 }
