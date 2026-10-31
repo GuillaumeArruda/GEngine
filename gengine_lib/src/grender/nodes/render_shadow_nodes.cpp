@@ -162,7 +162,7 @@ namespace grender
     
     void render_point_light_shadow_node::execute(gcore::node_context& context) const
     {
-        constexpr int shadow_map_size = 1024;
+        constexpr int shadow_map_size = 2048;
         if (auto* render_sys = context.get_in_context<std::reference_wrapper<render_system>>())
         {
             auto& memory = std::any_cast<state&>(context.m_node_memory);
@@ -206,56 +206,58 @@ namespace grender
             if (matrixes.empty() || radii.empty())
                 return;
 
+            constexpr std::array directions = {
+                glm::vec3(1.f, 0.f, 0.f),
+                glm::vec3(-1.f, 0.f, 0.f),
+                glm::vec3(0.f, 1.f, 0.f),
+                glm::vec3(0.f,-1.f, 0.f),
+                glm::vec3(0.f, 0.f, 1.f),
+                glm::vec3(0.f, 0.f, -1.f)
+            };
+
+            constexpr std::array up_vectors = {
+                glm::vec3(0.f, -1.f, 0.f),
+                glm::vec3(0.f, -1.f, 0.f),
+                glm::vec3(0.f, 0.f, 1.f),
+                glm::vec3(0.f, 0.f, -1.f),
+                glm::vec3(0.f, -1.f, 0.f),
+                glm::vec3(0.f, -1.f, 0.f)
+            };
+
+            glm::vec3 const light_pos = glm::vec3(matrixes[0][3]);
+            std::vector<glm::mat4> light_matrices;
+            glm::mat4 const light_projection = glm::perspective(gmath::radian(90.0_d).value(), 1.f, 0.1f, radii[0]);
+            for (int i = 0; i < 6; ++i)
+            {
+                glm::mat4 const light_view_matrix = glm::lookAt(light_pos, light_pos + directions[i], up_vectors[i]);
+                light_matrices.push_back(light_projection * light_view_matrix);
+            }
+
             render_sys->get().add_pre_light_work(
-                [memory,light_pos = glm::vec3(matrixes[0][3]), radius = radii[0]](render_system& render_sys) mutable
+                [memory, light_matrices = std::move(light_matrices)](render_system& render_sys) mutable
             {
                 OPTICK_EVENT("Render point light shadow");
                 gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, memory.m_framebuffer->get_fbo());
                 gl_exec(glViewport, 0, 0, shadow_map_size, shadow_map_size);
                 gl_exec(glClear, GL_DEPTH_BUFFER_BIT);
                 gl_exec(glCullFace, GL_FRONT);
-                
-                constexpr std::array directions = {
-                    glm::vec3(1.f, 0.f, 0.f),
-                    glm::vec3(-1.f, 0.f, 0.f),
-                    glm::vec3(0.f, 1.f, 0.f),
-                    glm::vec3(0.f,-1.f, 0.f),
-                    glm::vec3(0.f, 0.f, 1.f),
-                    glm::vec3(0.f, 0.f, -1.f)
-                };
-
-                constexpr std::array up_vectors = {
-                    glm::vec3(0.f, -1.f, 0.f),
-                    glm::vec3(0.f, -1.f, 0.f),
-                    glm::vec3(0.f, 0.f, 1.f),
-                    glm::vec3(0.f, 0.f, -1.f),
-                    glm::vec3(0.f, -1.f, 0.f),
-                    glm::vec3(0.f, -1.f, 0.f)
-                };
-
-                glm::mat4 const light_projection = glm::perspective(gmath::radian(90.0_d).value(), 1.f, 0.1f, radius);
-                for (int i = 0; i < 6; ++i)
-                {
-                    glm::mat4 const light_view_matrix = glm::lookAt(light_pos, light_pos + directions[i], up_vectors[i]);
-                    glm::mat4 const light_matrix = light_projection * light_view_matrix;
-                    gl_exec(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, memory.m_texture->get_id(), 0);
-                    render_sys.for_each_mesh_draw_request(
-                        [&light_matrix](render_system::draw_request const& request) mutable
+                render_sys.for_each_mesh_draw_request(
+                    [&light_matrices](render_system::draw_request const& request) mutable
+                    {
+                        gcore::resource_handle<program> shadow_program = request.m_program_data->m_program->get_associated_program(program::associated_program::point_light_shadow);
+                        if (shadow_program.is_loaded())
                         {
-                            gcore::resource_handle<program> shadow_program = request.m_program_data->m_program->get_associated_program(program::associated_program::point_light_shadow);
-                            if (shadow_program.is_loaded())
-                            {
-                                shadow_program->activate();
-                                program_uniform_state state = shadow_program->get_default_state();
-                                state.copy_matching_uniform(request.m_program_data->m_state);
-                                glm::mat4 const mvp = light_matrix * request.m_transform;
-                                state.set_uniform("mvp", gtl::span(mvp));
-                                state.apply();
-                                request.m_mesh->draw();
-                            }
+                            shadow_program->activate();
+                            program_uniform_state state = shadow_program->get_default_state();
+                            state.copy_matching_uniform(request.m_program_data->m_state);
+                            state.set_uniform("world_matrix", gtl::span(request.m_transform));
+                            state.set_uniform("light_matrices[0]", gtl::span<glm::mat4 const>(light_matrices));
+                            state.apply();
+                            request.m_mesh->draw();
                         }
-                    );
-                }
+                    }
+                );
+
 
                 gl_exec(glCullFace, GL_BACK);
                 gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, 0);

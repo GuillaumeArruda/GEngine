@@ -6,7 +6,7 @@
             "uuid": "6ae55133d412535169118d3e2ba2e9f",
             "name": "fullscreen_squad_shader",
             "type": "shader::type::vertex",
-            "path": "data\\programs\\vertex\\fullscreen_squad.glsl"
+            "path": "data\\programs\\vertex\\fullscreen_quad.glsl"
         }
     }
 }

@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae660254fb0721bf9e482fe0110bc4",
+            "name": "terrain_tesselation_evaluation_shadow_shader",
+            "type": "shader::type::tesselation_evaluation",
+            "path": "data\\programs\\tesselation_evaluation\\terrain_tesselation_evaluation_shadow.glsl"
+        }
+    }
+}

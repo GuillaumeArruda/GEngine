@@ -7,10 +7,13 @@
             "name": "default_point_light_shadow",
             "shaders": [
                 {
-                    "value": "6ae5515cd4125359291aa9baedb9c1bf"
+                    "value": "6ae6593733d12a27259c17a8cb0e3025"
                 },
                 {
                     "value": "6ae55058d412532a8a060790ae75935a"
+                },
+                {
+                    "value": "6ae658e39ee9ef582b833f15d46a62a1"
                 }
             ],
             "directional shadow": {
@@ -23,7 +26,37 @@
                 "value": "00"
             },
             "default uniforms": {
-                "uniforms": []
+                "uniforms": [
+                    {
+                        "name": "mvp",
+                        "type": "uniform_variant::type::mat44",
+                        "max_size": 1,
+                        "[0]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[1]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[3]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[4]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        }
+                    }
+                ]
             }
         }
     }

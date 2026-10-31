@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+      "data": {
+        "uuid": "6ae658e39ee9ef582b833f15d46a62a1",
+        "name": "point_light_shadow_geometry_shader",
+        "type": "shader::type::geometry",
+        "path": "data\\programs\\geometry\\point_light_shadow_geometry.glsl"
+      }
+    }
+}
