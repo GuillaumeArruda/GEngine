@@ -36,11 +36,6 @@ namespace grender
             gcore::resource_handle<mesh_resource> m_mesh;
         };
 
-        struct mesh_draw_request : draw_request
-        {
-            program_pin_data const* m_shadow_program = nullptr;
-        };
-
         struct light_draw_request : draw_request
         {
             bool m_cull_back = false;
@@ -54,7 +49,7 @@ namespace grender
         glm::ivec2 get_target_size() const;
         GLuint get_target_id() const;
 
-        void add_mesh_draw_request(glm::mat4 const& transform, program_pin_data const& program, program_pin_data const& shadow_program, gcore::resource_handle<mesh_resource> mesh);
+        void add_mesh_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
         void add_light_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh, bool cull_back_face);
         void add_skybox_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh);
     
@@ -68,7 +63,7 @@ namespace grender
         void for_each_mesh_draw_request(Functor&& functor)
         {
             auto locked_draw_request = m_mesh_draw_requests.get();
-            for (mesh_draw_request const& request : locked_draw_request.m_data)
+            for (draw_request const& request : locked_draw_request.m_data)
             {
                 functor(request);
             }
@@ -90,7 +85,7 @@ namespace grender
 
         gcore::resource_library* m_resource_library = nullptr;
         frame_buffer m_frame_buffer = frame_buffer(nullptr, 0ull, 0ull);
-        gthread::locked<std::vector<mesh_draw_request>> m_mesh_draw_requests;
+        gthread::locked<std::vector<draw_request>> m_mesh_draw_requests;
         gthread::locked<std::vector<std::move_only_function<void(render_system&)>>> m_pre_light_works;
         gthread::locked<std::vector<light_draw_request>> m_light_draw_requests;
         gthread::locked<std::vector<draw_request>> m_skybox_draw_requests;

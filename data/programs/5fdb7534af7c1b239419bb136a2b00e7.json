@@ -13,6 +13,15 @@
                     "value": "6ae55026d412532251846e69bfa70f88"
                 }
             ],
+            "directional shadow": {
+                "value": "6ae61dfc124e8ecceb6768438fd8be24"
+            },
+            "spot light shadow": {
+                "value": "6ade0ae7f9e16846c01d9df6ec5a7283"
+            },
+            "point light shadow": {
+                "value": "6ae61e18124e8ed0fd1e7aee3947ccee"
+            },
             "default uniforms": {
                 "uniforms": [
                     {

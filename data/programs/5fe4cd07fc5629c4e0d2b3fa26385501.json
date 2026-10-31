@@ -19,8 +19,88 @@
                     "value": "6ae5517fd4125361f6bd1e29d6f5cae7"
                 }
             ],
+            "directional shadow": {
+                "value": "6ae61e8abf821d014f54b92753914cfd"
+            },
+            "spot light shadow": {
+                "value": "6adfac0ffd9a6cc7fde0a1c98e5c25b6"
+            },
+            "point light shadow": {
+                "value": "6ae61e9dbf821d05bbbb76383cde269c"
+            },
             "default uniforms": {
-                "uniforms": []
+                "uniforms": [
+                    {
+                        "name": "height_map",
+                        "type": "uniform_variant::type::sampler_2d",
+                        "max_size": 1,
+                        "value": "00"
+                    },
+                    {
+                        "name": "max_height",
+                        "type": "uniform_variant::type::glfloat",
+                        "max_size": 1,
+                        "value": 0.0
+                    },
+                    {
+                        "name": "mvp",
+                        "type": "uniform_variant::type::mat44",
+                        "max_size": 1,
+                        "[0]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[1]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[3]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[4]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        }
+                    },
+                    {
+                        "name": "world_matrix",
+                        "type": "uniform_variant::type::mat44",
+                        "max_size": 1,
+                        "[0]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[1]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[3]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[4]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        }
+                    }
+                ]
             }
         }
     }

@@ -1,0 +1,37 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::program",
+        "data": {
+            "uuid": "6ae61e9dbf821d05bbbb76383cde269c",
+            "name": "terrain_point_light_shadow",
+            "shaders": [
+                
+                {
+                    "value": "6ae550e4d41253459ff9b6594295f3ea"
+                },
+                {
+                    "value": "6ae55104d41253494611d89af30a3c1f"
+                },
+                {
+                    "value": "6ae5517fd4125361f6bd1e29d6f5cae7"
+                },
+                {
+                    "value": "6ae55058d412532a8a060790ae75935a"
+                }
+            ],
+            "directional shadow": {
+                "value": "00"
+            },
+            "spot light shadow": {
+                "value": "00"
+            },
+            "point light shadow": {
+                "value": "00"
+            },
+            "default uniforms": {
+                "uniforms": []
+            }
+        }
+    }
+}

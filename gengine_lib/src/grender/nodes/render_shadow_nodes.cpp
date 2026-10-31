@@ -82,14 +82,19 @@ namespace grender
                     gl_exec(glClear, GL_DEPTH_BUFFER_BIT);
                     gl_exec(glCullFace, GL_FRONT);
                     render_sys.for_each_mesh_draw_request(
-                        [&light_matrix](render_system::mesh_draw_request const& request) mutable
+                        [&light_matrix](render_system::draw_request const& request) mutable
                         {
-                            glm::mat4 const mvp = light_matrix * request.m_transform;
-                            request.m_shadow_program->m_program->activate();
-                            program_uniform_state state = request.m_shadow_program->m_state;
-                            state.set_uniform("mvp", gtl::span(mvp));
-                            state.apply();
-                            request.m_mesh->draw();
+                            gcore::resource_handle<program> shadow_program = request.m_program_data->m_program->get_associated_program(program::associated_program::directional_shadow);
+                            if (shadow_program.is_loaded())
+                            {
+                                shadow_program->activate();
+                                program_uniform_state state = shadow_program->get_default_state();
+                                state.copy_matching_uniform(request.m_program_data->m_state);
+                                glm::mat4 const mvp = light_matrix * request.m_transform;
+                                state.set_uniform("mvp", gtl::span(mvp));
+                                state.apply();
+                                request.m_mesh->draw();
+                            }
                         }
                     );
                     gl_exec(glCullFace, GL_BACK);
@@ -235,14 +240,19 @@ namespace grender
                     glm::mat4 const light_matrix = light_projection * light_view_matrix;
                     gl_exec(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, memory.m_texture->get_id(), 0);
                     render_sys.for_each_mesh_draw_request(
-                        [&light_matrix](render_system::mesh_draw_request const& request) mutable
+                        [&light_matrix](render_system::draw_request const& request) mutable
                         {
-                            glm::mat4 const mvp = light_matrix * request.m_transform;
-                            request.m_shadow_program->m_program->activate();
-                            program_uniform_state state = request.m_shadow_program->m_state;
-                            state.set_uniform("mvp", gtl::span(mvp));
-                            state.apply();
-                            request.m_mesh->draw();
+                            gcore::resource_handle<program> shadow_program = request.m_program_data->m_program->get_associated_program(program::associated_program::point_light_shadow);
+                            if (shadow_program.is_loaded())
+                            {
+                                shadow_program->activate();
+                                program_uniform_state state = shadow_program->get_default_state();
+                                state.copy_matching_uniform(request.m_program_data->m_state);
+                                glm::mat4 const mvp = light_matrix * request.m_transform;
+                                state.set_uniform("mvp", gtl::span(mvp));
+                                state.apply();
+                                request.m_mesh->draw();
+                            }
                         }
                     );
                 }
@@ -327,14 +337,19 @@ namespace grender
                 gl_exec(glCullFace, GL_FRONT);
 
                 render_sys.for_each_mesh_draw_request(
-                    [&light_matrix](render_system::mesh_draw_request const& request) mutable
+                    [&light_matrix](render_system::draw_request const& request) mutable
                     {
-                        glm::mat4 const mvp = light_matrix * request.m_transform;
-                        request.m_shadow_program->m_program->activate();
-                        program_uniform_state state = request.m_shadow_program->m_state;
-                        state.set_uniform("mvp", gtl::span(mvp));
-                        state.apply();
-                        request.m_mesh->draw();
+                        gcore::resource_handle<program> shadow_program = request.m_program_data->m_program->get_associated_program(program::associated_program::spot_light_shadow);
+                        if (shadow_program.is_loaded())
+                        {
+                            glm::mat4 const mvp = light_matrix * request.m_transform;
+                            shadow_program->activate();
+                            program_uniform_state state = shadow_program->get_default_state();
+                            state.copy_matching_uniform(request.m_program_data->m_state);
+                            state.set_uniform("mvp", gtl::span(mvp));
+                            state.apply();
+                            request.m_mesh->draw();
+                        }
                     }
                 );
 

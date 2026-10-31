@@ -574,51 +574,9 @@
                     }
                 }
             }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": 1397.0,
-                "y": -96.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "grender::configure_program_node",
-                "data": {
-                    "node_id": 82,
-                    "program": {
-                        "value": "6ade0ae7f9e16846c01d9df6ec5a7283"
-                    }
-                }
-            }
         }
     ],
     "connections": [
-        {
-            "key": 33,
-            "data": [
-                {
-                    "source": 35,
-                    "source_pin": 12000,
-                    "destination_pin": 1
-                },
-                {
-                    "source": 80,
-                    "source_pin": 1,
-                    "destination_pin": 2
-                },
-                {
-                    "source": 48,
-                    "source_pin": 1,
-                    "destination_pin": 3
-                },
-                {
-                    "source": 82,
-                    "source_pin": 12000,
-                    "destination_pin": 4
-                }
-            ]
-        },
         {
             "key": 1,
             "data": [
@@ -649,6 +607,66 @@
                 },
                 {
                     "source": 67,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
+                }
+            ]
+        },
+        {
+            "key": 33,
+            "data": [
+                {
+                    "source": 35,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 80,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 48,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                },
+                {
+                    "source": 82,
+                    "source_pin": 12000,
+                    "destination_pin": 4
+                }
+            ]
+        },
+        {
+            "key": 21,
+            "data": [
+                {
+                    "source": 48,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 52,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 58,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
+                },
+                {
+                    "source": 71,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 72,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 73,
                     "source_pin": 1,
                     "destination_pin": -1818423387
                 }
@@ -690,45 +708,10 @@
             ]
         },
         {
-            "key": 21,
+            "key": 18,
             "data": [
                 {
-                    "source": 48,
-                    "source_pin": 1,
-                    "destination_pin": 1745697932
-                },
-                {
-                    "source": 52,
-                    "source_pin": 100,
-                    "destination_pin": -1775358419
-                },
-                {
-                    "source": 58,
-                    "source_pin": 100,
-                    "destination_pin": 1941987014
-                },
-                {
-                    "source": 71,
-                    "source_pin": 1,
-                    "destination_pin": 1530753153
-                },
-                {
-                    "source": 72,
-                    "source_pin": 1,
-                    "destination_pin": -880639002
-                },
-                {
-                    "source": 73,
-                    "source_pin": 1,
-                    "destination_pin": -1818423387
-                }
-            ]
-        },
-        {
-            "key": 10,
-            "data": [
-                {
-                    "source": 1,
+                    "source": 21,
                     "source_pin": 12000,
                     "destination_pin": 1
                 },
@@ -750,10 +733,10 @@
             ]
         },
         {
-            "key": 18,
+            "key": 10,
             "data": [
                 {
-                    "source": 21,
+                    "source": 1,
                     "source_pin": 12000,
                     "destination_pin": 1
                 },

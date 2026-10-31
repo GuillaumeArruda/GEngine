@@ -1,0 +1,30 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::program",
+        "data": {
+            "uuid": "6ae61dfc124e8ecceb6768438fd8be24",
+            "name": "default_directional_shadow_program",
+            "shaders": [
+                {
+                    "value": "6ae5515cd4125359291aa9baedb9c1bf"
+                },
+                {
+                    "value": "6ae55058d412532a8a060790ae75935a"
+                }
+            ],
+            "directional shadow": {
+                "value": "00"
+            },
+            "spot light shadow": {
+                "value": "00"
+            },
+            "point light shadow": {
+                "value": "00"
+            },
+            "default uniforms": {
+                "uniforms": []
+            }
+        }
+    }
+}

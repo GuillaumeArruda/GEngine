@@ -45,6 +45,7 @@ namespace grender
         std::string const& get_name_at_index(std::size_t index) const;
         void process(gserializer::serializer& serializer);
         void reconcile(program_uniform_state const& state);
+        void copy_matching_uniform(program_uniform_state const& state);
         GLint get_uniform_location(std::string_view name) const;
         std::size_t get_uniform_number() const { return m_uniforms.size(); }
     private:
@@ -59,11 +60,20 @@ namespace grender
 
     struct program : gcore::resource
     {
+        enum associated_program
+        {
+            directional_shadow,
+            spot_light_shadow,
+            point_light_shadow,
+            count,
+        };
+
         void process(gserializer::serializer& serializer) override;
 
         void activate() const;
         GLuint get_id() const noexcept { return m_program_id; }       
         program_uniform_state const& get_default_state() const { return m_default_state; }
+        gcore::resource_handle<program> get_associated_program(associated_program type) const; 
 
     private:
         void do_unload() override;
@@ -72,6 +82,7 @@ namespace grender
 
         program_uniform_state m_default_state;
         std::vector<gcore::resource_handle<shader>> m_shaders;
+        std::array<gcore::resource_handle<program>, associated_program::count> m_associated_programs;
         GLuint m_program_id = 0;
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
     };

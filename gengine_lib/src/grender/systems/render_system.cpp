@@ -99,9 +99,9 @@ namespace grender
         return target.is_loaded() ? target->get_id() : 0;
     }
 
-    void render_system::add_mesh_draw_request(glm::mat4 const& transform, program_pin_data const& program, program_pin_data const& shadow_program,  gcore::resource_handle<mesh_resource> mesh)
+    void render_system::add_mesh_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh)
     {
-        m_mesh_draw_requests.get()->push_back(mesh_draw_request{ transform, &program, std::move(mesh), &shadow_program });
+        m_mesh_draw_requests.get()->emplace_back(transform, &program, std::move(mesh));
     }
 
     void render_system::add_light_draw_request(glm::mat4 const& transform, program_pin_data const& program, gcore::resource_handle<mesh_resource> mesh, bool cull_back_face)

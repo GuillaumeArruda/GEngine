@@ -85,6 +85,22 @@ namespace grender
         m_uniforms = std::move(new_state);
     }
 
+    void program_uniform_state::copy_matching_uniform(program_uniform_state const& state)
+    {
+        for (auto& uni : m_uniforms)
+        {
+            auto it = std::find_if(state.m_uniforms.begin(), state.m_uniforms.end(),
+                [&](uniform const& u) 
+            { 
+                return uni.m_name == u.m_name && uni.m_uniform.get_type() == u.m_uniform.get_type() && uni.m_uniform.get_max_size() == u.m_uniform.get_max_size(); 
+            });
+            if (it != state.m_uniforms.end())
+            {
+                uni.m_uniform = it->m_uniform;
+            }
+        }
+    }
+
     GLint program_uniform_state::get_uniform_location(std::string_view name) const
     {
         auto const it = std::find_if(m_uniforms.begin(), m_uniforms.end(), [&](uniform const& u) { return u.m_name == name; });
@@ -99,6 +115,9 @@ namespace grender
     {
         resource::process(serializer);
         serializer.process("shaders", m_shaders, "shader");
+        serializer.process("directional shadow", m_associated_programs[associated_program::directional_shadow]);
+        serializer.process("spot light shadow", m_associated_programs[associated_program::spot_light_shadow]);
+        serializer.process("point light shadow", m_associated_programs[associated_program::point_light_shadow]);
         serializer.process("default uniforms", m_default_state);
     }
 
@@ -147,6 +166,11 @@ namespace grender
     void program::activate() const
     {
         gl_exec(glUseProgram, m_program_id);
+    }
+
+    gcore::resource_handle<program> program::get_associated_program(associated_program type) const
+    {
+        return m_associated_programs[type];
     }
 
     void program_uniform_state::uniform::process(gserializer::serializer& serializer)
