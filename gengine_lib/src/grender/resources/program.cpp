@@ -140,10 +140,12 @@ namespace grender
         {
             GLint logSize = 0;
             gl_exec(glGetProgramiv, m_program_id, GL_INFO_LOG_LENGTH, &logSize);
-
-            auto log = std::make_unique<GLchar[]>(logSize);
-            gl_exec(glGetProgramInfoLog, m_program_id, logSize, &logSize, log.get());
-            std::cerr << log << "\n";
+            if (logSize > 0)
+            {
+                auto log = std::make_unique<GLchar[]>(logSize);
+                gl_exec(glGetProgramInfoLog, m_program_id, logSize, &logSize, log.get());
+                std::cerr << log << "\n";
+            }
             gl_exec(glDeleteProgram, m_program_id);
             m_program_id = 0;
             return false;

@@ -71,16 +71,19 @@ namespace grender
         gl_exec(glCompileShader, m_shader_id);
 
         GLint success = 0;
-        glGetShaderiv(m_shader_id, GL_COMPILE_STATUS, &success);
+        gl_exec(glGetShaderiv, m_shader_id, GL_COMPILE_STATUS, &success);
         if (success == GL_FALSE)
         {
-            std::cerr << "Unable to compile shader:" << source_code;
+            std::cerr << "Unable to compile shader:\n" << source_code;
             GLint logSize = 0;
             GLint length = 0;
-            glGetShaderiv(m_shader_id, GL_INFO_LOG_LENGTH, &logSize);
-            auto log = std::make_unique<GLchar[]>(logSize);
-            glGetShaderInfoLog(m_shader_id, logSize, &length, log.get());
-            std::cout << log << std::endl;
+            gl_exec(glGetShaderiv, m_shader_id, GL_INFO_LOG_LENGTH, &logSize);
+            if (logSize > 0)
+            {
+                auto log = std::make_unique<GLchar[]>(logSize);
+                glGetShaderInfoLog(m_shader_id, logSize, &length, log.get());
+                std::cout << log << std::endl;
+            }
             return false;
         }
 

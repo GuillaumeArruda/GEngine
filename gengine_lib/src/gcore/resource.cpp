@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include <optick/optick.h>
-#include <fmt/format.h>
+#include <iostream>
 
 #include "gcore/resource.h"
 #include "gcore/resource_handle.h"
@@ -41,6 +41,7 @@ namespace gcore
         }
         else
         {
+            std::cerr << m_name << " failed to load async.";
             m_loading_state = loading_state::failed;
         }
     }
@@ -58,6 +59,7 @@ namespace gcore
             }
             else
             {
+                std::cerr << m_name << " failed to load sync.";
                 m_loading_state = loading_state::failed;
             }
         }
