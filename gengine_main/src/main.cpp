@@ -64,7 +64,7 @@ int main()
         world.m_update_tasks.add_parent(flying_controller_task, input_task);
         {
 
-            filewatch::FileWatch<std::wstring> watcher(L"./",
+            filewatch::FileWatch<std::wstring> watcher(L"./data",
                 [&](std::wstring const& path, filewatch::Event const&)
             {
                 lib->on_file_change(path);

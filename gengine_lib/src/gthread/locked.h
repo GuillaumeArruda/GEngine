@@ -16,7 +16,7 @@ namespace gthread
         };
 
         wrapper get() { return wrapper{ m_data, std::unique_lock(m_mutex) }; }
-        wrapper const get() const { return wrapper{ m_data, std::unique_lock(m_mutex) }; }
+        wrapper const get() const { return wrapper{ const_cast<Data&>(m_data), std::unique_lock(m_mutex) }; }
 
     protected:
         Data m_data;

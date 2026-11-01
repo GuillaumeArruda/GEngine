@@ -131,6 +131,10 @@ namespace grender
             {
                 gl_exec(glAttachShader, m_program_id, shader->get_id());
             }
+            else if (shader.is_failed())
+            {
+                return false;
+            }
         }
         gl_exec(glLinkProgram, m_program_id);
 
