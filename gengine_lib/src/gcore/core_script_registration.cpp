@@ -19,6 +19,7 @@
 #include "gcore/script/nodes/matrix_nodes.h"
 #include "gcore/script/nodes/variable_nodes.h"
 #include "gcore/script/nodes/vector_nodes.h"
+#include "gcore/script/nodes/array_nodes.h"
 
 #include "gserializer/gmath_serialization.h"
 
@@ -110,6 +111,8 @@ namespace gcore
         factory.register_type<break_vec3_node>("gcore::break_vec3_node", "Break Vec3");
         factory.register_type<make_vec4_node>("gcore::make_vec4_node", "Make Vec4");
         factory.register_type<break_vec4_node>("gcore::break_vec4_node", "Break Vec4");
+
+        factory.register_type<array_size_node>("gcore::array_size_node", "Array Size");
 
         factory.register_conversion<int, float>("gcore::conversion_node<int, float>");
         factory.register_conversion<float, int>("gcore::conversion_node<float, int>"); 

@@ -96,12 +96,13 @@ namespace gcore
 
         node_data_type::id_type get_type_id() const { return m_type_id; }
         void set_type_id(node_data_type::id_type type_id);
+        std::size_t get_number_of_elements() const;
 
         void process(gserializer::serializer& serializer);
     private:
         friend void gtool::display_node_data(imgui_serializer&, void*);
         
-        std::size_t get_number_of_elements() const;
+        
         void set_type(node_data_type const* new_node_data_type, std::size_t number_of_elements);
 
         void* create_array_internal(std::size_t number_of_element);

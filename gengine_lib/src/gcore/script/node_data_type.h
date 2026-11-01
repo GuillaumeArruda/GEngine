@@ -24,6 +24,7 @@ namespace gcore
 
         using id_type = std::uint16_t;
         static constexpr id_type invalid_id = 0;
+        static constexpr id_type all_id = std::numeric_limits<id_type>::max();
         
         node_data_type(std::string name, id_type id, vtable table) : m_vtable(table), m_name(std::move(name)), m_id(id) {}
 

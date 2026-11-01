@@ -60,7 +60,10 @@ namespace gcore
     {
         gcore::pin_descriptor const* source_pin_desc = get_pin_descriptor(source, source_pin_id);
         gcore::pin_descriptor const* destination_pin_desc = get_pin_descriptor(destination, destination_pin_id);
-        return source_pin_desc && destination_pin_desc && (source_pin_desc->m_type_id == destination_pin_desc->m_type_id || gcore::node_factory::get().has_conversion(source_pin_desc->m_type_id, destination_pin_desc->m_type_id)) && source_pin_desc->m_pin_type == gcore::pin_type::output && destination_pin_desc->m_pin_type == gcore::pin_type::input;
+        return source_pin_desc && destination_pin_desc 
+            && (source_pin_desc->m_type_id == destination_pin_desc->m_type_id || destination_pin_desc->m_type_id == node_data_type::all_id || gcore::node_factory::get().has_conversion(source_pin_desc->m_type_id, destination_pin_desc->m_type_id))
+            && source_pin_desc->m_pin_type == gcore::pin_type::output 
+            && destination_pin_desc->m_pin_type == gcore::pin_type::input;
     }
 
     bool script_descriptor::add_connection(node_id_t source, int source_pin_id, node_id_t destination, int destination_pin_id, node*& out_conversion_node)
