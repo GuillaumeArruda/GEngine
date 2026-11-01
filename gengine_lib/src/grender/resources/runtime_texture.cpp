@@ -5,6 +5,11 @@
 
 namespace grender
 {
+    runtime_texture::runtime_texture()
+    {
+        set_name("runtime texture");
+    }
+
     bool grender::runtime_texture::do_load_sync()
     {
         return true;

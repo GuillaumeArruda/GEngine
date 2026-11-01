@@ -37,11 +37,12 @@ namespace gcore
         assert(m_loading_state == loading_state::pending_async);
         if (do_load_async())
         {
+            std::cout << std::format("res: {}: {} {}\n", m_uuid.to_string(), m_name, "finished async loading.");
             m_loading_state = loading_state::pending_sync;
         }
         else
         {
-            std::cerr << m_name << " failed to load async.\n";
+            std::cerr << std::format("res: {}: {} {}\n", m_uuid.to_string(), m_name, "failed to load async.");
             m_loading_state = loading_state::failed;
         }
     }
@@ -55,11 +56,12 @@ namespace gcore
         {
             if (do_load_sync())
             {
+                std::cout << std::format("res: {}: {} {}\n", m_uuid.to_string(), m_name, "finished sync loading.");
                 m_loading_state = loading_state::loaded;
             }
             else
             {
-                std::cerr << m_name << " failed to load sync.\n";
+                std::cerr << std::format("res: {}: {} {}\n", m_uuid.to_string(), m_name, "failed to load sync.");
                 m_loading_state = loading_state::failed;
             }
         }
@@ -71,6 +73,7 @@ namespace gcore
         OPTICK_TAG("Res Name", m_name.c_str());
         assert(m_loading_state == loading_state::loaded);
         do_unload();
+        std::cout << std::format("res: {}: {} {}\n", m_uuid.to_string(), m_name, "finished unloading.");
         m_loading_state = loading_state::unloaded;
     }
 

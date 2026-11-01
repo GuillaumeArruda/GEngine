@@ -6,6 +6,8 @@ namespace grender
 {
     struct runtime_texture : texture
     {
+        runtime_texture();
+
         void set_id(GLuint id) { m_texture_id = id; }
         bool do_load_sync() override;
         void do_unload() override;

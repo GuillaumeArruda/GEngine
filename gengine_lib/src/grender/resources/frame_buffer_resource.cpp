@@ -2,6 +2,11 @@
 #include "grender/resources/frame_buffer_resource.h"
 #include "grender/utils.h"
 
+grender::frame_buffer_resource::frame_buffer_resource()
+{
+    set_name("frame buffer resource");
+}
+
 bool grender::frame_buffer_resource::do_load_async()
 {
     return true;

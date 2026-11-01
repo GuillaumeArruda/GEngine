@@ -8,6 +8,8 @@ namespace grender
 {
     struct frame_buffer_resource : gcore::resource
     {
+        frame_buffer_resource();
+
         bool do_load_async() override;
         bool do_load_sync() override;
         void do_unload() override;
