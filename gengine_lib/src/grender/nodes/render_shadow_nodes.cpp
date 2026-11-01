@@ -70,7 +70,7 @@ namespace grender
             if (camera_matrixs.empty() || camera_projections.empty() || light_directions.empty())
                 return;
 
-            std::array<glm::vec4, 8> const corners = get_camera_frustrum_corners(camera_projections[0], camera_matrixs[0]);
+            std::array<glm::vec4, 8> const corners = get_camera_frustrum_corners(camera_projections[0], glm::inverse(camera_matrixs[0]));
             glm::mat4 const light_matrix = create_light_matrix(light_directions[0], corners);
 
             render_sys->get().add_pre_light_work(
@@ -130,7 +130,7 @@ namespace grender
             for (int y = 0; y < 2; ++y)
                 for (int z = 0; z < 2; ++z)
                 {
-                    glm::vec4 const corner = inv * glm::vec4(2.f * x - 1.f, 2.f * y - 1.f, 2.f * z - 1.f, 1.f);
+                    glm::vec4 const corner = inv * glm::vec4((2.f * x) - 1.f, (2.f * y) - 1.f, (2.f * z) - 1.f, 1.f);
                     return_value[x * 4 + y * 2 + z] = corner / corner.w;
                 }
 
@@ -145,18 +145,18 @@ namespace grender
             center += glm::vec3(corner);
         }
         center /= corners.size();
+        glm::mat4 const light_view_matrix = glm::lookAt(center + glm::normalize(light_direction), center, generate_valid_up(light_direction));
 
-        float radius = 0.f;
-        for (auto const& corner : corners)
+        glm::vec3 min_corner = glm::vec3(std::numeric_limits<float>::max());
+        glm::vec3 max_corner = glm::vec3(std::numeric_limits<float>::lowest());
+        for (glm::vec4 const& corner : corners)
         {
-            radius = std::max(glm::distance(glm::vec3(corner), center), radius);
+            glm::vec3 const light_space_corner = glm::vec3(light_view_matrix * corner);
+            min_corner = glm::min(min_corner, light_space_corner);
+            max_corner = glm::max(max_corner, light_space_corner);
         }
 
-        glm::vec3 const max_extent = glm::vec3(radius);
-        glm::vec3 const min_extent = glm::vec3(-radius);
-
-        glm::mat4 const light_view_matrix = glm::lookAt(center - glm::normalize(light_direction) * min_extent.z, center, generate_valid_up(light_direction));
-        glm::mat4 const light_projection_matrix = glm::ortho(min_extent.x, max_extent.x, min_extent.y, max_extent.y, 0.f, max_extent.z - min_extent.z);
+        glm::mat4 const light_projection_matrix = glm::ortho(min_corner.x, max_corner.x, min_corner.y, max_corner.y, min_corner.z, max_corner.z);
         return light_projection_matrix * light_view_matrix;
     }
     
