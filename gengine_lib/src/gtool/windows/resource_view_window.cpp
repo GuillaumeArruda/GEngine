@@ -81,6 +81,7 @@ namespace gtool
                     if (ImGui::Button("Save"))
                     {
                         gserializer::json_write_serializer write_json;
+                        write_json.set_in_context(std::ref(library));
                         write_json.process("resource", s, gcore::resource::factory());
                         write_json.write_to_file(library.get_filepath(uid).string().c_str());
                     }

@@ -105,7 +105,7 @@ namespace gcore
             {
                 std::unique_ptr<resource> resource_to_load;
                 gserializer::json_read_serializer serializer(file_it->second.string().c_str());
-                serializer.set_in_context(std::reference_wrapper(*this));
+                serializer.set_in_context(std::ref(*this));
                 serializer.process("resource", resource_to_load, resource::factory());
                 if (resource_to_load)
                 {
@@ -308,6 +308,7 @@ namespace gcore
         {
             std::unique_ptr<resource> new_resource;
             gserializer::json_read_serializer serializer(file_path->second.string().c_str());
+            serializer.set_in_context(std::ref(*this));
             serializer.process("resource", new_resource, resource::factory());
             if (new_resource)
             {
