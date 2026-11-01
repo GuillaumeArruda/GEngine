@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\gcore\script\nodes\array_nodes.h" />
     <ClInclude Include="src\gcore\script\nodes\variable_nodes.h" />
     <ClInclude Include="src\gcore\script\nodes\matrix_nodes.h" />
     <ClInclude Include="src\gcore\script\nodes\vector_nodes.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="src\gcore\world.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gcore\script\nodes\array_nodes.cpp" />
     <ClCompile Include="src\gcore\script\nodes\matrix_nodes.cpp" />
     <ClCompile Include="src\gcore\script\nodes\variable_nodes.cpp" />
     <ClCompile Include="src\gcore\script\nodes\vector_nodes.cpp" />

@@ -49,9 +49,11 @@ namespace grender
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_1d)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_1d_array)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_1d_shadow)
+        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_1d_array_shadow)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_2d)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_2d_array)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_2d_shadow)
+        GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_2d_array)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_3d)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_cube)
         GSERIALIZER_ADD_ENUM_ELEMENT(uniform_variant::type::sampler_cube_shadow)
@@ -335,9 +337,11 @@ namespace grender
         case type::sampler_1d:
         case type::sampler_1d_array:
         case type::sampler_1d_shadow:
+        case type::sampler_1d_array_shadow:
         case type::sampler_2d:
         case type::sampler_2d_array:
         case type::sampler_2d_shadow:
+        case type::sampler_2d_array_shadow:
         case type::sampler_3d:
         case type::sampler_cube:
         case type::sampler_cube_shadow:
@@ -382,9 +386,11 @@ namespace grender
         case type::sampler_1d:
         case type::sampler_1d_array:
         case type::sampler_1d_shadow:
+        case type::sampler_1d_array_shadow:
         case type::sampler_2d:
         case type::sampler_2d_array:
         case type::sampler_2d_shadow:
+        case type::sampler_2d_array_shadow:
         case type::sampler_3d:
         case type::sampler_cube:
         case type::sampler_cube_shadow:
@@ -402,9 +408,11 @@ namespace grender
         case uniform_variant::type::sampler_1d: return GL_TEXTURE_1D;
         case uniform_variant::type::sampler_1d_array: return GL_TEXTURE_1D_ARRAY;
         case uniform_variant::type::sampler_1d_shadow: return GL_TEXTURE_1D;
+        case uniform_variant::type::sampler_1d_array_shadow: return GL_TEXTURE_1D_ARRAY;
         case uniform_variant::type::sampler_2d: return GL_TEXTURE_2D;
         case uniform_variant::type::sampler_2d_array: return GL_TEXTURE_2D_ARRAY;
         case uniform_variant::type::sampler_2d_shadow: return GL_TEXTURE_2D;
+        case uniform_variant::type::sampler_2d_array_shadow: return GL_TEXTURE_2D_ARRAY;
         case uniform_variant::type::sampler_3d: return GL_TEXTURE_3D;
         case uniform_variant::type::sampler_cube: return GL_TEXTURE_CUBE_MAP;
         case uniform_variant::type::sampler_cube_shadow: return GL_TEXTURE_CUBE_MAP;
@@ -449,9 +457,11 @@ namespace grender
         case GL_SAMPLER_1D:                 return uniform_variant::type::sampler_1d;
         case GL_SAMPLER_1D_ARRAY:           return uniform_variant::type::sampler_1d_array;
         case GL_SAMPLER_1D_SHADOW:          return uniform_variant::type::sampler_1d_shadow;
+        case GL_SAMPLER_1D_ARRAY_SHADOW:    return uniform_variant::type::sampler_1d_array_shadow;
         case GL_SAMPLER_2D:                 return uniform_variant::type::sampler_2d;
         case GL_SAMPLER_2D_ARRAY:           return uniform_variant::type::sampler_2d_array;
         case GL_SAMPLER_2D_SHADOW:          return uniform_variant::type::sampler_2d_shadow;
+        case GL_SAMPLER_2D_ARRAY_SHADOW:    return uniform_variant::type::sampler_2d_array_shadow;
         case GL_SAMPLER_3D:                 return uniform_variant::type::sampler_3d;
         case GL_SAMPLER_CUBE:               return uniform_variant::type::sampler_cube;
         case GL_SAMPLER_CUBE_SHADOW:        return uniform_variant::type::sampler_cube_shadow;

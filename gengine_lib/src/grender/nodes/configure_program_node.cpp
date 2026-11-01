@@ -87,9 +87,11 @@ namespace grender
         case uniform_variant::type::mat44:          state.set_uniform(location, context.read<glm::mat4>(index)); break;
         case uniform_variant::type::sampler_1d:
         case uniform_variant::type::sampler_1d_shadow:
+        case uniform_variant::type::sampler_1d_array_shadow:
         case uniform_variant::type::sampler_2d:
         case uniform_variant::type::sampler_2d_array:
         case uniform_variant::type::sampler_2d_shadow:
+        case uniform_variant::type::sampler_2d_array_shadow:
         case uniform_variant::type::sampler_3d:
         case uniform_variant::type::sampler_cube:   
         case uniform_variant::type::sampler_cube_shadow:
@@ -121,9 +123,11 @@ namespace grender
         case uniform_variant::type::sampler_1d:
         case uniform_variant::type::sampler_1d_array:
         case uniform_variant::type::sampler_1d_shadow:
+        case uniform_variant::type::sampler_1d_array_shadow:
         case uniform_variant::type::sampler_2d:
         case uniform_variant::type::sampler_2d_array:
         case uniform_variant::type::sampler_2d_shadow:
+        case uniform_variant::type::sampler_2d_array_shadow:
         case uniform_variant::type::sampler_3d:
         case uniform_variant::type::sampler_cube:
         case uniform_variant::type::sampler_cube_shadow:
