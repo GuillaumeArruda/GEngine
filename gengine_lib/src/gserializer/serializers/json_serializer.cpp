@@ -6,8 +6,10 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/prettywriter.h>
+#include <rapidjson/error/en.h>
 
 #include <fstream>
+#include <iostream>
 
 gserializer::json_write_serializer::json_write_serializer()
 {
@@ -130,7 +132,11 @@ gserializer::json_read_serializer::json_read_serializer(const char* file_path)
 {
     std::ifstream stream(file_path);
     rapidjson::IStreamWrapper isw(stream);
-    m_document.ParseStream(isw);
+    rapidjson::ParseResult const result = m_document.ParseStream(isw);
+    if (!result)
+    {
+        std::cerr << rapidjson::GetParseError_En(result.Code()) << "\n";
+    }
 }
 
 void gserializer::json_read_serializer::process(const char* name, std::string& value)
