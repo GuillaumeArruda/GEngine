@@ -41,7 +41,7 @@ namespace gcore
         }
         else
         {
-            std::cerr << m_name << " failed to load async.";
+            std::cerr << m_name << " failed to load async.\n";
             m_loading_state = loading_state::failed;
         }
     }
@@ -59,7 +59,7 @@ namespace gcore
             }
             else
             {
-                std::cerr << m_name << " failed to load sync.";
+                std::cerr << m_name << " failed to load sync.\n";
                 m_loading_state = loading_state::failed;
             }
         }

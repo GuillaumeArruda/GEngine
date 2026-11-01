@@ -62,6 +62,7 @@ namespace gcore
             }
         }
 
+        m_reloading_res.get()->clear();
 
         glfwDestroyWindow(m_loading_context);
     }
@@ -237,6 +238,14 @@ namespace gcore
 
             for (gtl::uuid const& reloaded_resource : reloaded_resources)
             {
+                {
+                    auto locked = m_reloading_res.get();
+                    auto it = std::find(locked->begin(), locked->end(), reloaded_resource);
+                    if (it != locked->end())
+                    {
+                        locked->erase(it);
+                    }
+                }
                 on_resource_reloaded(reloaded_resource);
             }
 
@@ -285,7 +294,8 @@ namespace gcore
         }
 
         gtl::span<resource_handle<resource> const> resources = res_to_load->get_loading_dependent_resources();
-        if (resources.empty() || std::all_of(resources.begin(), resources.end(), [](auto& res_handle) { return res_handle.is_loaded() || res_handle.is_failed(); }))
+        if (resources.empty() || std::all_of(resources.begin(), resources.end(), 
+            [this](auto& res_handle) { return (res_handle.is_loaded() || res_handle.is_failed()) && !is_resource_reloading(res_handle.get_uuid()); }))
         {
             res_to_load->load_async();
             std::unique_lock lock(m_lock);
@@ -312,7 +322,9 @@ namespace gcore
             serializer.process("resource", new_resource, resource::factory());
             if (new_resource)
             {
+                m_reloading_res.get()->push_back(uuid);
                 load_resource(std::move(new_resource));
+                std::unique_lock lock(m_lock);
                 for (auto const& dependant_uuid : m_dependency_tracker.get_uuid_depending_on_uuid(uuid))
                 {
                     auto it = m_proxy_map.find(dependant_uuid);
@@ -323,5 +335,11 @@ namespace gcore
                 }
             }
         }
+    }
+
+    bool resource_library::is_resource_reloading(gtl::uuid const& uuid) const
+    {
+        auto locked = m_reloading_res.get();
+        return std::find(locked->begin(), locked->end(), uuid) != locked->end();
     }
 }

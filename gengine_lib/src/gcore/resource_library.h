@@ -10,6 +10,7 @@
 #include "gtl/callbacks.h"
 
 #include "gthread/job_manager.h"
+#include "gthread/locked.h"
 
 #include "gcore/resource.h"
 #include "gcore/resource_handle.h"
@@ -76,6 +77,8 @@ namespace gcore
         resource_handle<resource> get_resource(gtl::uuid const& uuid);
         resource_handle<resource> try_get_resource(gtl::uuid const& uuid);
         
+        bool is_resource_reloading(gtl::uuid const& uuid) const;
+
         std::recursive_mutex m_lock;
         std::unordered_map<gtl::uuid, std::filesystem::path> m_uuid_to_resource_file;
         std::unordered_map<gtl::uuid, std::unique_ptr<resource>> m_resource_map;
@@ -83,6 +86,8 @@ namespace gcore
         
         std::vector<std::unique_ptr<resource>> m_res_to_unload;
         std::vector<std::unique_ptr<resource>> m_res_to_load_sync;
+
+        gthread::locked<std::vector<gtl::uuid>> m_reloading_res;
 
         std::mutex m_file_change_lock;
         std::vector<std::filesystem::path> m_file_changes;
