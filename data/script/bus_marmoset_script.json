@@ -1,0 +1,1306 @@
+{
+    "nodes": [
+        {
+            "name": "Hull",
+            "position": {
+                "x": 1281.0,
+                "y": -331.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_mesh_node",
+                "data": {
+                    "node_id": 4,
+                    "mesh": {
+                        "value": "6ae80712138fcde1209b45ab0778f009"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 998.0,
+                "y": -313.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 5,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 143.0,
+                "y": -289.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::get_input_frame_data_node",
+                "data": {
+                    "node_id": 8
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 959.0,
+                "y": -254.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 9,
+                    "program": {
+                        "value": "5fdb7534af7c1b239419bb136a2b00e7"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 478.0,
+                "y": -238.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::multiply_node<glm::mat4>",
+                "data": {
+                    "node_id": 10
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 673.0,
+                "y": -238.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::multiply_node<glm::mat4>",
+                "data": {
+                    "node_id": 13
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 577.0,
+                "y": -32.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::inverse_matrix_node<glm::mat3>",
+                "data": {
+                    "node_id": 14
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 424.0,
+                "y": -30.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::conversion_node<glm::mat4, glm::mat3>",
+                "data": {
+                    "node_id": 16
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 737.0,
+                "y": -32.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::transpose_matrix_node<glm::mat3>",
+                "data": {
+                    "node_id": 17
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 790.0,
+                "y": -432.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 19,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae80b0f0869af0c762c0ebf80e853d"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 790.0,
+                "y": -384.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 20,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae80cabe6d49c9c65d54f6f57bb6624"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 790.0,
+                "y": -336.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 21,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae80de6e6d49d5065ff79718a9721e5"
+                    }
+                }
+            }
+        },
+        {
+            "name": "Cockpit",
+            "position": {
+                "x": 1281.0,
+                "y": -49.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_mesh_node",
+                "data": {
+                    "node_id": 22,
+                    "mesh": {
+                        "value": "6ae80712138fcddc1f5a9eab37256335"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1014.0,
+                "y": -30.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 23,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 959.0,
+                "y": 18.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 26,
+                    "program": {
+                        "value": "5fdb7534af7c1b239419bb136a2b00e7"
+                    }
+                }
+            }
+        },
+        {
+            "name": "Inside",
+            "position": {
+                "x": 1281.0,
+                "y": 161.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_mesh_node",
+                "data": {
+                    "node_id": 27,
+                    "mesh": {
+                        "value": "6ae80712138fcde2bed53326a877c126"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1078.0,
+                "y": 176.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 28,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1023.0,
+                "y": 225.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 31,
+                    "program": {
+                        "value": "5fdb7534af7c1b239419bb136a2b00e7"
+                    }
+                }
+            }
+        },
+        {
+            "name": "Top and Bumper",
+            "position": {
+                "x": 1233.0,
+                "y": 465.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_mesh_node",
+                "data": {
+                    "node_id": 46,
+                    "mesh": {
+                        "value": "6ae80712138fcde3fcf41511e50004fa"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1069.0,
+                "y": 385.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 47,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
+        },
+        {
+            "name": "Tires",
+            "position": {
+                "x": 1233.0,
+                "y": 591.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_mesh_node",
+                "data": {
+                    "node_id": 48,
+                    "mesh": {
+                        "value": "6ae80712138fcde48aca03381fb96dd3"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1062.0,
+                "y": 608.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 49,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
+        },
+        {
+            "name": "Metro bus",
+            "position": {
+                "x": 1233.0,
+                "y": 782.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_mesh_node",
+                "data": {
+                    "node_id": 50,
+                    "mesh": {
+                        "value": "6ae80712138fcddbbba4193fe30eb7f0"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1078.0,
+                "y": 800.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 51,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
+        },
+        {
+            "name": "Inside Assets",
+            "position": {
+                "x": 1249.0,
+                "y": 989.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::render_mesh_node",
+                "data": {
+                    "node_id": 56,
+                    "mesh": {
+                        "value": "6ae80712138fcddebb4299479364a8f2"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1030.0,
+                "y": 1008.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 57,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 790.0,
+                "y": 16.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 58,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae8139111c2d339fe01090bbcdca43e"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 790.0,
+                "y": 64.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 59,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae813a611c2d33ac46cfcd4951ead54"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 790.0,
+                "y": 112.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 60,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae813b411c2d33bf62c801720c9aa28"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 854.0,
+                "y": 224.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 61,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae8149211c2d34129f7dff917fc989a"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 854.0,
+                "y": 272.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 62,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae814a211c2d342d46825184f6835c5"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 854.0,
+                "y": 320.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 63,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae814ac11c2d3434db0aced69692ad"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 959.0,
+                "y": 1056.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 64,
+                    "program": {
+                        "value": "5fdb7534af7c1b239419bb136a2b00e7"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 790.0,
+                "y": 1056.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 65,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae816d011c2d367384f5fab6b77d3d8"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 790.0,
+                "y": 1104.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 66,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae816e911c2d368a9fd648211128d44"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 790.0,
+                "y": 1152.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 70,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae816fb11c2d369e4f3b6a9c77abbe5"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1000.0,
+                "y": 433.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 71,
+                    "program": {
+                        "value": "5fdb7534af7c1b239419bb136a2b00e7"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 822.0,
+                "y": 432.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 72,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae8184059b1d5f6c6188960a762b62c"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 822.0,
+                "y": 480.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 73,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae8185359b1d5f71e64c6173ea602e6"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 822.0,
+                "y": 528.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 77,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae8186959b1d5f8c90fb5a7efe24566"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1007.0,
+                "y": 843.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 78,
+                    "program": {
+                        "value": "5fdb7534af7c1b239419bb136a2b00e7"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 822.0,
+                "y": 848.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 79,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae81b6915c72858538f24cc2244b5c1"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 822.0,
+                "y": 896.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 80,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae81b7415c7285978d77f1d249bd725"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 822.0,
+                "y": 944.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 81,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae81b7e15c7285af2e091495149cfb8"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 1007.0,
+                "y": 656.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "grender::configure_program_node",
+                "data": {
+                    "node_id": 82,
+                    "program": {
+                        "value": "5fdb7534af7c1b239419bb136a2b00e7"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 806.0,
+                "y": 656.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 83,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae81d9a15c7290fe2089cf954420564"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 806.0,
+                "y": 704.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 84,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae81da415c72910e9ed62584f3babe5"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 806.0,
+                "y": 752.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 85,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "6ae81db415c72911f5240d5ada888f00"
+                    }
+                }
+            }
+        }
+    ],
+    "connections": [
+        {
+            "key": 4,
+            "data": [
+                {
+                    "source": 5,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                },
+                {
+                    "source": 9,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 17,
+            "data": [
+                {
+                    "source": 14,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 9,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 13,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 17,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
+                },
+                {
+                    "source": 19,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 20,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 21,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
+                }
+            ]
+        },
+        {
+            "key": 10,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 3,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 8,
+                    "source_pin": 2,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 13,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 10,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 22,
+            "data": [
+                {
+                    "source": 23,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 26,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                }
+            ]
+        },
+        {
+            "key": 78,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 14,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
+                },
+                {
+                    "source": 13,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 79,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 80,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 81,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
+                }
+            ]
+        },
+        {
+            "key": 14,
+            "data": [
+                {
+                    "source": 16,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 16,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 26,
+            "data": [
+                {
+                    "source": 17,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
+                },
+                {
+                    "source": 13,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 58,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 59,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 60,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
+                }
+            ]
+        },
+        {
+            "key": 27,
+            "data": [
+                {
+                    "source": 28,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 31,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                }
+            ]
+        },
+        {
+            "key": 31,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 13,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 17,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
+                },
+                {
+                    "source": 61,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 62,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 63,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
+                }
+            ]
+        },
+        {
+            "key": 46,
+            "data": [
+                {
+                    "source": 47,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                },
+                {
+                    "source": 71,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 48,
+            "data": [
+                {
+                    "source": 49,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                },
+                {
+                    "source": 82,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 50,
+            "data": [
+                {
+                    "source": 51,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                },
+                {
+                    "source": 78,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 56,
+            "data": [
+                {
+                    "source": 57,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                },
+                {
+                    "source": 64,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 64,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 14,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
+                },
+                {
+                    "source": 13,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 65,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 66,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 70,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
+                }
+            ]
+        },
+        {
+            "key": 71,
+            "data": [
+                {
+                    "source": 14,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 13,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 72,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 77,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
+                },
+                {
+                    "source": 73,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                }
+            ]
+        },
+        {
+            "key": 82,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 1745697932
+                },
+                {
+                    "source": 17,
+                    "source_pin": 100,
+                    "destination_pin": 1941987014
+                },
+                {
+                    "source": 13,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 83,
+                    "source_pin": 1,
+                    "destination_pin": 1530753153
+                },
+                {
+                    "source": 84,
+                    "source_pin": 1,
+                    "destination_pin": -880639002
+                },
+                {
+                    "source": 85,
+                    "source_pin": 1,
+                    "destination_pin": -1818423387
+                }
+            ]
+        }
+    ],
+    "variables": []
+}

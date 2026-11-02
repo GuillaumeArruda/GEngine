@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "6ae80712138fcde1209b45ab0778f009",
+            "name": "bus_marmoset_hull",
+            "bin_file_path": "data\\meshes\\bus_marmoset\\bus_marmoset_hull.meshbin",
+            "primitive_type": "mesh_resource::primitive_type::triangle"
+        }
+    }
+}

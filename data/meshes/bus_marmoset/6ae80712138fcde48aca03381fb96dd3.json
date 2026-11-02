@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "6ae80712138fcde48aca03381fb96dd3",
+            "name": "bus_marmoset_tires",
+            "bin_file_path": "data\\meshes\\bus_marmoset\\bus_marmoset_tires.meshbin",
+            "primitive_type": "mesh_resource::primitive_type::triangle"
+        }
+    }
+}

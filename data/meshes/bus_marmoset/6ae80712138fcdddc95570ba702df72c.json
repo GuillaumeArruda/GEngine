@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "6ae80712138fcdddc95570ba702df72c",
+            "name": "bus_marmoset_doors",
+            "bin_file_path": "data\\meshes\\bus_marmoset\\bus_marmoset_doors.meshbin",
+            "primitive_type": "mesh_resource::primitive_type::triangle"
+        }
+    }
+}

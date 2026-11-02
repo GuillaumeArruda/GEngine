@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "6ae80712138fcde3fcf41511e50004fa",
+            "name": "bus_marmoset_top_display_bottom_bumper",
+            "bin_file_path": "data\\meshes\\bus_marmoset\\bus_marmoset_top_display_bottom_bumper.meshbin",
+            "primitive_type": "mesh_resource::primitive_type::triangle"
+        }
+    }
+}

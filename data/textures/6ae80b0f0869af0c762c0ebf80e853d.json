@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture_2d",
+        "data": {
+            "uuid": "6ae80b0f0869af0c762c0ebf80e853d",
+            "name": "_Hull_dDo_d",
+            "file": "data\\textures\\\\Hull_dDo_d.dds"
+        }
+    }
+}

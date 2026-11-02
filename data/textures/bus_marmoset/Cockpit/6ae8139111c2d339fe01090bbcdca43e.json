@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture_2d",
+        "data": {
+            "uuid": "6ae8139111c2d339fe01090bbcdca43e",
+            "name": "bus_marmoset_cockpit_dDo_d",
+            "file": "data\\textures\\bus_marmoset\\Cockpit\\cockpit_dDo_d.dds"
+        }
+    }
+}

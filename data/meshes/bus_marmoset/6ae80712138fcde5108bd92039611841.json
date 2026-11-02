@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "6ae80712138fcde5108bd92039611841",
+            "name": "bus_marmoset_light_glass",
+            "bin_file_path": "data\\meshes\\bus_marmoset\\bus_marmoset_Object180.rear_light_glass.Object176.Object177.Object183.Object182.Object184.Object185.Object179.Object178.Object181.lights_glass.meshbin",
+            "primitive_type": "mesh_resource::primitive_type::triangle"
+        }
+    }
+}

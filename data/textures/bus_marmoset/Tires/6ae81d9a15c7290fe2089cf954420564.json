@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture_2d",
+        "data": {
+            "uuid": "6ae81d9a15c7290fe2089cf954420564",
+            "name": "bus_marmoset_tires_dDo_d",
+            "file": "data\\textures\\bus_marmoset\\Tires\\tires_dDo_d.dds"
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "6ae80712138fcddebb4299479364a8f2",
+            "name": "bus_marmoset_inside_assets",
+            "bin_file_path": "data\\meshes\\bus_marmoset\\bus_marmoset_inside_assets.meshbin",
+            "primitive_type": "mesh_resource::primitive_type::triangle"
+        }
+    }
+}

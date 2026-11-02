@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::graphic_script",
+        "data": {
+            "uuid": "6ae80752138fcdec55c409eadc694535",
+            "name": "bus_marmoset_script",
+            "descriptor_file": "data/script/bus_marmoset_script.json"
+        }
+    }
+}

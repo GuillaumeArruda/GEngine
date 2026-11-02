@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::mesh_resource",
+        "data": {
+            "uuid": "6ae80712138fcde056503d52221d0684",
+            "name": "bus_marmoset_frontSeat",
+            "bin_file_path": "data\\meshes\\bus_marmoset\\bus_marmoset_frontSeat.meshbin",
+            "primitive_type": "mesh_resource::primitive_type::triangle"
+        }
+    }
+}

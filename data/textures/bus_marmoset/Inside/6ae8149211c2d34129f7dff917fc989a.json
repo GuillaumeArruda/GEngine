@@ -1,0 +1,11 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::texture_2d",
+        "data": {
+            "uuid": "6ae8149211c2d34129f7dff917fc989a",
+            "name": "bus_marmoset_inside_dDo_d",
+            "file": "data\\textures\\bus_marmoset\\Inside\\inside_dDo_d.dds"
+        }
+    }
+}
