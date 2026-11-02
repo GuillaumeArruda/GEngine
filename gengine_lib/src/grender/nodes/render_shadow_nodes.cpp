@@ -27,36 +27,41 @@ namespace grender
         }
     }
 
+    void render_shadow_node_base::process(gserializer::serializer& serializer)
+    {
+        node::process(serializer);
+        serializer.process("texture size", m_texture_size);
+    }
+
     void render_directional_shadow_node::execute(gcore::node_context& context) const
     {
-        constexpr int shadow_map_size = 8192;
         if (auto* render_sys = context.get_in_context<std::reference_wrapper<render_system>>())
         {
             auto& memory = std::any_cast<state&>(context.m_node_memory);
             if (memory.m_texture->get_id() == 0 && memory.m_framebuffer->get_fbo() == 0)
             {
                 render_sys->get().add_pre_light_work( 
-                    [memory = memory](render_system&) mutable
+                    [memory = memory, texture_size = static_cast<int>(m_texture_size), cascade_level = static_cast<int>(m_number_of_cascades)](render_system&) mutable
                     {
                         OPTICK_EVENT("Create directional shadow resources");
                         GLuint texture_id = 0;
                         gl_exec(glGenTextures, 1, &texture_id);
-                        gl_exec(glBindTexture, GL_TEXTURE_2D, texture_id);
-                        gl_exec(glTexImage2D, GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadow_map_size, shadow_map_size, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-                        gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+                        gl_exec(glBindTexture, GL_TEXTURE_2D_ARRAY, texture_id);
+                        gl_exec(glTexImage3D, GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT32F, texture_size, texture_size, cascade_level, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+                        gl_exec(glTexParameteri, GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
                         constexpr float bordercolor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-                        gl_exec(glTexParameterfv, GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, bordercolor);
+                        gl_exec(glTexParameterfv, GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BORDER_COLOR, bordercolor);
                         memory.m_texture->set_id(texture_id);
 
                         GLuint fbo_id = 0;
                         gl_exec(glGenFramebuffers, 1, &fbo_id);
                         gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, fbo_id);
-                        gl_exec(glFramebufferTexture2D, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture_id, 0);
+                        gl_exec(glFramebufferTexture, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture_id, 0);
                         gl_exec(glDrawBuffer, GL_NONE);
                         gl_exec(glReadBuffer, GL_NONE);
                         gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, 0);
@@ -64,25 +69,45 @@ namespace grender
                     }
                 );
             }
-            auto camera_matrixs = context.read<in_camera_matrix_pin>();
+            auto camera_matrices = context.read<in_camera_matrix_pin>();
             auto camera_projections = context.read<in_camera_matrix_projection_pin>();
             auto light_directions = context.read<in_light_direction_pin>();
-            if (camera_matrixs.empty() || camera_projections.empty() || light_directions.empty())
+            if (camera_matrices.empty() || camera_projections.empty() || light_directions.empty())
                 return;
 
-            std::array<glm::vec4, 8> const corners = get_camera_frustrum_corners(camera_projections[0], glm::inverse(camera_matrixs[0]));
-            glm::mat4 const light_matrix = create_light_matrix(light_directions[0], corners);
+            float const c22 = camera_projections[0][2][2];
+            float const c32 = camera_projections[0][3][2];
+            float const near_z = c32 / (c22 - 1.f);
+            float const far_z = c32 / (c22 + 1.f);
+            float const fov_y = 2.0f * std::atan(1.0f / camera_projections[0][1][1]);
+            float const aspect_ratio = camera_projections[0][1][1] / camera_projections[0][0][0];
+
+            std::vector<float> cascade_distances;
+            std::vector<glm::mat4> light_matrices;
+            float previous_z = near_z;
+            for (int i = 1; i <= m_number_of_cascades; ++i)
+            {
+                float const log_factor = near_z * std::pow(far_z / near_z, static_cast<float>(i)/m_number_of_cascades);
+                float const linear_factor = near_z + ((static_cast<float>(i) / m_number_of_cascades) * (far_z - near_z));
+                float const cascade_distance = m_log_linear_split_factor * log_factor + (1.f - m_log_linear_split_factor) * linear_factor;
+
+                cascade_distances.push_back(cascade_distance);
+                glm::mat4 const cascade_projection = glm::perspective(fov_y, aspect_ratio, previous_z, cascade_distances.back());
+                std::array<glm::vec4, 8> const corners = get_camera_frustrum_corners(cascade_projection, glm::inverse(camera_matrices[0]));
+                light_matrices.push_back(create_light_matrix(light_directions[0], corners));
+                previous_z = cascade_distance;
+            }
 
             render_sys->get().add_pre_light_work(
-                [memory = memory, light_matrix](render_system& render_sys) mutable
+                [memory = memory, texture_size = static_cast<int>(m_texture_size), light_matrices](render_system& render_sys) mutable
                 {
                     OPTICK_EVENT("Render directional shadow");
                     gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, memory.m_framebuffer->get_fbo());
-                    gl_exec(glViewport, 0, 0, shadow_map_size, shadow_map_size);
+                    gl_exec(glViewport, 0, 0, texture_size, texture_size);
                     gl_exec(glClear, GL_DEPTH_BUFFER_BIT);
                     gl_exec(glCullFace, GL_FRONT);
                     render_sys.for_each_mesh_draw_request(
-                        [&light_matrix](render_system::draw_request const& request) mutable
+                        [&light_matrices](render_system::draw_request const& request) mutable
                         {
                             gcore::resource_handle<program> shadow_program = request.m_program_data->m_program->get_associated_program(program::associated_program::directional_shadow);
                             if (shadow_program.is_loaded())
@@ -90,8 +115,8 @@ namespace grender
                                 shadow_program->activate();
                                 program_uniform_state state = shadow_program->get_default_state();
                                 state.copy_matching_uniform(request.m_program_data->m_state);
-                                glm::mat4 const mvp = light_matrix * request.m_transform;
-                                state.set_uniform("mvp", gtl::span(mvp));
+                                state.set_uniform("light_matrices[0]", gtl::span<glm::mat4 const>(light_matrices));
+                                state.set_uniform("world_matrix", gtl::span(request.m_transform));
                                 state.apply();
                                 request.m_mesh->draw();
                             }
@@ -103,7 +128,8 @@ namespace grender
             );
             
             context.write_values<out_texture_pin>(gcore::resource_handle<texture>(memory.m_texture));
-            context.write_values<out_light_matrix_pin>(light_matrix);
+            context.write_values<out_light_matrix_pin>(light_matrices);
+            context.write_values<out_cascade_distance_pin>(cascade_distances);
         }
     }
 
@@ -117,9 +143,17 @@ namespace grender
 
         static gcore::pin_descriptor const outputs[] = {
             out_texture_pin::get("shadow texture"),
-            out_light_matrix_pin::get("light matrix"),
+            out_light_matrix_pin::get("light matrices"),
+            out_cascade_distance_pin::get("cascade distances"),
         };
         return node::pin_descriptors{inputs, outputs};
+    }
+
+    void render_directional_shadow_node::process(gserializer::serializer& serializer)
+    {
+        render_shadow_node_base::process(serializer);
+        serializer.process("number of cascades", m_number_of_cascades);
+        serializer.process("log linear split factor", m_log_linear_split_factor);
     }
 
     std::array<glm::vec4, 8> render_directional_shadow_node::get_camera_frustrum_corners(glm::mat4 const& projection, glm::mat4 const& view)
@@ -155,6 +189,8 @@ namespace grender
             min_corner = glm::min(min_corner, light_space_corner);
             max_corner = glm::max(max_corner, light_space_corner);
         }
+        min_corner.z -= 20.f;
+        max_corner.z += 20.f;
 
         glm::mat4 const light_projection_matrix = glm::ortho(min_corner.x, max_corner.x, min_corner.y, max_corner.y, min_corner.z, max_corner.z);
         return light_projection_matrix * light_view_matrix;
@@ -162,14 +198,13 @@ namespace grender
     
     void render_point_light_shadow_node::execute(gcore::node_context& context) const
     {
-        constexpr int shadow_map_size = 2048;
         if (auto* render_sys = context.get_in_context<std::reference_wrapper<render_system>>())
         {
             auto& memory = std::any_cast<state&>(context.m_node_memory);
             if (memory.m_texture->get_id() == 0 && memory.m_framebuffer->get_fbo() == 0)
             {
                 render_sys->get().add_pre_light_work(
-                    [memory = memory](render_system&) mutable
+                    [memory = memory, texture_size = static_cast<int>(m_texture_size)](render_system&) mutable
                 {
                     OPTICK_EVENT("Create point light shadow resources");
                     GLuint texture_id = 0;
@@ -177,7 +212,7 @@ namespace grender
                     gl_exec(glBindTexture, GL_TEXTURE_CUBE_MAP, texture_id);
                     for (int i = 0; i < 6; ++i)
                     {
-                        gl_exec(glTexImage2D, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, shadow_map_size, shadow_map_size, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+                        gl_exec(glTexImage2D, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, texture_size, texture_size, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
                     }
 
                     gl_exec(glTexParameteri, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
@@ -234,11 +269,11 @@ namespace grender
             }
 
             render_sys->get().add_pre_light_work(
-                [memory, light_matrices = std::move(light_matrices)](render_system& render_sys) mutable
+                [memory, light_matrices = std::move(light_matrices), texture_size = static_cast<int>(m_texture_size)](render_system& render_sys) mutable
             {
                 OPTICK_EVENT("Render point light shadow");
                 gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, memory.m_framebuffer->get_fbo());
-                gl_exec(glViewport, 0, 0, shadow_map_size, shadow_map_size);
+                gl_exec(glViewport, 0, 0, texture_size, texture_size);
                 gl_exec(glClear, GL_DEPTH_BUFFER_BIT);
                 gl_exec(glCullFace, GL_FRONT);
                 render_sys.for_each_mesh_draw_request(
@@ -283,20 +318,19 @@ namespace grender
 
     void render_spot_light_shadow_node::execute(gcore::node_context& context) const
     {
-        constexpr int shadow_map_size = 1024;
         if (auto* render_sys = context.get_in_context<std::reference_wrapper<render_system>>())
         {
             auto& memory = std::any_cast<state&>(context.m_node_memory);
             if (memory.m_texture->get_id() == 0 && memory.m_framebuffer->get_fbo() == 0)
             {
                 render_sys->get().add_pre_light_work(
-                    [memory = memory](render_system&) mutable
+                    [memory = memory, texture_size = static_cast<int>(m_texture_size)](render_system&) mutable
                     {
                         OPTICK_EVENT("Create spot light shadow resources");
                         GLuint texture_id = 0;
                         gl_exec(glGenTextures, 1, &texture_id);
                         gl_exec(glBindTexture, GL_TEXTURE_2D, texture_id);
-                        gl_exec(glTexImage2D, GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadow_map_size, shadow_map_size, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+                        gl_exec(glTexImage2D, GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, texture_size, texture_size, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
                         gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                         gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                         gl_exec(glTexParameteri, GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
@@ -330,11 +364,11 @@ namespace grender
             glm::mat4 const light_matrix = light_projection * view_matrix;
 
             render_sys->get().add_pre_light_work(
-                [memory, light_matrix](render_system& render_sys) mutable
+                [memory, light_matrix, texture_size = static_cast<int>(m_texture_size)](render_system& render_sys) mutable
             {
                 OPTICK_EVENT("Render spot light shadow");
                 gl_exec(glBindFramebuffer, GL_FRAMEBUFFER, memory.m_framebuffer->get_fbo());
-                gl_exec(glViewport, 0, 0, shadow_map_size, shadow_map_size);
+                gl_exec(glViewport, 0, 0, texture_size, texture_size);
                 gl_exec(glClear, GL_DEPTH_BUFFER_BIT);
                 gl_exec(glCullFace, GL_FRONT);
 

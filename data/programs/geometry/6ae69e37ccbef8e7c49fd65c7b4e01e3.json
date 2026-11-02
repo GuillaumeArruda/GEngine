@@ -1,0 +1,12 @@
+{
+    "resource": {
+        "is_valid": true,
+        "type_name": "grender::shader",
+        "data": {
+            "uuid": "6ae69e37ccbef8e7c49fd65c7b4e01e3",
+            "name": "directional_light_shadow_geometry_shader",
+            "type": "shader::type::geometry",
+            "path": "data\\programs\\geometry\\directional_light_shadow_geometry.glsl"
+        }
+    }
+}

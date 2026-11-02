@@ -3,7 +3,7 @@
         {
             "name": "",
             "position": {
-                "x": -1631.0,
+                "x": -1615.0,
                 "y": -307.0
             },
             "node": {
@@ -39,8 +39,8 @@
         {
             "name": "",
             "position": {
-                "x": -2095.0,
-                "y": -152.0
+                "x": -2050.0,
+                "y": -153.0
             },
             "node": {
                 "is_valid": true,
@@ -129,14 +129,17 @@
         {
             "name": "",
             "position": {
-                "x": -2592.0,
-                "y": 109.0
+                "x": -2579.0,
+                "y": 95.0
             },
             "node": {
                 "is_valid": true,
                 "type_name": "grender::render_directional_shadow_node",
                 "data": {
-                    "node_id": 12
+                    "node_id": 12,
+                    "texture size": 2048,
+                    "number of cascades": 5,
+                    "log linear split factor": 0.8999999761581421
                 }
             }
         },
@@ -185,6 +188,20 @@
                         "number_of_elements": 1,
                         "value": true
                     }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2228.0,
+                "y": 128.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::array_size_node",
+                "data": {
+                    "node_id": 24
                 }
             }
         }
@@ -272,6 +289,31 @@
                     "source": 19,
                     "source_pin": 100,
                     "destination_pin": -1172172285
+                },
+                {
+                    "source": 12,
+                    "source_pin": 101,
+                    "destination_pin": -690652083
+                },
+                {
+                    "source": 12,
+                    "source_pin": 101,
+                    "destination_pin": 1829612561
+                },
+                {
+                    "source": 12,
+                    "source_pin": 102,
+                    "destination_pin": 840028749
+                },
+                {
+                    "source": 6,
+                    "source_pin": 2,
+                    "destination_pin": 2096047030
+                },
+                {
+                    "source": 24,
+                    "source_pin": 100,
+                    "destination_pin": -1072650406
                 }
             ]
         },
@@ -306,6 +348,16 @@
                 {
                     "source": 6,
                     "source_pin": 2,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 24,
+            "data": [
+                {
+                    "source": 12,
+                    "source_pin": 102,
                     "destination_pin": 0
                 }
             ]

@@ -16,13 +16,15 @@ namespace grender
         bool is_pure() const override { return false; }
 
         void prepare(gcore::node_context & context) const override;
-
+        void process(gserializer::serializer& serializer) override;
     protected:
         struct state
         {
             gcore::resource_handle<runtime_texture> m_texture;
             gcore::resource_handle<frame_buffer_resource> m_framebuffer;
         };
+
+        std::size_t m_texture_size = 2048;
     };
 
     struct render_directional_shadow_node : render_shadow_node_base
@@ -33,13 +35,18 @@ namespace grender
         using in_camera_matrix_pin = gcore::input_pin_descriptor<glm::mat4, 1, 3>;
         using in_camera_matrix_projection_pin = gcore::input_pin_descriptor<glm::mat4, 2, 4>;
 
-        using out_light_matrix_pin = gcore::output_pin_descriptor<glm::mat4, 1, 101>;
+        using out_light_matrix_pin = gcore::output_pin_descriptor<glm::mat4, 1>;
+        using out_cascade_distance_pin = gcore::output_pin_descriptor<float, 2>;
 
         void execute(gcore::node_context& context) const override;
         node::pin_descriptors get_pin_descriptors() const override;
+        void process(gserializer::serializer& serializer) override;
     protected:
         static std::array<glm::vec4, 8> get_camera_frustrum_corners(glm::mat4 const& projection, glm::mat4 const& view);
         static glm::mat4 create_light_matrix(glm::vec3 light_direction, std::array<glm::vec4, 8> const& corners);
+    
+        std::size_t m_number_of_cascades = 5;
+        float m_log_linear_split_factor = 0.5f;
     };
 
     struct render_point_light_shadow_node : render_shadow_node_base
