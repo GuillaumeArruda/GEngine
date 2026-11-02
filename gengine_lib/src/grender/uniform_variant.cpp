@@ -68,7 +68,7 @@ namespace grender
 
     uniform_variant::uniform_variant(gtl::span<gcore::resource_handle<texture> const> values, type type)
         : m_type(type)
-        , m_max_size(static_cast<std::uint32_t>(values.size()))
+        , m_max_size(std::max(static_cast<std::uint32_t>(values.size()), 1u))
     {
         vtable const table = get_vtable(m_type);
         table.m_construct(*this);

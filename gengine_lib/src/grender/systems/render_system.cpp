@@ -20,6 +20,7 @@
 #include "grender/utils.h"
 #include "grender/systems/debug_render_system.h"
 #include "grender/nodes/render_mesh_node.h"
+#include "grender/nodes/render_light_node.h"
 
 namespace grender
 {
@@ -231,14 +232,25 @@ namespace grender
 
         if (graphic_comp->m_script.is_loaded())
         {
-            for (gcore::node const* node : graphic_comp->m_script.get_script()->get_nodes())
+            if (extent)
             {
-                if (grender::render_mesh_node const* render_mesh_node = dynamic_cast<grender::render_mesh_node const*>(node))
+                for (gcore::node const* node : graphic_comp->m_script.get_script()->get_nodes())
                 {
-                    if (gcore::resource_handle<grender::mesh_resource> const mesh = render_mesh_node->get_mesh();
-                        mesh.is_loaded())
+                    if (grender::render_mesh_node const* render_mesh_node = dynamic_cast<grender::render_mesh_node const*>(node))
                     {
-                        extent->m_extent = extent->m_extent.merge(mesh->get_extent());
+                        if (gcore::resource_handle<grender::mesh_resource> const mesh = render_mesh_node->get_mesh();
+                            mesh.is_loaded())
+                        {
+                            extent->m_extent = extent->m_extent.merge(mesh->get_extent());
+                        }
+                    }
+                    else if (render_light_node const* render_light_node = dynamic_cast<grender::render_light_node const*>(node))
+                    {
+                        if (gcore::resource_handle<grender::mesh_resource> const mesh = render_light_node->get_mesh();
+                            mesh.is_loaded())
+                        {
+                            extent->m_extent = extent->m_extent.merge(mesh->get_extent());
+                        }
                     }
                 }
             }
