@@ -178,25 +178,38 @@ namespace gtool
         if (auto debug_render = world.get_system_registry().get_system<grender::debug_render_system>())
         {
             auto [transform_comp, extent_comp] = world.get_entity_registry().get_components<gcore::transform_component, gcore::extent_component>(entity);
-            if (transform_comp && extent_comp)
+            if (transform_comp)
             {
+                auto draw_box = [debug_render](glm::vec4 const min, glm::vec4 const max, glm::vec3 const color)
+                {
+                    debug_render->draw_line(min, glm::vec3(min[0], min[1], max[2]), color);
+                    debug_render->draw_line(min, glm::vec3(min[0], max[1], min[2]), color);
+                    debug_render->draw_line(min, glm::vec3(max[0], min[1], min[2]), color);
+                    debug_render->draw_line(max, glm::vec3(max[0], max[1], min[2]), color);
+                    debug_render->draw_line(max, glm::vec3(max[0], min[1], max[2]), color);
+                    debug_render->draw_line(max, glm::vec3(min[0], max[1], max[2]), color);
+                    debug_render->draw_line(glm::vec3(min[0], min[1], max[2]), glm::vec3(max[0], min[1], max[2]), color);
+                    debug_render->draw_line(glm::vec3(min[0], min[1], max[2]), glm::vec3(min[0], max[1], max[2]), color);
+                    debug_render->draw_line(glm::vec3(min[0], max[1], min[2]), glm::vec3(min[0], max[1], max[2]), color);
+                    debug_render->draw_line(glm::vec3(max[0], max[1], min[2]), glm::vec3(min[0], max[1], min[2]), color);
+                    debug_render->draw_line(glm::vec3(max[0], min[1], min[2]), glm::vec3(max[0], max[1], min[2]), color);
+                    debug_render->draw_line(glm::vec3(max[0], min[1], min[2]), glm::vec3(max[0], min[1], max[2]), color);
+                };
+
                 gmath::transform<gcore::world_space, gcore::model_space> const t(transform_comp->m_transform);
-                gmath::axis_aligned_box<gcore::world_space> const extent = t * extent_comp->m_extent;
+                if (extent_comp)
+                {
+                    gmath::axis_aligned_box<gcore::world_space> const extent = t * extent_comp->m_extent;
+                    glm::vec4 const min = static_cast<glm::vec4>(extent.min());
+                    glm::vec4 const max = static_cast<glm::vec4>(extent.max());
+                    draw_box(min, max, glm::vec3(1.f));
+                }
+
+                gmath::axis_aligned_box<gcore::model_space> const small_box{ gmath::position<gcore::model_space>{-0.1f,-0.1f,-0.1f}, gmath::position<gcore::model_space>{0.1f,0.1f,0.1f} };
+                gmath::axis_aligned_box<gcore::world_space> const extent = t * small_box;
                 glm::vec4 const min = static_cast<glm::vec4>(extent.min());
                 glm::vec4 const max = static_cast<glm::vec4>(extent.max());
-
-                debug_render->draw_line(min, glm::vec3(min[0], min[1], max[2]));
-                debug_render->draw_line(min, glm::vec3(min[0], max[1], min[2]));
-                debug_render->draw_line(min, glm::vec3(max[0], min[1], min[2]));
-                debug_render->draw_line(max, glm::vec3(max[0], max[1], min[2]));
-                debug_render->draw_line(max, glm::vec3(max[0], min[1], max[2]));
-                debug_render->draw_line(max, glm::vec3(min[0], max[1], max[2]));
-                debug_render->draw_line(glm::vec3(min[0], min[1], max[2]), glm::vec3(max[0], min[1], max[2]));
-                debug_render->draw_line(glm::vec3(min[0], min[1], max[2]), glm::vec3(min[0], max[1], max[2]));
-                debug_render->draw_line(glm::vec3(min[0], max[1], min[2]), glm::vec3(min[0], max[1], max[2]));
-                debug_render->draw_line(glm::vec3(max[0], max[1], min[2]), glm::vec3(min[0], max[1], min[2]));
-                debug_render->draw_line(glm::vec3(max[0], min[1], min[2]), glm::vec3(max[0], max[1], min[2]));
-                debug_render->draw_line(glm::vec3(max[0], min[1], min[2]), glm::vec3(max[0], min[1], max[2]));
+                draw_box(min, max, glm::vec3(1.f, 0.f,0.f));
             }
         }
 
