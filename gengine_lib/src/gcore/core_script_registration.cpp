@@ -20,6 +20,7 @@
 #include "gcore/script/nodes/variable_nodes.h"
 #include "gcore/script/nodes/vector_nodes.h"
 #include "gcore/script/nodes/array_nodes.h"
+#include "gcore/script/nodes/run_script_node.h"
 
 #include "gserializer/gmath_serialization.h"
 
@@ -81,12 +82,19 @@ namespace gcore
         GCORE_REGISTER_EQUALITY_NODES(gcore::resource_handle<resource>, "Resource");
         GCORE_REGISTER_SELECT_NODE(gcore::resource_handle<resource>, "Resource");
 
+        GCORE_REGISTER_SELECT_NODE(glm::vec3, "Vec3");
+        GCORE_REGISTER_SELECT_NODE(glm::vec4, "Vec4");
+        GCORE_REGISTER_SELECT_NODE(glm::mat4, "Mat4");
+        GCORE_REGISTER_SELECT_NODE(glm::mat3, "Mat3");
+
         factory.register_type<gcore::constant_node>("gcore::constant_node", "Constant");
         factory.register_type<gcore::get_variable_node>("gcore::get_variable_node", "Get Variable");
         factory.register_type<gcore::set_variable_node>("gcore::set_variable_node", "Set Variable");
         factory.register_type<gcore::and_node>("gcore::and_node", "And");
         factory.register_type<gcore::or_node>("gcore::or_node", "Or");
         factory.register_type<gcore::not_node>("gcore::not_node", "Not");
+
+        factory.register_type<run_script_node>("gcore::run_script_node", "Run Script");
 
         factory.register_type<print_node>("gcore::print_node", "Print");
         factory.register_type<root_execution_node>("gcore::root_execution_node", "Root Execute");

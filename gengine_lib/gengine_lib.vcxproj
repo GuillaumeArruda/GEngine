@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gcore\script\nodes\array_nodes.h" />
+    <ClInclude Include="src\gcore\script\nodes\run_script_node.h" />
     <ClInclude Include="src\gcore\script\nodes\variable_nodes.h" />
     <ClInclude Include="src\gcore\script\nodes\matrix_nodes.h" />
     <ClInclude Include="src\gcore\script\nodes\vector_nodes.h" />
@@ -157,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="src\gcore\script\nodes\array_nodes.cpp" />
     <ClCompile Include="src\gcore\script\nodes\matrix_nodes.cpp" />
+    <ClCompile Include="src\gcore\script\nodes\run_script_node.cpp" />
     <ClCompile Include="src\gcore\script\nodes\variable_nodes.cpp" />
     <ClCompile Include="src\gcore\script\nodes\vector_nodes.cpp" />
     <ClCompile Include="src\gcore\script\script_runner.cpp" />

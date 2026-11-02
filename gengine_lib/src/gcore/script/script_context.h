@@ -118,6 +118,8 @@ namespace gcore
         ContextElement* get_in_context();
 
         node_data* get_variable(gtl::uuid const& id);
+        script_context& get_script_context() { return *m_script_context; }
+        script_context const& get_script_context() const { return *m_script_context; }
 
         std::any m_node_memory;
 
@@ -163,6 +165,8 @@ namespace gcore
         }
 
         node_data* get_variable(gtl::uuid const& id);
+
+        void copy_context(script_context const& copy_from);
 
     private:
         void destroy_variables();

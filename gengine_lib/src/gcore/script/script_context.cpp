@@ -219,6 +219,11 @@ namespace gcore
         return nullptr;
     }
 
+    void script_context::copy_context(script_context const& copy_from)
+    {
+        m_context = copy_from.m_context;
+    }
+
     void script_context::destroy_variables()
     {
         if (m_memory_buffer)
