@@ -12,8 +12,8 @@ namespace gcore
     void make_mat4_node::execute_on_element(node_context&, glm::vec3 const& translation, glm::vec3 const& rotation, glm::vec3 const& scale, glm::mat4& out) const
     {
         using namespace gmath;
-        glm::vec3 const rotation_radian = glm::vec3(radian(degree(rotation.x)), radian(degree(rotation.y)), radian(degree(rotation.z)));
-        glm::quat const rotation_quat = glm::quat(rotation);
+        glm::vec3 const rotation_radian = glm::vec3(glm::radians(rotation.x), glm::radians(rotation.y), glm::radians(rotation.z));
+        glm::quat const rotation_quat = glm::quat(rotation_radian);
         
         out = glm::mat4(1.f);
         out = glm::translate(out, translation);
@@ -47,7 +47,8 @@ namespace gcore
             glm::vec4 perspective;
             glm::quat rotation;
             glm::decompose(inputs[i], scales[i], rotation, translations[i], skew, perspective);
-            rotations[i] = glm::eulerAngles(rotation);
+            glm::vec3 const radian_angles = glm::eulerAngles(rotation);
+            rotations[i] = glm::vec3(glm::degrees(radian_angles.x), glm::degrees(radian_angles.y), glm::degrees(radian_angles.z));
         }
     }
 
