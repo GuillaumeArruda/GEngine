@@ -25,10 +25,14 @@ namespace gtool
         void process(const char* name, std::filesystem::path& value) override;
 
         bool should_display() const { return m_should_display_stack.back(); }
+        bool has_changed() const { return m_has_changed; }
+        bool set_had_changed(bool has_changed) { m_has_changed = has_changed; }
+
     private:
         std::vector<bool> m_should_display_stack;
         std::vector<std::size_t> m_array_index_stack;
         std::vector<std::size_t> m_array_element_stack;
+        bool m_has_changed = false;
         bool enum_as_string() const override { return true; }
 
         void open_scope(const char* name, std::type_index type_index, void*) override;

@@ -258,6 +258,18 @@ namespace gcore
         m_use_command_list = use_command_list;
     }
 
+    void entity_registry::readd_components(entity entity)
+    {
+        assert(!m_use_command_list);
+        if (auto it = m_entity_to_component.find(entity); it != m_entity_to_component.end())
+        {
+            std::vector<std::unique_ptr<component>> holder = std::move(it->second);
+            warn_group_of_component_removal(entity);
+            it->second = std::move(holder);
+            warn_group_of_component_addition(entity);
+        }        
+    }
+
     void entity_registry::add_components(entity entity, gtl::span<std::unique_ptr<component>> components)
     {
         if (m_use_command_list)

@@ -123,6 +123,8 @@ namespace gcore
         void update();
 
         void use_command_list(bool use_command_list);
+
+        void readd_components(entity entity);
     private:
         bool has_components(entity entity, gtl::span<component_id const> component_types) const;
         

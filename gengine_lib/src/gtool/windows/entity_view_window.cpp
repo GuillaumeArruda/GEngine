@@ -214,6 +214,11 @@ namespace gtool
                 gtl::span<std::unique_ptr<gcore::component>> components = world.get_entity_registry().see_components(entity);
                 serializer.process("Components", components, "Component", gcore::component::factory());
 
+                if (serializer.has_changed())
+                {
+                    world.get_entity_registry().readd_components(entity);
+                }
+
                 if (ImGui::Button("Remove entity"))
                 {
                     world.get_entity_registry().remove_entity(entity);

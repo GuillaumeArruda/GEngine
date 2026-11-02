@@ -32,49 +32,49 @@ namespace gtool
     void imgui_serializer::process(const char* name, std::string& value)
     {
         if (should_display())
-            ImGui::InputText(name, &value);
+            m_has_changed |= ImGui::InputText(name, &value);
     }
 
     void imgui_serializer::process(const char* name, std::uint32_t& value)
     {
         if (should_display())
-            ImGui::InputScalar(name, ImGuiDataType_U32, &value);
+            m_has_changed |= ImGui::InputScalar(name, ImGuiDataType_U32, &value);
     }
 
     void imgui_serializer::process(const char* name, std::uint64_t& value)
     {
         if(should_display())
-            ImGui::InputScalar(name, ImGuiDataType_U64, &value);
+            m_has_changed |= ImGui::InputScalar(name, ImGuiDataType_U64, &value);
     }
 
     void imgui_serializer::process(const char* name, std::int32_t& value)
     {
         if (should_display())
-            ImGui::InputInt(name, &value);
+            m_has_changed |= ImGui::InputInt(name, &value);
     }
 
     void imgui_serializer::process(const char* name, std::int64_t& value)
     {
         if(should_display())
-            ImGui::InputScalar(name, ImGuiDataType_S64, &value);
+            m_has_changed |= ImGui::InputScalar(name, ImGuiDataType_S64, &value);
     }
 
     void imgui_serializer::process(const char* name, float& value)
     {
         if (should_display())
-            ImGui::InputFloat(name, &value);
+            m_has_changed |= ImGui::InputFloat(name, &value);
     }
 
     void imgui_serializer::process(const char* name, double& value)
     {
         if (should_display())
-            ImGui::InputDouble(name, &value);
+            m_has_changed |= ImGui::InputDouble(name, &value);
     }
 
     void imgui_serializer::process(const char* name, bool& value)
     {
         if (should_display())
-            ImGui::Checkbox(name, &value);
+            m_has_changed |= ImGui::Checkbox(name, &value);
     }
 
     void imgui_serializer::process(const char* name, gtl::uuid& value)
@@ -82,7 +82,7 @@ namespace gtool
         if (should_display())
         {
             std::string string = value.to_string();
-            ImGui::InputText(name, &string);
+            m_has_changed |= ImGui::InputText(name, &string);
             value = gtl::uuid::from_string(string);
             if (value.is_valid())
             {
@@ -103,7 +103,7 @@ namespace gtool
         if (should_display())
         {
             std::string string = value.string();
-            ImGui::InputText(name, &string);
+            m_has_changed |= ImGui::InputText(name, &string);
             value = std::filesystem::path(value);
         }
     }
