@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <GLFW/glfw3.h>
 #include <optick/optick.h>
+#include <iostream>
 
 #include "gcore/resource_library.h"
 
@@ -166,6 +167,7 @@ namespace gcore
         if (auto it = std::find(m_file_changes.begin(), m_file_changes.end(), path);
             it == m_file_changes.end())
         {
+            std::cout << std::format("on file changed: {}\n", absolute_path.generic_string());
             m_file_changes.push_back(std::move(absolute_path));
         }
     }
