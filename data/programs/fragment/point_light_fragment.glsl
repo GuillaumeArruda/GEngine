@@ -7,6 +7,7 @@ uniform ivec2 screen_size;
 uniform float inner_radius;
 uniform float outer_radius;
 uniform vec3 ambient_light;
+uniform bool cast_shadows;
 
 uniform sampler2D diffuse_tex;
 uniform sampler2D position_tex;
@@ -57,6 +58,6 @@ void main()
 	const vec3 diffuse_color = lambertian * diffuse;
 	const vec3 specular_color =  specular * specular_intensity;
 	const vec3 ambient = diffuse * ambient_light * light_intensity;
-    const float shadow = compute_shadow(position);
+    const float shadow = cast_shadows ? compute_shadow(position) : 1.0;
 	color = vec4((diffuse_color + specular_color) * shadow * light_color * light_intensity + ambient, 1.0);
 }

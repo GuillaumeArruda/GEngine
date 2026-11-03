@@ -838,8 +838,8 @@
         {
             "name": "",
             "position": {
-                "x": 806.0,
-                "y": 752.0
+                "x": 870.0,
+                "y": 208.0
             },
             "node": {
                 "is_valid": true,
@@ -850,6 +850,249 @@
                         "type_name": "Texture",
                         "number_of_elements": 1,
                         "value": "6ae81db415c72911f5240d5ada888f00"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 145.0,
+                "y": 470.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::run_script_node",
+                "data": {
+                    "node_id": 86,
+                    "script": {
+                        "value": "6ae21833418da08a39c718292ddb3d36"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -159.0,
+                "y": 582.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::make_mat4_node",
+                "data": {
+                    "node_id": 87
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -394.0,
+                "y": 592.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 88,
+                    "value": {
+                        "type_name": "Vec3",
+                        "number_of_elements": 1,
+                        "x": -0.5,
+                        "y": 0.8999999761581421,
+                        "z": -6.800000190734863
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -394.0,
+                "y": 696.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 89,
+                    "value": {
+                        "type_name": "Vec3",
+                        "number_of_elements": 1,
+                        "x": 0.0,
+                        "y": 180.0,
+                        "z": 0.0
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -394.0,
+                "y": 752.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 90,
+                    "value": {
+                        "type_name": "Vec3",
+                        "number_of_elements": 1,
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -122.0,
+                "y": 664.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 91,
+                    "value": {
+                        "type_name": "Float",
+                        "number_of_elements": 1,
+                        "value": 25.0
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -122.0,
+                "y": 712.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 95,
+                    "value": {
+                        "type_name": "Float",
+                        "number_of_elements": 1,
+                        "value": 15.0
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 145.0,
+                "y": 736.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::run_script_node",
+                "data": {
+                    "node_id": 96,
+                    "script": {
+                        "value": "6ae21833418da08a39c718292ddb3d36"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -107.0,
+                "y": 863.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::make_mat4_node",
+                "data": {
+                    "node_id": 97
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -394.0,
+                "y": 848.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 98,
+                    "value": {
+                        "type_name": "Vec3",
+                        "number_of_elements": 1,
+                        "x": -0.5,
+                        "y": 0.75,
+                        "z": -6.800000190734863
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -58.0,
+                "y": 472.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 101,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -122.0,
+                "y": 760.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 102,
+                    "value": {
+                        "type_name": "Vec3",
+                        "number_of_elements": 1,
+                        "x": 0.800000011920929,
+                        "y": 0.699999988079071,
+                        "z": 0.699999988079071
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -58.0,
+                "y": 952.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 103,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": false
                     }
                 }
             }
@@ -873,16 +1116,6 @@
                     "source": 9,
                     "source_pin": 12000,
                     "destination_pin": 1
-                }
-            ]
-        },
-        {
-            "key": 17,
-            "data": [
-                {
-                    "source": 14,
-                    "source_pin": 100,
-                    "destination_pin": 0
                 }
             ]
         },
@@ -922,6 +1155,16 @@
             ]
         },
         {
+            "key": 17,
+            "data": [
+                {
+                    "source": 14,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
             "key": 10,
             "data": [
                 {
@@ -948,26 +1191,6 @@
                     "source": 10,
                     "source_pin": 100,
                     "destination_pin": 0
-                }
-            ]
-        },
-        {
-            "key": 22,
-            "data": [
-                {
-                    "source": 23,
-                    "source_pin": 1,
-                    "destination_pin": 2
-                },
-                {
-                    "source": 26,
-                    "source_pin": 12000,
-                    "destination_pin": 1
-                },
-                {
-                    "source": 8,
-                    "source_pin": 1,
-                    "destination_pin": 3
                 }
             ]
         },
@@ -1013,6 +1236,61 @@
                     "source": 16,
                     "source_pin": 100,
                     "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 22,
+            "data": [
+                {
+                    "source": 23,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 26,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                }
+            ]
+        },
+        {
+            "key": 86,
+            "data": [
+                {
+                    "source": 87,
+                    "source_pin": 100,
+                    "destination_pin": 104754944
+                },
+                {
+                    "source": 91,
+                    "source_pin": 1,
+                    "destination_pin": 258582379
+                },
+                {
+                    "source": 95,
+                    "source_pin": 1,
+                    "destination_pin": -319216880
+                },
+                {
+                    "source": 101,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 102,
+                    "source_pin": 1,
+                    "destination_pin": -2026176076
+                },
+                {
+                    "source": 103,
+                    "source_pin": 1,
+                    "destination_pin": -157007288
                 }
             ]
         },
@@ -1298,6 +1576,81 @@
                     "source": 85,
                     "source_pin": 1,
                     "destination_pin": -1818423387
+                }
+            ]
+        },
+        {
+            "key": 87,
+            "data": [
+                {
+                    "source": 88,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 89,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 90,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                }
+            ]
+        },
+        {
+            "key": 96,
+            "data": [
+                {
+                    "source": 91,
+                    "source_pin": 1,
+                    "destination_pin": 258582379
+                },
+                {
+                    "source": 95,
+                    "source_pin": 1,
+                    "destination_pin": -319216880
+                },
+                {
+                    "source": 97,
+                    "source_pin": 100,
+                    "destination_pin": 104754944
+                },
+                {
+                    "source": 101,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 102,
+                    "source_pin": 1,
+                    "destination_pin": -2026176076
+                },
+                {
+                    "source": 103,
+                    "source_pin": 1,
+                    "destination_pin": -157007288
+                }
+            ]
+        },
+        {
+            "key": 97,
+            "data": [
+                {
+                    "source": 98,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 90,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 89,
+                    "source_pin": 1,
+                    "destination_pin": 1
                 }
             ]
         }

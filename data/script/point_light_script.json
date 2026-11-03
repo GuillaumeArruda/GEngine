@@ -158,22 +158,23 @@
         {
             "name": "",
             "position": {
-                "x": -2747.0,
-                "y": -353.0
+                "x": -3019.0,
+                "y": -337.0
             },
             "node": {
                 "is_valid": true,
                 "type_name": "grender::render_point_light_shadow_node",
                 "data": {
-                    "node_id": 19
+                    "node_id": 19,
+                    "texture size": 2048
                 }
             }
         },
         {
             "name": "",
             "position": {
-                "x": -3014.0,
-                "y": -272.0
+                "x": -3286.0,
+                "y": -256.0
             },
             "node": {
                 "is_valid": true,
@@ -243,8 +244,8 @@
         {
             "name": "",
             "position": {
-                "x": -3414.0,
-                "y": -1104.0
+                "x": -3459.0,
+                "y": -1008.0
             },
             "node": {
                 "is_valid": true,
@@ -291,8 +292,8 @@
         {
             "name": "",
             "position": {
-                "x": -3218.0,
-                "y": -1089.0
+                "x": -3263.0,
+                "y": -993.0
             },
             "node": {
                 "is_valid": true,
@@ -305,8 +306,8 @@
         {
             "name": "",
             "position": {
-                "x": -3386.0,
-                "y": -1056.0
+                "x": -3431.0,
+                "y": -960.0
             },
             "node": {
                 "is_valid": true,
@@ -318,6 +319,55 @@
                         "number_of_elements": 1,
                         "value": 1.0099999904632568
                     }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2750.0,
+                "y": -368.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::select_node<gcore::resource_handle<grender::texture>>",
+                "data": {
+                    "node_id": 47,
+                    "type_inputs_guaranteed_same_size": true
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2906.0,
+                "y": -272.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 50,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "00"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -2934.0,
+                "y": -384.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 51,
+                    "variable_id": "6ae8d87210c8740558b757c677c2d4b0"
                 }
             }
         }
@@ -437,14 +487,19 @@
                     "destination_pin": -1172172285
                 },
                 {
-                    "source": 19,
+                    "source": 32,
+                    "source_pin": 100,
+                    "destination_pin": -1775358419
+                },
+                {
+                    "source": 47,
                     "source_pin": 100,
                     "destination_pin": 1315276102
                 },
                 {
-                    "source": 32,
-                    "source_pin": 100,
-                    "destination_pin": -1775358419
+                    "source": 51,
+                    "source_pin": 1,
+                    "destination_pin": 1253852869
                 }
             ]
         },
@@ -542,6 +597,26 @@
                     "destination_pin": 0
                 }
             ]
+        },
+        {
+            "key": 47,
+            "data": [
+                {
+                    "source": 50,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 19,
+                    "source_pin": 100,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 51,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                }
+            ]
         }
     ],
     "variables": [
@@ -592,6 +667,17 @@
             },
             "is_input": true,
             "is_constant": true
+        },
+        {
+            "id": "6ae8d87210c8740558b757c677c2d4b0",
+            "name": "Cast Shadows",
+            "data": {
+                "type_name": "Bool",
+                "number_of_elements": 1,
+                "value": true
+            },
+            "is_input": true,
+            "is_constant": false
         }
     ]
 }

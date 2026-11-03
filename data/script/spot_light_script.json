@@ -3,8 +3,8 @@
         {
             "name": "",
             "position": {
-                "x": -2975.0,
-                "y": -899.0
+                "x": -2659.0,
+                "y": -888.0
             },
             "node": {
                 "is_valid": true,
@@ -20,8 +20,8 @@
         {
             "name": "",
             "position": {
-                "x": -3274.0,
-                "y": -928.0
+                "x": -2958.0,
+                "y": -917.0
             },
             "node": {
                 "is_valid": true,
@@ -39,8 +39,8 @@
         {
             "name": "",
             "position": {
-                "x": -3258.0,
-                "y": -592.0
+                "x": -2954.0,
+                "y": -528.0
             },
             "node": {
                 "is_valid": true,
@@ -58,8 +58,8 @@
         {
             "name": "",
             "position": {
-                "x": -4257.0,
-                "y": -914.0
+                "x": -4465.0,
+                "y": -1008.0
             },
             "node": {
                 "is_valid": true,
@@ -72,8 +72,8 @@
         {
             "name": "",
             "position": {
-                "x": -3371.0,
-                "y": -860.0
+                "x": -3055.0,
+                "y": -849.0
             },
             "node": {
                 "is_valid": true,
@@ -207,19 +207,175 @@
         {
             "name": "",
             "position": {
-                "x": -3675.0,
-                "y": -528.0
+                "x": -3751.0,
+                "y": -496.0
             },
             "node": {
                 "is_valid": true,
                 "type_name": "grender::render_spot_light_shadow_node",
                 "data": {
-                    "node_id": 17
+                    "node_id": 17,
+                    "texture size": 2048
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -4098.0,
+                "y": -1008.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::multiply_node<glm::mat4>",
+                "data": {
+                    "node_id": 18
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -4342.0,
+                "y": -928.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 21,
+                    "variable_id": "6ae8beb03aaac86e62e9dbf0063e6f00"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3343.0,
+                "y": -448.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::select_node<gcore::resource_handle<grender::texture>>",
+                "data": {
+                    "node_id": 22,
+                    "type_inputs_guaranteed_same_size": true
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3594.0,
+                "y": -368.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 26,
+                    "value": {
+                        "type_name": "Texture",
+                        "number_of_elements": 1,
+                        "value": "00"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3622.0,
+                "y": -544.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 27,
+                    "variable_id": "6ae8d6b923a230f4259f6942f6a44248"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3342.0,
+                "y": -528.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::select_node<glm::mat4>",
+                "data": {
+                    "node_id": 28,
+                    "type_inputs_guaranteed_same_size": true
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3594.0,
+                "y": -416.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 31,
+                    "value": {
+                        "type_name": "Matrix4",
+                        "number_of_elements": 1,
+                        "[0]": {
+                            "x": 1.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[1]": {
+                            "x": 0.0,
+                            "y": 1.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[3]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 1.0,
+                            "w": 0.0
+                        },
+                        "[4]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    }
                 }
             }
         }
     ],
     "connections": [
+        {
+            "key": 17,
+            "data": [
+                {
+                    "source": 13,
+                    "source_pin": 1,
+                    "destination_pin": 3
+                },
+                {
+                    "source": 16,
+                    "source_pin": 1,
+                    "destination_pin": 4
+                },
+                {
+                    "source": 18,
+                    "source_pin": 100,
+                    "destination_pin": 2
+                }
+            ]
+        },
         {
             "key": 1,
             "data": [
@@ -239,29 +395,9 @@
                     "destination_pin": 1
                 },
                 {
-                    "source": 6,
-                    "source_pin": 1,
+                    "source": 18,
+                    "source_pin": 100,
                     "destination_pin": 3
-                }
-            ]
-        },
-        {
-            "key": 17,
-            "data": [
-                {
-                    "source": 6,
-                    "source_pin": 1,
-                    "destination_pin": 2
-                },
-                {
-                    "source": 13,
-                    "source_pin": 1,
-                    "destination_pin": 3
-                },
-                {
-                    "source": 16,
-                    "source_pin": 1,
-                    "destination_pin": 4
                 }
             ]
         },
@@ -269,8 +405,8 @@
             "key": 8,
             "data": [
                 {
-                    "source": 6,
-                    "source_pin": 2,
+                    "source": 18,
+                    "source_pin": 100,
                     "destination_pin": 0
                 }
             ]
@@ -282,11 +418,6 @@
                     "source": 8,
                     "source_pin": 100,
                     "destination_pin": -1172172285
-                },
-                {
-                    "source": 6,
-                    "source_pin": 1,
-                    "destination_pin": 160724395
                 },
                 {
                     "source": 10,
@@ -344,14 +475,79 @@
                     "destination_pin": -1946053740
                 },
                 {
-                    "source": 17,
+                    "source": 18,
+                    "source_pin": 100,
+                    "destination_pin": 160724395
+                },
+                {
+                    "source": 22,
                     "source_pin": 100,
                     "destination_pin": 1315276102
                 },
                 {
+                    "source": 28,
+                    "source_pin": 100,
+                    "destination_pin": 501388726
+                },
+                {
+                    "source": 27,
+                    "source_pin": 1,
+                    "destination_pin": 1253852869
+                }
+            ]
+        },
+        {
+            "key": 18,
+            "data": [
+                {
+                    "source": 6,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 21,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 22,
+            "data": [
+                {
+                    "source": 17,
+                    "source_pin": 100,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 26,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 27,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
+            "key": 28,
+            "data": [
+                {
+                    "source": 31,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 27,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                },
+                {
                     "source": 17,
                     "source_pin": 101,
-                    "destination_pin": 501388726
+                    "destination_pin": 1
                 }
             ]
         }
@@ -426,6 +622,51 @@
             },
             "is_input": true,
             "is_constant": true
+        },
+        {
+            "id": "6ae8beb03aaac86e62e9dbf0063e6f00",
+            "name": "Transform",
+            "data": {
+                "type_name": "Matrix4",
+                "number_of_elements": 1,
+                "[0]": {
+                    "x": 1.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "[1]": {
+                    "x": 0.0,
+                    "y": 1.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "[3]": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 1.0,
+                    "w": 0.0
+                },
+                "[4]": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                }
+            },
+            "is_input": true,
+            "is_constant": false
+        },
+        {
+            "id": "6ae8d6b923a230f4259f6942f6a44248",
+            "name": "Cast shadows",
+            "data": {
+                "type_name": "Bool",
+                "number_of_elements": 1,
+                "value": true
+            },
+            "is_input": true,
+            "is_constant": false
         }
     ]
 }
