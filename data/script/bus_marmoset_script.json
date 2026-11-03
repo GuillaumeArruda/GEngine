@@ -889,7 +889,7 @@
             "name": "",
             "position": {
                 "x": -394.0,
-                "y": 592.0
+                "y": 576.0
             },
             "node": {
                 "is_valid": true,
@@ -899,7 +899,7 @@
                     "value": {
                         "type_name": "Vec3",
                         "number_of_elements": 1,
-                        "x": -0.5,
+                        "x": -0.800000011920929,
                         "y": 0.8999999761581421,
                         "z": -6.800000190734863
                     }
@@ -1031,7 +1031,7 @@
                     "value": {
                         "type_name": "Vec3",
                         "number_of_elements": 1,
-                        "x": -0.5,
+                        "x": 0.800000011920929,
                         "y": 0.75,
                         "z": -6.800000190734863
                     }
@@ -1195,6 +1195,16 @@
             ]
         },
         {
+            "key": 14,
+            "data": [
+                {
+                    "source": 16,
+                    "source_pin": 100,
+                    "destination_pin": 0
+                }
+            ]
+        },
+        {
             "key": 78,
             "data": [
                 {
@@ -1230,36 +1240,6 @@
             ]
         },
         {
-            "key": 14,
-            "data": [
-                {
-                    "source": 16,
-                    "source_pin": 100,
-                    "destination_pin": 0
-                }
-            ]
-        },
-        {
-            "key": 22,
-            "data": [
-                {
-                    "source": 23,
-                    "source_pin": 1,
-                    "destination_pin": 2
-                },
-                {
-                    "source": 26,
-                    "source_pin": 12000,
-                    "destination_pin": 1
-                },
-                {
-                    "source": 8,
-                    "source_pin": 1,
-                    "destination_pin": 3
-                }
-            ]
-        },
-        {
             "key": 86,
             "data": [
                 {
@@ -1291,6 +1271,26 @@
                     "source": 103,
                     "source_pin": 1,
                     "destination_pin": -157007288
+                }
+            ]
+        },
+        {
+            "key": 22,
+            "data": [
+                {
+                    "source": 23,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 26,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 3
                 }
             ]
         },
