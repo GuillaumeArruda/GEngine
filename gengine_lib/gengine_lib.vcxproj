@@ -269,6 +269,9 @@
     <ProjectReference Include="..\ax_NodeEditor\ax_NodeEditor.vcxproj">
       <Project>{05fa3646-f9ea-4f0f-9bbd-c2ed90355eef}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\ImGuizmo\ImGuizmo.vcxproj">
+      <Project>{d24268ee-03c0-40ab-9f5b-b374bf29a6ea}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\imgui\imgui.vcxproj">
       <Project>{701cea89-ecd9-42cf-8337-5a9f72dc6897}</Project>
     </ProjectReference>
