@@ -56,6 +56,7 @@ namespace gtool
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 		ImGui::StyleColorsDark();
 		
 		ImGui_ImplGlfw_InitForOpenGL(m_window, true);
@@ -158,11 +159,18 @@ namespace gtool
 				ImGui::PopStyleVar(3);
 
 				{
-					OPTICK_EVENT("ImGui Render");
 					ImGui::Render();
+					OPTICK_EVENT("ImGui Render");
 					ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 				}
 				
+				{
+					OPTICK_EVENT("ImGui Multi Window");
+					GLFWwindow* backup_current_context = glfwGetCurrentContext();
+					ImGui::UpdatePlatformWindows();
+					ImGui::RenderPlatformWindowsDefault();
+					glfwMakeContextCurrent(backup_current_context);
+				}
 			}
 		}
 		{
