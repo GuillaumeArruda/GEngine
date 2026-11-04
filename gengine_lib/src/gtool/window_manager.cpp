@@ -8,6 +8,7 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 #include <GLFW/glfw3.h>
+#include <ImGuizmo/ImGuizmo.h>
 
 #include <optick/optick.h>
 
@@ -50,7 +51,8 @@ namespace gtool
 		glfwMakeContextCurrent(m_window);
 
 		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
+		ImGuiContext* im_context = ImGui::CreateContext();
+		ImGuizmo::SetImGuiContext(im_context);
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -73,9 +75,9 @@ namespace gtool
 			return false;
 		});
 
+		m_windows.push_back(std::make_unique<viewport_window>());
         m_windows.push_back(std::make_unique<entity_view_window>());
         m_windows.push_back(std::make_unique<resource_view_window>());
-		m_windows.push_back(std::make_unique<viewport_window>());
 		m_windows.push_back(std::make_unique<node_editor_window>());
 		m_windows.push_back(std::make_unique<console_window>());
 		m_windows.push_back(std::make_unique<frame_view_window>());
@@ -96,7 +98,8 @@ namespace gtool
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
-
+			ImGuizmo::BeginFrame();
+			
 			{
 				OPTICK_EVENT("World Update");
 				world.get_time().new_frame();

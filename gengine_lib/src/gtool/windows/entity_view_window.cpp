@@ -3,6 +3,7 @@
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_stdlib.h>
+#include <ImGuizmo/ImGuizmo.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -13,16 +14,17 @@
 
 #include "gcore/components/extent_component.h"
 #include "gcore/components/input_component.h"
-#include "gcore/components/transform_component.h"
 #include "gcore/components/name_component.h"
+#include "gcore/components/transform_component.h"
+#include "gcore/components/flying_controller_component.h"
+#include "gcore/resource_library.h"
 #include "gcore/serializers/dependency_gatherer_serializer.h"
 #include "gcore/world.h"
-#include "gcore/resource_library.h"
 
-#include "gtool/serializers/imgui_serializer.h"
 #include "grender/components/camera_component.h"
-#include "grender/systems/render_system.h"
 #include "grender/systems/debug_render_system.h"
+#include "grender/systems/render_system.h"
+#include "gtool/serializers/imgui_serializer.h"
 
 #include "gserializer/serializers/binary_file_serializer.h"
 
@@ -136,41 +138,42 @@ namespace gtool
 
     void selected_entity_widget::update(gcore::world& world)
     {
-        if (grender::render_system* render = world.get_system_registry().get_system<grender::render_system>())
+        grender::render_system* render = world.get_system_registry().get_system<grender::render_system>();
+        if (!render)
+            return;
+
+        auto camera_view = world.get_entity_registry().get_view < grender::camera_component, gcore::input_component, gcore::flying_controller_component, gcore::transform_component > ();
+        glm::ivec2 const size = render->get_target_size();
+        float const aspect_ratio = size[0] / static_cast<float>(size[1]);
+        for (auto& [camera_entity, camera, input, controller, camera_transform] : camera_view)
         {
-            glm::ivec2 const size = render->get_target_size();
-            float const aspect_ratio = size[0] / static_cast<float>(size[1]);
-            auto camera_view = world.get_entity_registry().get_view<grender::camera_component, gcore::input_component, gcore::transform_component>();
-            for (auto& [camera_entity, camera, input, camera_transform] : camera_view)
+            if (input->m_keybord_state[gtl::to_underlying(gcore::keyboard_key::left_control)] == gcore::key_state::pressed
+                && input->m_mouse_key_state[gtl::to_underlying(gcore::mouse_key::button_1)] == gcore::key_state::pressed)
             {
-                if (input->m_keybord_state[gtl::to_underlying(gcore::keyboard_key::left_control)] == gcore::key_state::pressed
-                    && input->m_mouse_key_state[gtl::to_underlying(gcore::mouse_key::button_1)] == gcore::key_state::pressed)
+                using gmath::position; using gmath::direction; using gmath::ray;
+                using gcore::model_space; using gcore::world_space; using gcore::camera_space; using gcore::projection_space;
+
+                glm::mat4 const from_projection_space = glm::inverse(glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), aspect_ratio, camera->m_near_z, camera->m_far_z));
+                glm::vec2 const device_coordinates = (input->m_mouse_positions[0] * 2.f) - glm::vec2(1.f);
+                glm::vec4 const camera_direction = from_projection_space * glm::vec4(device_coordinates[0], -device_coordinates[1], -1.f, 1.f);
+                glm::vec4 const world_direction = camera_transform->m_transform * glm::vec4(camera_direction[0], camera_direction[1], -1.f, 0.f);
+                ray<world_space> const world_space_ray = ray<world_space>(gmath::position<world_space>(camera_transform->m_transform[3]), gmath::direction<world_space>(glm::vec3(world_direction)));
+
+                float best_t = std::numeric_limits<float>::max();
+                gcore::entity best_entity;
+                auto extent_view = world.get_entity_registry().get_view<gcore::transform_component, gcore::extent_component>();
+                for (auto& [entity, transform, extent] : extent_view)
                 {
-                    using gmath::position; using gmath::direction; using gmath::ray;
-                    using gcore::model_space; using gcore::world_space; using gcore::camera_space; using gcore::projection_space;
-
-                    glm::mat4 const from_projection_space = glm::inverse(glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), aspect_ratio, camera->m_near_z, camera->m_far_z));
-                    glm::vec2 const device_coordinates = (input->m_mouse_positions[0] * 2.f) - glm::vec2(1.f);
-                    glm::vec4 const camera_direction = from_projection_space * glm::vec4(device_coordinates[0], -device_coordinates[1], -1.f, 1.f);
-                    glm::vec4 const world_direction = camera_transform->m_transform * glm::vec4(camera_direction[0], camera_direction[1], -1.f, 0.f);
-                    ray<world_space> const world_space_ray = ray<world_space>(gmath::position<world_space>(camera_transform->m_transform[3]), gmath::direction<world_space>(glm::vec3(world_direction)));
-
-                    float best_t = std::numeric_limits<float>::max();
-                    gcore::entity best_entity;
-                    auto extent_view = world.get_entity_registry().get_view<gcore::transform_component, gcore::extent_component>();
-                    for (auto& [entity, transform, extent] : extent_view)
+                    gmath::axis_aligned_box<world_space> const projection_extent = gmath::transform<world_space, model_space>(transform->m_transform) * extent->m_extent;
+                    auto result = projection_extent.intersect(world_space_ray);
+                    if (result && result->t0 < best_t)
                     {
-                        gmath::axis_aligned_box<world_space> const projection_extent = gmath::transform<world_space, model_space>(transform->m_transform) * extent->m_extent;
-                        auto result = projection_extent.intersect(world_space_ray);
-                        if (result && result->t0 < best_t)
-                        {
-                            best_t = result->t0;
-                            best_entity = entity;
-                        }
+                        best_t = result->t0;
+                        best_entity = entity;
                     }
-
-                    m_uuid = best_entity.to_string();
                 }
+
+                m_uuid = best_entity.to_string();
             }
         }
 
@@ -205,11 +208,17 @@ namespace gtool
                     draw_box(min, max, glm::vec3(1.f));
                 }
 
-                gmath::axis_aligned_box<gcore::model_space> const small_box{ gmath::position<gcore::model_space>{-0.1f,-0.1f,-0.1f}, gmath::position<gcore::model_space>{0.1f,0.1f,0.1f} };
-                gmath::axis_aligned_box<gcore::world_space> const extent = t * small_box;
-                glm::vec4 const min = static_cast<glm::vec4>(extent.min());
-                glm::vec4 const max = static_cast<glm::vec4>(extent.max());
-                draw_box(min, max, glm::vec3(1.f, 0.f,0.f));
+                for (auto& [camera_entity, camera, input, controller, camera_transform] : camera_view)
+                {
+                    if (camera->m_active)
+                    {
+                        glm::mat4 const projection = glm::perspective(gmath::radian(camera->m_fov).value(), aspect_ratio, camera->m_near_z, camera->m_far_z);
+                        glm::mat4 const view = glm::inverse(camera_transform->m_transform);
+                        controller->m_is_active = !ImGuizmo::IsOver();
+                        ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), ImGuizmo::UNIVERSAL, ImGuizmo::WORLD, glm::value_ptr(transform_comp->m_transform));
+                    }
+                }
+                
             }
         }
 

@@ -3,6 +3,7 @@
 
 #include <imgui/imgui.h>
 #include <optick/optick.h>
+#include <ImGuizmo/ImGuizmo.h>
 
 #include "gcore/world.h"
 #include "gcore/systems/input_system.h"
@@ -29,6 +30,9 @@ namespace gtool
             ImVec2 const content_max = ImGui::GetWindowContentRegionMax();
             ImVec2 const window_size ( content_max[0] - content_min[0], content_max[1] - content_min[1]);
             ImVec2 const window_pos = ImGui::GetWindowPos();
+
+            ImGuizmo::SetRect(window_pos.x, window_pos.y, window_size.x, window_size.y);
+            ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
 
             if (gcore::input_system * input = world.get_system_registry().get_system<gcore::input_system>())
             {

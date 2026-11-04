@@ -23,6 +23,7 @@ namespace gcore
         keyboard_key m_left = keyboard_key::a;
         keyboard_key m_right = keyboard_key::d;
         keyboard_key m_boost_key = keyboard_key::left_shift;
+        bool m_is_active = true;
     private:
         GSERIALIZER_DECLARE_SUBCLASS_FACTORY_REGISTRATION();
     };

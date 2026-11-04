@@ -28,6 +28,9 @@ namespace gcore
         auto view = world.get_entity_registry().get_view<transform_component, input_component, flying_controller_component>();
         for (auto& [entity, transform, input, controller] : view)
         {
+            if (!controller->m_is_active)
+                continue;
+
             glm::vec2 const delta_mouse = (glm::vec2(input->m_mouse_positions[0] - input->m_mouse_positions[1]))
                 * dt * static_cast<float>(gmath::radian(controller->m_rotation_speed)) 
                 * static_cast<float>(input->m_mouse_key_state[gtl::to_underlying(mouse_key::button_1)] == key_state::pressed);
