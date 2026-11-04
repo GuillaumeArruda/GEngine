@@ -4,7 +4,7 @@
             "name": "Hull",
             "position": {
                 "x": 1281.0,
-                "y": -331.0
+                "y": -323.0
             },
             "node": {
                 "is_valid": true,
@@ -855,7 +855,7 @@
             }
         },
         {
-            "name": "",
+            "name": "Right Spot Light",
             "position": {
                 "x": 145.0,
                 "y": 470.0
@@ -867,83 +867,6 @@
                     "node_id": 86,
                     "script": {
                         "value": "6ae21833418da08a39c718292ddb3d36"
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": -159.0,
-                "y": 582.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::make_mat4_node",
-                "data": {
-                    "node_id": 87
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": -394.0,
-                "y": 576.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::constant_node",
-                "data": {
-                    "node_id": 88,
-                    "value": {
-                        "type_name": "Vec3",
-                        "number_of_elements": 1,
-                        "x": -0.800000011920929,
-                        "y": 0.8999999761581421,
-                        "z": -6.800000190734863
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": -394.0,
-                "y": 696.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::constant_node",
-                "data": {
-                    "node_id": 89,
-                    "value": {
-                        "type_name": "Vec3",
-                        "number_of_elements": 1,
-                        "x": 0.0,
-                        "y": 180.0,
-                        "z": 0.0
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": -394.0,
-                "y": 752.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::constant_node",
-                "data": {
-                    "node_id": 90,
-                    "value": {
-                        "type_name": "Vec3",
-                        "number_of_elements": 1,
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
                     }
                 }
             }
@@ -987,7 +910,7 @@
             }
         },
         {
-            "name": "",
+            "name": "Left Spot Light",
             "position": {
                 "x": 145.0,
                 "y": 736.0
@@ -1006,43 +929,8 @@
         {
             "name": "",
             "position": {
-                "x": -107.0,
-                "y": 863.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::make_mat4_node",
-                "data": {
-                    "node_id": 97
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": -394.0,
-                "y": 848.0
-            },
-            "node": {
-                "is_valid": true,
-                "type_name": "gcore::constant_node",
-                "data": {
-                    "node_id": 98,
-                    "value": {
-                        "type_name": "Vec3",
-                        "number_of_elements": 1,
-                        "x": 0.800000011920929,
-                        "y": 0.75,
-                        "z": -6.800000190734863
-                    }
-                }
-            }
-        },
-        {
-            "name": "",
-            "position": {
-                "x": -58.0,
-                "y": 472.0
+                "x": -106.0,
+                "y": 128.0
             },
             "node": {
                 "is_valid": true,
@@ -1096,6 +984,202 @@
                     }
                 }
             }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -106.0,
+                "y": 560.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 104,
+                    "value": {
+                        "type_name": "Matrix4",
+                        "number_of_elements": 1,
+                        "[0]": {
+                            "x": -0.9999842047691345,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[1]": {
+                            "x": 0.0,
+                            "y": 1.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[3]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": -1.0,
+                            "w": 0.0
+                        },
+                        "[4]": {
+                            "x": -1.0702179670333862,
+                            "y": 0.8262924551963806,
+                            "z": 6.299622058868408,
+                            "w": 1.0
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -58.0,
+                "y": 848.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 105,
+                    "value": {
+                        "type_name": "Matrix4",
+                        "number_of_elements": 1,
+                        "[0]": {
+                            "x": -0.9999276995658875,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[1]": {
+                            "x": 0.0,
+                            "y": 1.0,
+                            "z": 0.0,
+                            "w": 0.0
+                        },
+                        "[3]": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": -0.9999276995658875,
+                            "w": 0.0
+                        },
+                        "[4]": {
+                            "x": 1.0711506605148315,
+                            "y": 0.8043990135192871,
+                            "z": 6.354710578918457,
+                            "w": 1.0
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "name": "Right Point Light",
+            "position": {
+                "x": 145.0,
+                "y": 288.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::run_script_node",
+                "data": {
+                    "node_id": 106,
+                    "script": {
+                        "value": "6ad91e22561022876044630a9cd35426"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -154.0,
+                "y": 304.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 107,
+                    "value": {
+                        "type_name": "Bool",
+                        "number_of_elements": 1,
+                        "value": true
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -154.0,
+                "y": 400.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 108,
+                    "value": {
+                        "type_name": "Float",
+                        "number_of_elements": 1,
+                        "value": 0.4000000059604645
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -154.0,
+                "y": 352.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 109,
+                    "value": {
+                        "type_name": "Float",
+                        "number_of_elements": 1,
+                        "value": 0.20000000298023224
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": 129.0,
+                "y": 112.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::run_script_node",
+                "data": {
+                    "node_id": 110,
+                    "script": {
+                        "value": "6ad91e22561022876044630a9cd35426"
+                    }
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -106.0,
+                "y": 176.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::constant_node",
+                "data": {
+                    "node_id": 112,
+                    "value": {
+                        "type_name": "Vec3",
+                        "number_of_elements": 1,
+                        "x": 1.5,
+                        "y": 1.5,
+                        "z": 1.5
+                    }
+                }
+            }
         }
     ],
     "connections": [
@@ -1116,6 +1200,16 @@
                     "source": 9,
                     "source_pin": 12000,
                     "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 17,
+            "data": [
+                {
+                    "source": 14,
+                    "source_pin": 100,
+                    "destination_pin": 0
                 }
             ]
         },
@@ -1155,16 +1249,6 @@
             ]
         },
         {
-            "key": 17,
-            "data": [
-                {
-                    "source": 14,
-                    "source_pin": 100,
-                    "destination_pin": 0
-                }
-            ]
-        },
-        {
             "key": 10,
             "data": [
                 {
@@ -1195,12 +1279,57 @@
             ]
         },
         {
-            "key": 14,
+            "key": 86,
             "data": [
                 {
-                    "source": 16,
-                    "source_pin": 100,
+                    "source": 91,
+                    "source_pin": 1,
+                    "destination_pin": 258582379
+                },
+                {
+                    "source": 95,
+                    "source_pin": 1,
+                    "destination_pin": -319216880
+                },
+                {
+                    "source": 101,
+                    "source_pin": 1,
                     "destination_pin": 0
+                },
+                {
+                    "source": 102,
+                    "source_pin": 1,
+                    "destination_pin": -2026176076
+                },
+                {
+                    "source": 103,
+                    "source_pin": 1,
+                    "destination_pin": -157007288
+                },
+                {
+                    "source": 104,
+                    "source_pin": 1,
+                    "destination_pin": 104754944
+                }
+            ]
+        },
+        {
+            "key": 22,
+            "data": [
+                {
+                    "source": 23,
+                    "source_pin": 1,
+                    "destination_pin": 2
+                },
+                {
+                    "source": 26,
+                    "source_pin": 12000,
+                    "destination_pin": 1
+                },
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 3
                 }
             ]
         },
@@ -1240,57 +1369,12 @@
             ]
         },
         {
-            "key": 86,
+            "key": 14,
             "data": [
                 {
-                    "source": 87,
+                    "source": 16,
                     "source_pin": 100,
-                    "destination_pin": 104754944
-                },
-                {
-                    "source": 91,
-                    "source_pin": 1,
-                    "destination_pin": 258582379
-                },
-                {
-                    "source": 95,
-                    "source_pin": 1,
-                    "destination_pin": -319216880
-                },
-                {
-                    "source": 101,
-                    "source_pin": 1,
                     "destination_pin": 0
-                },
-                {
-                    "source": 102,
-                    "source_pin": 1,
-                    "destination_pin": -2026176076
-                },
-                {
-                    "source": 103,
-                    "source_pin": 1,
-                    "destination_pin": -157007288
-                }
-            ]
-        },
-        {
-            "key": 22,
-            "data": [
-                {
-                    "source": 23,
-                    "source_pin": 1,
-                    "destination_pin": 2
-                },
-                {
-                    "source": 26,
-                    "source_pin": 12000,
-                    "destination_pin": 1
-                },
-                {
-                    "source": 8,
-                    "source_pin": 1,
-                    "destination_pin": 3
                 }
             ]
         },
@@ -1411,6 +1495,41 @@
                     "source": 71,
                     "source_pin": 12000,
                     "destination_pin": 1
+                }
+            ]
+        },
+        {
+            "key": 110,
+            "data": [
+                {
+                    "source": 109,
+                    "source_pin": 1,
+                    "destination_pin": 48564606
+                },
+                {
+                    "source": 108,
+                    "source_pin": 1,
+                    "destination_pin": 1721616111
+                },
+                {
+                    "source": 105,
+                    "source_pin": 1,
+                    "destination_pin": -945586835
+                },
+                {
+                    "source": 103,
+                    "source_pin": 1,
+                    "destination_pin": 2009257136
+                },
+                {
+                    "source": 112,
+                    "source_pin": 1,
+                    "destination_pin": -273776928
+                },
+                {
+                    "source": 101,
+                    "source_pin": 1,
+                    "destination_pin": 0
                 }
             ]
         },
@@ -1580,26 +1699,6 @@
             ]
         },
         {
-            "key": 87,
-            "data": [
-                {
-                    "source": 88,
-                    "source_pin": 1,
-                    "destination_pin": 0
-                },
-                {
-                    "source": 89,
-                    "source_pin": 1,
-                    "destination_pin": 1
-                },
-                {
-                    "source": 90,
-                    "source_pin": 1,
-                    "destination_pin": 2
-                }
-            ]
-        },
-        {
             "key": 96,
             "data": [
                 {
@@ -1611,11 +1710,6 @@
                     "source": 95,
                     "source_pin": 1,
                     "destination_pin": -319216880
-                },
-                {
-                    "source": 97,
-                    "source_pin": 100,
-                    "destination_pin": 104754944
                 },
                 {
                     "source": 101,
@@ -1631,26 +1725,46 @@
                     "source": 103,
                     "source_pin": 1,
                     "destination_pin": -157007288
+                },
+                {
+                    "source": 105,
+                    "source_pin": 1,
+                    "destination_pin": 104754944
                 }
             ]
         },
         {
-            "key": 97,
+            "key": 106,
             "data": [
                 {
-                    "source": 98,
+                    "source": 108,
+                    "source_pin": 1,
+                    "destination_pin": 1721616111
+                },
+                {
+                    "source": 109,
+                    "source_pin": 1,
+                    "destination_pin": 48564606
+                },
+                {
+                    "source": 103,
+                    "source_pin": 1,
+                    "destination_pin": 2009257136
+                },
+                {
+                    "source": 104,
+                    "source_pin": 1,
+                    "destination_pin": -945586835
+                },
+                {
+                    "source": 112,
+                    "source_pin": 1,
+                    "destination_pin": -273776928
+                },
+                {
+                    "source": 101,
                     "source_pin": 1,
                     "destination_pin": 0
-                },
-                {
-                    "source": 90,
-                    "source_pin": 1,
-                    "destination_pin": 2
-                },
-                {
-                    "source": 89,
-                    "source_pin": 1,
-                    "destination_pin": 1
                 }
             ]
         }

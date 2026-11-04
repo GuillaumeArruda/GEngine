@@ -39,8 +39,8 @@
         {
             "name": "",
             "position": {
-                "x": -3569.0,
-                "y": -898.0
+                "x": -3953.0,
+                "y": -866.0
             },
             "node": {
                 "is_valid": true,
@@ -244,7 +244,7 @@
         {
             "name": "",
             "position": {
-                "x": -3459.0,
+                "x": -3478.0,
                 "y": -1008.0
             },
             "node": {
@@ -306,7 +306,7 @@
         {
             "name": "",
             "position": {
-                "x": -3431.0,
+                "x": -3450.0,
                 "y": -960.0
             },
             "node": {
@@ -370,6 +370,35 @@
                     "variable_id": "6ae8d87210c8740558b757c677c2d4b0"
                 }
             }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3830.0,
+                "y": -784.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::get_variable_node",
+                "data": {
+                    "node_id": 52,
+                    "variable_id": "6aebab52bd65cebb74d6cc15c7a37d6d"
+                }
+            }
+        },
+        {
+            "name": "",
+            "position": {
+                "x": -3570.0,
+                "y": -897.0
+            },
+            "node": {
+                "is_valid": true,
+                "type_name": "gcore::multiply_node<glm::mat4>",
+                "data": {
+                    "node_id": 53
+                }
+            }
         }
     ],
     "connections": [
@@ -377,8 +406,8 @@
             "key": 28,
             "data": [
                 {
-                    "source": 8,
-                    "source_pin": 1,
+                    "source": 53,
+                    "source_pin": 100,
                     "destination_pin": 1
                 }
             ]
@@ -392,11 +421,6 @@
                     "destination_pin": 2
                 },
                 {
-                    "source": 8,
-                    "source_pin": 1,
-                    "destination_pin": 3
-                },
-                {
                     "source": 9,
                     "source_pin": 12000,
                     "destination_pin": 1
@@ -405,6 +429,11 @@
                     "source": 42,
                     "source_pin": 1,
                     "destination_pin": 4
+                },
+                {
+                    "source": 53,
+                    "source_pin": 100,
+                    "destination_pin": 3
                 }
             ]
         },
@@ -431,11 +460,6 @@
         {
             "key": 9,
             "data": [
-                {
-                    "source": 8,
-                    "source_pin": 1,
-                    "destination_pin": 1745697932
-                },
                 {
                     "source": 10,
                     "source_pin": 5,
@@ -500,6 +524,11 @@
                     "source": 51,
                     "source_pin": 1,
                     "destination_pin": 1253852869
+                },
+                {
+                    "source": 53,
+                    "source_pin": 100,
+                    "destination_pin": 1745697932
                 }
             ]
         },
@@ -522,14 +551,14 @@
                     "destination_pin": 1
                 },
                 {
-                    "source": 8,
-                    "source_pin": 1,
-                    "destination_pin": 2
-                },
-                {
                     "source": 24,
                     "source_pin": 1,
                     "destination_pin": 3
+                },
+                {
+                    "source": 53,
+                    "source_pin": 100,
+                    "destination_pin": 2
                 }
             ]
         },
@@ -537,14 +566,14 @@
             "key": 32,
             "data": [
                 {
-                    "source": 25,
-                    "source_pin": 100,
-                    "destination_pin": 1
-                },
-                {
                     "source": 43,
                     "source_pin": 100,
                     "destination_pin": 0
+                },
+                {
+                    "source": 25,
+                    "source_pin": 100,
+                    "destination_pin": 1
                 }
             ]
         },
@@ -617,6 +646,21 @@
                     "destination_pin": 0
                 }
             ]
+        },
+        {
+            "key": 53,
+            "data": [
+                {
+                    "source": 8,
+                    "source_pin": 1,
+                    "destination_pin": 0
+                },
+                {
+                    "source": 52,
+                    "source_pin": 1,
+                    "destination_pin": 1
+                }
+            ]
         }
     ],
     "variables": [
@@ -675,6 +719,40 @@
                 "type_name": "Bool",
                 "number_of_elements": 1,
                 "value": true
+            },
+            "is_input": true,
+            "is_constant": false
+        },
+        {
+            "id": "6aebab52bd65cebb74d6cc15c7a37d6d",
+            "name": "Transform",
+            "data": {
+                "type_name": "Matrix4",
+                "number_of_elements": 1,
+                "[0]": {
+                    "x": 1.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "[1]": {
+                    "x": 0.0,
+                    "y": 1.0,
+                    "z": 0.0,
+                    "w": 0.0
+                },
+                "[3]": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 1.0,
+                    "w": 0.0
+                },
+                "[4]": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0,
+                    "w": 1.0
+                }
             },
             "is_input": true,
             "is_constant": false
