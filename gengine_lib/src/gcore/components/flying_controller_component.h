@@ -13,9 +13,9 @@ namespace gcore
 
         float m_pitch = 0.f;
         float m_yaw = 0.f;
-        float m_speed = 1.f;
+        float m_speed = 0.5f;
         float m_boost_factor = 5.f;
-        gmath::degree m_rotation_speed = 180.0_d;
+        gmath::degree m_rotation_speed = 5000.0_d;
         keyboard_key m_up = keyboard_key::x;
         keyboard_key m_down = keyboard_key::z;
         keyboard_key m_forward = keyboard_key::w;

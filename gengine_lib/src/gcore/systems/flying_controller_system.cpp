@@ -19,6 +19,18 @@
 
 namespace gcore
 {
+    void flying_controller_system::connect_to_world(gcore::world& world)
+    {
+        auto view = world.get_entity_registry().get_view<transform_component, input_component, flying_controller_component>();
+        m_on_added_callback_id = view.add_on_added_callback([this](auto& info) { this->on_flying_controller_added(info); });
+    }
+
+    void flying_controller_system::disconnect_from_world(gcore::world& world)
+    {
+        auto view = world.get_entity_registry().get_view<transform_component, input_component, flying_controller_component>();
+        view.remove_on_added_callback(m_on_added_callback_id);
+    }
+
     void flying_controller_system::update(world& world)
     {
         OPTICK_EVENT();
@@ -61,6 +73,13 @@ namespace gcore
             float const speed = controller->m_speed * dt * (1 + controller->m_boost_factor * (input->m_keybord_state[gtl::to_underlying(controller->m_boost_key)] == key_state::pressed));
             transform->m_transform[3] -= transform->m_transform * glm::vec4(direction_vector * speed, 0.f);
         }
+    }
+
+    void flying_controller_system::on_flying_controller_added(std::tuple<gcore::entity, transform_component*, input_component*, flying_controller_component*>& added_entity)
+    {
+        auto& [entity, transform_comp, input_comp, flying_controller_component] = added_entity;
+        float roll = 0.f;
+        glm::extractEulerAngleYXZ(transform_comp->m_transform, flying_controller_component->m_yaw, flying_controller_component->m_pitch, roll);
     }
 }
 
