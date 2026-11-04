@@ -25,6 +25,8 @@ namespace gtool
         bool wants_to_close() const;
 
         GLFWwindow* get_window() { return m_window; }
+
+        gthread::job_manager& get_jobs() { return m_jobs; }
     private:
         gthread::job_manager m_jobs{ "Worker Thread", 8 };
         GLFWwindow* m_window;

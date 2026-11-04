@@ -76,7 +76,7 @@ namespace gtool
 			return false;
 		});
 
-		m_windows.push_back(std::make_unique<viewport_window>());
+		m_windows.push_back(std::make_unique<viewport_window>("Viewport"));
         m_windows.push_back(std::make_unique<entity_view_window>());
         m_windows.push_back(std::make_unique<resource_view_window>());
 		m_windows.push_back(std::make_unique<node_editor_window>());
