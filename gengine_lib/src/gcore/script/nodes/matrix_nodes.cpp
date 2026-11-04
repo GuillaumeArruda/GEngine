@@ -17,7 +17,7 @@ namespace gcore
         
         out = glm::mat4(1.f);
         out = glm::translate(out, translation);
-        out = glm::mat4(rotation_quat) * out;
+        out = out * glm::mat4(rotation_quat);
         out = glm::scale(out, scale);
     }
 
