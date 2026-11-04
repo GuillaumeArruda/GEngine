@@ -212,7 +212,7 @@ namespace gtool
                 {
                     if (camera->m_active)
                     {
-                        glm::mat4 const projection = glm::perspective(gmath::radian(camera->m_fov).value(), aspect_ratio, camera->m_near_z, camera->m_far_z);
+                        glm::mat4 const projection = camera->create_perspective_matrix(aspect_ratio);
                         glm::mat4 const view = glm::inverse(camera_transform->m_transform);
                         controller->m_is_active = !ImGuizmo::IsOver();
                         ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), ImGuizmo::UNIVERSAL, ImGuizmo::WORLD, glm::value_ptr(transform_comp->m_transform));

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "grender/components/camera_component.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "gserializer/serializer.h"
 #include "gserializer/gmath_serialization.h"
 
@@ -14,6 +16,11 @@ namespace grender
         serializer.process("near_z", m_near_z);
         serializer.process("far_z", m_far_z);
         serializer.process("active", m_active);
+    }
+
+    glm::mat4 camera_component::create_perspective_matrix(float aspect) const
+    {
+        return glm::perspective(glm::radians(m_fov.value()), aspect, m_near_z, m_far_z);
     }
 }
 

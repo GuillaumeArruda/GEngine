@@ -43,7 +43,7 @@ namespace grender
         {
             if (camera->m_active)
             {
-                glm::mat4 const projection = glm::perspective(static_cast<float>(gmath::radian(camera->m_fov)), aspect_ratio, camera->m_near_z, camera->m_far_z);
+                glm::mat4 const projection = camera->create_perspective_matrix(aspect_ratio);
                 glm::mat4 const view_matrix = glm::inverse(camera_transform->m_transform);
 
                 run_graph_scripts(projection, view_matrix, registry, jobs);
