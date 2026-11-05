@@ -9,6 +9,7 @@
 #include "gcore/components/input_component.h"
 #include "gcore/world.h"
 
+#include <iostream>
 
 namespace gcore
 {
@@ -35,13 +36,8 @@ namespace gcore
             auto key_state = glfwGetMouseButton (m_window, mouse_key_to_glfw_int(static_cast<mouse_key>(i)));
             mouse_key_state[i] = key_state == GLFW_PRESS ? key_state::pressed : key_state::released;
         }
-        glm::dvec2 mouse_pos;
-        glfwGetCursorPos(m_window, &mouse_pos[0], &mouse_pos[1]);
-        if (m_viewport_size[0] == 0.f || m_viewport_size[1] == 0.f)
-        {
-            glfwGetWindowSize(m_window, &m_viewport_size[0], &m_viewport_size[1]);
-        }
 
+        glm::dvec2 mouse_pos = m_mouse_pos;
         mouse_pos -= m_start_point;
         mouse_pos /= m_viewport_size;
 
@@ -52,6 +48,7 @@ namespace gcore
             input_component->m_mouse_key_state = mouse_key_state;
             input_component->m_mouse_positions[1] = input_component->m_mouse_positions[0];
             input_component->m_mouse_positions[0] = mouse_pos;
+            input_component->m_is_focused = m_is_focused;
         }
     }
 

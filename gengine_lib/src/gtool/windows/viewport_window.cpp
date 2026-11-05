@@ -30,6 +30,7 @@ namespace gtool
             ImVec2 const content_max = ImGui::GetWindowContentRegionMax();
             m_size = glm::ivec2( content_max[0] - content_min[0], content_max[1] - content_min[1]);
             ImVec2 const window_pos = ImGui::GetWindowPos();
+            ImVec2 const mouse_pos = ImGui::GetMousePos();
 
             ImGuizmo::SetRect(window_pos.x, window_pos.y, static_cast<float>(m_size.x), static_cast<float>(m_size.y));
             ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
@@ -41,10 +42,13 @@ namespace gtool
                     input->m_window = manager.get_window();
                     input->m_start_point = glm::ivec2(static_cast<int>(window_pos[0]), static_cast<int>(window_pos[1]));
                     input->m_viewport_size = glm::ivec2(static_cast<int>(m_size[0]), static_cast<int>(m_size[1]));
+                    input->m_mouse_pos = glm::ivec2(mouse_pos.x, mouse_pos.y);
+                    input->m_is_focused = ImGui::IsWindowFocused();
                 }
                 else
                 {
                     input->m_window = nullptr;
+                    input->m_is_focused = false;
                 }
             }
 

@@ -14,5 +14,7 @@ namespace gcore
         GLFWwindow* m_window = nullptr;
         glm::ivec2 m_start_point = {};
         glm::ivec2 m_viewport_size = {};
+        glm::ivec2 m_mouse_pos = {};
+        bool m_is_focused = false;
     };
 }
